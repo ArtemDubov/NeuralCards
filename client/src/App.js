@@ -1,0 +1,251 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import "./App.css";
+
+const API_URL = "http://localhost:5000/api";
+
+function App() {
+  const [email, setEmail] = useState("test3@mail.ru");
+  const [password, setPassword] = useState("123456");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+  const [activeTab, setActiveTab] = useState("sets");
+  const [cardsets, setCardsets] = useState([]);
+  const [newSetTitle, setNewSetTitle] = useState("");
+  const [selectedSet, setSelectedSet] = useState(null);
+  const [newCardFront, setNewCardFront] = useState("");
+  const [newCardBack, setNewCardBack] = useState("");
+
+  // Функция входа
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(`${API_URL}/login`, {
+        email,
+        password,
+      });
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+
+      const profileResponse = await axios.get(`${API_URL}/profile`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      setIsLoggedIn(true);
+      setUser(profileResponse.data);
+      loadCardsets(token);
+    } catch (error) {
+      alert(
+        "Ошибка входа: " + (error.response?.data?.message || error.message)
+      );
+    }
+  };
+
+  // Загрузка наборов пользователя
+  const loadCardsets = async (token) => {
+    try {
+      const response = await axios.get(`${API_URL}/cardsets`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCardsets(response.data);
+    } catch (error) {
+      console.error("Ошибка загрузки наборов:", error);
+    }
+  };
+
+  // Создание нового набора
+  const handleCreateSet = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        `${API_URL}/cardsets`,
+        {
+          title: newSetTitle,
+          description: "Мой новый набор",
+          isPublic: false,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setNewSetTitle("");
+      loadCardsets(token);
+      setActiveTab("sets");
+      alert("Набор создан!");
+    } catch (error) {
+      alert("Ошибка создания набора: " + error.message);
+    }
+  };
+
+  // Добавление карточки в набор
+  const handleAddCard = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post(
+        `${API_URL}/cardsets/${selectedSet.id}/cards`,
+        {
+          front: newCardFront,
+          back: newCardBack,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      setNewCardFront("");
+      setNewCardBack("");
+      loadCardsets(token); // Перезагружаем наборы чтобы обновить карточки
+      alert("Карточка добавлена!");
+    } catch (error) {
+      alert("Ошибка добавления карточки: " + error.message);
+    }
+  };
+
+  // Просмотр набора
+  const handleViewSet = (set) => {
+    setSelectedSet(set);
+    setActiveTab("view-set");
+  };
+
+  if (!isLoggedIn) {
+    return (
+      <div className="App">
+        <h1>Neural Trident 🚀</h1>
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Пароль"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button type="submit">Войти</button>
+        </form>
+        <p>test3@mail.ru / 123456</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="App">
+      <header>
+        <h1>Neural Trident 🚀</h1>
+        <p>Добро пожаловать, {user?.name}!</p>
+        <button onClick={() => setIsLoggedIn(false)}>Выйти</button>
+      </header>
+
+      <nav>
+        <button
+          className={activeTab === "sets" ? "active" : ""}
+          onClick={() => setActiveTab("sets")}
+        >
+          Мои наборы
+        </button>
+        <button
+          className={activeTab === "create" ? "active" : ""}
+          onClick={() => setActiveTab("create")}
+        >
+          Создать набор
+        </button>
+      </nav>
+
+      <main>
+        {activeTab === "sets" && (
+          <div>
+            <h2>Мои наборы карточек</h2>
+            {cardsets.length === 0 ? (
+              <p>У вас пока нет наборов</p>
+            ) : (
+              <div className="sets-list">
+                {cardsets.map((set) => (
+                  <div
+                    key={set.id}
+                    className="set-card"
+                    onClick={() => handleViewSet(set)}
+                  >
+                    <h3>{set.title}</h3>
+                    <p>{set.description}</p>
+                    <small>Карточек: {set.cards?.length || 0}</small>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === "create" && (
+          <div>
+            <h2>Создать новый набор</h2>
+            <form onSubmit={handleCreateSet}>
+              <input
+                type="text"
+                placeholder="Название набора"
+                value={newSetTitle}
+                onChange={(e) => setNewSetTitle(e.target.value)}
+                required
+              />
+              <button type="submit">Создать набор</button>
+            </form>
+          </div>
+        )}
+
+        {activeTab === "view-set" && selectedSet && (
+          <div>
+            <button onClick={() => setActiveTab("sets")}>
+              ← Назад к наборам
+            </button>
+            <h2>{selectedSet.title}</h2>
+
+            <div className="cards-section">
+              <h3>Карточки в наборе:</h3>
+              {selectedSet.cards && selectedSet.cards.length > 0 ? (
+                <div className="cards-list">
+                  {selectedSet.cards.map((card) => (
+                    <div key={card.id} className="card-item">
+                      <strong>Вопрос:</strong> {card.front}
+                      <br />
+                      <strong>Ответ:</strong> {card.back}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p>В этом наборе пока нет карточек</p>
+              )}
+            </div>
+
+            <div className="add-card-section">
+              <h3>Добавить карточку:</h3>
+              <form onSubmit={handleAddCard}>
+                <input
+                  type="text"
+                  placeholder="Вопрос (лицевая сторона)"
+                  value={newCardFront}
+                  onChange={(e) => setNewCardFront(e.target.value)}
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Ответ (обратная сторона)"
+                  value={newCardBack}
+                  onChange={(e) => setNewCardBack(e.target.value)}
+                  required
+                />
+                <button type="submit">Добавить карточку</button>
+              </form>
+            </div>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
+
+export default App;

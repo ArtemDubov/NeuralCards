@@ -23,6 +23,8 @@ const authMiddleware = (req, res, next) => {
 
 app.use(cors());
 app.use(express.json());
+app.use(express.json({ type: "application/json" }));
+app.use(express.urlencoded({ extended: true }));
 
 const prisma = new PrismaClient();
 
@@ -58,11 +60,14 @@ app.post("/api/cardsets", authMiddleware, async (req, res) => {
 });
 
 // Получить все наборы пользователя
+// Получение всех наборов пользователя с карточками
 app.get("/api/cardsets", authMiddleware, async (req, res) => {
   try {
     const cardsets = await prisma.cardSet.findMany({
       where: { authorId: req.userId },
-      include: { _count: { select: { cards: true } } },
+      include: {
+        cards: true, // Включаем связанные карточки
+      },
     });
     res.json(cardsets);
   } catch (error) {
