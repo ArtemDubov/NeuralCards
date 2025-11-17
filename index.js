@@ -1,0 +1,135 @@
+const express = require("express");
+const cors = require("cors");
+const { PrismaClient } = require("@prisma/client");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const app = express();
+const PORT = 5000;
+const JWT_SECRET = "neural-trident-secret-key";
+
+// Middleware проверки токена
+const authMiddleware = (req, res, next) => {
+  const token = req.header("Authorization")?.replace("Bearer ", "");
+  if (!token) return res.status(401).json({ error: "Нет токена" });
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.userId = decoded.userId;
+    next();
+  } catch (error) {
+    res.status(401).json({ error: "Неверный токен" });
+  }
+};
+
+app.use(cors());
+app.use(express.json());
+
+const prisma = new PrismaClient();
+
+// Получить профиль пользователя (требует токен)
+app.get("/api/profile", authMiddleware, async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.userId },
+      select: { id: true, email: true, name: true, createdAt: true },
+    });
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: "Ошибка сервера" });
+  }
+});
+
+// Создать набор карточек
+app.post("/api/cardsets", authMiddleware, async (req, res) => {
+  try {
+    const { title, description, isPublic } = req.body;
+    const cardset = await prisma.cardSet.create({
+      data: {
+        title,
+        description,
+        isPublic: isPublic || false,
+        authorId: req.userId,
+      },
+    });
+    res.json(cardset);
+  } catch (error) {
+    res.status(500).json({ error: "Ошибка создания набора" });
+  }
+});
+
+// Получить все наборы пользователя
+app.get("/api/cardsets", authMiddleware, async (req, res) => {
+  try {
+    const cardsets = await prisma.cardSet.findMany({
+      where: { authorId: req.userId },
+      include: { _count: { select: { cards: true } } },
+    });
+    res.json(cardsets);
+  } catch (error) {
+    res.status(500).json({ error: "Ошибка получения наборов" });
+  }
+});
+
+// Добавить карточку в набор
+app.post("/api/cardsets/:id/cards", authMiddleware, async (req, res) => {
+  try {
+    const { front, back } = req.body;
+    const card = await prisma.flashCard.create({
+      data: { front, back, cardsetId: parseInt(req.params.id) },
+    });
+    res.json(card);
+  } catch (error) {
+    res.status(500).json({ error: "Ошибка создания карточки" });
+  }
+});
+
+// Регистрация пользователя
+app.post("/api/register", async (req, res) => {
+  try {
+    const { email, password, name } = req.body;
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await prisma.user.create({
+      data: { email, password: hashedPassword, name },
+    });
+
+    res.json({ message: "Пользователь создан", userId: user.id });
+  } catch (error) {
+    res.status(400).json({ error: "Ошибка регистрации" });
+  }
+});
+
+// Логин пользователя
+app.post("/api/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) return res.status(400).json({ error: "Пользователь не найден" });
+
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword)
+      return res.status(400).json({ error: "Неверный пароль" });
+
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.json({
+      message: "Успешный вход",
+      token,
+      userId: user.id,
+      name: user.name,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Ошибка входа" });
+  }
+});
+
+app.get("/", (req, res) => {
+  res.json({ message: "Neural Trident работает!" });
+});
+
+app.listen(PORT, () => {
+  console.log(`Сервер запущен на порту ${PORT}`);
+});
