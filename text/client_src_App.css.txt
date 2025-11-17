@@ -1,4 +1,4 @@
-.App {
+﻿.App {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
@@ -30,20 +30,3 @@ nav button.active {
   cursor: pointer;
 }
 
-.set-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.favorite-btn {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 5px;
-}
-
-.favorite-btn.favorite {
-  color: gold;
-}

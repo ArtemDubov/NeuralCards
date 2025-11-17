@@ -1,4 +1,4 @@
-generator client {
+﻿generator client {
   provider = "prisma-client-js"
 }
 
@@ -15,7 +15,6 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   cardsets  CardSet[]
-  favorites Favorite[]
 }
 
 model CardSet {
@@ -28,7 +27,6 @@ model CardSet {
   authorId    Int
   author      User     @relation(fields: [authorId], references: [id])
   cards       FlashCard[]
-  favorites   Favorite[]  // ← ДОБАВЬ ЭТУ СТРОКУ
 }
 
 model FlashCard {
@@ -39,15 +37,4 @@ model FlashCard {
   updatedAt DateTime @updatedAt
   cardsetId Int
   cardset   CardSet  @relation(fields: [cardsetId], references: [id])
-}
-
-model Favorite {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  cardsetId Int?
-  cardSet   CardSet? @relation(fields: [cardsetId], references: [id])
-  createdAt DateTime @default(now())
-  
-  @@unique([userId, cardsetId])
 }
