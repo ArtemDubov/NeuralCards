@@ -1,17 +1,25 @@
-﻿.confirmation-modal {
-  background: linear-gradient(
-    135deg,
-    var(--color-ocean-blue) 0%,
-    var(--color-deep-ocean) 100%
-  );
+﻿.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000; /* ВЫСОКИЙ z-index */
+}
+
+.confirmation-modal {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
   border: 2px solid #ff6b6b;
   border-radius: 16px;
   padding: 2rem;
   max-width: 500px;
   width: 90%;
-  max-height: 90vh;
   box-shadow: 0 20px 40px rgba(255, 107, 107, 0.3);
-  z-index: 1001;
+  z-index: 10001; /* ЕЩЕ ВЫШЕ */
 }
 
 .confirmation-modal .modal-header {
@@ -26,6 +34,7 @@
 .confirmation-modal .modal-header h3 {
   color: #ff6b6b;
   margin: 0;
+  font-size: 1.5rem;
 }
 
 .confirmation-modal .modal-body {
@@ -33,7 +42,7 @@
 }
 
 .confirmation-modal .modal-body p {
-  color: var(--color-text-light);
+  color: white;
   font-size: 1.1rem;
   line-height: 1.5;
   margin: 0;
@@ -44,6 +53,23 @@
   display: flex;
   justify-content: center;
   gap: 1rem;
+}
+
+.secondary-button {
+  background: #95a5a6;
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.secondary-button:hover {
+  background: #7f8c8d;
+  transform: scale(1.05);
 }
 
 .delete-confirm-button {
@@ -62,5 +88,24 @@
   opacity: 0.9;
   transform: scale(1.05);
   box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #ff6b6b;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-button:hover {
+  background: rgba(255, 107, 107, 0.1);
+  border-radius: 50%;
 }
 

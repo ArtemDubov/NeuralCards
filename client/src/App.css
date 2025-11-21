@@ -1200,17 +1200,6 @@ body {
   }
 }
 
-/* Гарантированно убираем блокировку кликов */
-.modal-overlay {
-  pointer-events: auto !important;
-}
-
-/* После закрытия модального окна */
-.modal-overlay[style*="display: none"],
-.modal-overlay:not(.confirmation-modal) {
-  display: none !important;
-}
-
 /* Убедимся что body всегда кликабелен */
 body {
   pointer-events: auto !important;

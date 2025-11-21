@@ -98,6 +98,7 @@ function App() {
 
   // Показ модального окна удаления
   const showDeleteModal = (type, id, title, message) => {
+    console.log("showDeleteModal called:", { type, id, title, message });
     setDeleteModal({
       isOpen: true,
       type,
@@ -395,42 +396,6 @@ function App() {
       alert(
         "Ошибка входа: " + (error.response?.data?.message || error.message)
       );
-    }
-  };
-
-  // Удаление карточки
-  const handleDeleteCard = async (cardId) => {
-    if (window.confirm("Удалить эту карточку?")) {
-      try {
-        await apiClient.delete(`/cardsets/${selectedSet.id}/cards/${cardId}`);
-        const updatedCardsets = await loadCardsets();
-        const updatedSet = updatedCardsets.find(
-          (set) => set.id === selectedSet.id
-        );
-        setSelectedSet(updatedSet);
-      } catch (error) {
-        alert("Ошибка удаления карточки: " + error.message);
-      }
-    }
-  };
-
-  // Удаление набора
-  const handleDeleteSet = async (setId) => {
-    if (
-      window.confirm(
-        "Удалить этот набор со всеми карточками? Это действие нельзя отменить."
-      )
-    ) {
-      try {
-        await apiClient.delete(`/cardsets/${setId}`);
-        loadCardsets();
-        if (selectedSet && selectedSet.id === setId) {
-          setSelectedSet(null);
-          setActiveTab("sets");
-        }
-      } catch (error) {
-        alert("Ошибка удаления набора: " + error.message);
-      }
     }
   };
 
@@ -732,37 +697,41 @@ function App() {
                 {cardsets.map((set) => (
                   <div key={set.id} className="cardset-item">
                     <div className="set-header">
-                      <h3
+                      <div
+                        className="set-content"
                         onClick={() => handleViewSet(set)}
-                        style={{ cursor: "pointer", flex: 1 }}
+                        style={{
+                          cursor: "pointer",
+                          flex: 1,
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
                       >
-                        {set.title}
-                      </h3>
+                        <h3>{set.title}</h3>
+                        <p className="set-description">{set.description}</p>
+                        <small className="cards-count">
+                          Карточек: {set.cards?.length || 0}
+                        </small>
+                      </div>
                       <div className="set-actions">
                         <FavoriteButton itemId={set.id} itemType="cardset" />
                         <button
                           className="delete-set-btn"
-                          onClick={() => handleDeleteSet(set.id)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            showDeleteModal(
+                              "set",
+                              set.id,
+                              "Удалить набор",
+                              `Набор "${set.title}" будет удален безвозвратно со всеми карточками. Это действие нельзя отменить.`
+                            );
+                          }}
                           title="Удалить набор"
                         >
                           ✕
                         </button>
                       </div>
                     </div>
-                    <p
-                      className="set-description"
-                      onClick={() => handleViewSet(set)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      {set.description}
-                    </p>
-                    <small
-                      className="cards-count"
-                      onClick={() => handleViewSet(set)}
-                      style={{ cursor: "pointer" }}
-                    >
-                      Карточек: {set.cards?.length || 0}
-                    </small>
                   </div>
                 ))}
               </div>
@@ -831,7 +800,15 @@ function App() {
                       </div>
                       <button
                         className="delete-card-btn"
-                        onClick={() => handleDeleteCard(card.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          showDeleteModal(
+                            "card",
+                            card.id,
+                            "Удалить карточку",
+                            `Карточка "${card.front}" будет удалена безвозвратно.`
+                          );
+                        }}
                         title="Удалить карточку"
                       >
                         ✕
@@ -847,31 +824,132 @@ function App() {
             <button
               className="action-button"
               onClick={() => {
-                console.log("Add card button clicked");
+                console.log("Add card button clicked - setting to TRUE");
                 setIsAddCardModalOpen(true);
+                // Принудительно проверьте состояние
+                setTimeout(() => {
+                  console.log(
+                    "Current isAddCardModalOpen:",
+                    isAddCardModalOpen
+                  );
+                }, 0);
               }}
             >
               ➕ Добавить карточку
             </button>
-            <ConfirmationModal
-              isOpen={deleteModal.isOpen}
-              onClose={handleCancelDelete}
-              onConfirm={handleConfirmDelete}
-              title={deleteModal.title}
-              message={deleteModal.message}
-              confirmText="Удалить"
-              cancelText="Отмена"
-            />
           </div>
         )}
 
         {activeTab === "training" && <TrainingPage cardsets={cardsets} />}
         {activeTab === "favorites" && <FavoritesPage />}
       </main>
+
+      {/* Модальное окно просмотра карточки */}
+      {isViewCardModalOpen && viewedCard && (
+        <div className="modal-overlay">
+          <div className="card-view-modal">
+            <div className="modal-header">
+              <h2>Просмотр карточки</h2>
+              <div className="view-card-actions">
+                <button
+                  className="edit-card-btn"
+                  onClick={() => handleEditCard(viewedCard)}
+                  title="Редактировать карточку"
+                >
+                  ✏️
+                </button>
+                <button
+                  className="close-button"
+                  onClick={() => setIsViewCardModalOpen(false)}
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            <div className="card-view-container">
+              <div className="card-view-side front-view">
+                <h3>🟦 Вопрос</h3>
+                <div className="card-view-content">
+                  <p className="card-view-text">{viewedCard.front}</p>
+
+                  {viewedCard.imageUrl && (
+                    <div className="card-media">
+                      <img
+                        src={`http://localhost:5002${viewedCard.imageUrl}`}
+                        alt=""
+                        className="card-image"
+                      />
+                    </div>
+                  )}
+
+                  {viewedCard.audioUrl && (
+                    <div className="card-media">
+                      <audio controls className="card-audio">
+                        <source
+                          src={`http://localhost:5002${viewedCard.audioUrl}`}
+                          type="audio/mpeg"
+                        />
+                        <source
+                          src={`http://localhost:5002${viewedCard.audioUrl}`}
+                          type="audio/wav"
+                        />
+                        <source
+                          src={`http://localhost:5002${viewedCard.audioUrl}`}
+                          type="audio/ogg"
+                        />
+                        Ваш браузер не поддерживает аудио элемент.
+                      </audio>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="card-view-side back-view">
+                <h3>🟩 Ответ</h3>
+                <div className="card-view-content">
+                  <p className="card-view-text">{viewedCard.back}</p>
+
+                  {viewedCard.backImageUrl && (
+                    <div className="card-media">
+                      <img
+                        src={`http://localhost:5002${viewedCard.backImageUrl}`}
+                        alt=""
+                        className="card-image"
+                      />
+                    </div>
+                  )}
+
+                  {viewedCard.backAudioUrl && (
+                    <div className="card-media">
+                      <audio controls className="card-audio">
+                        <source
+                          src={`http://localhost:5002${viewedCard.backAudioUrl}`}
+                          type="audio/mpeg"
+                        />
+                        <source
+                          src={`http://localhost:5002${viewedCard.backAudioUrl}`}
+                          type="audio/wav"
+                        />
+                        <source
+                          src={`http://localhost:5002${viewedCard.backAudioUrl}`}
+                          type="audio/ogg"
+                        />
+                        Ваш браузер не поддерживает аудио элемент.
+                      </audio>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Модальное окно добавления карточки */}
       {isAddCardModalOpen && (
-        <div className="modal-overlay">
-          <div className="card-modal">
+        <div className="modal-overlay" style={{ zIndex: 100000 }}>
+          <div className="card-modal" style={{ zIndex: 100001 }}>
             <div className="modal-header">
               <h2>Создание карточки</h2>
               <button
@@ -1039,107 +1117,7 @@ function App() {
           </div>
         </div>
       )}
-      {/* Модальное окно просмотра карточки */}
-      {isViewCardModalOpen && viewedCard && (
-        <div className="modal-overlay">
-          <div className="card-view-modal">
-            <div className="modal-header">
-              <h2>Просмотр карточки</h2>
-              <div className="view-card-actions">
-                <button
-                  className="edit-card-btn"
-                  onClick={() => handleEditCard(viewedCard)}
-                  title="Редактировать карточку"
-                >
-                  ✏️
-                </button>
-                <button
-                  className="close-button"
-                  onClick={() => setIsViewCardModalOpen(false)}
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
 
-            <div className="card-view-container">
-              <div className="card-view-side front-view">
-                <h3>🟦 Вопрос</h3>
-                <div className="card-view-content">
-                  <p className="card-view-text">{viewedCard.front}</p>
-
-                  {viewedCard.imageUrl && (
-                    <div className="card-media">
-                      <img
-                        src={`http://localhost:5002${viewedCard.imageUrl}`}
-                        alt=""
-                        className="card-image"
-                      />
-                    </div>
-                  )}
-
-                  {viewedCard.audioUrl && (
-                    <div className="card-media">
-                      <audio controls className="card-audio">
-                        <source
-                          src={`http://localhost:5002${viewedCard.audioUrl}`}
-                          type="audio/mpeg"
-                        />
-                        <source
-                          src={`http://localhost:5002${viewedCard.audioUrl}`}
-                          type="audio/wav"
-                        />
-                        <source
-                          src={`http://localhost:5002${viewedCard.audioUrl}`}
-                          type="audio/ogg"
-                        />
-                        Ваш браузер не поддерживает аудио элемент.
-                      </audio>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="card-view-side back-view">
-                <h3>🟩 Ответ</h3>
-                <div className="card-view-content">
-                  <p className="card-view-text">{viewedCard.back}</p>
-
-                  {viewedCard.backImageUrl && (
-                    <div className="card-media">
-                      <img
-                        src={`http://localhost:5002${viewedCard.backImageUrl}`}
-                        alt=""
-                        className="card-image"
-                      />
-                    </div>
-                  )}
-
-                  {viewedCard.backAudioUrl && (
-                    <div className="card-media">
-                      <audio controls className="card-audio">
-                        <source
-                          src={`http://localhost:5002${viewedCard.backAudioUrl}`}
-                          type="audio/mpeg"
-                        />
-                        <source
-                          src={`http://localhost:5002${viewedCard.backAudioUrl}`}
-                          type="audio/wav"
-                        />
-                        <source
-                          src={`http://localhost:5002${viewedCard.backAudioUrl}`}
-                          type="audio/ogg"
-                        />
-                        Ваш браузер не поддерживает аудио элемент.
-                      </audio>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
       {/* Модальное окно редактирования карточки */}
       {isEditCardModalOpen && editingCard && (
         <div className="modal-overlay">
@@ -1220,6 +1198,46 @@ function App() {
           </div>
         </div>
       )}
+      {/* ✅✅✅ CONFirmationModal ДОЛЖЕН БЫТЬ ЗДЕСЬ - В САМОМ КОНЦЕ ✅✅✅ */}
+      {console.log("ConfirmationModal should render:", deleteModal.isOpen)}
+
+      {/* Временная индикация */}
+      {deleteModal.isOpen && (
+        <div
+          style={{
+            position: "fixed",
+            top: "10px",
+            left: "10px",
+            background: "red",
+            color: "white",
+            padding: "10px",
+            zIndex: 10000,
+            fontSize: "16px",
+            fontWeight: "bold",
+          }}
+        >
+          🚨 МОДАЛКА УДАЛЕНИЯ ОТКРЫТА!
+          <br />
+          Тип: {deleteModal.type}
+          <br />
+          ID: {deleteModal.id}
+          <br />
+          {deleteModal.title}
+        </div>
+      )}
+
+      {/*ConfirmationModal*/}
+      {
+        <ConfirmationModal
+          isOpen={deleteModal.isOpen}
+          onClose={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
+          title={deleteModal.title}
+          message={deleteModal.message}
+          confirmText="Удалить"
+          cancelText="Отмена"
+        />
+      }
     </div>
   );
 }
