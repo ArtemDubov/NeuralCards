@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import apiClient from "../../../api-client";
 import FavoriteButton from "./FavoriteButton";
 
@@ -77,3 +77,4 @@ const FavoritesPage = () => {
 };
 
 export default FavoritesPage;
+

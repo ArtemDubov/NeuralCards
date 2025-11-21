@@ -15,6 +15,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   cardsets  CardSet[]
+  favorites Favorite[]
 }
 
 model CardSet {
@@ -25,16 +26,32 @@ model CardSet {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   authorId    Int
-  author      User     @relation(fields: [authorId], references: [id])
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   cards       FlashCard[]
+  favorites   Favorite[]
 }
 
 model FlashCard {
+  id          Int      @id @default(autoincrement())
+  front       String
+  back        String
+  imageUrl    String?
+  audioUrl    String?
+  backImageUrl String?
+  backAudioUrl String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  cardsetId   Int
+  cardset     CardSet  @relation(fields: [cardsetId], references: [id], onDelete: Cascade)
+}
+
+model Favorite {
   id        Int      @id @default(autoincrement())
-  front     String
-  back      String
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cardsetId Int?
+  cardSet   CardSet? @relation(fields: [cardsetId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  cardsetId Int
-  cardset   CardSet  @relation(fields: [cardsetId], references: [id])
+  
+  @@unique([userId, cardsetId])
 }
