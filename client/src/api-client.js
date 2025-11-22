@@ -5,7 +5,7 @@ const debugLog = (component, action, data = null) => {
   console.log(`[${timestamp}] [${component}] ${action}`, data || "");
 };
 
-const API_URL = "http://localhost:5002/api";
+const API_URL = "http://localhost:5001/api";
 
 // Создаем экземпляр axios с базовой конфигурацией
 const apiClient = axios.create({

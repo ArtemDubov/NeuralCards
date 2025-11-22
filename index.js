@@ -7,11 +7,18 @@ const path = require("path");
 const authMiddleware = require("./server/middleware/auth");
 
 const app = express();
-const PORT = 5002;
+const PORT = 5001;
 const JWT_SECRET = "neural-trident-secret-key";
 const prisma = new PrismaClient();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 app.use((req, res, next) => {
   res.setHeader("Content-Type", "application/json; charset=utf-8");

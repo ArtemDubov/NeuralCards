@@ -3,5 +3,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+COPY prisma ./prisma
+RUN npx prisma generate
 EXPOSE 5000
 CMD ["npm", "run", "dev"]

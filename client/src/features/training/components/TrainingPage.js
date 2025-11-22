@@ -77,7 +77,7 @@ export function TrainingPage({ cardsets }) {
             {currentCard.backImageUrl && (
               <div className="card-media">
                 <img
-                  src={`http://localhost:5002${currentCard.backImageUrl}`}
+                  src={`http://localhost:5001${currentCard.backImageUrl}`}
                   alt=""
                   className="card-image"
                 />
@@ -88,15 +88,15 @@ export function TrainingPage({ cardsets }) {
               <div className="card-media">
                 <audio controls className="card-audio">
                   <source
-                    src={`http://localhost:5002${currentCard.backAudioUrl}`}
+                    src={`http://localhost:5001${currentCard.backAudioUrl}`}
                     type="audio/mpeg"
                   />
                   <source
-                    src={`http://localhost:5002${currentCard.backAudioUrl}`}
+                    src={`http://localhost:5001${currentCard.backAudioUrl}`}
                     type="audio/wav"
                   />
                   <source
-                    src={`http://localhost:5002${currentCard.backAudioUrl}`}
+                    src={`http://localhost:5001${currentCard.backAudioUrl}`}
                     type="audio/ogg"
                   />
                   Ваш браузер не поддерживает аудио элемент.
@@ -113,7 +113,7 @@ export function TrainingPage({ cardsets }) {
             {currentCard.imageUrl && (
               <div className="card-media">
                 <img
-                  src={`http://localhost:5002${currentCard.imageUrl}`}
+                  src={`http://localhost:5001${currentCard.imageUrl}`}
                   alt=""
                   className="card-image"
                 />
@@ -124,15 +124,15 @@ export function TrainingPage({ cardsets }) {
               <div className="card-media">
                 <audio controls className="card-audio">
                   <source
-                    src={`http://localhost:5002${currentCard.audioUrl}`}
+                    src={`http://localhost:5001${currentCard.audioUrl}`}
                     type="audio/mpeg"
                   />
                   <source
-                    src={`http://localhost:5002${currentCard.audioUrl}`}
+                    src={`http://localhost:5001${currentCard.audioUrl}`}
                     type="audio/wav"
                   />
                   <source
-                    src={`http://localhost:5002${currentCard.audioUrl}`}
+                    src={`http://localhost:5001${currentCard.audioUrl}`}
                     type="audio/ogg"
                   />
                   Ваш браузер не поддерживает аудио элемент.

@@ -27,12 +27,12 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit
+    fileSize: 1024 * 1024 * 1024, // 1GB limit
   },
 });
 
 // POST /api/upload - загрузка файла
-router.post("/upload", upload.single("file"), (req, res) => {
+router.post("/", upload.single("file"), (req, res) => {
   try {
     if (!req.file) {
       return res.status(400).json({ error: "Файл не загружен" });

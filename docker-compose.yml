@@ -13,7 +13,7 @@ services:
   app:
     build: .
     ports:
-      - "5000:5000"
+      - "5001:5001"
     environment:
       DATABASE_URL: "postgresql://neural_user:neural_password@postgres:5432/neuraltrident"
     depends_on:
