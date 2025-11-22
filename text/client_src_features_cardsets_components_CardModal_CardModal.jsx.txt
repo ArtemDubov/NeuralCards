@@ -34,8 +34,8 @@ const CardModal = ({
   };
 
   return (
-    <div className="modal-overlay" style={{ zIndex: 100000 }}>
-      <div className="card-modal" style={{ zIndex: 100001 }}>
+    <div className="modal-overlay">
+      <div className="card-modal container-tp1">
         <div className="modal-header">
           <h2>{title}</h2>
           <button className="close-button" onClick={resetForm}>
@@ -176,11 +176,11 @@ const CardModal = ({
             💡 Добавьте хотя бы один элемент на каждую сторону карточки
           </div>
           <div className="modal-actions">
-            <button className="secondary-button" onClick={resetForm}>
+            <button className="btn-tp3" onClick={resetForm}>
               Отмена
             </button>
             <button
-              className="action-button"
+              className="btn-tp1"
               onClick={onSubmit}
               disabled={isUploading}
             >

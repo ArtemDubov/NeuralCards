@@ -1,0 +1,24 @@
+﻿[data-theme="sunset"] {
+  /* 🎨 ОСНОВНАЯ ЦВЕТОВАЯ ПАЛИТРА */
+  --color-primary: #ea580c;
+  --color-primary-dark: #c2410c;
+  --color-secondary: #dc2626;
+  --color-accent: #f97316;
+  --color-success: #16a34a;
+  --color-warning: #eab308;
+  --color-error: #b91c1c;
+
+  /* 🌗 НЕЙТРАЛЬНЫЕ ЦВЕТА */
+  --color-bg-primary: #451a03;
+  --color-bg-secondary: #7c2d12;
+  --color-bg-card: rgba(124, 45, 18, 0.6);
+  --color-bg-overlay: rgba(69, 26, 3, 0.9);
+
+  --color-text-primary: #fffbeb;
+  --color-text-secondary: #fed7aa;
+  --color-text-muted: rgba(254, 215, 170, 0.6);
+
+  --color-border: rgba(249, 115, 22, 0.3);
+  --color-border-hover: rgba(249, 115, 22, 0.6);
+}
+

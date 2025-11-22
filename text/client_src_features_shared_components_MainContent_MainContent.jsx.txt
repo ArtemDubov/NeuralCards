@@ -24,9 +24,9 @@ const MainContent = ({
   searchResults, // Добавляем результаты поиска
 }) => {
   return (
-    <main className="main-content">
+    <main className="main-content container-tp5">
       {activeTab === "sets" && (
-        <div className="tab-content">
+        <div className="tab-content container-tp5">
           <h2>
             {searchResults !== null
               ? "Результаты поиска"
@@ -58,7 +58,7 @@ const MainContent = ({
       )}
 
       {activeTab === "create" && (
-        <div className="tab-content">
+        <div className="tab-content container-tp5">
           <h2>Создать новый набор</h2>
           <CreateSetForm
             newSetTitle={newSetTitle}

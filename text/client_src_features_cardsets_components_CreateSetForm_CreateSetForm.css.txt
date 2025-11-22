@@ -1,12 +1,4 @@
-﻿.create-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-width: 400px;
-  margin: 0 auto;
-}
-
-.form-field {
+﻿.form-field {
   display: flex;
   flex-direction: column;
   gap: 8px;

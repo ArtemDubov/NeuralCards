@@ -9,7 +9,7 @@ export function TrainingPage({ cardsets }) {
   // ШАГ 1: Выбор режима обучения
   if (trainingMode === null) {
     return (
-      <div className="training-container">
+      <div className="training-container container-tp6">
         <h2>Режимы обучения</h2>
 
         <div className="mode-selection">
@@ -45,7 +45,7 @@ export function TrainingPage({ cardsets }) {
   // ШАГ 2: Выбор набора карточек
   if (!selectedSet) {
     return (
-      <div className="training-container">
+      <div className="training-container container-tp6">
         <div className="training-header">
           <button className="btn-tp3" onClick={() => setTrainingMode(null)}>
             ← Назад к режимам
@@ -57,7 +57,7 @@ export function TrainingPage({ cardsets }) {
           <h3>Выберите набор карточек:</h3>
           <div className="sets-grid">
             {cardsets.map((set) => (
-              <div key={set.id} className="training-set-card">
+              <div key={set.id} className="training-set-card container-tp4">
                 <h4>{set.title}</h4>
                 <p className="cards-count">
                   Карточек: {set.cards?.length || 0}
@@ -90,7 +90,7 @@ export function TrainingPage({ cardsets }) {
   // Если набор не выбран, показываем список наборов с выбором режима
   if (!selectedSet) {
     return (
-      <div className="training-container">
+      <div className="training-container container-tp6">
         <h2>Режимы обучения</h2>
 
         {/* Выбор режима тренировки */}
@@ -115,7 +115,7 @@ export function TrainingPage({ cardsets }) {
           <h3>Выберите набор для тренировки:</h3>
           <div className="sets-grid">
             {cardsets.map((set) => (
-              <div key={set.id} className="training-set-card">
+              <div key={set.id} className="training-set-card container-tp4">
                 <h4>{set.title}</h4>
                 <p className="cards-count">
                   Карточек: {set.cards?.length || 0}
@@ -163,7 +163,7 @@ export function TrainingPage({ cardsets }) {
 
   if (!currentCard) {
     return (
-      <div className="training-container completion-screen">
+      <div className="training-container completion-screen container-tp6">
         <h2>Тренировка завершена! 🎉</h2>
         <p>Вы прошли все карточки в наборе "{selectedSet.title}"</p>
         <button
@@ -181,7 +181,7 @@ export function TrainingPage({ cardsets }) {
   }
 
   return (
-    <div className="training-container">
+    <div className="training-container container-tp6">
       <div className="training-header">
         <h2>Тренировка: {selectedSet.title}</h2>
         <div className="progress-info">
@@ -364,7 +364,7 @@ function QuizPractice({ selectedSet, onBack }) {
   // ЭКРАН ЗАВЕРШЕНИЯ ВИКТОРИНЫ
   if (quizCompleted) {
     return (
-      <div className="training-container completion-screen">
+      <div className="training-container completion-screen container-tp6">
         <h2>Викторина завершена! 🎉</h2>
         <div className="quiz-results">
           <div className="result-score">
@@ -387,7 +387,7 @@ function QuizPractice({ selectedSet, onBack }) {
 
   // ИНТЕРФЕЙС ВИКТОРИНЫ
   return (
-    <div className="training-container quiz-container">
+    <div className="training-container quiz-container container-tp6">
       <div className="training-header">
         <h2>Викторина: {selectedSet.title}</h2>
         <div className="progress-info">

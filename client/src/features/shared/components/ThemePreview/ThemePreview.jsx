@@ -1,0 +1,39 @@
+import React from "react";
+import "./ThemePreview.css";
+
+const ThemePreview = ({ theme, isActive, onClick }) => {
+  const themeInfo = {
+    ocean: { primary: "#667eea", accent: "#4fc3f7", bg: "#0a1a2d" },
+    dark: { primary: "#8b5cf6", accent: "#60a5fa", bg: "#0f172a" },
+    forest: { primary: "#059669", accent: "#10b981", bg: "#052e16" },
+    sunset: { primary: "#ea580c", accent: "#f97316", bg: "#451a03" },
+    light: { primary: "#3b82f6", accent: "#06b6d4", bg: "#ffffff" },
+  };
+
+  const info = themeInfo[theme.id] || themeInfo.ocean;
+
+  return (
+    <div
+      className={`theme-preview ${isActive ? "active" : ""}`}
+      onClick={onClick}
+    >
+      <div className="theme-preview-colors">
+        <div
+          className="color-primary"
+          style={{ backgroundColor: info.primary }}
+        ></div>
+        <div
+          className="color-accent"
+          style={{ backgroundColor: info.accent }}
+        ></div>
+        <div className="color-bg" style={{ backgroundColor: info.bg }}></div>
+      </div>
+      <div className="theme-preview-info">
+        <span className="theme-icon">{theme.icon}</span>
+        <span className="theme-name">{theme.name}</span>
+      </div>
+    </div>
+  );
+};
+
+export default ThemePreview;

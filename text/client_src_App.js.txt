@@ -1,8 +1,17 @@
 ﻿import React, { useState } from "react";
 import apiClient from "./api-client";
 import "./App.css";
-import "./styles/Global.css";
-import "./styles/GlobalBtn.css";
+
+// Импорты стилей (ВАЖНЫЙ ПОРЯДОК!)
+import "./styles/Theme.css"; // 1. Базовые переменные
+import "./styles/ThemeOcean.css"; // 2. Тема по умолчанию
+import "./styles/ThemeDark.css"; // 3. Дополнительные темы
+import "./styles/ThemeForest.css";
+import "./styles/ThemeSunset.css";
+import "./styles/ThemeLight.css";
+import "./styles/Global.css"; // 4. Семантические переменные
+import "./styles/GlobalBtn.css"; // 5. Стили кнопок
+import "./styles/GlobalContainer.css"; // 6. Стили контейнеров
 
 // Импорты компонентов
 import { ConfirmationModal } from "./features/shared/components/ConfirmationModal";

@@ -1,4 +1,4 @@
-/* client/src/styles/GlobalContainer.css */
+﻿/* client/src/styles/GlobalContainer.css */
 :root {
   /* Контейнер типа 1 - Модальные окна */
   --container-tp1-bg: var(--gradient-secondary);
@@ -166,3 +166,4 @@
     padding: var(--spacing);
   }
 }
+

@@ -1,0 +1,23 @@
+[data-theme="forest"] {
+  /* 🎨 ОСНОВНАЯ ЦВЕТОВАЯ ПАЛИТРА */
+  --color-primary: #059669;
+  --color-primary-dark: #047857;
+  --color-secondary: #0f766e;
+  --color-accent: #10b981;
+  --color-success: #22c55e;
+  --color-warning: #eab308;
+  --color-error: #dc2626;
+
+  /* 🌗 НЕЙТРАЛЬНЫЕ ЦВЕТА */
+  --color-bg-primary: #052e16;
+  --color-bg-secondary: #14532d;
+  --color-bg-card: rgba(20, 83, 45, 0.6);
+  --color-bg-overlay: rgba(5, 46, 22, 0.9);
+
+  --color-text-primary: #f0fdf4;
+  --color-text-secondary: #dcfce7;
+  --color-text-muted: rgba(220, 252, 231, 0.6);
+
+  --color-border: rgba(16, 185, 129, 0.3);
+  --color-border-hover: rgba(16, 185, 129, 0.6);
+}

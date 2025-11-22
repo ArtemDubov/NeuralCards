@@ -1,21 +1,4 @@
-﻿.main-content {
-  flex: 1;
-  padding: 2rem;
-}
-
-.tab-content {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.tab-content h2 {
-  color: var(--color-sea-wave);
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid var(--color-neural-accent);
-  padding-bottom: 0.5rem;
-}
-
-/* Адаптивность */
+﻿/* Адаптивность */
 @media (max-width: 768px) {
   .main-content {
     padding: 1rem;

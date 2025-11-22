@@ -1,0 +1,79 @@
+﻿import React, { useState, useEffect, useRef } from "react";
+import "./ThemeSwitcher.css";
+
+const ThemeSwitcher = () => {
+  const [currentTheme, setCurrentTheme] = useState("ocean");
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const themes = [
+    { id: "ocean", name: "🌊 Океан", icon: "🌊" },
+    { id: "dark", name: "🌙 Тёмная", icon: "🌙" },
+    { id: "forest", name: "🌲 Лесная", icon: "🌲" },
+    { id: "sunset", name: "🌅 Закат", icon: "🌅" },
+    { id: "light", name: "☀️ Светлая", icon: "☀️" },
+  ];
+
+  useEffect(() => {
+    // Загружаем сохраненную тему из localStorage
+    const savedTheme = localStorage.getItem("neuraltrident-theme") || "ocean";
+    setCurrentTheme(savedTheme);
+    document.documentElement.setAttribute("data-theme", savedTheme);
+  }, []);
+
+  useEffect(() => {
+    // Обработчик клика вне компонента
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const switchTheme = (themeId) => {
+    setCurrentTheme(themeId);
+    document.documentElement.setAttribute("data-theme", themeId);
+    localStorage.setItem("neuraltrident-theme", themeId);
+    // НЕ закрываем меню после выбора темы
+  };
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <div className="theme-switcher-container" ref={dropdownRef}>
+      <div className="theme-switcher-dropdown">
+        <button className="theme-current btn-tp7" onClick={toggleDropdown}>
+          <span className="theme-icon">
+            {themes.find((t) => t.id === currentTheme)?.icon}
+          </span>
+          <span className="theme-arrow">{isOpen ? "▲" : "▼"}</span>
+        </button>
+
+        <div className={`theme-options ${isOpen ? "open" : ""}`}>
+          {themes.map((theme) => (
+            <button
+              key={theme.id}
+              className={`theme-option ${
+                currentTheme === theme.id ? "active" : ""
+              }`}
+              onClick={() => switchTheme(theme.id)}
+            >
+              <span className="theme-option-icon">{theme.icon}</span>
+              <span className="theme-option-name">{theme.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ThemeSwitcher;
+

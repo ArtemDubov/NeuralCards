@@ -1,0 +1,23 @@
+[data-theme="ocean"] {
+  /* 🎨 ОСНОВНАЯ ЦВЕТОВАЯ ПАЛИТРА */
+  --color-primary: #667eea;
+  --color-primary-dark: #5a6fd8;
+  --color-secondary: #764ba2;
+  --color-accent: #4fc3f7;
+  --color-success: #4caf50;
+  --color-warning: #ff9800;
+  --color-error: #ff6b6b;
+
+  /* 🌗 НЕЙТРАЛЬНЫЕ ЦВЕТА */
+  --color-bg-primary: #0a1a2d;
+  --color-bg-secondary: #1e3a5f;
+  --color-bg-card: rgba(30, 58, 95, 0.6);
+  --color-bg-overlay: rgba(10, 26, 45, 0.9);
+
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #e3f2fd;
+  --color-text-muted: rgba(255, 255, 255, 0.6);
+
+  --color-border: rgba(79, 195, 247, 0.3);
+  --color-border-hover: rgba(79, 195, 247, 0.6);
+}

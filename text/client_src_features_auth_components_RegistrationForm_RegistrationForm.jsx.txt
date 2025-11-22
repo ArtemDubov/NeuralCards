@@ -18,7 +18,7 @@ const RegistrationForm = ({
   handleRegister,
 }) => {
   return (
-    <form onSubmit={handleRegister} className="auth-form">
+    <form onSubmit={handleRegister} className="auth-form container-tp9">
       {/* Поле имени с защитой от ошибок */}
       <div className="input-group">
         <input
@@ -31,8 +31,8 @@ const RegistrationForm = ({
           maxLength={16}
         />
         <div className="input-hint">
-          {registerName.length}/16 символов • Только буквы • Начинается с буквы
-          • Один пробел между словами
+          {registerName.length}/16 символов • Только буквы • Один пробел между
+          словами
         </div>
         {errors.name && <span className="error-text">{errors.name}</span>}
       </div>
@@ -87,7 +87,7 @@ const RegistrationForm = ({
         <div className="error-message general-error">{errors.general}</div>
       )}
 
-      <button type="submit" className="action-button">
+      <button type="submit" className="btn-tp1">
         Зарегистрироваться
       </button>
     </form>

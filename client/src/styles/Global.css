@@ -1,71 +1,61 @@
 /* client/src/styles/Global.css */
 :root {
-  /* Основные цвета темы */
-  --color-deep-ocean: #0a1a2d;
-  --color-ocean-blue: #1e3a5f;
-  --color-sea-wave: #4fc3f7;
-  --color-neural-accent: #7e57c2;
-  --color-light-foam: #e3f2fd;
-  --color-text-light: #ffffff;
-  --color-success: #4caf50;
-  --color-warning: #ff9800;
-  --color-error: #ff6b6b;
+  /* === СЕМАНТИЧЕСКИЕ ПЕРЕМЕННЫЕ ДЛЯ КНОПОК === */
 
-  /* Цвета для кнопок */
-  --btn-tp1-bg: linear-gradient(
-    135deg,
-    var(--color-sea-wave) 0%,
-    var(--color-neural-accent) 100%
-  );
-  --btn-tp1-color: white;
-  --btn-tp1-hover: linear-gradient(
-    135deg,
-    var(--color-neural-accent) 0%,
-    var(--color-sea-wave) 100%
-  );
+  /* btn-tp1 - Основные action-кнопки */
+  --btn-tp1-bg: var(--gradient-primary);
+  --btn-tp1-color: var(--color-text-primary);
+  --btn-tp1-hover: var(--gradient-primary-reverse);
 
+  /* btn-tp2 - Навигационные кнопки */
   --btn-tp2-bg: transparent;
-  --btn-tp2-color: var(--color-light-foam);
-  --btn-tp2-border: 1px solid var(--color-sea-wave);
-  --btn-tp2-hover-bg: var(--color-sea-wave);
-  --btn-tp2-hover-color: var(--color-deep-ocean);
+  --btn-tp2-color: var(--color-text-secondary);
+  --btn-tp2-border: 1px solid var(--color-accent);
+  --btn-tp2-hover-bg: var(--color-accent);
+  --btn-tp2-hover-color: var(--color-bg-primary);
 
+  /* btn-tp3 - Вторичные кнопки */
   --btn-tp3-bg: rgba(255, 255, 255, 0.1);
-  --btn-tp3-color: var(--color-sea-wave);
-  --btn-tp3-border: 1px solid var(--color-sea-wave);
-  --btn-tp3-hover-bg: var(--color-sea-wave);
-  --btn-tp3-hover-color: var(--color-deep-ocean);
+  --btn-tp3-color: var(--color-accent);
+  --btn-tp3-border: 1px solid var(--color-accent);
+  --btn-tp3-hover-bg: var(--color-accent);
+  --btn-tp3-hover-color: var(--color-bg-primary);
 
+  /* btn-tp4 - Опасные действия */
   --btn-tp4-bg: rgba(255, 107, 107, 0.2);
-  --btn-tp4-color: #ff6b6b;
-  --btn-tp4-border: 1px solid #ff6b6b;
-  --btn-tp4-hover-bg: #ff6b6b;
-  --btn-tp4-hover-color: white;
+  --btn-tp4-color: var(--color-error);
+  --btn-tp4-border: 1px solid var(--color-error);
+  --btn-tp4-hover-bg: var(--color-error);
+  --btn-tp4-hover-color: var(--color-text-primary);
 
+  /* btn-tp5 - Кнопки вкладок */
   --btn-tp5-bg: transparent;
-  --btn-tp5-color: var(--color-light-foam);
+  --btn-tp5-color: var(--color-text-secondary);
   --btn-tp5-hover-bg: rgba(79, 195, 247, 0.2);
-  --btn-tp5-active-bg: var(--color-sea-wave);
-  --btn-tp5-active-color: var(--color-deep-ocean);
+  --btn-tp5-active-bg: var(--color-accent);
+  --btn-tp5-active-color: var(--color-bg-primary);
 
+  /* btn-tp6 - Игровые кнопки */
   --btn-tp6-bg: linear-gradient(
     135deg,
     var(--color-success) 0%,
-    var(--color-sea-wave) 100%
+    var(--color-accent) 100%
   );
-  --btn-tp6-color: white;
+  --btn-tp6-color: var(--color-text-primary);
   --btn-tp6-hover: scale(1.02);
 
+  /* btn-tp7 - Иконковые кнопки */
   --btn-tp7-bg: none;
-  --btn-tp7-color: var(--color-light-foam);
+  --btn-tp7-color: var(--color-text-secondary);
   --btn-tp7-hover-bg: rgba(255, 255, 255, 0.2);
 
+  /* btn-tp8 - Специальные кнопки */
   --btn-tp8-bg: rgba(255, 215, 0, 0.1);
-  --btn-tp8-color: #ffd700;
+  --btn-tp8-color: #ffd700; /* Золотой цвет оставляем как есть */
   --btn-tp8-border: 1px solid rgba(255, 215, 0, 0.3);
   --btn-tp8-hover-bg: rgba(255, 215, 0, 0.2);
 
-  /* Размеры и отступы */
+  /* === РАЗМЕРЫ И ОТСТУПЫ === */
   --btn-padding-base: 0.7rem 1.5rem;
   --btn-padding-small: 0.5rem 1rem;
   --btn-padding-large: 0.8rem 2rem;
@@ -73,12 +63,12 @@
   --btn-border-radius-round: 20px;
   --btn-transition: all 0.3s ease;
 
-  /* Тени */
+  /* === ТЕНИ === */
   --btn-shadow: 0 4px 12px rgba(126, 87, 194, 0.3);
   --btn-shadow-hover: 0 5px 15px rgba(126, 87, 194, 0.4);
 }
 
-/* Базовые сбросы для кнопок */
+/* === БАЗОВЫЕ СБРОСЫ ДЛЯ КНОПОК === */
 button {
   border: none;
   cursor: pointer;
@@ -89,7 +79,6 @@ button {
   margin: 0.25rem;
 }
 
-/* Состояния для всех кнопок */
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -100,16 +89,16 @@ button:active {
   transform: translateY(0) !important;
 }
 
-/* Добавь в конец Global.css */
+/* === СТИЛИ ДЛЯ ФОРМ === */
 input:not(.search-input):not(.no-global-styles),
 textarea:not(.search-input):not(.no-global-styles),
 select:not(.search-input):not(.no-global-styles) {
   width: 100%;
   padding: 0.8rem 1rem;
-  border: 1px solid var(--color-sea-wave);
+  border: 1px solid var(--color-accent);
   border-radius: 8px;
-  background: rgba(227, 242, 253, 0.1);
-  color: var(--color-text-light);
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
   font-size: 1rem;
   margin-bottom: 1rem;
 }
@@ -118,11 +107,11 @@ input:not(.search-input):not(.no-global-styles):focus,
 textarea:not(.search-input):not(.no-global-styles):focus,
 select:not(.search-input):not(.no-global-styles):focus {
   outline: none;
-  border-color: var(--color-neural-accent);
+  border-color: var(--color-primary);
   box-shadow: 0 0 10px rgba(126, 87, 194, 0.3);
 }
 
 input:not(.search-input):not(.no-global-styles)::placeholder,
 textarea:not(.search-input):not(.no-global-styles)::placeholder {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--color-text-muted);
 }

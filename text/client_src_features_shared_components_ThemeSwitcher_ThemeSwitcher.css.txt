@@ -1,0 +1,93 @@
+﻿.theme-switcher-container {
+  position: relative;
+  display: inline-block;
+}
+
+.theme-switcher-dropdown {
+  position: relative;
+}
+
+.theme-current {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  min-width: 60px;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.theme-current:hover {
+  background: var(--color-bg-card);
+}
+
+.theme-icon {
+  font-size: 1.2rem;
+}
+
+.theme-arrow {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  transition: var(--transition);
+}
+
+.theme-options {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 0.5rem;
+  min-width: 150px;
+  box-shadow: var(--shadow-medium);
+  z-index: 10003330;
+  display: none;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.theme-options.open {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  background: transparent;
+  color: var(--color-text-primary);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  text-align: left;
+}
+
+.theme-option:hover {
+  background: var(--color-bg-card);
+}
+
+.theme-option.active {
+  background: var(--color-bg-card);
+  border-left: 3px solid var(--color-accent);
+}
+
+.theme-option-icon {
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.theme-option-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
