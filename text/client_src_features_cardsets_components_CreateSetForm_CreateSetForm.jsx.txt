@@ -29,7 +29,7 @@ const CreateSetForm = ({
         />
       </div>
 
-      <button type="submit" className="action-button">
+      <button type="submit" className="btn-tp1">
         Создать набор
       </button>
     </form>

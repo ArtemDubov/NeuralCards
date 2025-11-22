@@ -6,7 +6,7 @@ const Header = ({ user, onLogout }) => {
     <header className="app-header">
       <h1>Neural Trident 🌊</h1>
       <p className="welcome-text">Добро пожаловать, {user?.name}!</p>
-      <button className="logout-button" onClick={onLogout}>
+      <button className="btn-tp2" onClick={onLogout}>
         Выйти
       </button>
     </header>

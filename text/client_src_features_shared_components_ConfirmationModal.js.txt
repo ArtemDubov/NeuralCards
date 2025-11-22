@@ -17,7 +17,7 @@ export function ConfirmationModal({
       <div className="confirmation-modal">
         <div className="modal-header">
           <h3>{title}</h3>
-          <button className="close-button" onClick={onClose}>
+          <button className="btn-tp7" onClick={onClose}>
             ✕
           </button>
         </div>
@@ -27,10 +27,10 @@ export function ConfirmationModal({
         </div>
 
         <div className="modal-actions">
-          <button className="secondary-button" onClick={onClose}>
+          <button className="btn-tp3" onClick={onClose}>
             {cancelText}
           </button>
-          <button className="delete-confirm-button" onClick={onConfirm}>
+          <button className="btn-tp4" onClick={onConfirm}>
             {confirmText}
           </button>
         </div>

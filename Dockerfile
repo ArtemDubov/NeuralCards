@@ -1,9 +1,18 @@
-FROM node:18-alpine
+FROM node:18
+
 WORKDIR /app
+
+# Копируем package.json отдельно для кэширования
 COPY package*.json ./
 RUN npm install
-COPY . .
+
+# Копируем Prisma схему и генерируем клиент
 COPY prisma ./prisma
 RUN npx prisma generate
-EXPOSE 5000
+
+# Копируем остальные файлы
+COPY . .
+
+EXPOSE 5001
+
 CMD ["npm", "run", "dev"]

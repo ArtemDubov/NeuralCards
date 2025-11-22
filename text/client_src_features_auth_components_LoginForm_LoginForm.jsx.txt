@@ -22,7 +22,7 @@ const LoginForm = ({ email, setEmail, password, setPassword, handleLogin }) => {
           className="form-input"
         />
       </div>
-      <button type="submit" className="action-button">
+      <button className="btn-tp1" type="submit">
         Войти
       </button>
     </form>

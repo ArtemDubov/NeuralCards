@@ -38,7 +38,7 @@ const SearchBar = ({
         {query && (
           <button
             type="button"
-            className="clear-search-btn"
+            className="btn-tp7"
             onClick={handleClear}
             title="Очистить поиск"
           >

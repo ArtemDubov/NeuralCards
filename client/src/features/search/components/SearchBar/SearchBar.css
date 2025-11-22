@@ -39,7 +39,6 @@
   line-height: normal;
   height: 44px;
   box-sizing: border-box;
-  /* margin-bottom: 0; - больше не нужно, т.к. глобальные стили не применяются */
 }
 
 .search-input::placeholder {
@@ -54,35 +53,6 @@
   background: rgba(255, 255, 255, 0.15);
 }
 
-.clear-search-btn {
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: var(--color-light-foam);
-  cursor: pointer;
-  padding: 0;
-  border-radius: 50%;
-  transition: all 0.2s ease;
-  opacity: 0.7;
-  font-size: 20px;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-  font-weight: bold;
-}
-
-.clear-search-btn:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-  opacity: 1;
-  transform: translateY(-50%) scale(1.1);
-}
-
 @media (max-width: 768px) {
   .search-input {
     padding: 10px 35px 10px 40px;
@@ -93,10 +63,5 @@
   .search-icon {
     left: 12px;
     font-size: 16px;
-  }
-
-  .clear-search-btn {
-    right: 12px;
-    font-size: 18px;
   }
 }

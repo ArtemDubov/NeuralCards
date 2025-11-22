@@ -51,7 +51,7 @@ const TagsInput = ({ tags, setTags, placeholder = "Добавьте теги..."
                 e.stopPropagation();
                 removeTag(index);
               }}
-              className="tag-remove"
+              className="btn-tp7"
             >
               ×
             </button>

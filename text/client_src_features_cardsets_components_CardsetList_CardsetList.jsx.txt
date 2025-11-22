@@ -32,7 +32,7 @@ const CardsetList = ({ cardsets, handleViewSet, showDeleteModal }) => {
             <div className="set-actions">
               <FavoriteButton itemId={set.id} itemType="cardset" />
               <button
-                className="delete-set-btn"
+                className="btn-tp4"
                 onClick={(e) => {
                   e.stopPropagation();
                   showDeleteModal(

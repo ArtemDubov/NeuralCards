@@ -10,7 +10,7 @@ const ViewSet = ({
 }) => {
   return (
     <div className="tab-content">
-      <button className="back-button" onClick={() => setActiveTab("sets")}>
+      <button className="btn-tp3" onClick={() => setActiveTab("sets")}>
         ← Назад к наборам
       </button>
       <h2>{selectedSet.title}</h2>
@@ -55,7 +55,7 @@ const ViewSet = ({
                   </div>
                 </div>
                 <button
-                  className="delete-card-btn"
+                  className="btn-tp4"
                   onClick={(e) => {
                     e.stopPropagation();
                     showDeleteModal(
@@ -78,7 +78,7 @@ const ViewSet = ({
       </div>
 
       <button
-        className="action-button"
+        className="btn-tp1"
         onClick={() => {
           setIsAddCardModalOpen(true);
         }}

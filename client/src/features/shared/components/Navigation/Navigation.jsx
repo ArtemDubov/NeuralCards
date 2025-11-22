@@ -17,7 +17,7 @@ const Navigation = ({ activeTab, setActiveTab, onSearch }) => {
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            className={`nav-button ${activeTab === tab.id ? "active" : ""}`}
+            className={`btn-tp2 ${activeTab === tab.id ? "active" : ""}`}
             onClick={() => setActiveTab(tab.id)}
           >
             {tab.label}

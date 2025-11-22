@@ -47,7 +47,7 @@ export function TrainingPage({ cardsets }) {
     return (
       <div className="training-container">
         <div className="training-header">
-          <button className="back-button" onClick={() => setTrainingMode(null)}>
+          <button className="btn-tp3" onClick={() => setTrainingMode(null)}>
             ← Назад к режимам
           </button>
           <h2>{trainingMode === "practice" ? "Повторение" : "Викторина"}</h2>
@@ -71,7 +71,7 @@ export function TrainingPage({ cardsets }) {
                 )}
 
                 <button
-                  className="action-button"
+                  className="btn-tp1"
                   onClick={() => setSelectedSet(set)}
                   disabled={trainingMode === "quiz" && set.cards?.length < 4}
                 >
@@ -129,7 +129,7 @@ export function TrainingPage({ cardsets }) {
                 )}
 
                 <button
-                  className="action-button"
+                  className="btn-tp1"
                   onClick={() => setSelectedSet(set)}
                   disabled={trainingMode === "quiz" && set.cards?.length < 4}
                 >
@@ -167,7 +167,7 @@ export function TrainingPage({ cardsets }) {
         <h2>Тренировка завершена! 🎉</h2>
         <p>Вы прошли все карточки в наборе "{selectedSet.title}"</p>
         <button
-          className="action-button"
+          className="btn-tp1"
           onClick={() => {
             setSelectedSet(null);
             setCurrentCardIndex(0);
@@ -272,7 +272,7 @@ export function TrainingPage({ cardsets }) {
       <div className="training-controls">
         {showAnswer && (
           <button
-            className="action-button next-button"
+            className="btn-tp1 next-button"
             onClick={() => {
               setShowAnswer(false);
               setCurrentCardIndex(currentCardIndex + 1);
@@ -282,7 +282,7 @@ export function TrainingPage({ cardsets }) {
           </button>
         )}
         <button
-          className="secondary-button"
+          className="btn-tp3"
           onClick={() => {
             setSelectedSet(null);
             setCurrentCardIndex(0);
@@ -378,7 +378,7 @@ function QuizPractice({ selectedSet, onBack }) {
             <strong>{Math.round((score / questions.length) * 100)}%</strong>
           </div>
         </div>
-        <button className="action-button" onClick={onBack}>
+        <button className="btn-tp1" onClick={onBack}>
           Выбрать другой набор
         </button>
       </div>
@@ -427,7 +427,7 @@ function QuizPractice({ selectedSet, onBack }) {
         {currentQuestion.answers.map((answer, index) => (
           <button
             key={index}
-            className={`answer-button ${
+            className={`btn-tp6 ${
               showResult
                 ? index === currentQuestion.correctIndex
                   ? "correct"
@@ -447,7 +447,7 @@ function QuizPractice({ selectedSet, onBack }) {
       </div>
 
       <div className="training-controls">
-        <button className="secondary-button" onClick={onBack}>
+        <button className="btn-tp3" onClick={onBack}>
           Завершить викторину
         </button>
       </div>

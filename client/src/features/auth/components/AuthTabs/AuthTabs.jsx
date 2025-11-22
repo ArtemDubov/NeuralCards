@@ -5,13 +5,13 @@ const AuthTabs = ({ isLoginForm, setIsLoginForm }) => {
   return (
     <div className="auth-tabs">
       <button
-        className={`tab-button ${isLoginForm ? "active" : ""}`}
+        className={`btn-tp5 ${isLoginForm ? "active" : ""}`}
         onClick={() => setIsLoginForm(true)}
       >
         Вход
       </button>
       <button
-        className={`tab-button ${!isLoginForm ? "active" : ""}`}
+        className={`btn-tp5 ${isLoginForm ? "active" : ""}`}
         onClick={() => setIsLoginForm(false)}
       >
         Регистрация

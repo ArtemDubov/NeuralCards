@@ -1,0 +1,188 @@
+/* client/src/styles/GlobalBtn.css */
+
+/* btn-tp1 - Основные action-кнопки (формы, подтверждения) */
+.btn-tp1 {
+  background: var(--btn-tp1-bg);
+  color: var(--btn-tp1-color);
+  padding: var(--btn-padding-large);
+  border-radius: var(--btn-border-radius);
+  font-weight: bold;
+}
+
+.btn-tp1:hover:not(:disabled) {
+  background: var(--btn-tp1-hover);
+  transform: scale(1.05);
+  box-shadow: var(--btn-shadow-hover);
+}
+
+/* btn-tp2 - Навигационные кнопки (header, navigation) */
+.btn-tp2 {
+  background: var(--btn-tp2-bg);
+  color: var(--btn-tp2-color);
+  border: var(--btn-tp2-border);
+  padding: var(--btn-padding-base);
+  border-radius: var(--btn-border-radius);
+}
+
+.btn-tp2:hover:not(:disabled) {
+  background: var(--btn-tp2-hover-bg);
+  color: var(--btn-tp2-hover-color);
+  transform: translateY(-2px);
+}
+
+/* btn-tp3 - Вторичные кнопки (отмена, назад) */
+.btn-tp3 {
+  background: var(--btn-tp3-bg);
+  color: var(--btn-tp3-color);
+  border: var(--btn-tp3-border);
+  padding: var(--btn-padding-base);
+  border-radius: var(--btn-border-radius);
+}
+
+.btn-tp3:hover:not(:disabled) {
+  background: var(--btn-tp3-hover-bg);
+  color: var(--btn-tp3-hover-color);
+}
+
+/* btn-tp4 - Опасные действия (удаление) */
+.btn-tp4 {
+  background: var(--btn-tp4-bg);
+  color: var(--btn-tp4-color);
+  border: var(--btn-tp4-border);
+  padding: var(--btn-padding-small);
+  border-radius: var(--btn-border-radius);
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+.btn-tp4:hover:not(:disabled) {
+  background: var(--btn-tp4-hover-bg);
+  color: var(--btn-tp4-hover-color);
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* btn-tp5 - Кнопки вкладок (auth tabs) */
+.btn-tp5 {
+  background: var(--btn-tp5-bg);
+  color: var(--btn-tp5-color);
+  padding: var(--btn-padding-base);
+  border-radius: var(--btn-border-radius);
+  flex: 1;
+}
+
+.btn-tp5:hover:not(:disabled) {
+  background: var(--btn-tp5-hover-bg);
+}
+
+.btn-tp5.active {
+  background: var(--btn-tp5-active-bg);
+  color: var(--btn-tp5-active-color);
+  font-weight: bold;
+}
+
+/* btn-tp6 - Игровые кнопки (викторина, тренировка) */
+.btn-tp6 {
+  background: var(--btn-tp6-bg);
+  color: var(--btn-tp6-color);
+  padding: 20px;
+  border: 3px solid var(--color-sea-wave);
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-break: break-word;
+}
+
+.btn-tp6:hover:not(:disabled) {
+  transform: var(--btn-tp6-hover);
+  border-color: var(--color-neural-accent);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-tp6.selected {
+  border-color: var(--color-neural-accent);
+  background: linear-gradient(
+    135deg,
+    var(--color-neural-accent),
+    var(--color-sea-wave)
+  );
+  color: white;
+}
+
+.btn-tp6.correct {
+  border-color: var(--color-success);
+  background: linear-gradient(135deg, var(--color-success), #66bb6a);
+  color: white;
+}
+
+.btn-tp6.wrong {
+  border-color: var(--color-error);
+  background: linear-gradient(135deg, var(--color-error), #ef5350);
+  color: white;
+}
+
+/* btn-tp7 - Иконковые кнопки (очистка, закрытие) */
+.btn-tp7 {
+  background: var(--btn-tp7-bg);
+  color: var(--btn-tp7-color);
+  padding: 0.3rem;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  opacity: 0.7;
+}
+
+.btn-tp7:hover:not(:disabled) {
+  background: var(--btn-tp7-hover-bg);
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* btn-tp8 - Специальные кнопки (избранное, теги) */
+.btn-tp8 {
+  background: var(--btn-tp8-bg);
+  color: var(--btn-tp8-color);
+  border: var(--btn-tp8-border);
+  padding: var(--btn-padding-small);
+  border-radius: var(--btn-border-radius);
+  transition: var(--btn-transition);
+}
+
+.btn-tp8:hover:not(:disabled) {
+  background: var(--btn-tp8-hover-bg);
+  transform: translateY(-2px);
+}
+
+/* Модификаторы размеров */
+.btn-small {
+  padding: var(--btn-padding-small);
+  font-size: 0.9rem;
+}
+
+.btn-large {
+  padding: var(--btn-padding-large);
+  font-size: 1.1rem;
+}
+
+/* Модификаторы ширины */
+.btn-full {
+  width: 100%;
+}
+
+.btn-auto {
+  width: auto;
+}
+
+/* Добавь в конец GlobalBtn.css */
+.btn-tp2.active {
+  background-color: var(--color-neural-accent);
+  border-color: var(--color-neural-accent);
+}
