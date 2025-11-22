@@ -27,7 +27,7 @@ export const useCardsetsAPI = () => {
         title: newSetTitle,
         description: "Мой новый набор",
         isPublic: false,
-        tags: tags, // Добавляем теги в запрос
+        tags: tags.map((tag) => ({ name: tag })), // преобразуем строки в объекты Добавляем теги в запрос
       });
 
       setNewSetTitle("");

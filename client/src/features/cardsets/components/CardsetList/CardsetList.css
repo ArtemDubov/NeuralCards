@@ -81,22 +81,26 @@
   padding: 2rem;
 }
 
-/* стили для тегов */
-
+/* Стили для тегов в правом нижнем углу */
 .set-tags {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  margin: 8px 0;
+  gap: 4px;
+  justify-content: flex-end;
+  max-width: 70%;
 }
 
 .set-tags .tag {
   display: inline-block;
   padding: 2px 8px;
-  background: #e3f2fd;
-  border: 1px solid #bbdefb;
+  background: rgba(126, 87, 194, 0.2);
+  border: 1px solid rgba(126, 87, 194, 0.5);
   border-radius: 12px;
-  font-size: 12px;
-  color: #1976d2;
+  font-size: 11px;
+  color: var(--color-neural-accent);
   font-weight: 500;
+  white-space: nowrap;
 }

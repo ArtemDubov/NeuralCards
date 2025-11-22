@@ -26,27 +26,39 @@ router.post("/", authMiddleware, async (req, res) => {
   try {
     const { title, description, isPublic, tags } = req.body;
 
+    console.log("Полученные данные:", { title, description, isPublic, tags });
+
+    // Создаем данные для набора
+    const data = {
+      title,
+      description,
+      isPublic: isPublic || false,
+      authorId: req.userId,
+    };
+
+    // Добавляем теги только если они есть
+    if (tags && tags.length > 0) {
+      data.tags = {
+        connectOrCreate: tags.map((tag) => ({
+          where: { name: tag.name },
+          create: { name: tag.name },
+        })),
+      };
+    }
+
     const cardset = await prisma.cardSet.create({
-      data: {
-        title,
-        description,
-        isPublic: isPublic || false,
-        authorId: req.userId,
-        tags: {
-          connectOrCreate:
-            tags?.map((tagName) => ({
-              where: { name: tagName },
-              create: { name: tagName },
-            })) || [],
-        },
-      },
+      data: data,
       include: {
         tags: true,
+        cards: true,
       },
     });
+
+    console.log("Создан набор:", cardset);
     res.json(cardset);
   } catch (error) {
-    res.status(500).json({ error: "Ошибка создания набора" });
+    console.error("Полная ошибка создания набора:", error);
+    res.status(500).json({ error: "Ошибка создания набора: " + error.message });
   }
 });
 
