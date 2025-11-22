@@ -20,4 +20,44 @@
 
   --color-border: rgba(16, 185, 129, 0.3);
   --color-border-hover: rgba(16, 185, 129, 0.6);
+
+  /* 🌳 ГРАДИЕНТЫ - лесные тона */
+  --gradient-primary: linear-gradient(
+    135deg,
+    var(--color-accent) 0%,
+    var(--color-primary) 100%
+  );
+  --gradient-primary-reverse: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-accent) 100%
+  );
+  --gradient-secondary: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-secondary) 100%
+  );
+  --gradient-success: linear-gradient(
+    135deg,
+    var(--color-success) 0%,
+    #16a34a 100%
+  );
+  --gradient-error: linear-gradient(
+    135deg,
+    var(--color-error) 0%,
+    #b91c1c 100%
+  );
+
+  /* 🍃 ТЕНИ И ЭФФЕКТЫ - природные */
+  --shadow-small: 0 2px 8px rgba(5, 46, 22, 0.3);
+  --shadow-medium: 0 4px 12px rgba(16, 185, 129, 0.2);
+  --shadow-large: 0 8px 24px rgba(5, 46, 22, 0.4);
+  --shadow-glow: 0 0 20px rgba(16, 185, 129, 0.3);
+
+  /* 🎯 ДОПОЛНИТЕЛЬНЫЕ ПЕРЕМЕННЫЕ */
+  --color-sea-wave: var(--color-accent);
+  --color-neural-accent: var(--color-primary);
+  --color-light-foam: var(--color-text-secondary);
+  --color-deep-ocean: var(--color-bg-primary);
+  --color-gold: #d97706;
 }

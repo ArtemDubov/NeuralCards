@@ -71,4 +71,11 @@
   --transition-fast: 0.15s ease;
   --transition: 0.3s ease;
   --transition-slow: 0.5s ease;
+
+  /* 🎯 ДОПОЛНИТЕЛЬНЫЕ ПЕРЕМЕННЫЕ ДЛЯ ПОЛНОЙ ПОДДЕРЖКИ */
+  --color-sea-wave: var(--color-accent);
+  --color-neural-accent: var(--color-primary);
+  --color-light-foam: var(--color-text-secondary);
+  --color-deep-ocean: var(--color-bg-primary);
+  --color-gold: #ffd700;
 }

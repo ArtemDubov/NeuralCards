@@ -2,7 +2,7 @@
 .back-button {
   background: none;
   border: none;
-  color: var(--color-sea-wave);
+  color: var(--color-accent);
   cursor: pointer;
   font-size: 16px;
   padding: 8px 16px;
@@ -12,21 +12,21 @@
 }
 
 .back-button:hover {
-  background: var(--color-neural-accent);
+  background: var(--color-primary);
   text-decoration: none;
 }
 
 /* Специфичные состояния для кнопок викторины */
 .btn-tp6.correct {
-  border-color: #4caf50;
-  background: linear-gradient(135deg, #4caf50, #66bb6a);
+  border-color: var(--color-success);
+  background: var(--gradient-success);
   color: white;
   transform: scale(1.02);
 }
 
 .btn-tp6.wrong {
-  border-color: #f44336;
-  background: linear-gradient(135deg, #f44336, #ef5350);
+  border-color: var(--color-error);
+  background: var(--gradient-error);
   color: white;
   transform: scale(1.02);
 }

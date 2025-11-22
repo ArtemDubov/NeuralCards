@@ -12,6 +12,7 @@ import "./styles/ThemeLight.css";
 import "./styles/Global.css"; // 4. Семантические переменные
 import "./styles/GlobalBtn.css"; // 5. Стили кнопок
 import "./styles/GlobalContainer.css"; // 6. Стили контейнеров
+import { themeUtils } from "./features/shared/utils/themeUtils";
 
 // Импорты компонентов
 import { ConfirmationModal } from "./features/shared/components/ConfirmationModal";

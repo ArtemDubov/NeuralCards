@@ -8,18 +8,18 @@
 
 .set-header h3 {
   margin: 0;
-  color: var(--color-sea-wave);
+  color: var(--color-accent);
   flex: 1;
 }
 
 .set-description {
-  color: var(--color-light-foam);
+  color: var(--color-text-secondary);
   opacity: 0.8;
   margin-bottom: 1rem;
 }
 
 .cards-count {
-  color: var(--color-sea-wave);
+  color: var(--color-accent);
   display: block;
   margin-bottom: 1rem;
 }

@@ -29,4 +29,15 @@ export const themeUtils = {
     document.documentElement.setAttribute("data-theme", savedTheme);
     return savedTheme;
   },
+
+  // Получить все темы
+  getAllThemes: () => {
+    return [
+      { id: "ocean", name: "🌊 Океан", icon: "🌊" },
+      { id: "dark", name: "🌙 Тёмная", icon: "🌙" },
+      { id: "forest", name: "🌲 Лесная", icon: "🌲" },
+      { id: "sunset", name: "🌅 Закат", icon: "🌅" },
+      { id: "light", name: "☀️ Светлая", icon: "☀️" },
+    ];
+  },
 };

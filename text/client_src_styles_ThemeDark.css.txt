@@ -1,24 +1,64 @@
 ﻿[data-theme="dark"] {
-  /* 🎨 ОСНОВНАЯ ЦВЕТОВАЯ ПАЛИТРА */
-  --color-primary: #8b5cf6;
-  --color-primary-dark: #7c3aed;
-  --color-secondary: #6d28d9;
+  /* 🎨 ОСНОВНАЯ ЦВЕТОВАЯ ПАЛИТРА - приглушённые тона для ночного режима */
+  --color-primary: #7c3aed;
+  --color-primary-dark: #6d28d9;
+  --color-secondary: #5b21b6;
   --color-accent: #60a5fa;
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-error: #ef4444;
 
-  /* 🌗 НЕЙТРАЛЬНЫЕ ЦВЕТА */
-  --color-bg-primary: #0f172a;
-  --color-bg-secondary: #1e293b;
-  --color-bg-card: rgba(30, 41, 59, 0.6);
-  --color-bg-overlay: rgba(15, 23, 42, 0.9);
+  /* 🌑 НЕЙТРАЛЬНЫЕ ЦВЕТА - настоящая тёмная тема */
+  --color-bg-primary: #000000;
+  --color-bg-secondary: #0f0f0f;
+  --color-bg-card: rgba(15, 15, 15, 0.8);
+  --color-bg-overlay: rgba(0, 0, 0, 0.95);
 
-  --color-text-primary: #f1f5f9;
-  --color-text-secondary: #cbd5e1;
-  --color-text-muted: rgba(203, 213, 225, 0.6);
+  --color-text-primary: #e5e7eb;
+  --color-text-secondary: #d1d5db;
+  --color-text-muted: rgba(209, 213, 219, 0.6);
 
-  --color-border: rgba(96, 165, 250, 0.3);
-  --color-border-hover: rgba(96, 165, 250, 0.6);
+  --color-border: rgba(96, 165, 250, 0.2);
+  --color-border-hover: rgba(96, 165, 250, 0.4);
+
+  /* 🌌 ГРАДИЕНТЫ - более тёмные и приглушённые */
+  --gradient-primary: linear-gradient(
+    135deg,
+    var(--color-accent) 0%,
+    var(--color-primary) 100%
+  );
+  --gradient-primary-reverse: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-accent) 100%
+  );
+  --gradient-secondary: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-secondary) 100%
+  );
+  --gradient-success: linear-gradient(
+    135deg,
+    var(--color-success) 0%,
+    #059669 100%
+  );
+  --gradient-error: linear-gradient(
+    135deg,
+    var(--color-error) 0%,
+    #dc2626 100%
+  );
+
+  /* ✨ ТЕНИ И ЭФФЕКТЫ - минимальные для ночного режима */
+  --shadow-small: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-medium: 0 2px 8px rgba(96, 165, 250, 0.15);
+  --shadow-large: 0 4px 12px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 15px rgba(96, 165, 250, 0.2);
+
+  /* 🎯 ДОПОЛНИТЕЛЬНЫЕ ПЕРЕМЕННЫЕ */
+  --color-sea-wave: var(--color-accent);
+  --color-neural-accent: var(--color-primary);
+  --color-light-foam: var(--color-text-secondary);
+  --color-deep-ocean: var(--color-bg-primary);
+  --color-gold: #d97706; /* Более тёмный золотой для ночного режима */
 }
 

@@ -39,20 +39,19 @@ const ThemeSwitcher = () => {
     setCurrentTheme(themeId);
     document.documentElement.setAttribute("data-theme", themeId);
     localStorage.setItem("neuraltrident-theme", themeId);
-    // НЕ закрываем меню после выбора темы
   };
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
+  const currentThemeInfo = themes.find((t) => t.id === currentTheme);
+
   return (
     <div className="theme-switcher-container" ref={dropdownRef}>
       <div className="theme-switcher-dropdown">
         <button className="theme-current btn-tp7" onClick={toggleDropdown}>
-          <span className="theme-icon">
-            {themes.find((t) => t.id === currentTheme)?.icon}
-          </span>
+          <span className="theme-icon">{currentThemeInfo?.icon}</span>
           <span className="theme-arrow">{isOpen ? "▲" : "▼"}</span>
         </button>
 
@@ -60,6 +59,7 @@ const ThemeSwitcher = () => {
           {themes.map((theme) => (
             <button
               key={theme.id}
+              data-theme={theme.id}
               className={`theme-option ${
                 currentTheme === theme.id ? "active" : ""
               }`}

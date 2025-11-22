@@ -1,12 +1,12 @@
 .tab-content h2 {
-  color: var(--color-sea-wave);
+  color: var(--color-accent);
   margin-bottom: 1.5rem;
-  border-bottom: 2px solid var(--color-neural-accent);
+  border-bottom: 2px solid var(--color-primary);
   padding-bottom: 0.5rem;
 }
 
 .cards-section h3 {
-  color: var(--color-sea-wave);
+  color: var(--color-accent);
   margin-bottom: 1rem;
 }
 
@@ -34,7 +34,7 @@
 
 .empty-state {
   text-align: center;
-  color: var(--color-light-foam);
+  color: var(--color-text-secondary);
   opacity: 0.7;
   font-style: italic;
   padding: 2rem;
@@ -55,10 +55,10 @@
 .tag {
   display: inline-block;
   padding: 4px 12px;
-  background: #e3f2fd;
-  border: 1px solid #bbdefb;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
   border-radius: 16px;
   font-size: 14px;
-  color: #1976d2;
+  color: var(--color-accent);
   font-weight: 500;
 }

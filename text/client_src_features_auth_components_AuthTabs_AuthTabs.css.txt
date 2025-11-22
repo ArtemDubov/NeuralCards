@@ -1,6 +1,6 @@
 ﻿.auth-tabs {
   display: flex;
-  background: rgba(30, 58, 95, 0.8);
+  background: var(--color-bg-secondary);
   border-radius: 12px;
   padding: 0.3rem;
   margin-bottom: 1.5rem;
