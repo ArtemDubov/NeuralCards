@@ -5,6 +5,7 @@ export const useCardsetsAPI = () => {
   const [cardsets, setCardsets] = useState([]);
   const [newSetTitle, setNewSetTitle] = useState("");
   const [selectedSet, setSelectedSet] = useState(null);
+  const [tags, setTags] = useState([]); // Добавляем состояние для тегов
 
   // Загрузка наборов пользователя
   const loadCardsets = async () => {
@@ -18,7 +19,7 @@ export const useCardsetsAPI = () => {
     }
   };
 
-  // Создание нового набора
+  // Создание нового набора с тегами
   const handleCreateSet = async (e) => {
     e.preventDefault();
     try {
@@ -26,9 +27,11 @@ export const useCardsetsAPI = () => {
         title: newSetTitle,
         description: "Мой новый набор",
         isPublic: false,
+        tags: tags, // Добавляем теги в запрос
       });
 
       setNewSetTitle("");
+      setTags([]); // Очищаем теги после создания
       await loadCardsets();
       return true;
     } catch (error) {
@@ -45,6 +48,8 @@ export const useCardsetsAPI = () => {
     setNewSetTitle,
     selectedSet,
     setSelectedSet,
+    tags, // Добавляем теги в возвращаемые значения
+    setTags, // И функцию для их обновления
 
     // Функции API
     loadCardsets,

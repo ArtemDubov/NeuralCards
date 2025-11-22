@@ -1,0 +1,37 @@
+/* Глобальные CSS переменные */
+:root {
+  --color-deep-ocean: #0a1a2d;
+  --color-ocean-blue: #1e3a5f;
+  --color-sea-wave: #4fc3f7;
+  --color-neural-accent: #7e57c2;
+  --color-light-foam: #e3f2fd;
+  --color-text-light: #ffffff;
+  --color-success: #4caf50;
+}
+
+/* Базовые стили для ВСЕХ полей ввода на сайте */
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--color-sea-wave);
+  border-radius: 8px;
+  background: rgba(227, 242, 253, 0.1);
+  color: var(--color-text-light);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-neural-accent);
+  box-shadow: 0 0 10px rgba(126, 87, 194, 0.3);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}

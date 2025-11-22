@@ -75,6 +75,8 @@ function App() {
     setSelectedSet,
     loadCardsets,
     handleCreateSet,
+    tags,
+    setTags,
   } = cardsetsAPI;
 
   // Подтверждение удаления
@@ -295,6 +297,8 @@ function App() {
         showDeleteModal={showDeleteModal}
         setIsAddCardModalOpen={setIsAddCardModalOpen}
         setActiveTab={setActiveTab}
+        tags={tags}
+        setTags={setTags}
       />
 
       {/* Модальные окна */}

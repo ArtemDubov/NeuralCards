@@ -122,3 +122,27 @@
   box-shadow: 0 5px 15px rgba(126, 87, 194, 0.4);
 }
 
+/* стили тегов */
+
+.tags-section {
+  margin-bottom: 20px;
+}
+
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 12px;
+  background: #e3f2fd;
+  border: 1px solid #bbdefb;
+  border-radius: 16px;
+  font-size: 14px;
+  color: #1976d2;
+  font-weight: 500;
+}
+

@@ -80,3 +80,23 @@
   font-style: italic;
   padding: 2rem;
 }
+
+/* стили для тегов */
+
+.set-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 8px 0;
+}
+
+.set-tags .tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: #e3f2fd;
+  border: 1px solid #bbdefb;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #1976d2;
+  font-weight: 500;
+}

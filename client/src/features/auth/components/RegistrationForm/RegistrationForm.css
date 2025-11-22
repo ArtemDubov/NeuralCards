@@ -12,32 +12,6 @@
   position: relative;
 }
 
-.form-input {
-  width: 100%;
-  padding: 0.8rem 1rem;
-  border: 1px solid var(--color-sea-wave);
-  border-radius: 8px;
-  background: rgba(227, 242, 253, 0.1);
-  color: var(--color-text-light);
-  font-size: 1rem;
-  margin-bottom: 1rem;
-}
-
-.form-input::placeholder {
-  color: rgba(255, 255, 255, 0.6);
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--color-neural-accent);
-  box-shadow: 0 0 10px rgba(126, 87, 194, 0.3);
-}
-
-.form-input.error {
-  border-color: #ff6b6b;
-  box-shadow: 0 0 5px rgba(255, 107, 107, 0.3);
-}
-
 .error-text {
   color: #ff6b6b;
   font-size: 0.8rem;

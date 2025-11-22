@@ -1,7 +1,14 @@
 import React from "react";
+import TagsInput from "../../../shared/components/TagsInput/TagsInput";
 import "./CreateSetForm.css";
 
-const CreateSetForm = ({ newSetTitle, setNewSetTitle, handleCreateSet }) => {
+const CreateSetForm = ({
+  newSetTitle,
+  setNewSetTitle,
+  tags,
+  setTags,
+  handleCreateSet,
+}) => {
   return (
     <form onSubmit={handleCreateSet} className="create-form">
       <input
@@ -12,6 +19,16 @@ const CreateSetForm = ({ newSetTitle, setNewSetTitle, handleCreateSet }) => {
         className="form-input"
         required
       />
+
+      <div className="form-field">
+        <label className="form-label">Теги:</label>
+        <TagsInput
+          tags={tags}
+          setTags={setTags}
+          placeholder="Введите теги через запятую или Enter..."
+        />
+      </div>
+
       <button type="submit" className="action-button">
         Создать набор
       </button>

@@ -15,6 +15,19 @@ const ViewSet = ({
       </button>
       <h2>{selectedSet.title}</h2>
 
+      {/* Добавляем отображение тегов */}
+      {selectedSet.tags && selectedSet.tags.length > 0 && (
+        <div className="tags-section">
+          <div className="tags-list">
+            {selectedSet.tags.map((tag, index) => (
+              <span key={index} className="tag">
+                {tag.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="cards-section">
         <h3>Карточки в наборе:</h3>
         {selectedSet.cards && selectedSet.cards.length > 0 ? (

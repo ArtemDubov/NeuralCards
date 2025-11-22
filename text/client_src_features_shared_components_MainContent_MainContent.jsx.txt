@@ -18,6 +18,8 @@ const MainContent = ({
   showDeleteModal,
   setIsAddCardModalOpen,
   setActiveTab,
+  tags, // Добавляем теги
+  setTags, // И функцию для их обновления
 }) => {
   return (
     <main className="main-content">
@@ -38,6 +40,8 @@ const MainContent = ({
           <CreateSetForm
             newSetTitle={newSetTitle}
             setNewSetTitle={setNewSetTitle}
+            tags={tags} // Передаем теги
+            setTags={setTags} // И функцию для их обновления
             handleCreateSet={handleCreateSet}
           />
         </div>

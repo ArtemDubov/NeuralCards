@@ -1,0 +1,78 @@
+﻿.tags-input-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-sea-wave);
+  border-radius: 8px;
+  background: rgba(227, 242, 253, 0.1);
+  min-height: 44px;
+  cursor: text;
+}
+
+.tags-input-container:focus-within {
+  border-color: var(--color-neural-accent);
+  box-shadow: 0 0 10px rgba(126, 87, 194, 0.3);
+}
+
+.tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  background: #e3f2fd;
+  border: 1px solid #bbdefb;
+  border-radius: 16px;
+  font-size: 14px;
+  color: #1976d2;
+}
+
+.tag-remove {
+  background: none;
+  border: none;
+  color: #1976d2;
+  cursor: pointer;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.tag-remove:hover {
+  background: #bbdefb;
+}
+
+/* Стили для поля ввода - переопределяем глобальные */
+.tags-input-container .tags-input {
+  border: none;
+  outline: none;
+  flex: 1;
+  min-width: 80px;
+  padding: 4px 0;
+  font-size: 14px;
+  background: transparent;
+  color: var(--color-text-light);
+  margin-bottom: 0;
+}
+
+.tags-input-container .tags-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.tags-input-container .tags-input:focus {
+  border: none;
+  box-shadow: none;
+}
+
