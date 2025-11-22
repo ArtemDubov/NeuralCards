@@ -25,17 +25,6 @@ const CardsetList = ({ cardsets, handleViewSet, showDeleteModal }) => {
               <h3>{set.title}</h3>
               <p className="set-description">{set.description}</p>
 
-              {/* Добавляем отображение тегов */}
-              {set.tags && set.tags.length > 0 && (
-                <div className="set-tags">
-                  {set.tags.map((tag, index) => (
-                    <span key={index} className="tag">
-                      {tag.name}
-                    </span>
-                  ))}
-                </div>
-              )}
-
               <small className="cards-count">
                 Карточек: {set.cards?.length || 0}
               </small>
@@ -59,6 +48,17 @@ const CardsetList = ({ cardsets, handleViewSet, showDeleteModal }) => {
               </button>
             </div>
           </div>
+
+          {/* Теги в правом нижнем углу */}
+          {set.tags && set.tags.length > 0 && (
+            <div className="set-tags">
+              {set.tags.map((tag, index) => (
+                <span key={index} className="tag">
+                  {tag.name}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       ))}
     </div>

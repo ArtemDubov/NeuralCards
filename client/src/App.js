@@ -18,6 +18,7 @@ import {
   useDeleteManagement,
 } from "./features/shared/hooks";
 import { useCardState, useCardsetsAPI } from "./features/cardsets/hooks";
+import useSearch from "./features/search/hooks/useSearch"; // Добавляем хук поиска
 
 function App() {
   // Состояния аутентификации
@@ -32,6 +33,7 @@ function App() {
   const cardState = useCardState();
   const deleteManagement = useDeleteManagement();
   const cardsetsAPI = useCardsetsAPI();
+  const search = useSearch(); // Добавляем хук поиска
 
   // Деструктурируем для удобства
   const {
@@ -79,12 +81,19 @@ function App() {
     setTags,
   } = cardsetsAPI;
 
+  const { searchResults, isSearching, handleSearch, clearSearch } = search;
+
+  // Определяем какие наборы показывать - результаты поиска или все наборы
+  const displayedCardsets = searchResults !== null ? searchResults : cardsets;
+
   // Подтверждение удаления
   const handleConfirmDelete = async () => {
     try {
       if (deleteModal.type === "set") {
         await apiClient.delete(`/cardsets/${deleteModal.id}`);
         await loadCardsets();
+        // Очищаем поиск при удалении
+        clearSearch();
         if (selectedSet && selectedSet.id === deleteModal.id) {
           setSelectedSet(null);
           setActiveTab("sets");
@@ -280,11 +289,15 @@ function App() {
   return (
     <div className="app">
       <Header user={user} onLogout={() => setIsLoggedIn(false)} />
-      <Navigation activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Navigation
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onSearch={handleSearch} // Передаем функцию поиска
+      />
 
       <MainContent
         activeTab={activeTab}
-        cardsets={cardsets}
+        cardsets={displayedCardsets}
         newSetTitle={newSetTitle}
         setNewSetTitle={setNewSetTitle}
         selectedSet={selectedSet}
@@ -299,9 +312,11 @@ function App() {
         setActiveTab={setActiveTab}
         tags={tags}
         setTags={setTags}
+        isSearching={isSearching} // Добавляем
+        searchResults={searchResults} // Добавляем
       />
 
-      {/* Модальные окна */}
+      {/* Остальной код остается без изменений */}
       <ViewCardModal
         isOpen={isViewCardModalOpen}
         onClose={() => setIsViewCardModalOpen(false)}
@@ -357,7 +372,6 @@ function App() {
         submitText={isUploading ? "📤 Сохранение..." : "💾 Сохранить изменения"}
       />
 
-      {/* Модальное окно подтверждения удаления */}
       <ConfirmationModal
         isOpen={deleteModal.isOpen}
         onClose={handleCancelDelete}

@@ -7,8 +7,9 @@ const fs = require("fs");
 const router = express.Router();
 const prisma = new PrismaClient();
 
+// 🔧 ИСПРАВЛЕНИЕ: Используем regex для setId чтобы он не совпадал с 'search'
 // Добавить карточку в набор
-router.post("/:setId/cards", authMiddleware, async (req, res) => {
+router.post("/:setId(\\d+)/cards", authMiddleware, async (req, res) => {
   try {
     const { front, back, imageUrl, audioUrl, backImageUrl, backAudioUrl } =
       req.body;
@@ -30,67 +31,75 @@ router.post("/:setId/cards", authMiddleware, async (req, res) => {
 });
 
 // Обновление карточки
-router.put("/:setId/cards/:cardId", authMiddleware, async (req, res) => {
-  try {
-    const { front, back, imageUrl, audioUrl, backImageUrl, backAudioUrl } =
-      req.body;
-    const card = await prisma.flashCard.update({
-      where: { id: parseInt(req.params.cardId) },
-      data: {
-        front,
-        back,
-        imageUrl,
-        audioUrl,
-        backImageUrl,
-        backAudioUrl,
-      },
-    });
-    res.json(card);
-  } catch (error) {
-    res.status(500).json({ error: "Ошибка обновления карточки" });
+router.put(
+  "/:setId(\\d+)/cards/:cardId(\\d+)",
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const { front, back, imageUrl, audioUrl, backImageUrl, backAudioUrl } =
+        req.body;
+      const card = await prisma.flashCard.update({
+        where: { id: parseInt(req.params.cardId) },
+        data: {
+          front,
+          back,
+          imageUrl,
+          audioUrl,
+          backImageUrl,
+          backAudioUrl,
+        },
+      });
+      res.json(card);
+    } catch (error) {
+      res.status(500).json({ error: "Ошибка обновления карточки" });
+    }
   }
-});
+);
 
 // Удаление карточки
-router.delete("/:setId/cards/:cardId", authMiddleware, async (req, res) => {
-  try {
-    const card = await prisma.flashCard.findUnique({
-      where: { id: parseInt(req.params.cardId) },
-    });
+router.delete(
+  "/:setId(\\d+)/cards/:cardId(\\d+)",
+  authMiddleware,
+  async (req, res) => {
+    try {
+      const card = await prisma.flashCard.findUnique({
+        where: { id: parseInt(req.params.cardId) },
+      });
 
-    if (!card) {
-      return res.status(404).json({ error: "Карточка не найдена" });
-    }
-
-    // Удаляем файлы с диска если они есть
-    const deleteFile = (filePath) => {
-      if (filePath) {
-        const fullPath = path.join(
-          __dirname,
-          "../uploads",
-          path.basename(filePath)
-        );
-        if (fs.existsSync(fullPath)) {
-          fs.unlinkSync(fullPath);
-        }
+      if (!card) {
+        return res.status(404).json({ error: "Карточка не найдена" });
       }
-    };
 
-    deleteFile(card.imageUrl);
-    deleteFile(card.audioUrl);
-    deleteFile(card.backImageUrl);
-    deleteFile(card.backAudioUrl);
+      // Удаляем файлы с диска если они есть
+      const deleteFile = (filePath) => {
+        if (filePath) {
+          const fullPath = path.join(
+            __dirname,
+            "../uploads",
+            path.basename(filePath)
+          );
+          if (fs.existsSync(fullPath)) {
+            fs.unlinkSync(fullPath);
+          }
+        }
+      };
 
-    // Удаляем карточку из БД
-    await prisma.flashCard.delete({
-      where: { id: parseInt(req.params.cardId) },
-    });
+      deleteFile(card.imageUrl);
+      deleteFile(card.audioUrl);
+      deleteFile(card.backImageUrl);
+      deleteFile(card.backAudioUrl);
 
-    res.json({ message: "Карточка удалена" });
-  } catch (error) {
-    console.error("Ошибка удаления карточки:", error);
-    res.status(500).json({ error: "Ошибка удаления карточки" });
+      // Удаляем карточку из БД
+      await prisma.flashCard.delete({
+        where: { id: parseInt(req.params.cardId) },
+      });
+
+      res.json({ message: "Карточка удалена" });
+    } catch (error) {
+      console.error("Ошибка удаления карточки:", error);
+      res.status(500).json({ error: "Ошибка удаления карточки" });
+    }
   }
-});
+);
 
 module.exports = router;

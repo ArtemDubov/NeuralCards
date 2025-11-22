@@ -18,14 +18,37 @@ const MainContent = ({
   showDeleteModal,
   setIsAddCardModalOpen,
   setActiveTab,
-  tags, // Добавляем теги
-  setTags, // И функцию для их обновления
+  tags,
+  setTags,
+  isSearching, // Добавляем состояние поиска
+  searchResults, // Добавляем результаты поиска
 }) => {
   return (
     <main className="main-content">
       {activeTab === "sets" && (
         <div className="tab-content">
-          <h2>Мои наборы карточек</h2>
+          <h2>
+            {searchResults !== null
+              ? "Результаты поиска"
+              : "Мои наборы карточек"}
+          </h2>
+
+          {/* Индикатор поиска */}
+          {isSearching && (
+            <div className="search-indicator">🔍 Идет поиск...</div>
+          )}
+
+          {/* Сообщение если ничего не найдено */}
+          {searchResults !== null &&
+            searchResults.length === 0 &&
+            !isSearching && (
+              <div className="no-results">
+                <div className="no-results-icon">😔</div>
+                <h3>Ничего не найдено</h3>
+                <p>Попробуйте изменить поисковый запрос</p>
+              </div>
+            )}
+
           <CardsetList
             cardsets={cardsets}
             handleViewSet={handleViewSet}
@@ -40,8 +63,8 @@ const MainContent = ({
           <CreateSetForm
             newSetTitle={newSetTitle}
             setNewSetTitle={setNewSetTitle}
-            tags={tags} // Передаем теги
-            setTags={setTags} // И функцию для их обновления
+            tags={tags}
+            setTags={setTags}
             handleCreateSet={handleCreateSet}
           />
         </div>

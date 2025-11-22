@@ -9,10 +9,10 @@
   --color-success: #4caf50;
 }
 
-/* Базовые стили для ВСЕХ полей ввода на сайте */
-input,
-textarea,
-select {
+/* Базовые стили для стандартных полей ввода */
+input:not(.search-input):not(.no-global-styles),
+textarea:not(.search-input):not(.no-global-styles),
+select:not(.search-input):not(.no-global-styles) {
   width: 100%;
   padding: 0.8rem 1rem;
   border: 1px solid var(--color-sea-wave);
@@ -23,15 +23,15 @@ select {
   margin-bottom: 1rem;
 }
 
-input:focus,
-textarea:focus,
-select:focus {
+input:not(.search-input):not(.no-global-styles):focus,
+textarea:not(.search-input):not(.no-global-styles):focus,
+select:not(.search-input):not(.no-global-styles):focus {
   outline: none;
   border-color: var(--color-neural-accent);
   box-shadow: 0 0 10px rgba(126, 87, 194, 0.3);
 }
 
-input::placeholder,
-textarea::placeholder {
+input:not(.search-input):not(.no-global-styles)::placeholder,
+textarea:not(.search-input):not(.no-global-styles)::placeholder {
   color: rgba(255, 255, 255, 0.6);
 }

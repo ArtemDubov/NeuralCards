@@ -1,11 +1,24 @@
 import { useState } from "react";
 import apiClient from "../../../api-client";
 
+// Выносим функцию поиска отдельно
+export const searchCardsets = async (query) => {
+  try {
+    const response = await apiClient.get(
+      `/search/cardsets?query=${encodeURIComponent(query)}` // новый путь
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Search error:", error);
+    throw error;
+  }
+};
+
 export const useCardsetsAPI = () => {
   const [cardsets, setCardsets] = useState([]);
   const [newSetTitle, setNewSetTitle] = useState("");
   const [selectedSet, setSelectedSet] = useState(null);
-  const [tags, setTags] = useState([]); // Добавляем состояние для тегов
+  const [tags, setTags] = useState([]);
 
   // Загрузка наборов пользователя
   const loadCardsets = async () => {
@@ -27,11 +40,11 @@ export const useCardsetsAPI = () => {
         title: newSetTitle,
         description: "Мой новый набор",
         isPublic: false,
-        tags: tags.map((tag) => ({ name: tag })), // преобразуем строки в объекты Добавляем теги в запрос
+        tags: tags.map((tag) => ({ name: tag })),
       });
 
       setNewSetTitle("");
-      setTags([]); // Очищаем теги после создания
+      setTags([]);
       await loadCardsets();
       return true;
     } catch (error) {
@@ -48,8 +61,8 @@ export const useCardsetsAPI = () => {
     setNewSetTitle,
     selectedSet,
     setSelectedSet,
-    tags, // Добавляем теги в возвращаемые значения
-    setTags, // И функцию для их обновления
+    tags,
+    setTags,
 
     // Функции API
     loadCardsets,

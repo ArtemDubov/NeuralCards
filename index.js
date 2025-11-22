@@ -27,8 +27,37 @@ app.use("/uploads", express.static(path.join(__dirname, "server/uploads")));
 app.use("/api/favorites", require("./server/routes/favorites"));
 app.use("/api/upload", require("./server/routes/uploads"));
 app.use("/api/cardsets", require("./server/routes/cardsets"));
-app.use("/api/cardsets", require("./server/routes/cards")); // Карточки как под-роуты наборов
+app.use("/api/cardsets", require("./server/routes/cards"));
 app.use("/api/tags", require("./server/routes/tags"));
+app.use("/api/search", require("./server/routes/search"));
+
+// 🔍 ПОДКЛЮЧАЕМ ПОИСК С ПРОВЕРКОЙ
+try {
+  const searchRouter = require("./server/routes/search");
+  app.use("/api/search", searchRouter);
+  console.log("✅ Search router успешно подключен");
+} catch (error) {
+  console.error("❌ Ошибка подключения search router:", error);
+}
+
+// 🔍 ВЫВОДИМ ВСЕ ЗАРЕГИСТРИРОВАННЫЕ ПУТИ
+console.log("\n🔍 Зарегистрированные API пути:");
+app._router.stack.forEach((middleware) => {
+  if (middleware.name === "router") {
+    console.log(`Router: ${middleware.regexp}`);
+    if (middleware.handle.stack) {
+      middleware.handle.stack.forEach((handler) => {
+        if (handler.route) {
+          const methods = Object.keys(handler.route.methods);
+          const path = handler.route.path;
+          console.log(`  ${methods} ${path}`);
+        }
+      });
+    }
+  }
+});
+
+console.log("\n🚀 Сервер запускается...");
 
 // Регистрация пользователя
 app.post("/api/register", async (req, res) => {

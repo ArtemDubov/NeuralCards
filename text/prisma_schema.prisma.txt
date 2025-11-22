@@ -29,13 +29,13 @@ model CardSet {
   author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   cards       FlashCard[]
   favorites   Favorite[]
-  tags        Tag[]     // Связь с тегами
+  tags        Tag[]     @relation("CardSetToTag") // Правильная связь many-to-many
 }
 
 model Tag {
-  id        Int     @id @default(autoincrement())
-  name      String
-  cardsets  CardSet[]
+  id        Int       @id @default(autoincrement())
+  name      String    @unique  // ДОБАВЬТЕ @unique!
+  cardsets  CardSet[] @relation("CardSetToTag")
 }
 
 model FlashCard {

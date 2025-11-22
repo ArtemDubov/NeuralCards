@@ -1,7 +1,8 @@
 import React from "react";
+import SearchBar from "../../../search/components/SearchBar/SearchBar";
 import "./Navigation.css";
 
-const Navigation = ({ activeTab, setActiveTab }) => {
+const Navigation = ({ activeTab, setActiveTab, onSearch }) => {
   const tabs = [
     { id: "sets", label: "Мои наборы" },
     { id: "create", label: "Создать набор" },
@@ -10,17 +11,22 @@ const Navigation = ({ activeTab, setActiveTab }) => {
   ];
 
   return (
-    <nav className="nav-buttons">
-      {tabs.map((tab) => (
-        <button
-          key={tab.id}
-          className={`nav-button ${activeTab === tab.id ? "active" : ""}`}
-          onClick={() => setActiveTab(tab.id)}
-        >
-          {tab.label}
-        </button>
-      ))}
-    </nav>
+    <div className="nav-container">
+      <nav className="nav-buttons">
+        {tabs.map((tab) => (
+          <button
+            key={tab.id}
+            className={`nav-button ${activeTab === tab.id ? "active" : ""}`}
+            onClick={() => setActiveTab(tab.id)}
+          >
+            {tab.label}
+          </button>
+        ))}
+      </nav>
+      <div className="search-section">
+        <SearchBar onSearch={onSearch} />
+      </div>
+    </div>
   );
 };
 

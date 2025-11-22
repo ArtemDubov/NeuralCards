@@ -93,4 +93,78 @@ router.delete("/:setId", authMiddleware, async (req, res) => {
   }
 });
 
+// Эндпоинт поиска наборов и карточек
+router.get("/search", authMiddleware, async (req, res) => {
+  try {
+    const { query } = req.query;
+
+    console.log("🔍 Search query:", query); // Добавьте эту строку
+    console.log("🔍 User ID:", req.userId); // И эту
+
+    if (!query || query.trim().length === 0) {
+      return res.status(400).json({ error: "Пустой поисковый запрос" });
+    }
+
+    const searchResults = await prisma.cardSet.findMany({
+      where: {
+        authorId: req.userId,
+        OR: [
+          {
+            title: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+          {
+            description: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+          {
+            cards: {
+              some: {
+                OR: [
+                  {
+                    front: {
+                      contains: query,
+                      mode: "insensitive",
+                    },
+                  },
+                  {
+                    back: {
+                      contains: query,
+                      mode: "insensitive",
+                    },
+                  },
+                ],
+              },
+            },
+          },
+          {
+            tags: {
+              some: {
+                name: {
+                  contains: query,
+                  mode: "insensitive",
+                },
+              },
+            },
+          },
+        ],
+      },
+      include: {
+        cards: true,
+        tags: true,
+      },
+    });
+
+    console.log("🔍 Search results:", searchResults.length); // И эту
+    res.json(searchResults);
+  } catch (error) {
+    console.error("Ошибка поиска:", error);
+    res.status(500).json({ error: "Ошибка поиска" });
+  }
+});
+
 module.exports = router;
