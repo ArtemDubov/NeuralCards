@@ -1,0 +1,107 @@
+﻿import React from "react";
+import "./ViewCardModal.css";
+
+const ViewCardModal = ({ isOpen, onClose, card, onEdit }) => {
+  if (!isOpen || !card) return null;
+
+  return (
+    <div className="modal-overlay">
+      <div className="card-view-modal">
+        <div className="modal-header">
+          <h2>Просмотр карточки</h2>
+          <div className="view-card-actions">
+            <button
+              className="edit-card-btn"
+              onClick={() => onEdit(card)}
+              title="Редактировать карточку"
+            >
+              ✏️
+            </button>
+            <button className="close-button" onClick={onClose}>
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <div className="card-view-container">
+          <div className="card-view-side front-view">
+            <h3>🟦 Вопрос</h3>
+            <div className="card-view-content">
+              <p className="card-view-text">{card.front}</p>
+
+              {card.imageUrl && (
+                <div className="card-media">
+                  <img
+                    src={`http://localhost:5002${card.imageUrl}`}
+                    alt=""
+                    className="card-image"
+                  />
+                </div>
+              )}
+
+              {card.audioUrl && (
+                <div className="card-media">
+                  <audio controls className="card-audio">
+                    <source
+                      src={`http://localhost:5002${card.audioUrl}`}
+                      type="audio/mpeg"
+                    />
+                    <source
+                      src={`http://localhost:5002${card.audioUrl}`}
+                      type="audio/wav"
+                    />
+                    <source
+                      src={`http://localhost:5002${card.audioUrl}`}
+                      type="audio/ogg"
+                    />
+                    Ваш браузер не поддерживает аудио элемент.
+                  </audio>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="card-view-side back-view">
+            <h3>🟩 Ответ</h3>
+            <div className="card-view-content">
+              <p className="card-view-text">{card.back}</p>
+
+              {card.backImageUrl && (
+                <div className="card-media">
+                  <img
+                    src={`http://localhost:5002${card.backImageUrl}`}
+                    alt=""
+                    className="card-image"
+                  />
+                </div>
+              )}
+
+              {card.backAudioUrl && (
+                <div className="card-media">
+                  <audio controls className="card-audio">
+                    <source
+                      src={`http://localhost:5002${card.backAudioUrl}`}
+                      type="audio/mpeg"
+                    />
+                    <source
+                      src={`http://localhost:5002${card.backAudioUrl}`}
+                      type="audio/wav"
+                    />
+                    <source
+                      src={`http://localhost:5002${card.backAudioUrl}`}
+                      type="audio/ogg"
+                    />
+                    Ваш браузер не поддерживает аудио элемент.
+                  </audio>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ViewCardModal;
+

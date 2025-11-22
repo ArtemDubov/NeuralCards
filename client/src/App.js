@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import apiClient from "./api-client";
 import "./App.css";
+
+// Импорты компонентов
 import { ConfirmationModal } from "./features/shared/components/ConfirmationModal";
 import CardModal from "./features/cardsets/components/CardModal/CardModal";
 import ViewCardModal from "./features/cardsets/components/ViewCardModal/ViewCardModal";
@@ -8,57 +10,79 @@ import Header from "./features/shared/components/Header/Header";
 import Navigation from "./features/shared/components/Navigation/Navigation";
 import LoginPage from "./features/auth/components/LoginPage/LoginPage";
 import MainContent from "./features/shared/components/MainContent/MainContent";
+import { uploadFile } from "./features/shared/utils";
+
+// Импорты кастомных хуков через index
+import {
+  useModalManagement,
+  useDeleteManagement,
+} from "./features/shared/hooks";
+import { useCardState, useCardsetsAPI } from "./features/cardsets/hooks";
 
 function App() {
+  // Состояния аутентификации
   const [email, setEmail] = useState("test3@mail.ru");
   const [password, setPassword] = useState("123456");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
   const [activeTab, setActiveTab] = useState("sets");
-  const [cardsets, setCardsets] = useState([]);
-  const [newSetTitle, setNewSetTitle] = useState("");
-  const [selectedSet, setSelectedSet] = useState(null);
 
-  const [isViewCardModalOpen, setIsViewCardModalOpen] = useState(false);
-  const [viewedCard, setViewedCard] = useState(null);
-  const [isEditCardModalOpen, setIsEditCardModalOpen] = useState(false);
-  const [editingCard, setEditingCard] = useState(null);
-  const [isUploading, setIsUploading] = useState(false);
+  // Используем кастомные хуки
+  const modalManagement = useModalManagement();
+  const cardState = useCardState();
+  const deleteManagement = useDeleteManagement();
+  const cardsetsAPI = useCardsetsAPI();
 
-  const [isAddCardModalOpen, setIsAddCardModalOpen] = useState(false);
-  const [cardFrontText, setCardFrontText] = useState("");
-  const [cardBackText, setCardBackText] = useState("");
-  const [frontImage, setFrontImage] = useState(null);
-  const [backImage, setBackImage] = useState(null);
-  const [frontAudio, setFrontAudio] = useState(null);
-  const [backAudio, setBackAudio] = useState(null);
+  // Деструктурируем для удобства
+  const {
+    isViewCardModalOpen,
+    setIsViewCardModalOpen,
+    viewedCard,
+    isEditCardModalOpen,
+    setIsEditCardModalOpen,
+    editingCard,
+    isAddCardModalOpen,
+    setIsAddCardModalOpen,
+    handleViewCard,
+    handleEditCard,
+  } = modalManagement;
 
-  const [deleteModal, setDeleteModal] = useState({
-    isOpen: false,
-    type: null, // 'set' или 'card'
-    id: null,
-    title: "",
-    message: "",
-  });
+  const {
+    cardFrontText,
+    setCardFrontText,
+    cardBackText,
+    setCardBackText,
+    frontImage,
+    setFrontImage,
+    backImage,
+    setBackImage,
+    frontAudio,
+    setFrontAudio,
+    backAudio,
+    setBackAudio,
+    isUploading,
+    setIsUploading,
+    resetCardForm,
+  } = cardState;
 
-  // Показ модального окна удаления
-  const showDeleteModal = (type, id, title, message) => {
-    console.log("showDeleteModal called:", { type, id, title, message });
-    setDeleteModal({
-      isOpen: true,
-      type,
-      id,
-      title,
-      message,
-    });
-  };
+  const { deleteModal, showDeleteModal, handleCancelDelete } = deleteManagement;
+
+  const {
+    cardsets,
+    newSetTitle,
+    setNewSetTitle,
+    selectedSet,
+    setSelectedSet,
+    loadCardsets,
+    handleCreateSet,
+  } = cardsetsAPI;
 
   // Подтверждение удаления
   const handleConfirmDelete = async () => {
     try {
       if (deleteModal.type === "set") {
         await apiClient.delete(`/cardsets/${deleteModal.id}`);
-        loadCardsets();
+        await loadCardsets();
         if (selectedSet && selectedSet.id === deleteModal.id) {
           setSelectedSet(null);
           setActiveTab("sets");
@@ -74,35 +98,11 @@ function App() {
         setSelectedSet(updatedSet);
       }
 
-      setDeleteModal({ isOpen: false, type: null, id: null });
+      deleteManagement.setDeleteModal({ isOpen: false, type: null, id: null });
     } catch (error) {
       alert("Ошибка удаления: " + error.message);
-      setDeleteModal({ isOpen: false, type: null, id: null });
+      deleteManagement.setDeleteModal({ isOpen: false, type: null, id: null });
     }
-  };
-
-  // Отмена удаления
-  const handleCancelDelete = () => {
-    setDeleteModal({ isOpen: false, type: null, id: null });
-  };
-
-  // Просмотр карточки
-  const handleViewCard = (card) => {
-    setViewedCard(card);
-    setIsViewCardModalOpen(true);
-  };
-
-  // Редактирование карточки
-  const handleEditCard = (card) => {
-    setEditingCard(card);
-    setCardFrontText(card.front);
-    setCardBackText(card.back);
-    setFrontImage(null);
-    setBackImage(null);
-    setFrontAudio(null);
-    setBackAudio(null);
-    setIsViewCardModalOpen(false);
-    setIsEditCardModalOpen(true);
   };
 
   // Сохранение изменений карточки
@@ -169,37 +169,6 @@ function App() {
     }
   };
 
-  // Загрузка наборов пользователя
-  const loadCardsets = async () => {
-    try {
-      const response = await apiClient.get("/cardsets");
-      setCardsets(response.data);
-      return response.data; // ← ДОБАВИТЬ ЭТУ СТРОКУ
-    } catch (error) {
-      console.error("Ошибка загрузки наборов:", error);
-      return []; // ← И ЭТУ
-    }
-  };
-
-  // Создание нового набора
-  const handleCreateSet = async (e) => {
-    e.preventDefault();
-    try {
-      await apiClient.post("/cardsets", {
-        title: newSetTitle,
-        description: "Мой новый набор",
-        isPublic: false,
-      });
-
-      setNewSetTitle("");
-      loadCardsets();
-      setActiveTab("sets");
-      alert("Набор создан!");
-    } catch (error) {
-      alert("Ошибка создания набора: " + error.message);
-    }
-  };
-
   // Добавление карточки в набор
   const handleAddCard = async (e) => {
     e.preventDefault();
@@ -242,10 +211,10 @@ function App() {
       await apiClient.post(`/cardsets/${selectedSet.id}/cards`, {
         front: cardFrontText,
         back: cardBackText,
-        imageUrl: frontImageUrl, // Изображение для лицевой стороны
-        audioUrl: frontAudioUrl, // Аудио для лицевой стороны
-        backImageUrl: backImageUrl, // Нужно добавить это поле в модель!
-        backAudioUrl: backAudioUrl, // И это поле!
+        imageUrl: frontImageUrl,
+        audioUrl: frontAudioUrl,
+        backImageUrl: backImageUrl,
+        backAudioUrl: backAudioUrl,
       });
 
       // Закрываем модальное окно и сбрасываем форму
@@ -265,52 +234,39 @@ function App() {
     }
   };
 
-  // Функция сброса формы
-  const resetCardForm = () => {
-    setCardFrontText("");
-    setCardBackText("");
-    setFrontImage(null);
-    setBackImage(null);
-    setFrontAudio(null);
-    setBackAudio(null);
-  };
+  // Обработчик логина
+  const handleLogin = async (loginEmail, loginPassword, registerName) => {
+    try {
+      // Если передан registerName - это регистрация
+      if (registerName) {
+        await apiClient.post("/register", {
+          email: loginEmail,
+          password: loginPassword,
+          name: registerName,
+        });
+      }
 
-  // Просмотр набора
-  const handleViewSet = (set) => {
-    setSelectedSet(set);
-    setActiveTab("view-set");
+      // Вход (после регистрации или обычный вход)
+      const response = await apiClient.post("/login", {
+        email: loginEmail,
+        password: loginPassword,
+      });
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+
+      const profileResponse = await apiClient.get("/profile");
+      setIsLoggedIn(true);
+      setUser(profileResponse.data);
+      await loadCardsets();
+    } catch (error) {
+      alert("Ошибка: " + (error.response?.data?.error || error.message));
+    }
   };
 
   if (!isLoggedIn) {
     return (
       <LoginPage
-        onLogin={async (loginEmail, loginPassword, registerName) => {
-          try {
-            // Если передан registerName - это регистрация
-            if (registerName) {
-              await apiClient.post("/register", {
-                email: loginEmail,
-                password: loginPassword,
-                name: registerName,
-              });
-            }
-
-            // Вход (после регистрации или обычный вход)
-            const response = await apiClient.post("/login", {
-              email: loginEmail,
-              password: loginPassword,
-            });
-            const token = response.data.token;
-            localStorage.setItem("token", token);
-
-            const profileResponse = await apiClient.get("/profile");
-            setIsLoggedIn(true);
-            setUser(profileResponse.data);
-            loadCardsets();
-          } catch (error) {
-            alert("Ошибка: " + (error.response?.data?.error || error.message));
-          }
-        }}
+        onLogin={handleLogin}
         email={email}
         setEmail={setEmail}
         password={password}
@@ -331,14 +287,17 @@ function App() {
         setNewSetTitle={setNewSetTitle}
         selectedSet={selectedSet}
         handleCreateSet={handleCreateSet}
-        handleViewSet={handleViewSet}
+        handleViewSet={(set) => {
+          setSelectedSet(set);
+          setActiveTab("view-set");
+        }}
         handleViewCard={handleViewCard}
         showDeleteModal={showDeleteModal}
         setIsAddCardModalOpen={setIsAddCardModalOpen}
         setActiveTab={setActiveTab}
       />
 
-      {/* Модальное окно просмотра карточки */}
+      {/* Модальные окна */}
       <ViewCardModal
         isOpen={isViewCardModalOpen}
         onClose={() => setIsViewCardModalOpen(false)}
@@ -346,7 +305,6 @@ function App() {
         onEdit={handleEditCard}
       />
 
-      {/* Модальное окно добавления карточки */}
       <CardModal
         isOpen={isAddCardModalOpen}
         onClose={() => {
@@ -371,7 +329,6 @@ function App() {
         submitText={isUploading ? "📤 Создание..." : "✅ Создать карточку"}
       />
 
-      {/* Модальное окно редактирования карточки */}
       <CardModal
         isOpen={isEditCardModalOpen}
         onClose={() => {
@@ -395,61 +352,19 @@ function App() {
         isUploading={isUploading}
         submitText={isUploading ? "📤 Сохранение..." : "💾 Сохранить изменения"}
       />
-      {/* ✅✅✅ CONFirmationModal ДОЛЖЕН БЫТЬ ЗДЕСЬ - В САМОМ КОНЦЕ ✅✅✅ */}
-      {console.log("ConfirmationModal should render:", deleteModal.isOpen)}
 
-      {/* Временная индикация */}
-      {deleteModal.isOpen && (
-        <div
-          style={{
-            position: "fixed",
-            top: "10px",
-            left: "10px",
-            background: "red",
-            color: "white",
-            padding: "10px",
-            zIndex: 10000,
-            fontSize: "16px",
-            fontWeight: "bold",
-          }}
-        >
-          🚨 МОДАЛКА УДАЛЕНИЯ ОТКРЫТА!
-          <br />
-          Тип: {deleteModal.type}
-          <br />
-          ID: {deleteModal.id}
-          <br />
-          {deleteModal.title}
-        </div>
-      )}
-
-      {/*ConfirmationModal*/}
-      {
-        <ConfirmationModal
-          isOpen={deleteModal.isOpen}
-          onClose={handleCancelDelete}
-          onConfirm={handleConfirmDelete}
-          title={deleteModal.title}
-          message={deleteModal.message}
-          confirmText="Удалить"
-          cancelText="Отмена"
-        />
-      }
+      {/* Модальное окно подтверждения удаления */}
+      <ConfirmationModal
+        isOpen={deleteModal.isOpen}
+        onClose={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        title={deleteModal.title}
+        message={deleteModal.message}
+        confirmText="Удалить"
+        cancelText="Отмена"
+      />
     </div>
   );
 }
-
-// Функция загрузки файла на сервер
-const uploadFile = async (file) => {
-  const formData = new FormData();
-  formData.append("file", file);
-
-  const response = await apiClient.post("/upload", formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  return response.data.fileUrl;
-};
 
 export default App;

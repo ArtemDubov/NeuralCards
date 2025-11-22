@@ -5,98 +5,46 @@ const authMiddleware = require("../middleware/auth");
 const router = express.Router();
 const prisma = new PrismaClient();
 
-// Получить избранное пользователя
-router.get("/", authMiddleware, async (req, res) => {
-  debugLog("Favorites API", "GET / started", { userId: req.userId });
-
-  try {
-    const favorites = await prisma.favorite.findMany({
-      where: { userId: req.userId },
-      include: {
-        cardSet: {
-          include: {
-            cards: true,
-          },
-        },
-      },
-    });
-
-    debugLog("Favorites API", "GET / success", { count: favorites.length });
-    res.json(favorites);
-  } catch (error) {
-    debugLog("Favorites API", "GET / error", { error: error.message });
-    res.status(500).json({ error: "Ошибка получения избранного" });
-  }
-});
-
 // Добавить в избранное
 router.post("/:cardsetId", authMiddleware, async (req, res) => {
-  const { cardsetId } = req.params;
-  debugLog("Favorites API", "POST /:cardsetId started", {
-    userId: req.userId,
-    cardsetId,
-  });
-
   try {
-    // Проверяем существование набора
-    const cardset = await prisma.cardSet.findUnique({
-      where: { id: parseInt(cardsetId) },
-    });
-
-    if (!cardset) {
-      debugLog("Favorites API", "POST /:cardsetId error - cardset not found", {
-        cardsetId,
-      });
-      return res.status(404).json({ error: "Набор не найден" });
-    }
-
     const favorite = await prisma.favorite.create({
       data: {
         userId: req.userId,
-        cardsetId: parseInt(cardsetId),
+        cardsetId: parseInt(req.params.cardsetId),
       },
     });
-
-    debugLog("Favorites API", "POST /:cardsetId success", {
-      favoriteId: favorite.id,
-    });
-    res.json(favorite);
+    res.json({ success: true, favorite });
   } catch (error) {
-    debugLog("Favorites API", "POST /:cardsetId error", {
-      error: error.message,
-    });
-
-    if (error.code === "P2002") {
-      return res.status(400).json({ error: "Уже в избранном" });
-    }
-
     res.status(500).json({ error: "Ошибка добавления в избранное" });
   }
 });
 
 // Удалить из избранного
 router.delete("/:cardsetId", authMiddleware, async (req, res) => {
-  const { cardsetId } = req.params;
-  debugLog("Favorites API", "DELETE /:cardsetId started", {
-    userId: req.userId,
-    cardsetId,
-  });
-
   try {
     await prisma.favorite.deleteMany({
       where: {
         userId: req.userId,
-        cardsetId: parseInt(cardsetId),
+        cardsetId: parseInt(req.params.cardsetId),
       },
     });
-
-    debugLog("Favorites API", "DELETE /:cardsetId success");
-    res.json({ message: "Удалено из избранного" });
+    res.json({ success: true });
   } catch (error) {
-    debugLog("Favorites API", "DELETE /:cardsetId error", {
-      error: error.message,
-    });
     res.status(500).json({ error: "Ошибка удаления из избранного" });
+  }
+});
+
+// Получить избранное пользователя
+router.get("/", authMiddleware, async (req, res) => {
+  try {
+    const favorites = await prisma.favorite.findMany({
+      where: { userId: req.userId },
+      include: { cardSet: { include: { cards: true } } },
+    });
+    res.json(favorites);
+  } catch (error) {
+    res.status(500).json({ error: "Ошибка получения избранного" });
   }
 });
 

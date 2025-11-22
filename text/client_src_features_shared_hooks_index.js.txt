@@ -1,2 +1,4 @@
-﻿export { useLocalStorage } from './useLocalStorage';
+﻿// Реэкспорт всех кастомных хуков
+export { useModalManagement } from "./useModalManagement";
+export { useDeleteManagement } from "./useDeleteManagement";
 

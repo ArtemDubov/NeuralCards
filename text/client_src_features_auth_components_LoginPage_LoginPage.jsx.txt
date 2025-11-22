@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import RegistrationForm from "../RegistrationForm/RegistrationForm";
 import AuthTabs from "../AuthTabs/AuthTabs";
 import LoginForm from "../LoginForm/LoginForm";
@@ -160,3 +160,4 @@ const LoginPage = ({ onLogin, email, setEmail, password, setPassword }) => {
 };
 
 export default LoginPage;
+

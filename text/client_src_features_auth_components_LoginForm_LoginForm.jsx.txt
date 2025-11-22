@@ -1,0 +1,33 @@
+﻿import React from "react";
+import "./LoginForm.css";
+
+const LoginForm = ({ email, setEmail, password, setPassword, handleLogin }) => {
+  return (
+    <form onSubmit={handleLogin} className="auth-form">
+      <div className="input-group">
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="form-input"
+        />
+      </div>
+      <div className="input-group">
+        <input
+          type="password"
+          placeholder="Пароль"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="form-input"
+        />
+      </div>
+      <button type="submit" className="action-button">
+        Войти
+      </button>
+    </form>
+  );
+};
+
+export default LoginForm;
+
