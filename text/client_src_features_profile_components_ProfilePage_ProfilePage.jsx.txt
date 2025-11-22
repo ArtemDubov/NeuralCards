@@ -1,0 +1,98 @@
+﻿import React, { useState, useEffect } from "react";
+import "./ProfilePage.css";
+
+const ProfilePage = ({ user }) => {
+  const [stats, setStats] = useState({
+    cardsetsCount: 0,
+    cardsCount: 0,
+    favoritesCount: 0,
+  });
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(
+          "http://localhost:5001/api/profile/stats",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          setStats(data);
+        }
+      } catch (error) {
+        console.error("Ошибка загрузки статистики:", error);
+        // Заглушка для демонстрации
+        setStats({
+          cardsetsCount: 12,
+          cardsCount: 45,
+          favoritesCount: 3,
+        });
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("ru-RU", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  return (
+    <div className="profile-page">
+      <div className="profile-header">
+        <h2>👤 Мой профиль</h2>
+      </div>
+
+      <div className="profile-info">
+        <div className="info-card">
+          <h3>Основная информация</h3>
+          <div className="info-row">
+            <span className="label">Имя:</span>
+            <span className="value">{user?.name || "Не указано"}</span>
+          </div>
+          <div className="info-row">
+            <span className="label">Email:</span>
+            <span className="value">{user?.email}</span>
+          </div>
+          <div className="info-row">
+            <span className="label">Дата регистрации:</span>
+            <span className="value">
+              {user?.createdAt ? formatDate(user.createdAt) : "Неизвестно"}
+            </span>
+          </div>
+        </div>
+
+        <div className="stats-card">
+          <h3>📊 Статистика обучения</h3>
+          <div className="stats-grid">
+            <div className="stat-item">
+              <div className="stat-number">{stats.cardsetsCount}</div>
+              <div className="stat-label">Наборов создано</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">{stats.cardsCount}</div>
+              <div className="stat-label">Всего карточек</div>
+            </div>
+            <div className="stat-item">
+              <div className="stat-number">{stats.favoritesCount}</div>
+              <div className="stat-label">В избранном</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProfilePage;
+

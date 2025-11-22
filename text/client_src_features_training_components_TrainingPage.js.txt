@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import "./TrainingPage.css";
 export function TrainingPage({ cardsets }) {
   const [selectedSet, setSelectedSet] = useState(null);
@@ -454,3 +454,4 @@ function QuizPractice({ selectedSet, onBack }) {
     </div>
   );
 }
+

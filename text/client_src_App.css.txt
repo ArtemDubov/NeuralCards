@@ -1,4 +1,4 @@
-/* Neural Trident - Морская тема с нейронами */
+﻿/* Neural Trident - Морская тема с нейронами */
 :root {
   --color-deep-ocean: #0a1a2d;
   --color-ocean-blue: #1e3a5f;
@@ -480,3 +480,4 @@ body {
 body {
   pointer-events: auto !important;
 }
+

@@ -1,0 +1,44 @@
+﻿const express = require("express");
+const { PrismaClient } = require("@prisma/client");
+const authMiddleware = require("../middleware/auth");
+
+const router = express.Router();
+const prisma = new PrismaClient();
+
+// Получение статистики пользователя
+router.get("/stats", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.userId;
+
+    // Получаем количество наборов пользователя
+    const cardsetsCount = await prisma.cardSet.count({
+      where: { authorId: userId },
+    });
+
+    // Получаем общее количество карточек пользователя
+    const cardsCount = await prisma.flashCard.count({
+      where: {
+        cardset: {
+          authorId: userId,
+        },
+      },
+    });
+
+    // Получаем количество избранных наборов
+    const favoritesCount = await prisma.favorite.count({
+      where: { userId: userId },
+    });
+
+    res.json({
+      cardsetsCount,
+      cardsCount,
+      favoritesCount,
+    });
+  } catch (error) {
+    console.error("Ошибка получения статистики:", error);
+    res.status(500).json({ error: "Ошибка получения статистики" });
+  }
+});
+
+module.exports = router;
+

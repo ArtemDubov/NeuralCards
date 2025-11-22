@@ -1,0 +1,41 @@
+﻿import { useState, useCallback } from "react";
+import { searchCardsets } from "../../cardsets/hooks/useCardsetsAPI"; // Правильный путь
+
+const useSearch = () => {
+  const [searchResults, setSearchResults] = useState(null);
+  const [isSearching, setIsSearching] = useState(false);
+
+  const handleSearch = useCallback(async (query) => {
+    console.log("🔍 Frontend search query:", query); // Добавьте эту строку
+    if (!query || query.trim() === "") {
+      setSearchResults(null); // Очищаем результаты, показываем все наборы
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const results = await searchCardsets(query);
+      console.log("🔍 Frontend search results:", results); // И эту
+      setSearchResults(results);
+    } catch (error) {
+      console.error("Search error:", error);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  }, []);
+
+  const clearSearch = useCallback(() => {
+    setSearchResults(null);
+  }, []);
+
+  return {
+    searchResults,
+    isSearching,
+    handleSearch,
+    clearSearch,
+  };
+};
+
+export default useSearch;
+

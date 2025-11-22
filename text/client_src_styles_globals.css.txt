@@ -1,4 +1,4 @@
-/* Глобальные CSS переменные */
+﻿/* Глобальные CSS переменные */
 :root {
   --color-deep-ocean: #0a1a2d;
   --color-ocean-blue: #1e3a5f;
@@ -109,3 +109,4 @@ button:not(.action-button):not(.back-button):not(.nav-button):not(
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(126, 87, 194, 0.3);
 }
+

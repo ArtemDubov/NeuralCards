@@ -1,0 +1,70 @@
+﻿.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgba(30, 58, 95, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--color-sea-wave);
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.nav-button {
+  background: transparent;
+  color: var(--color-light-foam);
+  border: 1px solid var(--color-sea-wave);
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.nav-button:hover {
+  background-color: var(--color-sea-wave);
+  color: var(--color-deep-ocean);
+  transform: translateY(-2px);
+}
+
+.nav-button.active {
+  background-color: var(--color-neural-accent);
+  border-color: var(--color-neural-accent);
+}
+
+.search-section {
+  flex: 1;
+  max-width: 400px;
+  min-width: 250px;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .nav-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .nav-button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .search-section {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+

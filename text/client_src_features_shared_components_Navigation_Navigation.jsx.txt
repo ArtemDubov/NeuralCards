@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import SearchBar from "../../../search/components/SearchBar/SearchBar";
 import "./Navigation.css";
 
@@ -32,3 +32,4 @@ const Navigation = ({ activeTab, setActiveTab, onSearch }) => {
 };
 
 export default Navigation;
+
