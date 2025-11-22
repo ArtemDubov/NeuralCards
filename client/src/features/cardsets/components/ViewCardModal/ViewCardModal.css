@@ -14,19 +14,10 @@
 }
 
 .card-view-modal {
-  background: linear-gradient(
-    135deg,
-    var(--color-ocean-blue) 0%,
-    var(--color-deep-ocean) 100%
-  );
-  border: 2px solid var(--color-sea-wave);
-  border-radius: 16px;
-  padding: 2rem;
   max-width: 800px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 .modal-header {

@@ -3,6 +3,7 @@ import apiClient from "./api-client";
 import "./App.css";
 import "./styles/Global.css";
 import "./styles/GlobalBtn.css";
+import "./styles/GlobalContainer.css";
 
 // Импорты компонентов
 import { ConfirmationModal } from "./features/shared/components/ConfirmationModal";

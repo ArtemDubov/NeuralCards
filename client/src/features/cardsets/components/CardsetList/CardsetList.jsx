@@ -10,7 +10,7 @@ const CardsetList = ({ cardsets, handleViewSet, showDeleteModal }) => {
   return (
     <div className="sets-grid">
       {cardsets.map((set) => (
-        <div key={set.id} className="cardset-item">
+        <div key={set.id} className="cardset-item container-tp2">
           <div className="set-header">
             <div
               className="set-content"

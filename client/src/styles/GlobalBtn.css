@@ -71,7 +71,7 @@
   flex: 1;
 }
 
-.btn-tp5:hover:not(:disabled) {
+.btn-tp5:hover {
   background: var(--btn-tp5-hover-bg);
 }
 
@@ -185,4 +185,48 @@
 .btn-tp2.active {
   background-color: var(--color-neural-accent);
   border-color: var(--color-neural-accent);
+}
+
+/* Дополнительные модификаторы для кнопок */
+.btn-tp1:disabled,
+.btn-tp2:disabled,
+.btn-tp3:disabled,
+.btn-tp4:disabled,
+.btn-tp5:disabled,
+.btn-tp6:disabled,
+.btn-tp7:disabled,
+.btn-tp8:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Активное состояние для навигационных кнопок */
+.btn-tp2.active {
+  background-color: var(--color-neural-accent);
+  border-color: var(--color-neural-accent);
+  color: white;
+}
+
+/* Состояния для игровых кнопок */
+.btn-tp6.selected {
+  border-color: var(--color-neural-accent);
+  background: linear-gradient(
+    135deg,
+    var(--color-neural-accent),
+    var(--color-sea-wave)
+  );
+  color: white;
+}
+
+.btn-tp6.correct {
+  border-color: var(--color-success);
+  background: linear-gradient(135deg, var(--color-success), #66bb6a);
+  color: white;
+}
+
+.btn-tp6.wrong {
+  border-color: var(--color-error);
+  background: linear-gradient(135deg, var(--color-error), #ef5350);
+  color: white;
 }

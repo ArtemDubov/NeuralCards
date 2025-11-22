@@ -9,7 +9,7 @@ const ViewSet = ({
   setIsAddCardModalOpen,
 }) => {
   return (
-    <div className="tab-content">
+    <div className="tab-content container-tp5">
       <button className="btn-tp3" onClick={() => setActiveTab("sets")}>
         ← Назад к наборам
       </button>
@@ -35,7 +35,7 @@ const ViewSet = ({
             {selectedSet.cards.map((card) => (
               <div
                 key={card.id}
-                className="card-item"
+                className="card-item container-tp4"
                 onClick={() => handleViewCard(card)}
               >
                 <div className="card-content-wrapper">

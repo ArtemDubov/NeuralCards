@@ -3,7 +3,7 @@ import "./LoginForm.css";
 
 const LoginForm = ({ email, setEmail, password, setPassword, handleLogin }) => {
   return (
-    <form onSubmit={handleLogin} className="auth-form">
+    <form onSubmit={handleLogin} className="auth-form container-tp9">
       <div className="input-group">
         <input
           type="email"

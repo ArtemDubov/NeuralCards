@@ -11,7 +11,7 @@ const AuthTabs = ({ isLoginForm, setIsLoginForm }) => {
         Вход
       </button>
       <button
-        className={`btn-tp5 ${isLoginForm ? "active" : ""}`}
+        className={`btn-tp5 ${!isLoginForm ? "active" : ""}`}
         onClick={() => setIsLoginForm(false)}
       >
         Регистрация

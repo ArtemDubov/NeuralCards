@@ -6,7 +6,7 @@ const ViewCardModal = ({ isOpen, onClose, card, onEdit }) => {
 
   return (
     <div className="modal-overlay">
-      <div className="card-view-modal">
+      <div className="card-view-modal container-tp1">
         <div className="modal-header">
           <h2>Просмотр карточки</h2>
           <div className="view-card-actions">

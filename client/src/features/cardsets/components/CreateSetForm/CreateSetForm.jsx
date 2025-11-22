@@ -10,7 +10,7 @@ const CreateSetForm = ({
   handleCreateSet,
 }) => {
   return (
-    <form onSubmit={handleCreateSet} className="create-form">
+    <form onSubmit={handleCreateSet} className="create-form container-tp3">
       <input
         type="text"
         placeholder="Название набора"
