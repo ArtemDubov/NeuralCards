@@ -1,6 +1,6 @@
 ﻿import React, { useState, useEffect } from "react";
 import apiClient from "../../../api-client";
-import FavoriteButton from "./FavoriteButton";
+import FavoriteButton from "./FavoriteButton/FavoriteButton";
 
 const FavoritesPage = () => {
   const [favorites, setFavorites] = useState([]);

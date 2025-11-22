@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import apiClient from "../../../api-client";
-import StarIcon from "../../shared/components/StarIcon";
+import apiClient from "../../../../api-client";
+import StarIcon from "../../../shared/components/StarIcon";
 
 const FavoriteButton = ({ itemId, itemType = "cardset" }) => {
   const [isFavorite, setIsFavorite] = useState(false);

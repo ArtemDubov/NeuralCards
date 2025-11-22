@@ -1,0 +1,38 @@
+.nav-buttons {
+  background-color: rgba(30, 58, 95, 0.85);
+  backdrop-filter: blur(10px);
+  padding: 1rem 2rem;
+  display: flex;
+  gap: 1rem;
+  border-bottom: 1px solid var(--color-sea-wave);
+}
+
+.nav-button {
+  background: transparent;
+  color: var(--color-light-foam);
+  border: 1px solid var(--color-sea-wave);
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+}
+
+.nav-button:hover {
+  background-color: var(--color-sea-wave);
+  color: var(--color-deep-ocean);
+  transform: translateY(-2px);
+}
+
+.nav-button.active {
+  background-color: var(--color-neural-accent);
+  border-color: var(--color-neural-accent);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .nav-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

@@ -1,0 +1,46 @@
+.create-form {
+  max-width: 500px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--color-sea-wave);
+  border-radius: 8px;
+  background: rgba(227, 242, 253, 0.1);
+  color: var(--color-text-light);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-neural-accent);
+  box-shadow: 0 0 10px rgba(126, 87, 194, 0.3);
+}
+
+.action-button {
+  background: linear-gradient(
+    135deg,
+    var(--color-sea-wave) 0%,
+    var(--color-neural-accent) 100%
+  );
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.action-button:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(126, 87, 194, 0.4);
+}

@@ -1,0 +1,27 @@
+import React from "react";
+import "./Navigation.css";
+
+const Navigation = ({ activeTab, setActiveTab }) => {
+  const tabs = [
+    { id: "sets", label: "Мои наборы" },
+    { id: "create", label: "Создать набор" },
+    { id: "training", label: "Тренировка" },
+    { id: "favorites", label: "⭐ Избранное" },
+  ];
+
+  return (
+    <nav className="nav-buttons">
+      {tabs.map((tab) => (
+        <button
+          key={tab.id}
+          className={`nav-button ${activeTab === tab.id ? "active" : ""}`}
+          onClick={() => setActiveTab(tab.id)}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </nav>
+  );
+};
+
+export default Navigation;
