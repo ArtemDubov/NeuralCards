@@ -1,28 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useLanguage } from "../../../../contexts/LanguageContext";
 import "./ThemeSwitcher.css";
 
 const ThemeSwitcher = () => {
+  const { t } = useLanguage();
   const [currentTheme, setCurrentTheme] = useState("ocean");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   const themes = [
-    { id: "ocean", name: "🌊 Океан", icon: "🌊" },
-    { id: "dark", name: "🌙 Тёмная", icon: "🌙" },
-    { id: "forest", name: "🌲 Лесная", icon: "🌲" },
-    { id: "sunset", name: "🌅 Закат", icon: "🌅" },
-    { id: "light", name: "☀️ Светлая", icon: "☀️" },
+    { id: "ocean", name: t("theme.ocean"), icon: "🌊" },
+    { id: "dark", name: t("theme.dark"), icon: "🌙" },
+    { id: "forest", name: t("theme.forest"), icon: "🌲" },
+    { id: "sunset", name: t("theme.sunset"), icon: "🌅" },
+    { id: "light", name: t("theme.light"), icon: "☀️" },
   ];
 
   useEffect(() => {
-    // Загружаем сохраненную тему из localStorage
     const savedTheme = localStorage.getItem("neuraltrident-theme") || "ocean";
     setCurrentTheme(savedTheme);
     document.documentElement.setAttribute("data-theme", savedTheme);
   }, []);
 
   useEffect(() => {
-    // Обработчик клика вне компонента
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsOpen(false);

@@ -1,0 +1,5 @@
+﻿// Для удобного импорта SVG
+export { default as RuFlag } from "./flags/ru.svg";
+export { default as EnFlag } from "./flags/en.svg";
+export { default as EsFlag } from "./flags/es.svg";
+

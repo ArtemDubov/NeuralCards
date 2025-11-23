@@ -1,4 +1,5 @@
 import React from "react";
+import { useLanguage } from "../../../../contexts/LanguageContext";
 import CardsetList from "../../../cardsets/components/CardsetList/CardsetList";
 import CreateSetForm from "../../../cardsets/components/CreateSetForm/CreateSetForm";
 import ViewSet from "../../../cardsets/components/ViewSet/ViewSet";
@@ -20,22 +21,22 @@ const MainContent = ({
   setActiveTab,
   tags,
   setTags,
-  isSearching, // Добавляем состояние поиска
-  searchResults, // Добавляем результаты поиска
+  isSearching,
+  searchResults,
 }) => {
+  const { t } = useLanguage();
+
   return (
     <main className="main-content container-tp5">
       {activeTab === "sets" && (
         <div className="tab-content container-tp5">
           <h2>
-            {searchResults !== null
-              ? "Результаты поиска"
-              : "Мои наборы карточек"}
+            {searchResults !== null ? t("search.results") : t("sets.my_sets")}
           </h2>
 
           {/* Индикатор поиска */}
           {isSearching && (
-            <div className="search-indicator">🔍 Идет поиск...</div>
+            <div className="search-indicator">🔍 {t("search.in_progress")}</div>
           )}
 
           {/* Сообщение если ничего не найдено */}
@@ -44,13 +45,13 @@ const MainContent = ({
             !isSearching && (
               <div className="no-results">
                 <div className="no-results-icon">😔</div>
-                <h3>Ничего не найдено</h3>
-                <p>Попробуйте изменить поисковый запрос</p>
+                <h3>{t("search.no_results")}</h3>
+                <p>{t("search.try_again")}</p>
               </div>
             )}
 
           <CardsetList
-            cardsets={cardsets}
+            cardsets={searchResults !== null ? searchResults : cardsets}
             handleViewSet={handleViewSet}
             showDeleteModal={showDeleteModal}
           />
@@ -59,7 +60,7 @@ const MainContent = ({
 
       {activeTab === "create" && (
         <div className="tab-content container-tp5">
-          <h2>Создать новый набор</h2>
+          <h2>{t("sets.create.title")}</h2>
           <CreateSetForm
             newSetTitle={newSetTitle}
             setNewSetTitle={setNewSetTitle}

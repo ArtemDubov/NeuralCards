@@ -50,3 +50,17 @@
   }
 }
 
+/* Добавить в конец файла */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* Уменьшаем отступ между элементами */
+}
+
+/* Адаптивность для мобильных */
+@media (max-width: 768px) {
+  .header-actions {
+    gap: 0.25rem;
+  }
+}
+

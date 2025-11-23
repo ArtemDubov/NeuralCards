@@ -1,38 +1,38 @@
 import React from "react";
-import TagsInput from "../../../shared/components/TagsInput/TagsInput";
+import { useLanguage } from "../../../../contexts/LanguageContext";
 import "./CreateSetForm.css";
 
 const CreateSetForm = ({
   newSetTitle,
   setNewSetTitle,
+  handleCreateSet,
   tags,
   setTags,
-  handleCreateSet,
 }) => {
+  const { t } = useLanguage();
+
   return (
-    <form onSubmit={handleCreateSet} className="create-form container-tp3">
-      <input
-        type="text"
-        placeholder="Название набора"
-        value={newSetTitle}
-        onChange={(e) => setNewSetTitle(e.target.value)}
-        className="form-input"
-        required
-      />
-
-      <div className="form-field">
-        <label className="form-label">Теги:</label>
-        <TagsInput
-          tags={tags}
-          setTags={setTags}
-          placeholder="Введите теги через запятую или Enter..."
+    <div className="container-tp9">
+      <h2>{t("sets.create.title")}</h2>
+      <form onSubmit={handleCreateSet}>
+        <input
+          type="text"
+          placeholder={t("sets.create.placeholder")}
+          value={newSetTitle}
+          onChange={(e) => setNewSetTitle(e.target.value)}
+          required
         />
-      </div>
-
-      <button type="submit" className="btn-tp1">
-        Создать набор
-      </button>
-    </form>
+        <input
+          type="text"
+          placeholder={t("sets.create.tags.placeholder")}
+          value={tags}
+          onChange={(e) => setTags(e.target.value)}
+        />
+        <button type="submit" className="btn-tp1">
+          {t("sets.create.button")}
+        </button>
+      </form>
+    </div>
   );
 };
 

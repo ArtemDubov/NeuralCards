@@ -1,90 +1,96 @@
 ﻿import React from "react";
+import { useLanguage } from "../../../../contexts/LanguageContext";
 import "./ViewSet.css";
 
 const ViewSet = ({
-  selectedSet,
-  setActiveTab,
-  handleViewCard,
-  showDeleteModal,
-  setIsAddCardModalOpen,
+  set,
+  onBack,
+  onAddCard,
+  onViewCard,
+  onDeleteSet,
+  onDeleteCard,
 }) => {
-  return (
-    <div className="tab-content container-tp5">
-      <button className="btn-tp3" onClick={() => setActiveTab("sets")}>
-        ← Назад к наборам
-      </button>
-      <h2>{selectedSet.title}</h2>
+  const { t } = useLanguage();
 
-      {/* Добавляем отображение тегов */}
-      {selectedSet.tags && selectedSet.tags.length > 0 && (
-        <div className="tags-section">
-          <div className="tags-list">
-            {selectedSet.tags.map((tag, index) => (
-              <span key={index} className="tag">
-                {tag.name}
-              </span>
-            ))}
-          </div>
+  return (
+    <div className="view-set-container">
+      <div className="view-set-header">
+        <button className="btn-tp3" onClick={onBack}>
+          {t("sets.back")}
+        </button>
+        <h2>{set.title}</h2>
+        <div className="header-actions">
+          <button className="btn-tp1" onClick={onAddCard}>
+            {t("sets.add.card")}
+          </button>
+          <button className="btn-tp4" onClick={() => onDeleteSet(set)}>
+            {t("sets.delete")}
+          </button>
+        </div>
+      </div>
+
+      {set.tags && set.tags.length > 0 && (
+        <div className="set-tags">
+          {set.tags.split(",").map((tag, index) => (
+            <span key={index} className="tag">
+              {tag.trim()}
+            </span>
+          ))}
         </div>
       )}
 
-      <div className="cards-section">
-        <h3>Карточки в наборе:</h3>
-        {selectedSet.cards && selectedSet.cards.length > 0 ? (
-          <div className="cards-list">
-            {selectedSet.cards.map((card) => (
-              <div
-                key={card.id}
-                className="card-item container-tp4"
-                onClick={() => handleViewCard(card)}
-              >
-                <div className="card-content-wrapper">
-                  <div className="card-front">
-                    <strong>Вопрос:</strong> {card.front}
-                    {card.imageUrl && <span className="media-badge">🖼️</span>}
-                    {card.audioUrl && <span className="media-badge">🎵</span>}
-                  </div>
-                  <div className="card-back">
-                    <strong>Ответ:</strong> {card.back}
-                    {card.backImageUrl && (
-                      <span className="media-badge">🖼️</span>
-                    )}
-                    {card.backAudioUrl && (
-                      <span className="media-badge">🎵</span>
-                    )}
-                  </div>
+      <div className="cards-grid">
+        {set.cards && set.cards.length > 0 ? (
+          set.cards.map((card) => (
+            <div key={card.id} className="container-tp4 card-item">
+              <div className="card-preview">
+                {/* Front side preview */}
+                <div className="card-side">
+                  <h4>{t("cards.front")}</h4>
+                  {card.imageUrl && (
+                    <img
+                      src={card.imageUrl}
+                      alt="Front"
+                      className="card-image"
+                    />
+                  )}
+                  {card.audioUrl && <div className="audio-indicator">🎵</div>}
+                  <p>{card.front}</p>
                 </div>
-                <button
-                  className="btn-tp4"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    showDeleteModal(
-                      "card",
-                      card.id,
-                      "Удалить карточку",
-                      `Карточка "${card.front}" будет удалена безвозвратно.`
-                    );
-                  }}
-                  title="Удалить карточку"
-                >
-                  ✕
+
+                {/* Back side preview */}
+                <div className="card-side">
+                  <h4>{t("cards.back")}</h4>
+                  {card.backImageUrl && (
+                    <img
+                      src={card.backImageUrl}
+                      alt="Back"
+                      className="card-image"
+                    />
+                  )}
+                  {card.backAudioUrl && (
+                    <div className="audio-indicator">🎵</div>
+                  )}
+                  <p>{card.back}</p>
+                </div>
+              </div>
+
+              <div className="card-actions">
+                <button className="btn-tp3" onClick={() => onViewCard(card)}>
+                  {t("sets.view")}
+                </button>
+                <button className="btn-tp4" onClick={() => onDeleteCard(card)}>
+                  {t("sets.delete")}
                 </button>
               </div>
-            ))}
-          </div>
+            </div>
+          ))
         ) : (
-          <p className="empty-state">В этом наборе пока нет карточек</p>
+          <div className="container-tp3 empty-cards">
+            <p>{t("sets.cards.empty")}</p>
+          </div>
         )}
       </div>
-
-      <button
-        className="btn-tp1"
-        onClick={() => {
-          setIsAddCardModalOpen(true);
-        }}
-      >
-        ➕ Добавить карточку
-      </button>
     </div>
   );
 };

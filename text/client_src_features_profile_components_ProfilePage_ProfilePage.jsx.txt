@@ -1,95 +1,65 @@
-﻿import React, { useState, useEffect } from "react";
+﻿import React from "react";
+import { useLanguage } from "../../../../contexts/LanguageContext";
 import "./ProfilePage.css";
 
 const ProfilePage = ({ user }) => {
-  const [stats, setStats] = useState({
-    cardsetsCount: 0,
-    cardsCount: 0,
-    favoritesCount: 0,
-  });
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(
-          "http://localhost:5001/api/profile/stats",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response.ok) {
-          const data = await response.json();
-          setStats(data);
-        }
-      } catch (error) {
-        console.error("Ошибка загрузки статистики:", error);
-        // Заглушка для демонстрации
-        setStats({
-          cardsetsCount: 12,
-          cardsCount: 45,
-          favoritesCount: 3,
-        });
-      }
-    };
-
-    fetchStats();
-  }, []);
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("ru-RU", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
+  const { t } = useLanguage();
 
   return (
-    <div className="profile-page">
-      <div className="profile-header">
-        <h2>👤 Мой профиль</h2>
-      </div>
+    <div className="container-tp5 profile-page">
+      <h2>{t("profile.title")}</h2>
 
       <div className="profile-info">
-        <div className="info-card">
-          <h3>Основная информация</h3>
-          <div className="info-row">
-            <span className="label">Имя:</span>
-            <span className="value">{user?.name || "Не указано"}</span>
-          </div>
-          <div className="info-row">
-            <span className="label">Email:</span>
-            <span className="value">{user?.email}</span>
-          </div>
-          <div className="info-row">
-            <span className="label">Дата регистрации:</span>
-            <span className="value">
-              {user?.createdAt ? formatDate(user.createdAt) : "Неизвестно"}
-            </span>
-          </div>
+        <div className="info-item">
+          <label>{t("profile.name")}</label>
+          <input
+            type="text"
+            value={user?.name || ""}
+            readOnly
+            className="profile-input"
+          />
         </div>
 
-        <div className="stats-card">
-          <h3>📊 Статистика обучения</h3>
-          <div className="stats-grid">
-            <div className="stat-item">
-              <div className="stat-number">{stats.cardsetsCount}</div>
-              <div className="stat-label">Наборов создано</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">{stats.cardsCount}</div>
-              <div className="stat-label">Всего карточек</div>
-            </div>
-            <div className="stat-item">
-              <div className="stat-number">{stats.favoritesCount}</div>
-              <div className="stat-label">В избранном</div>
-            </div>
+        <div className="info-item">
+          <label>{t("profile.email")}</label>
+          <input
+            type="email"
+            value={user?.email || ""}
+            readOnly
+            className="profile-input"
+          />
+        </div>
+
+        <div className="info-item">
+          <label>Дата регистрации</label>
+          <input
+            type="text"
+            value={new Date(user?.createdAt).toLocaleDateString("ru-RU")}
+            readOnly
+            className="profile-input"
+          />
+        </div>
+      </div>
+
+      <div className="profile-stats">
+        <h3>Статистика</h3>
+        <div className="stats-grid">
+          <div className="stat-item">
+            <span className="stat-number">0</span>
+            <span className="stat-label">Наборов создано</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">0</span>
+            <span className="stat-label">Карточек создано</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-number">0</span>
+            <span className="stat-label">Тренировок пройдено</span>
           </div>
         </div>
       </div>
+
+      <button className="btn-tp1">{t("profile.save")}</button>
     </div>
   );
 };
