@@ -1,0 +1,23 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <title>Simple HTML Test</title>
+    <style>
+      body {
+        padding: 50px;
+        text-align: center;
+        font-family: Arial;
+        background: #f0f8ff;
+      }
+      h1 {
+        color: #0066cc;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>✅ HTML Test Page</h1>
+    <p>If you see this, the dev server is working</p>
+    <button onclick="alert('JavaScript works!')">Test JavaScript</button>
+  </body>
+</html>
+
