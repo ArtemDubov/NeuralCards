@@ -22,7 +22,7 @@
   --color-border: rgba(79, 195, 247, 0.3);
   --color-border-hover: rgba(79, 195, 247, 0.6);
 
-  /* 🌈 ГРАДИЕНТЫ */
+  /* 🌈 ГРАДИЕНТЫ - универсальные формулы */
   --gradient-primary: linear-gradient(
     135deg,
     var(--color-accent) 0%,
@@ -41,19 +41,28 @@
   --gradient-success: linear-gradient(
     135deg,
     var(--color-success) 0%,
-    var(--color-accent) 100%
+    var(
+        --color-success-dark,
+        color-mix(in srgb, var(--color-success) 80%, black)
+      )
+      100%
   );
   --gradient-error: linear-gradient(
     135deg,
     var(--color-error) 0%,
-    #ef5350 100%
+    var(--color-error-dark, color-mix(in srgb, var(--color-error) 80%, black))
+      100%
   );
 
-  /* ✨ ТЕНИ И ЭФФЕКТЫ */
-  --shadow-small: 0 2px 8px rgba(0, 0, 0, 0.2);
-  --shadow-medium: 0 4px 12px rgba(126, 87, 194, 0.3);
-  --shadow-large: 0 8px 24px rgba(0, 0, 0, 0.4);
-  --shadow-glow: 0 0 20px rgba(79, 195, 247, 0.4);
+  /* ✨ ТЕНИ И ЭФФЕКТЫ - динамические на основе цветов темы */
+  --shadow-small: 0 2px 8px
+    color-mix(in srgb, var(--color-bg-primary) 80%, transparent);
+  --shadow-medium: 0 4px 12px
+    color-mix(in srgb, var(--color-primary) 30%, transparent);
+  --shadow-large: 0 8px 24px
+    color-mix(in srgb, var(--color-bg-primary) 60%, transparent);
+  --shadow-glow: 0 0 20px
+    color-mix(in srgb, var(--color-accent) 40%, transparent);
 
   /* 📏 РАЗМЕРЫ (общие для всей системы) */
   --border-radius-sm: 4px;
@@ -78,4 +87,117 @@
   --color-light-foam: var(--color-text-secondary);
   --color-deep-ocean: var(--color-bg-primary);
   --color-gold: #ffd700;
+
+  /* 🔧 СЕМАНТИЧЕСКИЕ ПЕРЕМЕННЫЕ ДЛЯ КОМПОНЕНТОВ */
+  --container-tp1-bg: var(--gradient-secondary);
+  --container-tp1-border: 2px solid var(--color-accent);
+  --container-tp1-radius: var(--border-radius-xl);
+  --container-tp1-padding: var(--spacing-xl);
+  --container-tp1-shadow: var(--shadow-large);
+
+  --container-tp2-bg: var(--color-bg-card);
+  --container-tp2-border: 1px solid var(--color-border);
+  --container-tp2-radius: var(--border-radius-lg);
+  --container-tp2-padding: var(--spacing-lg);
+  --container-tp2-shadow: var(--shadow-glow);
+  --container-tp2-hover-border: var(--color-accent);
+  --container-tp2-hover-transform: translateY(-5px);
+
+  --container-tp3-bg: transparent;
+  --container-tp3-border: none;
+  --container-tp3-radius: 0;
+  --container-tp3-padding: 0;
+  --container-tp3-shadow: none;
+
+  --container-tp4-bg: var(--color-bg-card);
+  --container-tp4-border: 1px solid var(--color-border);
+  --container-tp4-radius: var(--border-radius);
+  --container-tp4-padding: var(--spacing);
+  --container-tp4-hover-border: var(--color-accent);
+  --container-tp4-hover-transform: translateY(-2px);
+
+  --container-tp5-bg: transparent;
+  --container-tp5-border: none;
+  --container-tp5-radius: 0;
+  --container-tp5-padding: var(--spacing-xl);
+  --container-tp5-shadow: none;
+
+  --container-tp6-bg: transparent;
+  --container-tp6-border: none;
+  --container-tp6-radius: 0;
+  --container-tp6-padding: var(--spacing);
+  --container-tp6-shadow: none;
+
+  --container-tp9-bg: var(--container-tp1-bg);
+  --container-tp9-border: var(--container-tp1-border);
+  --container-tp9-radius: var(--container-tp1-radius);
+  --container-tp9-padding: 2.5rem;
+  --container-tp9-shadow: var(--container-tp1-shadow);
+
+  /* 🎯 ПЕРЕМЕННЫЕ ДЛЯ КНОПОК */
+  --btn-tp1-bg: var(--gradient-primary);
+  --btn-tp1-color: var(--color-text-primary);
+  --btn-tp1-hover: var(--gradient-primary-reverse);
+
+  --btn-tp2-bg: transparent;
+  --btn-tp2-color: var(--color-text-secondary);
+  --btn-tp2-border: 1px solid var(--color-accent);
+  --btn-tp2-hover-bg: var(--color-accent);
+  --btn-tp2-hover-color: var(--color-bg-primary);
+
+  --btn-tp3-bg: color-mix(in srgb, var(--color-text-primary) 10%, transparent);
+  --btn-tp3-color: var(--color-accent);
+  --btn-tp3-border: 1px solid var(--color-accent);
+  --btn-tp3-hover-bg: var(--color-accent);
+  --btn-tp3-hover-color: var(--color-bg-primary);
+
+  --btn-tp4-bg: color-mix(in srgb, var(--color-error) 20%, transparent);
+  --btn-tp4-color: var(--color-error);
+  --btn-tp4-border: 1px solid var(--color-error);
+  --btn-tp4-hover-bg: var(--color-error);
+  --btn-tp4-hover-color: var(--color-text-primary);
+
+  --btn-tp5-bg: transparent;
+  --btn-tp5-color: var(--color-text-secondary);
+  --btn-tp5-hover-bg: color-mix(in srgb, var(--color-accent) 20%, transparent);
+  --btn-tp5-active-bg: var(--color-accent);
+  --btn-tp5-active-color: var(--color-bg-primary);
+
+  --btn-tp6-bg: linear-gradient(
+    135deg,
+    var(--color-success) 0%,
+    var(--color-accent) 100%
+  );
+  --btn-tp6-color: var(--color-text-primary);
+  --btn-tp6-hover: scale(1.02);
+
+  --btn-tp7-bg: none;
+  --btn-tp7-color: var(--color-text-secondary);
+  --btn-tp7-hover-bg: color-mix(
+    in srgb,
+    var(--color-text-primary) 20%,
+    transparent
+  );
+
+  --btn-tp8-bg: color-mix(in srgb, var(--color-gold) 10%, transparent);
+  --btn-tp8-color: var(--color-gold);
+  --btn-tp8-border: 1px solid
+    color-mix(in srgb, var(--color-gold) 30%, transparent);
+  --btn-tp8-hover-bg: color-mix(in srgb, var(--color-gold) 20%, transparent);
+
+  /* 📏 РАЗМЕРЫ КНОПОК */
+  --btn-padding-base: 0.7rem 1.5rem;
+  --btn-padding-small: 0.5rem 1rem;
+  --btn-padding-large: 0.8rem 2rem;
+  --btn-border-radius: 8px;
+  --btn-border-radius-round: 20px;
+  --btn-transition: all 0.3s ease;
+
+  /* 🌈 ТЕНИ КНОПОК */
+  --btn-shadow: var(--shadow-medium);
+  --btn-shadow-hover: 0 5px 15px
+    color-mix(in srgb, var(--color-primary) 40%, transparent);
+
+  /* 🔧 ОБЩИЕ ПЕРЕМЕННЫЕ */
+  --container-transition: var(--transition);
 }

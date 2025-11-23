@@ -13,7 +13,7 @@
 
 .tags-input-container:focus-within {
   border-color: var(--color-neural-accent);
-  box-shadow: 0 0 10px rgba(126, 87, 194, 0.3);
+  box-shadow: 0 0 10px var(--color-shadow-focused);
 }
 
 .tags-list {

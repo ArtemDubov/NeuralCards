@@ -100,28 +100,24 @@
 .btn-tp6:hover:not(:disabled) {
   transform: var(--btn-tp6-hover);
   border-color: var(--color-neural-accent);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-medium);
 }
 
 .btn-tp6.selected {
   border-color: var(--color-neural-accent);
-  background: linear-gradient(
-    135deg,
-    var(--color-neural-accent),
-    var(--color-sea-wave)
-  );
+  background: var(--gradient-primary);
   color: white;
 }
 
 .btn-tp6.correct {
   border-color: var(--color-success);
-  background: linear-gradient(135deg, var(--color-success), #66bb6a);
+  background: var(--gradient-success);
   color: white;
 }
 
 .btn-tp6.wrong {
   border-color: var(--color-error);
-  background: linear-gradient(135deg, var(--color-error), #ef5350);
+  background: var(--gradient-error);
   color: white;
 }
 
@@ -181,13 +177,14 @@
   width: auto;
 }
 
-/* Добавь в конец GlobalBtn.css */
+/* Активное состояние для навигационных кнопок */
 .btn-tp2.active {
   background-color: var(--color-neural-accent);
   border-color: var(--color-neural-accent);
+  color: white;
 }
 
-/* Дополнительные модификаторы для кнопок */
+/* Состояния отключения */
 .btn-tp1:disabled,
 .btn-tp2:disabled,
 .btn-tp3:disabled,
@@ -199,34 +196,4 @@
   opacity: 0.6;
   cursor: not-allowed;
   transform: none !important;
-}
-
-/* Активное состояние для навигационных кнопок */
-.btn-tp2.active {
-  background-color: var(--color-neural-accent);
-  border-color: var(--color-neural-accent);
-  color: white;
-}
-
-/* Состояния для игровых кнопок */
-.btn-tp6.selected {
-  border-color: var(--color-neural-accent);
-  background: linear-gradient(
-    135deg,
-    var(--color-neural-accent),
-    var(--color-sea-wave)
-  );
-  color: white;
-}
-
-.btn-tp6.correct {
-  border-color: var(--color-success);
-  background: linear-gradient(135deg, var(--color-success), #66bb6a);
-  color: white;
-}
-
-.btn-tp6.wrong {
-  border-color: var(--color-error);
-  background: linear-gradient(135deg, var(--color-error), #ef5350);
-  color: white;
 }

@@ -4,8 +4,8 @@
 }
 
 .form-input.error {
-  border-color: #ff6b6b;
-  box-shadow: 0 0 5px rgba(255, 107, 107, 0.3);
+  border-color: var(--color-error);
+  box-shadow: 0 0 5px var(--color-shadow-error);
 }
 
 .error-text {

@@ -1,53 +1,4 @@
 /* client/src/styles/GlobalContainer.css */
-:root {
-  /* Контейнер типа 1 - Модальные окна */
-  --container-tp1-bg: var(--gradient-secondary);
-  --container-tp1-border: 2px solid var(--color-accent);
-  --container-tp1-radius: var(--border-radius-xl);
-  --container-tp1-padding: var(--spacing-xl);
-  --container-tp1-shadow: var(--shadow-large);
-
-  /* Контейнер типа 2 - Карточки наборов */
-  --container-tp2-bg: var(--color-bg-card);
-  --container-tp2-border: 1px solid var(--color-border);
-  --container-tp2-radius: var(--border-radius-lg);
-  --container-tp2-padding: var(--spacing-lg);
-  --container-tp2-shadow: var(--shadow-glow);
-  --container-tp2-hover-border: var(--color-accent);
-  --container-tp2-hover-transform: translateY(-5px);
-
-  /* Контейнер типа 3 - Формы */
-  --container-tp3-bg: transparent;
-  --container-tp3-border: none;
-  --container-tp3-radius: 0;
-  --container-tp3-padding: 0;
-  --container-tp3-shadow: none;
-
-  /* Контейнер типа 4 - Элементы списка */
-  --container-tp4-bg: var(--color-bg-card);
-  --container-tp4-border: 1px solid var(--color-border);
-  --container-tp4-radius: var(--border-radius);
-  --container-tp4-padding: var(--spacing);
-  --container-tp4-hover-border: var(--color-accent);
-  --container-tp4-hover-transform: translateY(-2px);
-
-  /* Контейнер типа 5 - Секции контента */
-  --container-tp5-bg: transparent;
-  --container-tp5-border: none;
-  --container-tp5-radius: 0;
-  --container-tp5-padding: var(--spacing-xl);
-  --container-tp5-shadow: none;
-
-  /* Контейнер типа 6 - Специальные контейнеры */
-  --container-tp6-bg: transparent;
-  --container-tp6-border: none;
-  --container-tp6-radius: 0;
-  --container-tp6-padding: var(--spacing);
-  --container-tp6-shadow: none;
-
-  /* Общие переходы */
-  --container-transition: var(--transition);
-}
 
 /* Базовые стили для всех контейнеров */
 .container-base {
@@ -127,11 +78,11 @@
 
 /* Контейнер типа 9 - Формы авторизации */
 .container-tp9 {
-  background: var(--container-tp1-bg);
-  border: var(--container-tp1-border);
-  border-radius: var(--container-tp1-radius);
-  padding: 2.5rem;
-  box-shadow: var(--container-tp1-shadow);
+  background: var(--container-tp9-bg);
+  border: var(--container-tp9-border);
+  border-radius: var(--container-tp9-radius);
+  padding: var(--container-tp9-padding);
+  box-shadow: var(--container-tp9-shadow);
   max-width: 450px;
   width: 100%;
   margin: 0 auto;
