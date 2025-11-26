@@ -21,3 +21,16 @@
   color: var(--color-accent);
   opacity: 0.8;
 }
+
+.login-switchers {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.login-header {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}

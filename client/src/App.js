@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { LanguageProvider } from "./contexts/LanguageContext";
 import apiClient from "./api-client";
 import "./App.css";
 
@@ -301,110 +300,107 @@ function App() {
   }
 
   return (
-    <LanguageProvider>
-      <div className="app">
-        <Header user={user} onLogout={() => setIsLoggedIn(false)} />
-        <Navigation
+    <div className="app">
+      <Header user={user} onLogout={() => setIsLoggedIn(false)} />
+      <Navigation
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onSearch={handleSearch} // Передаем функцию поиска
+      />
+
+      {/* Рендерим ProfilePage когда активна вкладка profile */}
+      {activeTab === "profile" ? (
+        <ProfilePage user={user} />
+      ) : (
+        <MainContent
           activeTab={activeTab}
+          cardsets={displayedCardsets}
+          newSetTitle={newSetTitle}
+          setNewSetTitle={setNewSetTitle}
+          selectedSet={selectedSet}
+          handleCreateSet={(e) => handleCreateSet(e, setActiveTab)}
+          handleViewSet={(set) => {
+            setSelectedSet(set);
+            setActiveTab("view-set");
+          }}
+          handleViewCard={handleViewCard}
+          showDeleteModal={showDeleteModal}
+          setIsAddCardModalOpen={setIsAddCardModalOpen}
           setActiveTab={setActiveTab}
-          onSearch={handleSearch} // Передаем функцию поиска
+          tags={tags}
+          setTags={setTags}
+          isSearching={isSearching} // Добавляем
+          searchResults={searchResults} // Добавляем
+          loadCardsets={loadCardsets}
         />
+      )}
 
-        {/* Рендерим ProfilePage когда активна вкладка profile */}
-        {activeTab === "profile" ? (
-          <ProfilePage user={user} />
-        ) : (
-          <MainContent
-            activeTab={activeTab}
-            cardsets={displayedCardsets}
-            newSetTitle={newSetTitle}
-            setNewSetTitle={setNewSetTitle}
-            selectedSet={selectedSet}
-            handleCreateSet={(e) => handleCreateSet(e, setActiveTab)}
-            handleViewSet={(set) => {
-              setSelectedSet(set);
-              setActiveTab("view-set");
-            }}
-            handleViewCard={handleViewCard}
-            showDeleteModal={showDeleteModal}
-            setIsAddCardModalOpen={setIsAddCardModalOpen}
-            setActiveTab={setActiveTab}
-            tags={tags}
-            setTags={setTags}
-            isSearching={isSearching} // Добавляем
-            searchResults={searchResults} // Добавляем
-          />
-        )}
+      {/* Остальной код остается без изменений */}
+      <ViewCardModal
+        isOpen={isViewCardModalOpen}
+        onClose={() => setIsViewCardModalOpen(false)}
+        card={viewedCard}
+        onEdit={handleEditCard}
+      />
 
-        {/* Остальной код остается без изменений */}
-        <ViewCardModal
-          isOpen={isViewCardModalOpen}
-          onClose={() => setIsViewCardModalOpen(false)}
-          card={viewedCard}
-          onEdit={handleEditCard}
-        />
+      <CardModal
+        isOpen={isAddCardModalOpen}
+        onClose={() => {
+          setIsAddCardModalOpen(false);
+          resetCardForm();
+        }}
+        onSubmit={handleAddCard}
+        title="Создание карточки"
+        cardFrontText={cardFrontText}
+        setCardFrontText={setCardFrontText}
+        cardBackText={cardBackText}
+        setCardBackText={setCardBackText}
+        frontImage={frontImage}
+        setFrontImage={setFrontImage}
+        backImage={backImage}
+        setBackImage={setBackImage}
+        frontAudio={frontAudio}
+        setFrontAudio={setFrontAudio}
+        backAudio={backAudio}
+        setBackAudio={setBackAudio}
+        isUploading={isUploading}
+        submitText={isUploading ? "📤 Создание..." : "✅ Создать карточку"}
+      />
 
-        <CardModal
-          isOpen={isAddCardModalOpen}
-          onClose={() => {
-            setIsAddCardModalOpen(false);
-            resetCardForm();
-          }}
-          onSubmit={handleAddCard}
-          title="Создание карточки"
-          cardFrontText={cardFrontText}
-          setCardFrontText={setCardFrontText}
-          cardBackText={cardBackText}
-          setCardBackText={setCardBackText}
-          frontImage={frontImage}
-          setFrontImage={setFrontImage}
-          backImage={backImage}
-          setBackImage={setBackImage}
-          frontAudio={frontAudio}
-          setFrontAudio={setFrontAudio}
-          backAudio={backAudio}
-          setBackAudio={setBackAudio}
-          isUploading={isUploading}
-          submitText={isUploading ? "📤 Создание..." : "✅ Создать карточку"}
-        />
+      <CardModal
+        isOpen={isEditCardModalOpen}
+        onClose={() => {
+          setIsEditCardModalOpen(false);
+          resetCardForm();
+        }}
+        onSubmit={handleUpdateCard}
+        title="Редактирование карточки"
+        cardFrontText={cardFrontText}
+        setCardFrontText={setCardFrontText}
+        cardBackText={cardBackText}
+        setCardBackText={setCardBackText}
+        frontImage={frontImage}
+        setFrontImage={setFrontImage}
+        backImage={backImage}
+        setBackImage={setBackImage}
+        frontAudio={frontAudio}
+        setFrontAudio={setFrontAudio}
+        backAudio={backAudio}
+        setBackAudio={setBackAudio}
+        isUploading={isUploading}
+        submitText={isUploading ? "📤 Сохранение..." : "💾 Сохранить изменения"}
+      />
 
-        <CardModal
-          isOpen={isEditCardModalOpen}
-          onClose={() => {
-            setIsEditCardModalOpen(false);
-            resetCardForm();
-          }}
-          onSubmit={handleUpdateCard}
-          title="Редактирование карточки"
-          cardFrontText={cardFrontText}
-          setCardFrontText={setCardFrontText}
-          cardBackText={cardBackText}
-          setCardBackText={setCardBackText}
-          frontImage={frontImage}
-          setFrontImage={setFrontImage}
-          backImage={backImage}
-          setBackImage={setBackImage}
-          frontAudio={frontAudio}
-          setFrontAudio={setFrontAudio}
-          backAudio={backAudio}
-          setBackAudio={setBackAudio}
-          isUploading={isUploading}
-          submitText={
-            isUploading ? "📤 Сохранение..." : "💾 Сохранить изменения"
-          }
-        />
-
-        <ConfirmationModal
-          isOpen={deleteModal.isOpen}
-          onClose={handleCancelDelete}
-          onConfirm={handleConfirmDelete}
-          title={deleteModal.title}
-          message={deleteModal.message}
-          confirmText="Удалить"
-          cancelText="Отмена"
-        />
-      </div>
-    </LanguageProvider>
+      <ConfirmationModal
+        isOpen={deleteModal.isOpen}
+        onClose={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        title={deleteModal.title}
+        message={deleteModal.message}
+        confirmText="Удалить"
+        cancelText="Отмена"
+      />
+    </div>
   );
 }
 

@@ -3,7 +3,9 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
-  const [language, setLanguage] = useState("ru");
+  const [language, setLanguage] = useState(
+    localStorage.getItem("neuraltrident-language") || "ru"
+  );
   const [translations, setTranslations] = useState({});
 
   // Загрузка переводов
@@ -33,6 +35,7 @@ export const LanguageProvider = ({ children }) => {
       setTranslations(translationModule.default);
       setLanguage(newLang);
       localStorage.setItem("neuraltrident-language", newLang);
+      localStorage.setItem("selectedLanguage", newLang); // ← ДОБАВЬ ЭТУ СТРОКУ
     } catch (error) {
       console.error("Error switching language:", error);
     }

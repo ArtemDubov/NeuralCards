@@ -15,9 +15,21 @@ const ViewSet = ({
 
   return (
     <div className="tab-content container-tp5">
-      <button className="btn-tp3" onClick={() => setActiveTab("sets")}>
-        {t("sets.back")}
-      </button>
+      {/* Контейнер для кнопок навигации */}
+      <div className="viewset-header-actions">
+        <button className="btn-tp3" onClick={() => setActiveTab("sets")}>
+          {t("sets.back")}
+        </button>
+        <button
+          className="btn-tp1"
+          onClick={() => {
+            setIsAddCardModalOpen(true);
+          }}
+        >
+          {t("sets.add.card")}
+        </button>
+      </div>
+
       <h2>{selectedSet.title}</h2>
 
       {/* Добавляем отображение тегов с исправленной логикой */}
@@ -39,33 +51,47 @@ const ViewSet = ({
       )}
 
       <div className="cards-section">
-        <h3>{t("sets.cards")}</h3>
+        <h3>
+          {t("sets.cards")} ({selectedSet.cards ? selectedSet.cards.length : 0})
+        </h3>
         {selectedSet.cards && selectedSet.cards.length > 0 ? (
-          <div className="cards-list">
+          <div className="cards-grid">
             {selectedSet.cards.map((card) => (
               <div
                 key={card.id}
-                className="card-item container-tp4"
+                className="card-preview container-tp4"
                 onClick={() => handleViewCard(card)}
               >
-                <div className="card-content-wrapper">
-                  <div className="card-front">
-                    <strong>{t("cards.front")}:</strong> {card.front}
-                    {card.imageUrl && <span className="media-badge">🖼️</span>}
-                    {card.audioUrl && <span className="media-badge">🎵</span>}
+                <div className="card-preview-content">
+                  <div className="card-preview-front">
+                    <div className="card-text" title={card.front}>
+                      {card.front}
+                    </div>
+                    <div className="card-media-indicators">
+                      {card.imageUrl && (
+                        <span className="media-indicator">🖼️</span>
+                      )}
+                      {card.audioUrl && (
+                        <span className="media-indicator">🎵</span>
+                      )}
+                    </div>
                   </div>
-                  <div className="card-back">
-                    <strong>{t("cards.back")}:</strong> {card.back}
-                    {card.backImageUrl && (
-                      <span className="media-badge">🖼️</span>
-                    )}
-                    {card.backAudioUrl && (
-                      <span className="media-badge">🎵</span>
-                    )}
+                  <div className="card-preview-back">
+                    <div className="card-text" title={card.back}>
+                      {card.back}
+                    </div>
+                    <div className="card-media-indicators">
+                      {card.backImageUrl && (
+                        <span className="media-indicator">🖼️</span>
+                      )}
+                      {card.backAudioUrl && (
+                        <span className="media-indicator">🎵</span>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <button
-                  className="btn-tp4"
+                  className="card-delete-btn"
                   onClick={(e) => {
                     e.stopPropagation();
                     showDeleteModal(card, "card");
@@ -81,15 +107,6 @@ const ViewSet = ({
           <p className="empty-state">{t("sets.cards.empty")}</p>
         )}
       </div>
-
-      <button
-        className="btn-tp1"
-        onClick={() => {
-          setIsAddCardModalOpen(true);
-        }}
-      >
-        {t("sets.add.card")}
-      </button>
     </div>
   );
 };

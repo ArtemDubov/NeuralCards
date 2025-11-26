@@ -1,3 +1,119 @@
+/* Стили для сетки карточек */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.card-preview {
+  position: relative;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-preview:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-preview-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.card-preview-front,
+.card-preview-back {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.card-preview-front {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.card-text {
+  flex: 1;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.card-media-indicators {
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.media-indicator {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.card-delete-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 50%;
+  background: var(--color-error);
+  color: white;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.card-preview:hover .card-delete-btn {
+  opacity: 1;
+}
+
+.card-delete-btn:hover {
+  background: var(--color-error-dark);
+  transform: scale(1.1);
+}
+
+/* Адаптивность для карточек */
+@media (max-width: 768px) {
+  .cards-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .card-preview {
+    min-height: 100px;
+    padding: 0.75rem;
+  }
+
+  .card-text {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Обновляем остальные существующие стили */
 .tab-content h2 {
   color: var(--color-accent);
   margin-bottom: 1.5rem;
@@ -8,28 +124,6 @@
 .cards-section h3 {
   color: var(--color-accent);
   margin-bottom: 1rem;
-}
-
-.cards-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin: 1.5rem 0;
-}
-
-.card-content-wrapper {
-  flex: 1;
-}
-
-.card-front,
-.card-back {
-  margin-bottom: 0.5rem;
-}
-
-.media-badge {
-  margin-left: 0.5rem;
-  font-size: 0.8rem;
-  opacity: 0.7;
 }
 
 .empty-state {
@@ -61,4 +155,35 @@
   font-size: 14px;
   color: var(--color-accent);
   font-weight: 500;
+}
+
+/* Стили для контейнера кнопок навигации */
+.viewset-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.viewset-header-actions .btn-tp3 {
+  align-self: flex-start;
+}
+
+.viewset-header-actions .btn-tp1 {
+  align-self: flex-end;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .viewset-header-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .viewset-header-actions .btn-tp1,
+  .viewset-header-actions .btn-tp3 {
+    align-self: stretch;
+    text-align: center;
+  }
 }

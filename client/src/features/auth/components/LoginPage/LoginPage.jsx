@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import RegistrationForm from "../RegistrationForm/RegistrationForm";
 import AuthTabs from "../AuthTabs/AuthTabs";
 import LoginForm from "../LoginForm/LoginForm";
+import LanguageSwitcher from "../../../shared/components/LanguageSwitcher/LanguageSwitcher";
+import { useLanguage } from "../../../../contexts/LanguageContext";
+import ThemeSwitcher from "../../../shared/components/ThemeSwitcher/ThemeSwitcher";
 import "./LoginPage.css";
 
 const LoginPage = ({ onLogin, email, setEmail, password, setPassword }) => {
   const [isLoginForm, setIsLoginForm] = useState(true);
+  const { t } = useLanguage();
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerName, setRegisterName] = useState("");
@@ -118,7 +122,13 @@ const LoginPage = ({ onLogin, email, setEmail, password, setPassword }) => {
 
   return (
     <div className="app login-container">
-      <h1>Neural Trident 🌊</h1>
+      <div className="login-header">
+        <h1>{t("app.title")}</h1>
+        <div className="login-switchers">
+          <LanguageSwitcher />
+          <ThemeSwitcher />
+        </div>
+      </div>
 
       <AuthTabs isLoginForm={isLoginForm} setIsLoginForm={setIsLoginForm} />
 

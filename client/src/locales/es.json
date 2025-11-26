@@ -80,5 +80,14 @@
   "modal.delete.set": "¿Estás seguro de que quieres eliminar el conjunto \"{title}\"?",
   "modal.delete.card": "¿Estás seguro de que quieres eliminar esta tarjeta?",
   "modal.delete.confirm": "🗑️ Eliminar",
-  "modal.delete.cancel": "❌ Cancelar"
+  "modal.delete.cancel": "❌ Cancelar",
+
+  "auth.login": "Inicio de sesión",
+  "auth.register": "Registro",
+  "auth.signin": "Iniciar sesión",
+  "auth.signup": "Registrarse",
+  "auth.name": "Nombre",
+  "auth.email": "Correo electrónico",
+  "auth.password": "Contraseña",
+  "auth.confirm_password": "Confirmar contraseña"
 }

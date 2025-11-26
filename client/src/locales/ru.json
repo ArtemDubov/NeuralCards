@@ -80,5 +80,14 @@
   "modal.delete.set": "Вы уверены, что хотите удалить набор \"{title}\"?",
   "modal.delete.card": "Вы уверены, что хотите удалить эту карточку?",
   "modal.delete.confirm": "🗑️ Удалить",
-  "modal.delete.cancel": "❌ Отмена"
+  "modal.delete.cancel": "❌ Отмена",
+
+  "auth.login": "Вход",
+  "auth.register": "Регистрация",
+  "auth.signin": "Войти",
+  "auth.signup": "Зарегистрироваться",
+  "auth.name": "Имя",
+  "auth.email": "Email",
+  "auth.password": "Пароль",
+  "auth.confirm_password": "Подтвердите пароль"
 }

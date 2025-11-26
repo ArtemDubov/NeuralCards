@@ -1,5 +1,6 @@
 import React from "react";
 import "./RegistrationForm.css";
+import { useLanguage } from "../../../../contexts/LanguageContext";
 
 const RegistrationForm = ({
   registerEmail,
@@ -17,13 +18,14 @@ const RegistrationForm = ({
   handleNameChange,
   handleRegister,
 }) => {
+  const { t } = useLanguage();
   return (
     <form onSubmit={handleRegister} className="auth-form container-tp9">
       {/* Поле имени с защитой от ошибок */}
       <div className="input-group">
         <input
           type="text"
-          placeholder="Ваше имя (макс. 16 символов)"
+          placeholder={t("auth.name")}
           value={registerName}
           onChange={handleNameChange}
           className={`form-input ${errors.name ? "error" : ""}`}
@@ -42,7 +44,7 @@ const RegistrationForm = ({
         <div className="email-input-wrapper">
           <input
             type="email"
-            placeholder="Email"
+            placeholder={t("auth.email")}
             value={registerEmail}
             onChange={handleEmailChange}
             className={`form-input ${errors.email ? "error" : ""}`}
@@ -71,7 +73,7 @@ const RegistrationForm = ({
       <div className="input-group">
         <input
           type="password"
-          placeholder="Пароль (минимум 6 символов)"
+          placeholder={t("auth.password")}
           value={registerPassword}
           onChange={(e) => setRegisterPassword(e.target.value)}
           className={`form-input ${errors.password ? "error" : ""}`}
@@ -88,7 +90,7 @@ const RegistrationForm = ({
       )}
 
       <button type="submit" className="btn-tp1">
-        Зарегистрироваться
+        {t("auth.signup")}
       </button>
     </form>
   );

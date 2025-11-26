@@ -1,24 +1,21 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { LanguageProvider } from "./contexts/LanguageContext";
-import App from "./App";
-const authMiddleware = require("./server/middleware/auth");
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <LanguageProvider>
-      <App />
-    </LanguageProvider>
-  </React.StrictMode>
-);
-
 const express = require("express");
 const cors = require("cors");
 const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const path = require("path");
-const authMiddleware = require("./server/middleware/auth");
+const authMiddleware = (req, res, next) => {
+  const token = req.header("Authorization")?.replace("Bearer ", "");
+  if (!token) return res.status(401).json({ error: "No token" });
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.userId = decoded.userId;
+    next();
+  } catch (error) {
+    res.status(401).json({ error: "Invalid token" });
+  }
+};
 
 const app = express();
 const PORT = 5001;
@@ -42,7 +39,7 @@ app.use(express.json({ type: "application/json" }));
 app.use(express.urlencoded({ extended: true }));
 
 // Раздаем статические файлы
-app.use("/uploads", express.static(path.join(__dirname, "server/uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Подключаем ВСЕ роутеры
 app.use("/api/favorites", require("./server/routes/favorites"));
@@ -51,44 +48,7 @@ app.use("/api/cardsets", require("./server/routes/cardsets"));
 app.use("/api/cardsets", require("./server/routes/cards"));
 app.use("/api/tags", require("./server/routes/tags"));
 app.use("/api/search", require("./server/routes/search"));
-app.use("/api/profile", require("./server/routes/profile")); // Добавлен роутер профиля
-
-// 🔍 ПОДКЛЮЧАЕМ ПОИСК С ПРОВЕРКОЙ
-try {
-  const searchRouter = require("./server/routes/search");
-  app.use("/api/search", searchRouter);
-  console.log("✅ Search router успешно подключен");
-} catch (error) {
-  console.error("❌ Ошибка подключения search router:", error);
-}
-
-// 🔍 ПОДКЛЮЧАЕМ ПРОФИЛЬ С ПРОВЕРКОЙ
-try {
-  const profileRouter = require("./server/routes/profile");
-  app.use("/api/profile", profileRouter);
-  console.log("✅ Profile router успешно подключен");
-} catch (error) {
-  console.error("❌ Ошибка подключения profile router:", error);
-}
-
-// 🔍 ВЫВОДИМ ВСЕ ЗАРЕГИСТРИРОВАННЫЕ ПУТИ
-console.log("\n🔍 Зарегистрированные API пути:");
-app._router.stack.forEach((middleware) => {
-  if (middleware.name === "router") {
-    console.log(`Router: ${middleware.regexp}`);
-    if (middleware.handle.stack) {
-      middleware.handle.stack.forEach((handler) => {
-        if (handler.route) {
-          const methods = Object.keys(handler.route.methods);
-          const path = handler.route.path;
-          console.log(`  ${methods} ${path}`);
-        }
-      });
-    }
-  }
-});
-
-console.log("\n🚀 Сервер запускается...");
+app.use("/api/profile", require("./server/routes/profile"));
 
 // Регистрация пользователя
 app.post("/api/register", async (req, res) => {

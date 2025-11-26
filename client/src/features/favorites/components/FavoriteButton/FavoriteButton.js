@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import apiClient from "../../../../api-client";
 import StarIcon from "../../../shared/components/StarIcon";
 
-const FavoriteButton = ({ itemId, itemType = "cardset" }) => {
+const FavoriteButton = ({ itemId, itemType = "cardset", onUpdate }) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
   // Проверяем при загрузке, в избранном ли элемент
@@ -29,6 +29,7 @@ const FavoriteButton = ({ itemId, itemType = "cardset" }) => {
         await apiClient.post(`/favorites/${itemId}`);
       }
       setIsFavorite(!isFavorite);
+      onUpdate?.();
     } catch (error) {
       console.error("Ошибка обновления избранного:", error);
     }

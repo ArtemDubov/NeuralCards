@@ -80,5 +80,14 @@
   "modal.delete.set": "Are you sure you want to delete set \"{title}\"?",
   "modal.delete.card": "Are you sure you want to delete this card?",
   "modal.delete.confirm": "🗑️ Delete",
-  "modal.delete.cancel": "❌ Cancel"
+  "modal.delete.cancel": "❌ Cancel",
+
+  "auth.login": "Login",
+  "auth.register": "Registration",
+  "auth.signin": "Sign In",
+  "auth.signup": "Sign Up",
+  "auth.name": "Name",
+  "auth.email": "Email",
+  "auth.password": "Password",
+  "auth.confirm_password": "Confirm Password"
 }

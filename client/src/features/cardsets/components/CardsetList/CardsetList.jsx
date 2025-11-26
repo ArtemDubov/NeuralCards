@@ -1,8 +1,14 @@
 import React from "react";
 import { useLanguage } from "../../../../contexts/LanguageContext";
+import FavoriteButton from "../../../favorites/components/FavoriteButton/FavoriteButton";
 import "./CardsetList.css";
 
-const CardsetList = ({ cardsets, handleViewSet, showDeleteModal }) => {
+const CardsetList = ({
+  cardsets,
+  handleViewSet,
+  showDeleteModal,
+  onFavoriteUpdate,
+}) => {
   const { t } = useLanguage();
 
   if (cardsets.length === 0) {
@@ -43,6 +49,11 @@ const CardsetList = ({ cardsets, handleViewSet, showDeleteModal }) => {
                 </span>
               </div>
               <div className="set-actions">
+                <FavoriteButton
+                  itemId={set.id}
+                  itemType="cardset"
+                  onUpdate={onFavoriteUpdate}
+                />
                 <button
                   className="btn-tp4"
                   onClick={(e) => {

@@ -18,15 +18,6 @@ const FavoritesPage = () => {
     }
   };
 
-  const handleRemoveFavorite = async (cardsetId) => {
-    try {
-      await apiClient.delete(`/favorites/${cardsetId}`);
-      loadFavorites(); // Перезагружаем список
-    } catch (error) {
-      console.error("Ошибка удаления из избранного:", error);
-    }
-  };
-
   return (
     <div className="favorites-container">
       <div className="favorites-header">
@@ -47,7 +38,20 @@ const FavoritesPage = () => {
               <div className="favorite-card-header">
                 <h3>{fav.cardSet?.title || "Неизвестный набор"}</h3>
                 <div className="favorite-actions">
-                  <FavoriteButton itemId={fav.cardsetId} itemType="cardset" />
+                  <FavoriteButton
+                    itemId={fav.cardsetId}
+                    itemType="cardset"
+                    onUpdate={async () => {
+                      try {
+                        await apiClient.delete(`/favorites/${fav.cardsetId}`);
+                        setFavorites((prev) =>
+                          prev.filter((f) => f.cardsetId !== fav.cardsetId)
+                        );
+                      } catch (error) {
+                        console.error("Ошибка удаления из избранного:", error);
+                      }
+                    }}
+                  />
                 </div>
               </div>
               <p className="favorite-description">

@@ -23,6 +23,7 @@ const MainContent = ({
   setTags,
   isSearching,
   searchResults,
+  loadCardsets,
 }) => {
   const { t } = useLanguage();
 
@@ -54,6 +55,7 @@ const MainContent = ({
             cardsets={searchResults !== null ? searchResults : cardsets}
             handleViewSet={handleViewSet}
             showDeleteModal={showDeleteModal}
+            onFavoriteUpdate={loadCardsets}
           />
         </div>
       )}

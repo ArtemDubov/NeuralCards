@@ -16,6 +16,7 @@ services:
       - "5001:5001"
     environment:
       DATABASE_URL: "postgresql://neural_user:neural_password@postgres:5432/neuraltrident"
+      command: node server.js
     depends_on:
       - postgres
     volumes:
