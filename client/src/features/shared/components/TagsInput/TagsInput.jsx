@@ -5,6 +5,9 @@ const TagsInput = ({ tags, setTags, placeholder = "Добавьте теги..."
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef(null);
 
+  // ДОБАВЛЕНО: защита от не-массива
+  const safeTags = Array.isArray(tags) ? tags : [];
+
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
@@ -13,21 +16,25 @@ const TagsInput = ({ tags, setTags, placeholder = "Добавьте теги..."
     if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
       addTag();
-    } else if (e.key === "Backspace" && inputValue === "" && tags.length > 0) {
-      removeTag(tags.length - 1);
+    } else if (
+      e.key === "Backspace" &&
+      inputValue === "" &&
+      safeTags.length > 0
+    ) {
+      removeTag(safeTags.length - 1);
     }
   };
 
   const addTag = () => {
     const tag = inputValue.trim();
-    if (tag && !tags.includes(tag)) {
-      setTags([...tags, tag]);
+    if (tag && !safeTags.includes(tag)) {
+      setTags([...safeTags, tag]);
     }
     setInputValue("");
   };
 
   const removeTag = (indexToRemove) => {
-    setTags(tags.filter((_, index) => index !== indexToRemove));
+    setTags(safeTags.filter((_, index) => index !== indexToRemove));
   };
 
   const handleInputBlur = () => {
@@ -42,7 +49,8 @@ const TagsInput = ({ tags, setTags, placeholder = "Добавьте теги..."
       onClick={() => inputRef.current?.focus()}
     >
       <div className="tags-list">
-        {tags.map((tag, index) => (
+        {/* ИСПОЛЬЗУЕМ safeTags вместо tags */}
+        {safeTags.map((tag, index) => (
           <span key={index} className="tag">
             {tag}
             <button
@@ -65,7 +73,7 @@ const TagsInput = ({ tags, setTags, placeholder = "Добавьте теги..."
         onChange={handleInputChange}
         onKeyDown={handleInputKeyDown}
         onBlur={handleInputBlur}
-        placeholder={tags.length === 0 ? placeholder : ""}
+        placeholder={safeTags.length === 0 ? placeholder : ""}
         className="tags-input"
       />
     </div>

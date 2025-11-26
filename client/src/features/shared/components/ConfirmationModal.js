@@ -17,7 +17,7 @@ const ConfirmationModal = ({
   return (
     <div className="modal-overlay">
       <div className="container-tp1 modal-content">
-        <h3>{title || t("modal.delete.title")}</h3>
+        <h3>{title}</h3>
         <p>{message}</p>
         <div className="modal-actions">
           <button className="btn-tp3" onClick={onClose}>

@@ -25,12 +25,13 @@
 .login-switchers {
   display: flex;
   gap: 1rem;
-  margin-bottom: 2rem;
+  justify-content: center;
 }
 
 .login-header {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
   margin-bottom: 2rem;
 }

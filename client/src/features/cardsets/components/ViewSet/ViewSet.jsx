@@ -15,24 +15,33 @@ const ViewSet = ({
 
   return (
     <div className="tab-content container-tp5">
-      {/* Контейнер для кнопок навигации */}
-      <div className="viewset-header-actions">
-        <button className="btn-tp3" onClick={() => setActiveTab("sets")}>
-          {t("sets.back")}
-        </button>
-        <button
-          className="btn-tp1"
-          onClick={() => {
-            setIsAddCardModalOpen(true);
-          }}
-        >
-          {t("sets.add.card")}
-        </button>
+      {/* НОВАЯ СТРУКТУРА: название набора и кнопка назад в одной строке */}
+      <div className="viewset-header-main">
+        <div className="viewset-title-section">
+          <h2>{selectedSet.title}</h2>
+          <button className="btn-tp3" onClick={() => setActiveTab("sets")}>
+            {t("sets.back")}
+          </button>
+        </div>
+
+        <div className="viewset-actions">
+          {/* Количество карточек теперь здесь - слева от кнопки добавления */}
+          <span className="cards-count-badge">
+            {selectedSet.cards ? selectedSet.cards.length : 0}{" "}
+            {t("sets.cards_count")}
+          </span>
+          <button
+            className="btn-tp1"
+            onClick={() => {
+              setIsAddCardModalOpen(true);
+            }}
+          >
+            {t("sets.add.card")}
+          </button>
+        </div>
       </div>
 
-      <h2>{selectedSet.title}</h2>
-
-      {/* Добавляем отображение тегов с исправленной логикой */}
+      {/* Только теги остаются здесь */}
       {selectedSet.tags && selectedSet.tags.length > 0 && (
         <div className="tags-section">
           <div className="tags-list">
@@ -51,9 +60,6 @@ const ViewSet = ({
       )}
 
       <div className="cards-section">
-        <h3>
-          {t("sets.cards")} ({selectedSet.cards ? selectedSet.cards.length : 0})
-        </h3>
         {selectedSet.cards && selectedSet.cards.length > 0 ? (
           <div className="cards-grid">
             {selectedSet.cards.map((card) => (
@@ -94,7 +100,12 @@ const ViewSet = ({
                   className="card-delete-btn"
                   onClick={(e) => {
                     e.stopPropagation();
-                    showDeleteModal(card, "card");
+                    showDeleteModal(
+                      "card",
+                      card.id,
+                      t("modal.delete.title"),
+                      t("modal.delete.card")
+                    );
                   }}
                   title={t("sets.delete")}
                 >

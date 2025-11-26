@@ -187,3 +187,122 @@
     text-align: center;
   }
 }
+
+/* Стили для заголовка набора с количеством карточек */
+.set-header-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.set-header-main h2 {
+  margin: 0;
+  color: var(--color-accent);
+  flex: 1;
+}
+
+.cards-count-badge {
+  background: var(--color-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .set-header-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .cards-count-badge {
+    align-self: flex-start;
+  }
+}
+/* СТИЛИ ДЛЯ ЗАГОЛОВКА С КНОПКАМИ */
+.viewset-header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.viewset-title-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.viewset-title-section h2 {
+  margin: 0;
+  color: var(--color-accent);
+}
+
+.viewset-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.cards-count-badge {
+  background: var(--color-primary);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .viewset-header-main {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .viewset-title-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .viewset-actions {
+    justify-content: space-between;
+  }
+}
+
+/* Оставьте остальные существующие стили без изменений */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.card-preview {
+  position: relative;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-preview:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* ... и все остальные ваши стили */

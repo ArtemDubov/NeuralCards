@@ -31,9 +31,22 @@ const MainContent = ({
     <main className="main-content container-tp5">
       {activeTab === "sets" && (
         <div className="tab-content container-tp5">
-          <h2>
-            {searchResults !== null ? t("search.results") : t("sets.my_sets")}
-          </h2>
+          {/* ЗАГОЛОВОК С КНОПКОЙ СОЗДАНИЯ */}
+          <div className="sets-header">
+            <h2>
+              {searchResults !== null ? t("search.results") : t("sets.my_sets")}
+            </h2>
+
+            {/* КНОПКА СОЗДАНИЯ - ПОКАЗЫВАЕМ ТОЛЬКО КОГДА НЕ АКТИВЕН ПОИСК */}
+            {searchResults === null && (
+              <button
+                className="btn-tp1"
+                onClick={() => setActiveTab("create")}
+              >
+                {t("navigation.create")}
+              </button>
+            )}
+          </div>
 
           {/* Индикатор поиска */}
           {isSearching && (
@@ -66,9 +79,9 @@ const MainContent = ({
           <CreateSetForm
             newSetTitle={newSetTitle}
             setNewSetTitle={setNewSetTitle}
+            handleCreateSet={handleCreateSet}
             tags={tags}
             setTags={setTags}
-            handleCreateSet={handleCreateSet}
           />
         </div>
       )}

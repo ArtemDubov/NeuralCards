@@ -8,10 +8,8 @@ const Navigation = ({ activeTab, setActiveTab, onSearch }) => {
 
   const tabs = [
     { id: "sets", label: t("navigation.sets") },
-    { id: "create", label: t("navigation.create") },
     { id: "training", label: t("navigation.training") },
     { id: "favorites", label: t("navigation.favorites") },
-    { id: "profile", label: t("navigation.profile") },
   ];
 
   return (

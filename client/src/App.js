@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import apiClient from "./api-client";
+import { useLanguage } from "./contexts/LanguageContext";
 import "./App.css";
 
 // Импорты стилей (ВАЖНЫЙ ПОРЯДОК!)
@@ -34,6 +35,8 @@ import { useCardState, useCardsetsAPI } from "./features/cardsets/hooks";
 import useSearch from "./features/search/hooks/useSearch"; // Добавляем хук поиска
 
 function App() {
+  const { t } = useLanguage();
+
   // Состояния аутентификации
   const [email, setEmail] = useState("test3@mail.ru");
   const [password, setPassword] = useState("123456");
@@ -128,7 +131,6 @@ function App() {
       deleteManagement.setDeleteModal({ isOpen: false, type: null, id: null });
     }
   };
-
   // Сохранение изменений карточки
   const handleUpdateCard = async (e) => {
     e.preventDefault();
@@ -301,7 +303,11 @@ function App() {
 
   return (
     <div className="app">
-      <Header user={user} onLogout={() => setIsLoggedIn(false)} />
+      <Header
+        user={user}
+        onLogout={() => setIsLoggedIn(false)}
+        setActiveTab={setActiveTab}
+      />
       <Navigation
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -390,15 +396,14 @@ function App() {
         isUploading={isUploading}
         submitText={isUploading ? "📤 Сохранение..." : "💾 Сохранить изменения"}
       />
-
       <ConfirmationModal
         isOpen={deleteModal.isOpen}
         onClose={handleCancelDelete}
         onConfirm={handleConfirmDelete}
         title={deleteModal.title}
         message={deleteModal.message}
-        confirmText="Удалить"
-        cancelText="Отмена"
+        confirmText={t("modal.delete.confirm")}
+        cancelText={t("modal.delete.cancel")}
       />
     </div>
   );

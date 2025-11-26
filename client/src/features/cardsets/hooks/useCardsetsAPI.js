@@ -33,12 +33,11 @@ export const useCardsetsAPI = () => {
   const handleCreateSet = async (e, setActiveTab) => {
     e.preventDefault();
     try {
-      // Убрал неиспользуемую переменную response
       await apiClient.post("/cardsets", {
         title: newSetTitle,
         description: "Мой новый набор",
         isPublic: false,
-        tags: tags.map((tag) => ({ name: tag })),
+        tags: Array.isArray(tags) ? tags.map((tag) => ({ name: tag })) : [], // Добавьте проверку
       });
 
       setNewSetTitle("");

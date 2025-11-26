@@ -1,5 +1,6 @@
 import React from "react";
 import { useLanguage } from "../../../../contexts/LanguageContext";
+import TagsInput from "../../../shared/components/TagsInput/TagsInput";
 import "./CreateSetForm.css";
 
 const CreateSetForm = ({
@@ -22,12 +23,14 @@ const CreateSetForm = ({
           onChange={(e) => setNewSetTitle(e.target.value)}
           required
         />
-        <input
-          type="text"
+
+        {/* ЗАМЕНИТЕ input на TagsInput компонент */}
+        <TagsInput
+          tags={tags}
+          setTags={setTags}
           placeholder={t("sets.create.tags.placeholder")}
-          value={tags}
-          onChange={(e) => setTags(e.target.value)}
         />
+
         <button type="submit" className="btn-tp1">
           {t("sets.create.button")}
         </button>

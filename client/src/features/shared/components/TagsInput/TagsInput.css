@@ -6,7 +6,7 @@
   padding: 8px 12px;
   border: 1px solid var(--color-sea-wave);
   border-radius: 8px;
-  background: rgba(227, 242, 253, 0.1);
+  background: transparent;
   min-height: 44px;
   cursor: text;
 }

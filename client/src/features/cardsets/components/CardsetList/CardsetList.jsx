@@ -58,7 +58,12 @@ const CardsetList = ({
                   className="btn-tp4"
                   onClick={(e) => {
                     e.stopPropagation();
-                    showDeleteModal(set, "set");
+                    showDeleteModal(
+                      "set",
+                      set.id,
+                      t("modal.delete.title"),
+                      t("modal.delete.set").replace("{title}", set.title)
+                    );
                   }}
                   title={t("sets.delete")}
                 >
