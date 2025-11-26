@@ -31,6 +31,7 @@ model CardSet {
   cards       FlashCard[]
   favorites   Favorite[]
   tags        Tag[]     @relation("CardSetToTag") // Правильная связь many-to-many
+  search_vector Unsupported("tsvector")?
 }
 
 model Tag {
@@ -51,6 +52,7 @@ model FlashCard {
   updatedAt   DateTime @updatedAt
   cardsetId   Int
   cardset     CardSet  @relation(fields: [cardsetId], references: [id], onDelete: Cascade)
+  search_vector Unsupported("tsvector")?
 }
 
 model Favorite {

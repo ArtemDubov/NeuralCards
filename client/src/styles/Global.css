@@ -1,6 +1,15 @@
 /* client/src/styles/Global.css */
 :root {
-  /* Все переменные теперь в Theme.css */
+  /* Дополнительные переменные для поиска */
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --text-on-accent: white;
+  --accent-primary: var(--color-primary);
+  --accent-secondary: var(--color-accent);
+  --background-primary: var(--color-bg-primary);
+  --background-secondary: var(--color-bg-card);
+  --border-color: var(--color-border);
+  --border-light: var(--color-border-light);
 }
 
 /* === БАЗОВЫЕ СБРОСЫ ДЛЯ КНОПОК === */

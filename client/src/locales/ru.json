@@ -9,11 +9,21 @@
   "navigation.favorites": "Избранное",
   "navigation.profile": "Профиль",
 
-  "search.placeholder": "Поиск наборов...",
+  "search.placeholder": "Поиск наборов и карточек...",
   "search.results": "Результаты поиска",
   "search.in_progress": "Идет поиск...",
   "search.no_results": "Ничего не найдено",
   "search.try_again": "Попробуйте изменить поисковый запрос",
+  "search.all": "Все",
+  "search.sets": "Наборы",
+  "search.cards": "Карточки",
+  "search.clear": "Очистить поиск",
+  "search.found_sets": "Найденные наборы",
+  "search.found_cards": "Найденные карточки",
+  "search.from_set": "Из набора",
+  "cards.edit": "Редактировать карточку",
+  "cards.save.error": "Ошибка сохранения карточки",
+  "training.choose.set": "Пожалуйста, выберите набор для начала тренировки",
 
   "language.russian": "Русский",
   "language.english": "Английский",
@@ -90,5 +100,11 @@
   "auth.name": "Имя",
   "auth.email": "Email",
   "auth.password": "Пароль",
-  "auth.confirm_password": "Подтвердите пароль"
+  "auth.confirm_password": "Подтвердите пароль",
+
+  "favorites.title": "Избранное",
+  "favorites.count": "Наборов: {count}",
+  "sets.unknown": "Неизвестный набор",
+  "favorites.empty.title": "Пока пусто",
+  "favorites.empty.message": "Добавляйте наборы в избранное, чтобы быстро к ним возвращаться"
 }

@@ -4,7 +4,7 @@ import "./Header.css";
 import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 
-const Header = ({ user, onLogout, setActiveTab }) => {
+const Header = ({ user, onLogout, setActiveTab, onSearch }) => {
   const { t } = useLanguage();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -51,14 +51,11 @@ const Header = ({ user, onLogout, setActiveTab }) => {
             {t("welcome").replace("{name}", user?.name || "Гость")}
           </p>
         </div>
-
         <div className="header-actions">
           {/* Добавляем переключатель языка */}
           <LanguageSwitcher />
-
           {/* Добавляем переключатель тем */}
           <ThemeSwitcher />
-
           {/* Аватар пользователя с dropdown меню */}
           <div className="avatar-dropdown" ref={dropdownRef}>
             <button className="avatar-btn" onClick={handleAvatarClick}>
@@ -74,7 +71,6 @@ const Header = ({ user, onLogout, setActiveTab }) => {
                 )}
               </div>
             </button>
-
             {isDropdownOpen && (
               <div className="dropdown-menu">
                 <div className="dropdown-header">

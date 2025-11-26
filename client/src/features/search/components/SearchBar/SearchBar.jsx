@@ -1,23 +1,30 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useLanguage } from "../../../../contexts/LanguageContext";
 import "./SearchBar.css";
 
-const SearchBar = ({
-  onSearch,
-  placeholder = "Поиск наборов и карточек...",
-}) => {
+const SearchBar = ({ onSearch }) => {
+  const { t } = useLanguage();
   const [query, setQuery] = useState("");
 
-  // Автопоиск при изменении запроса (с задержкой)
+  // Используем useCallback для стабильной ссылки onSearch
+  const stableOnSearch = useCallback(onSearch, []);
+
   useEffect(() => {
+    if (query.trim() === "") {
+      stableOnSearch("");
+      return;
+    }
+
     const timeoutId = setTimeout(() => {
-      onSearch(query.trim());
-    }, 300); // Задержка 300мс
+      stableOnSearch(query.trim());
+    }, 300); // Задержка 300мс для дебаунсинга
 
     return () => clearTimeout(timeoutId);
-  }, [query, onSearch]);
+  }, [query, stableOnSearch]);
 
   const handleClear = () => {
     setQuery("");
+    stableOnSearch(""); // Явно очищаем поиск
   };
 
   const handleChange = (e) => {
@@ -32,7 +39,7 @@ const SearchBar = ({
           type="text"
           value={query}
           onChange={handleChange}
-          placeholder={placeholder}
+          placeholder={t("search.placeholder")}
           className="search-input"
         />
         {query && (

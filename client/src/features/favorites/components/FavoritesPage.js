@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import apiClient from "../../../api-client";
 import FavoriteButton from "./FavoriteButton/FavoriteButton";
+import { useLanguage } from "../../../contexts/LanguageContext";
 
 const FavoritesPage = () => {
+  const { t } = useLanguage();
   const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
@@ -21,23 +23,33 @@ const FavoritesPage = () => {
   return (
     <div className="favorites-container">
       <div className="favorites-header">
-        <h2>⭐ Избранное</h2>
-        <div className="favorites-count">Наборов: {favorites.length}</div>
+        <h2>⭐ {t("favorites.title")}</h2>
+        <div className="favorites-count">
+          {t("favorites.count").replace("{count}", favorites.length)}
+        </div>
       </div>
 
       {favorites.length === 0 ? (
         <div className="empty-favorites">
           <div className="empty-icon">⭐</div>
-          <h3>Пока пусто</h3>
-          <p>Добавляйте наборы в избранное, чтобы быстро к ним возвращаться</p>
+          <h3>{t("favorites.empty.title")}</h3>
+          <p>{t("favorites.empty.message")}</p>
         </div>
       ) : (
         <div className="favorites-grid">
           {favorites.map((fav) => (
-            <div key={fav.id} className="favorite-card">
-              <div className="favorite-card-header">
-                <h3>{fav.cardSet?.title || "Неизвестный набор"}</h3>
-                <div className="favorite-actions">
+            <div key={fav.id} className="cardset-item container-tp2">
+              <div className="set-header">
+                <div
+                  className="set-content"
+                  style={{ cursor: "default", flex: 1 }}
+                >
+                  <h3>{fav.cardSet?.title || t("sets.unknown")}</h3>
+                  <span className="cards-count">
+                    {fav.cardSet?.cards?.length || 0} {t("sets.cards_count")}
+                  </span>
+                </div>
+                <div className="set-actions">
                   <FavoriteButton
                     itemId={fav.cardsetId}
                     itemType="cardset"
@@ -53,17 +65,6 @@ const FavoritesPage = () => {
                     }}
                   />
                 </div>
-              </div>
-              <p className="favorite-description">
-                {fav.cardSet?.description || "Описание отсутствует"}
-              </p>
-              <div className="favorite-meta">
-                <span className="cards-count">
-                  📊 Карточек: {fav.cardSet?.cards?.length || 0}
-                </span>
-                <span className="favorite-date">
-                  📅 Добавлено: {new Date(fav.createdAt).toLocaleDateString()}
-                </span>
               </div>
             </div>
           ))}

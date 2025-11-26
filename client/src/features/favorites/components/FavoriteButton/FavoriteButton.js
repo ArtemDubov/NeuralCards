@@ -45,6 +45,14 @@ const FavoriteButton = ({ itemId, itemType = "cardset", onUpdate }) => {
         border: "none",
         padding: "5px",
         cursor: "pointer",
+        borderRadius: "4px",
+        transition: "all 0.2s ease",
+      }}
+      onMouseEnter={(e) => {
+        e.target.style.background = "rgba(255, 215, 0, 0.1)";
+      }}
+      onMouseLeave={(e) => {
+        e.target.style.background = "none";
       }}
     >
       <StarIcon filled={isFavorite} />

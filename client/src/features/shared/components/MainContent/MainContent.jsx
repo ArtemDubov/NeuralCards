@@ -33,8 +33,14 @@ const MainContent = ({
         <div className="tab-content container-tp5">
           {/* ЗАГОЛОВОК С КНОПКОЙ СОЗДАНИЯ */}
           <div className="sets-header">
-            <h2>
-              {searchResults !== null ? t("search.results") : t("sets.my_sets")}
+            <h2 className="main-content-title">
+              {searchResults !== null ? (
+                <>
+                  {t("search.resultsFor")} "{searchResults.query}"
+                </>
+              ) : (
+                t("sets.my_sets")
+              )}
             </h2>
 
             {/* КНОПКА СОЗДАНИЯ - ПОКАЗЫВАЕМ ТОЛЬКО КОГДА НЕ АКТИВЕН ПОИСК */}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import apiClient from "./api-client";
 import { useLanguage } from "./contexts/LanguageContext";
 import "./App.css";
@@ -13,7 +13,6 @@ import "./styles/ThemeLight.css";
 import "./styles/Global.css"; // 4. Семантические переменные
 import "./styles/GlobalBtn.css"; // 5. Стили кнопок
 import "./styles/GlobalContainer.css"; // 6. Стили контейнеров
-// import { themeUtils } from "./features/shared/utils/themeUtils";
 
 // Импорты компонентов
 import { ConfirmationModal } from "./features/shared/components/ConfirmationModal";
@@ -23,16 +22,18 @@ import Header from "./features/shared/components/Header/Header";
 import Navigation from "./features/shared/components/Navigation/Navigation";
 import LoginPage from "./features/auth/components/LoginPage/LoginPage";
 import MainContent from "./features/shared/components/MainContent/MainContent";
-import ProfilePage from "./features/profile/components/ProfilePage/ProfilePage"; // Добавлен импорт
+import ProfilePage from "./features/profile/components/ProfilePage/ProfilePage";
+import SearchBar from "./features/search/components/SearchBar/SearchBar";
+import SearchResults from "./features/search/components/SearchResults/SearchResults";
 import { uploadFile } from "./features/shared/utils";
 
-// Импорты кастомных хуков через index
+// Импорты кастомных хуков
 import {
   useModalManagement,
   useDeleteManagement,
 } from "./features/shared/hooks";
 import { useCardState, useCardsetsAPI } from "./features/cardsets/hooks";
-import useSearch from "./features/search/hooks/useSearch"; // Добавляем хук поиска
+import useSearch from "./features/search/hooks/useSearch";
 
 function App() {
   const { t } = useLanguage();
@@ -49,7 +50,7 @@ function App() {
   const cardState = useCardState();
   const deleteManagement = useDeleteManagement();
   const cardsetsAPI = useCardsetsAPI();
-  const search = useSearch(); // Добавляем хук поиска
+  const search = useSearch();
 
   // Деструктурируем для удобства
   const {
@@ -99,8 +100,46 @@ function App() {
 
   const { searchResults, isSearching, handleSearch, clearSearch } = search;
 
+  // Адаптер для SearchBar - преобразует вызов с одним аргументом в вызов с двумя
+  const handleSearchForBar = useCallback(
+    (query) => {
+      console.log("🔄 Starting search for:", query);
+      handleSearch(query, "all").catch((error) => {
+        console.error("Search failed:", error);
+        alert("Ошибка поиска. Проверьте подключение к серверу.");
+      });
+    },
+    [handleSearch]
+  );
+
   // Определяем какие наборы показывать - результаты поиска или все наборы
   const displayedCardsets = searchResults !== null ? searchResults : cardsets;
+
+  // Check authentication on app start
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userData = localStorage.getItem("user");
+
+    if (token && userData) {
+      try {
+        setUser(JSON.parse(userData));
+        setIsLoggedIn(true);
+        loadCardsets();
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+        handleLogout();
+      }
+    }
+  }, []);
+
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    setIsLoggedIn(false);
+    clearSearch();
+  };
 
   // Подтверждение удаления
   const handleConfirmDelete = async () => {
@@ -131,6 +170,7 @@ function App() {
       deleteManagement.setDeleteModal({ isOpen: false, type: null, id: null });
     }
   };
+
   // Сохранение изменений карточки
   const handleUpdateCard = async (e) => {
     e.preventDefault();
@@ -289,6 +329,50 @@ function App() {
     }
   };
 
+  // Determine what to display in main content
+  const renderMainContent = () => {
+    // If we have search results, show them
+    if (searchResults && activeTab === "sets") {
+      return (
+        <SearchResults
+          searchResults={searchResults}
+          isSearching={isSearching}
+          handleViewSet={(set) => {
+            setSelectedSet(set);
+            setActiveTab("view-set");
+          }}
+          showDeleteModal={showDeleteModal}
+          searchQuery={searchResults.query}
+        />
+      );
+    }
+
+    // Regular tab content
+    return (
+      <MainContent
+        activeTab={activeTab}
+        cardsets={displayedCardsets} // Исправлено: передаем только cardsets
+        newSetTitle={newSetTitle}
+        setNewSetTitle={setNewSetTitle}
+        selectedSet={selectedSet}
+        handleCreateSet={(e) => handleCreateSet(e, setActiveTab)}
+        handleViewSet={(set) => {
+          setSelectedSet(set);
+          setActiveTab("view-set");
+        }}
+        handleViewCard={handleViewCard}
+        showDeleteModal={showDeleteModal}
+        setIsAddCardModalOpen={setIsAddCardModalOpen}
+        setActiveTab={setActiveTab}
+        tags={tags}
+        setTags={setTags}
+        isSearching={isSearching}
+        searchResults={searchResults}
+        loadCardsets={loadCardsets}
+      />
+    );
+  };
+
   if (!isLoggedIn) {
     return (
       <LoginPage
@@ -305,41 +389,26 @@ function App() {
     <div className="app">
       <Header
         user={user}
-        onLogout={() => setIsLoggedIn(false)}
+        onLogout={handleLogout}
         setActiveTab={setActiveTab}
-      />
-      <Navigation
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onSearch={handleSearch} // Передаем функцию поиска
+        onSearch={handleSearch}
       />
 
-      {/* Рендерим ProfilePage когда активна вкладка profile */}
-      {activeTab === "profile" ? (
-        <ProfilePage user={user} />
-      ) : (
-        <MainContent
+      <div className="app-container">
+        <Navigation
           activeTab={activeTab}
-          cardsets={displayedCardsets}
-          newSetTitle={newSetTitle}
-          setNewSetTitle={setNewSetTitle}
-          selectedSet={selectedSet}
-          handleCreateSet={(e) => handleCreateSet(e, setActiveTab)}
-          handleViewSet={(set) => {
-            setSelectedSet(set);
-            setActiveTab("view-set");
-          }}
-          handleViewCard={handleViewCard}
-          showDeleteModal={showDeleteModal}
-          setIsAddCardModalOpen={setIsAddCardModalOpen}
           setActiveTab={setActiveTab}
-          tags={tags}
-          setTags={setTags}
-          isSearching={isSearching} // Добавляем
-          searchResults={searchResults} // Добавляем
-          loadCardsets={loadCardsets}
+          selectedSet={selectedSet}
+          onSearch={handleSearchForBar}
         />
-      )}
+
+        {/* Рендерим ProfilePage когда активна вкладка profile */}
+        {activeTab === "profile" ? (
+          <ProfilePage user={user} />
+        ) : (
+          renderMainContent()
+        )}
+      </div>
 
       {/* Остальной код остается без изменений */}
       <ViewCardModal
@@ -396,6 +465,7 @@ function App() {
         isUploading={isUploading}
         submitText={isUploading ? "📤 Сохранение..." : "💾 Сохранить изменения"}
       />
+
       <ConfirmationModal
         isOpen={deleteModal.isOpen}
         onClose={handleCancelDelete}

@@ -13,6 +13,30 @@ export const searchCardsets = async (query) => {
   }
 };
 
+export const searchCards = async (query) => {
+  try {
+    const response = await apiClient.get(
+      `/search/cards?query=${encodeURIComponent(query)}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Cards search error:", error);
+    throw error;
+  }
+};
+
+export const searchByTags = async (tags) => {
+  try {
+    const response = await apiClient.get(
+      `/search/tags?tags=${encodeURIComponent(tags.join(","))}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Tags search error:", error);
+    throw error;
+  }
+};
+
 export const useCardsetsAPI = () => {
   const [cardsets, setCardsets] = useState([]);
   const [newSetTitle, setNewSetTitle] = useState("");

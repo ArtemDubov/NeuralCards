@@ -9,11 +9,21 @@
   "navigation.favorites": "Favoritos",
   "navigation.profile": "Perfil",
 
-  "search.placeholder": "Buscar conjuntos...",
+  "search.placeholder": "Buscar conjuntos y tarjetas...",
   "search.results": "Resultados de búsqueda",
   "search.in_progress": "Buscando...",
   "search.no_results": "No se encontraron resultados",
   "search.try_again": "Intente cambiar su consulta de búsqueda",
+  "search.all": "Todo",
+  "search.sets": "Conjuntos",
+  "search.cards": "Tarjetas",
+  "search.clear": "Limpiar búsqueda",
+  "search.found_sets": "Conjuntos encontrados",
+  "search.found_cards": "Tarjetas encontradas",
+  "search.from_set": "Del conjunto",
+  "cards.edit": "Editar tarjeta",
+  "cards.save.error": "Error al guardar la tarjeta",
+  "training.choose.set": "Por favor selecciona un conjunto para comenzar el entrenamiento",
 
   "language.russian": "Ruso",
   "language.english": "Inglés",
@@ -90,5 +100,11 @@
   "auth.name": "Nombre",
   "auth.email": "Correo electrónico",
   "auth.password": "Contraseña",
-  "auth.confirm_password": "Confirmar contraseña"
+  "auth.confirm_password": "Confirmar contraseña",
+
+  "favorites.title": "Favoritos",
+  "favorites.count": "Conjuntos: {count}",
+  "sets.unknown": "Conjunto desconocido",
+  "favorites.empty.title": "Vacío por ahora",
+  "favorites.empty.message": "Agrega conjuntos a favoritos para volver rápidamente a ellos"
 }

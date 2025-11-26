@@ -9,11 +9,21 @@
   "navigation.favorites": "Favorites",
   "navigation.profile": "Profile",
 
-  "search.placeholder": "Search sets...",
+  "search.placeholder": "Search sets and cards...",
   "search.results": "Search results",
   "search.in_progress": "Searching...",
   "search.no_results": "No results found",
   "search.try_again": "Try changing your search query",
+  "search.all": "All",
+  "search.sets": "Sets",
+  "search.cards": "Cards",
+  "search.clear": "Clear search",
+  "search.found_sets": "Found sets",
+  "search.found_cards": "Found cards",
+  "search.from_set": "From set",
+  "cards.edit": "Edit card",
+  "cards.save.error": "Error saving card",
+  "training.choose.set": "Please select a set to start training",
 
   "language.russian": "Russian",
   "language.english": "English",
@@ -90,5 +100,11 @@
   "auth.name": "Name",
   "auth.email": "Email",
   "auth.password": "Password",
-  "auth.confirm_password": "Confirm Password"
+  "auth.confirm_password": "Confirm Password",
+
+  "favorites.title": "Favorites",
+  "favorites.count": "Sets: {count}",
+  "sets.unknown": "Unknown set",
+  "favorites.empty.title": "Empty for now",
+  "favorites.empty.message": "Add sets to favorites to quickly return to them"
 }

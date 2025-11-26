@@ -24,10 +24,11 @@ const Navigation = ({ activeTab, setActiveTab, onSearch }) => {
             {tab.label}
           </button>
         ))}
+        {/* ПЕРЕМЕСТИ ПОИСК СЮДА */}
+        <div className="search-inline">
+          <SearchBar onSearch={onSearch} />
+        </div>
       </nav>
-      <div className="search-section">
-        <SearchBar onSearch={onSearch} />
-      </div>
     </div>
   );
 };

@@ -21,14 +21,15 @@
 
 .nav-buttons {
   display: flex;
+  align-items: center;
   gap: 1rem;
   flex-wrap: wrap;
+  width: 100%;
 }
 
-.search-section {
-  flex: 1;
-  max-width: 400px;
-  min-width: 250px;
+.search-inline {
+  flex-shrink: 0; /* Не сжимается */
+  margin-left: auto; /* Прижимаем к правому краю */
 }
 
 /* Адаптивность */
@@ -42,6 +43,39 @@
   .nav-buttons {
     flex-direction: column;
     gap: 0.5rem;
+    width: 100%;
+  }
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.search-inline {
+  flex: 0 0 300px; /* Фиксированная ширина */
+  margin-left: auto; /* Прижимаем к правому краю */
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .nav-buttons {
+    flex-direction: column;
+  }
+
+  .search-inline {
+    flex: 1;
+    margin-left: 0;
     width: 100%;
   }
 }
