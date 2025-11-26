@@ -59,14 +59,15 @@ const ThemeSwitcher = () => {
           {themes.map((theme) => (
             <button
               key={theme.id}
-              data-theme={theme.id}
               className={`theme-option ${
                 currentTheme === theme.id ? "active" : ""
               }`}
               onClick={() => switchTheme(theme.id)}
             >
               <span className="theme-option-icon">{theme.icon}</span>
-              <span className="theme-option-name">{theme.name}</span>
+              <span className="theme-option-name text-primary dropdown-text-active">
+                {theme.name}
+              </span>
             </button>
           ))}
         </div>

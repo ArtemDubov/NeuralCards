@@ -48,13 +48,6 @@ const FavoritesPage = () => {
                 <h3>{fav.cardSet?.title || "Неизвестный набор"}</h3>
                 <div className="favorite-actions">
                   <FavoriteButton itemId={fav.cardsetId} itemType="cardset" />
-                  <button
-                    className="remove-favorite-btn"
-                    onClick={() => handleRemoveFavorite(fav.cardsetId)}
-                    title="Удалить из избранного"
-                  >
-                    🗑️
-                  </button>
                 </div>
               </div>
               <p className="favorite-description">

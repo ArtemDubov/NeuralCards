@@ -1,0 +1,89 @@
+# Определяем путь к рабочему столу и названия файлов
+$desktopPath = [Environment]::GetFolderPath("Desktop")
+$jsFilesOutput = Join-Path $desktopPath "js_files.txt"
+$cssFilesOutput = Join-Path $desktopPath "css_files.txt"
+$jsContentOutput = Join-Path $desktopPath "js_content.txt"
+$cssContentOutput = Join-Path $desktopPath "css_content.txt"
+
+Write-Host "🔄 Начинаем анализ проекта..."
+
+# Удаляем предыдущие файлы если существуют
+if (Test-Path $jsFilesOutput) { Remove-Item $jsFilesOutput }
+if (Test-Path $cssFilesOutput) { Remove-Item $cssFilesOutput }
+if (Test-Path $jsContentOutput) { Remove-Item $jsContentOutput }
+if (Test-Path $cssContentOutput) { Remove-Item $cssContentOutput }
+
+# Функция для безопасного чтения файлов
+function Read-FileContent {
+    param($FilePath)
+    try {
+        $content = Get-Content $FilePath -Raw -Encoding UTF8
+        return $content
+    }
+    catch {
+        try {
+            $content = Get-Content $FilePath -Raw -Encoding Default
+            return $content
+        }
+        catch {
+            return "[ОШИБКА ЧТЕНИЯ ФАЙЛА: $($_.Exception.Message)]"
+        }
+    }
+}
+
+# 1) ФАЙЛ С ПЕРЕЧНЕМ JS/JSX ФАЙЛОВ
+"ПЕРЕЧЕНЬ ВСЕХ JS/JSX ФАЙЛОВ ПРОЕКТА" | Out-File $jsFilesOutput -Encoding UTF8
+"Дата: $(Get-Date)" | Out-File $jsFilesOutput -Encoding UTF8 -Append
+"Всего файлов: $(@(Get-ChildItem "client\src" -Recurse -File -Include '*.js','*.jsx').Count)" | Out-File $jsFilesOutput -Encoding UTF8 -Append
+"=" * 80 | Out-File $jsFilesOutput -Encoding UTF8 -Append
+
+Get-ChildItem "client\src" -Recurse -File -Include '*.js','*.jsx' | Sort-Object FullName | ForEach-Object {
+    "$($_.FullName) ($($_.Length) байт)" | Out-File $jsFilesOutput -Encoding UTF8 -Append
+}
+
+# 2) ФАЙЛ С ПЕРЕЧНЕМ CSS ФАЙЛОВ
+"`nПЕРЕЧЕНЬ ВСЕХ CSS ФАЙЛОВ ПРОЕКТА" | Out-File $cssFilesOutput -Encoding UTF8
+"Дата: $(Get-Date)" | Out-File $cssFilesOutput -Encoding UTF8 -Append
+"Всего файлов: $(@(Get-ChildItem "client\src" -Recurse -File -Include '*.css','*.scss','*.sass','*.less').Count)" | Out-File $cssFilesOutput -Encoding UTF8 -Append
+"=" * 80 | Out-File $cssFilesOutput -Encoding UTF8 -Append
+
+Get-ChildItem "client\src" -Recurse -File -Include '*.css','*.scss','*.sass','*.less' | Sort-Object FullName | ForEach-Object {
+    "$($_.FullName) ($($_.Length) байт)" | Out-File $cssFilesOutput -Encoding UTF8 -Append
+}
+
+# 3) ФАЙЛ С СОДЕРЖИМЫМ JS/JSX ФАЙЛОВ
+"ПОЛНОЕ СОДЕРЖИМОЕ JS/JSX ФАЙЛОВ" | Out-File $jsContentOutput -Encoding UTF8
+"Дата: $(Get-Date)" | Out-File $jsContentOutput -Encoding UTF8 -Append
+"Всего файлов: $(@(Get-ChildItem "client\src" -Recurse -File -Include '*.js','*.jsx').Count)" | Out-File $jsContentOutput -Encoding UTF8 -Append
+"=" * 80 | Out-File $jsContentOutput -Encoding UTF8 -Append
+
+Get-ChildItem "client\src" -Recurse -File -Include '*.js','*.jsx' | Sort-Object FullName | ForEach-Object {
+    "`n" + "=" * 60 | Out-File $jsContentOutput -Encoding UTF8 -Append
+    "ФАЙЛ: $($_.FullName)" | Out-File $jsContentOutput -Encoding UTF8 -Append
+    "РАЗМЕР: $($_.Length) байт" | Out-File $jsContentOutput -Encoding UTF8 -Append
+    "-" * 40 | Out-File $jsContentOutput -Encoding UTF8 -Append
+    $content = Read-FileContent -FilePath $_.FullName
+    $content | Out-File $jsContentOutput -Encoding UTF8 -Append
+}
+
+# 4) ФАЙЛ С СОДЕРЖИМЫМ CSS ФАЙЛОВ
+"ПОЛНОЕ СОДЕРЖИМОЕ CSS ФАЙЛОВ" | Out-File $cssContentOutput -Encoding UTF8
+"Дата: $(Get-Date)" | Out-File $cssContentOutput -Encoding UTF8 -Append
+"Всего файлов: $(@(Get-ChildItem "client\src" -Recurse -File -Include '*.css','*.scss','*.sass','*.less').Count)" | Out-File $cssContentOutput -Encoding UTF8 -Append
+"=" * 80 | Out-File $cssContentOutput -Encoding UTF8 -Append
+
+Get-ChildItem "client\src" -Recurse -File -Include '*.css','*.scss','*.sass','*.less' | Sort-Object FullName | ForEach-Object {
+    "`n" + "=" * 60 | Out-File $cssContentOutput -Encoding UTF8 -Append
+    "ФАЙЛ: $($_.FullName)" | Out-File $cssContentOutput -Encoding UTF8 -Append
+    "РАЗМЕР: $($_.Length) байт" | Out-File $cssContentOutput -Encoding UTF8 -Append
+    "-" * 40 | Out-File $cssContentOutput -Encoding UTF8 -Append
+    $content = Read-FileContent -FilePath $_.FullName
+    $content | Out-File $cssContentOutput -Encoding UTF8 -Append
+}
+
+Write-Host "✅ Анализ завершен! Созданы файлы на рабочем столе:"
+Write-Host "   📄 js_files.txt - перечень JS/JSX файлов"
+Write-Host "   📄 css_files.txt - перечень CSS файлов" 
+Write-Host "   📄 js_content.txt - содержимое JS/JSX файлов"
+Write-Host "   📄 css_content.txt - содержимое CSS файлов"
+Write-Host "`n📁 Путь: $desktopPath"

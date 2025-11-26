@@ -66,7 +66,9 @@ const LanguageSwitcher = () => {
                 alt={t(lang.name)}
                 className="language-option-flag"
               />
-              <span className="language-option-name">{t(lang.name)}</span>
+              <span className="text-primary dropdown-text-active">
+                {t(lang.name)}
+              </span>
             </button>
           ))}
         </div>

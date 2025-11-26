@@ -7,7 +7,7 @@
   "navigation.create": "Create Set",
   "navigation.training": "Training",
   "navigation.favorites": "⭐ Favorites",
-  "navigation.profile": "👤 Profile",
+  "navigation.profile": "Profile",
 
   "search.placeholder": "Search sets...",
   "search.results": "Search results",
@@ -19,11 +19,11 @@
   "language.english": "English",
   "language.spanish": "Spanish",
 
-  "theme.ocean": "🌊 Ocean",
-  "theme.dark": "🌙 Dark",
-  "theme.forest": "🌲 Forest",
-  "theme.sunset": "🌅 Sunset",
-  "theme.light": "☀️ Light",
+  "theme.ocean": "Ocean",
+  "theme.dark": "Dark",
+  "theme.forest": "Forest",
+  "theme.sunset": "Sunset",
+  "theme.light": "Light",
 
   "sets.my_sets": "My flashcard sets",
   "sets.empty": "You don't have any sets yet",

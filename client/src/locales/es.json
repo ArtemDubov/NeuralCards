@@ -7,7 +7,7 @@
   "navigation.create": "Crear conjunto",
   "navigation.training": "Entrenamiento",
   "navigation.favorites": "⭐ Favoritos",
-  "navigation.profile": "👤 Perfil",
+  "navigation.profile": "Perfil",
 
   "search.placeholder": "Buscar conjuntos...",
   "search.results": "Resultados de búsqueda",
@@ -19,11 +19,11 @@
   "language.english": "Inglés",
   "language.spanish": "Español",
 
-  "theme.ocean": "🌊 Océano",
-  "theme.dark": "🌙 Oscuro",
-  "theme.forest": "🌲 Bosque",
-  "theme.sunset": "🌅 Atardecer",
-  "theme.light": "☀️ Claro",
+  "theme.ocean": "Océano",
+  "theme.dark": "Oscuro",
+  "theme.forest": "Bosque",
+  "theme.sunset": "Atardecer",
+  "theme.light": "Claro",
 
   "sets.my_sets": "Mis conjuntos de tarjetas",
   "sets.empty": "Aún no tienes conjuntos",

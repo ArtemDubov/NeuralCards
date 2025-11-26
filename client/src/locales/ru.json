@@ -7,7 +7,7 @@
   "navigation.create": "Создать набор",
   "navigation.training": "Тренировка",
   "navigation.favorites": "⭐ Избранное",
-  "navigation.profile": "👤 Профиль",
+  "navigation.profile": "Профиль",
 
   "search.placeholder": "Поиск наборов...",
   "search.results": "Результаты поиска",
@@ -19,11 +19,11 @@
   "language.english": "Английский",
   "language.spanish": "Испанский",
 
-  "theme.ocean": "🌊 Океан",
-  "theme.dark": "🌙 Тёмная",
-  "theme.forest": "🌲 Лесная",
-  "theme.sunset": "🌅 Закат",
-  "theme.light": "☀️ Светлая",
+  "theme.ocean": "Океан",
+  "theme.dark": "Тёмная",
+  "theme.forest": "Лесная",
+  "theme.sunset": "Закат",
+  "theme.light": "Светлая",
 
   "sets.my_sets": "Мои наборы карточек",
   "sets.empty": "У вас пока нет наборов",
