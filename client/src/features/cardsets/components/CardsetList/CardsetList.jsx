@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useLanguage } from "../../../../contexts/LanguageContext";
+import { useFavorites } from "../../../../contexts/FavoritesContext";
 import FavoriteButton from "../../../favorites/components/FavoriteButton/FavoriteButton";
 import "./CardsetList.css";
 
 const CardsetList = ({ cardsets, handleViewSet, showDeleteModal }) => {
   const { t } = useLanguage();
+  const { isSetFavorite } = useFavorites();
+
+  // Слушаем события обновления избранного для перерисовки
+  useEffect(() => {
+    const handleFavoritesUpdate = () => {
+      // Компонент автоматически перерисуется благодаря контексту
+      console.log("🔄 [CardsetList] Получен сигнал обновления избранного");
+    };
+
+    window.addEventListener("favoritesUpdated", handleFavoritesUpdate);
+    return () => {
+      window.removeEventListener("favoritesUpdated", handleFavoritesUpdate);
+    };
+  }, []);
 
   if (cardsets.length === 0) {
     return <p className="empty-state">{t("sets.empty")}</p>;
@@ -24,8 +39,18 @@ const CardsetList = ({ cardsets, handleViewSet, showDeleteModal }) => {
             : []
           : [];
 
+        // Используем контекст вместо set.isFavorite
+        const isFavorite = isSetFavorite(set.id);
+
+        console.log("Set:", set.id, "isFavorite:", isFavorite);
+
         return (
-          <div key={set.id} className="cardset-item container-tp2">
+          <div
+            key={set.id}
+            className={`cardset-item container-tp2 ${
+              isFavorite ? "favorite" : ""
+            }`}
+          >
             <div className="set-header">
               <div
                 className="set-content"
@@ -37,7 +62,10 @@ const CardsetList = ({ cardsets, handleViewSet, showDeleteModal }) => {
                   flexDirection: "column",
                 }}
               >
-                <h3>{set.title}</h3>
+                <h3>
+                  {set.title}
+                  {isFavorite && <span style={{ marginLeft: "8px" }}>⭐</span>}
+                </h3>
                 <span className="cards-count">
                   {set.cards ? set.cards.length : 0} {t("sets.cards_count")}
                 </span>

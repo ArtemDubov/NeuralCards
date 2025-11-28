@@ -3,7 +3,14 @@ import apiClient from "../api-client";
 import { useAuth } from "./useAuth";
 
 export const useData = () => {
-  const { isLoggedIn } = useAuth();
+  const auth = useAuth(); // Получаем весь объект auth
+  const { isLoggedIn, user } = auth; // Деструктурируем
+
+  console.log("🔍 [useData] Состояние auth:", {
+    isLoggedIn,
+    user: user?.email,
+    loading: auth.loading,
+  });
 
   const [state, setState] = useState({
     cardsets: [],
@@ -15,8 +22,10 @@ export const useData = () => {
 
   const loadCardsets = useCallback(async () => {
     try {
+      console.log("🟡 [useData] Загружаем наборы карточек...");
       const response = await apiClient.get("/api/cardsets");
       const cardsets = response.data;
+      console.log("✅ [useData] Наборы загружены:", cardsets.length, "шт");
 
       // ОБНОВЛЕНИЕ: Используем один вызов setState для обновления обоих состояний
       setState((prev) => {
@@ -40,15 +49,28 @@ export const useData = () => {
 
       return cardsets;
     } catch (error) {
-      console.error("Ошибка загрузки наборов:", error);
+      console.error("❌ [useData] Ошибка загрузки наборов:", error);
       return [];
     }
   }, []);
 
   const createSet = useCallback(async (setData) => {
     try {
+      console.log("🟡 [useData] createSet начал выполнение");
+      console.log(
+        "📤 [useData] Отправляемые данные:",
+        JSON.stringify(setData, null, 2)
+      );
+      console.log(
+        "🔑 [useData] Токен для запроса:",
+        localStorage.getItem("token")
+      );
+      console.log("🌐 [useData] BaseURL:", apiClient.defaults.baseURL);
+
       const response = await apiClient.post("/api/cardsets", setData);
       const newSet = response.data;
+
+      console.log("✅ [useData] Набор успешно создан на сервере:", newSet);
 
       // Оптимистичное обновление
       setState((prev) => ({
@@ -57,9 +79,18 @@ export const useData = () => {
         selectedSet: newSet, // Сразу выбираем новый набор
       }));
 
+      console.log("✅ [useData] Локальное состояние обновлено");
       return newSet;
     } catch (error) {
-      console.error("Ошибка создания набора:", error);
+      console.error("❌ [useData] Ошибка создания набора:");
+      console.error("❌ [useData] Сообщение ошибки:", error.message);
+      console.error("❌ [useData] Статус ошибки:", error.response?.status);
+      console.error("❌ [useData] Данные ошибки:", error.response?.data);
+      console.error("❌ [useData] Заголовки запроса:", error.config?.headers);
+      console.error("❌ [useData] URL запроса:", error.config?.url);
+      console.error("❌ [useData] Метод запроса:", error.config?.method);
+      console.error("❌ [useData] Данные запроса:", error.config?.data);
+
       throw error;
     }
   }, []);
@@ -67,6 +98,8 @@ export const useData = () => {
   const deleteSet = useCallback(
     async (setId) => {
       try {
+        console.log("🟡 [useData] Удаляем набор:", setId);
+
         // Оптимистичное обновление
         setState((prev) => ({
           ...prev,
@@ -79,11 +112,12 @@ export const useData = () => {
         // Перезагружаем для синхронизации
         await loadCardsets();
 
+        console.log("✅ [useData] Набор успешно удален");
         return true;
       } catch (error) {
         // Откатываем оптимистичное обновление в случае ошибки
         await loadCardsets();
-        console.error("Ошибка удаления набора:", error);
+        console.error("❌ [useData] Ошибка удаления набора:", error);
         throw error;
       }
     },
@@ -92,6 +126,7 @@ export const useData = () => {
 
   const addCard = useCallback(async (setId, cardData) => {
     try {
+      console.log("🟡 [useData] Добавляем карточку в набор:", setId);
       const response = await apiClient.post(
         `/api/cardsets/${setId}/cards`,
         cardData
@@ -124,15 +159,17 @@ export const useData = () => {
         };
       });
 
+      console.log("✅ [useData] Карточка успешно добавлена");
       return newCard;
     } catch (error) {
-      console.error("Ошибка добавления карточки:", error);
+      console.error("❌ [useData] Ошибка добавления карточки:", error);
       throw error;
     }
   }, []);
 
   const updateCard = useCallback(async (setId, cardId, cardData) => {
     try {
+      console.log("🟡 [useData] Обновляем карточку:", cardId);
       const response = await apiClient.put(
         `/api/cardsets/${setId}/cards/${cardId}`,
         cardData
@@ -167,9 +204,10 @@ export const useData = () => {
         };
       });
 
+      console.log("✅ [useData] Карточка успешно обновлена");
       return updatedCard;
     } catch (error) {
-      console.error("Ошибка обновления карточки:", error);
+      console.error("❌ [useData] Ошибка обновления карточки:", error);
       throw error;
     }
   }, []);
@@ -177,6 +215,8 @@ export const useData = () => {
   const deleteCard = useCallback(
     async (setId, cardId) => {
       try {
+        console.log("🟡 [useData] Удаляем карточку:", cardId);
+
         // Оптимистичное обновление
         setState((prev) => {
           const updatedCardsets = prev.cardsets.map((set) => {
@@ -205,11 +245,12 @@ export const useData = () => {
 
         await apiClient.delete(`/api/cardsets/${setId}/cards/${cardId}`);
 
+        console.log("✅ [useData] Карточка успешно удалена");
         return true;
       } catch (error) {
         // Откатываем в случае ошибки
         await loadCardsets();
-        console.error("Ошибка удаления карточки:", error);
+        console.error("❌ [useData] Ошибка удаления карточки:", error);
         throw error;
       }
     },
@@ -218,10 +259,12 @@ export const useData = () => {
 
   const handleSearch = useCallback(async (query) => {
     if (!query.trim()) {
+      console.log("🔍 [useData] Поиск очищен");
       setState((prev) => ({ ...prev, searchResults: null, searchQuery: "" }));
       return;
     }
 
+    console.log("🔍 [useData] Выполняем поиск:", query);
     setState((prev) => ({ ...prev, isSearching: true, searchQuery: query }));
 
     try {
@@ -231,6 +274,11 @@ export const useData = () => {
         ),
         apiClient.get(`/api/search/cards?query=${encodeURIComponent(query)}`),
       ]);
+
+      console.log("✅ [useData] Результаты поиска получены:", {
+        наборы: cardsetsResults.data.length,
+        карточки: cardsResults.data.length,
+      });
 
       setState((prev) => ({
         ...prev,
@@ -242,14 +290,17 @@ export const useData = () => {
         isSearching: false,
       }));
     } catch (error) {
-      console.error("Ошибка поиска:", error);
+      console.error("❌ [useData] Ошибка поиска:", error);
       setState((prev) => ({ ...prev, isSearching: false }));
     }
   }, []);
 
   useEffect(() => {
     if (isLoggedIn) {
+      console.log("🟡 [useData] Пользователь авторизован, загружаем наборы...");
       loadCardsets();
+    } else {
+      console.log("🔴 [useData] Пользователь не авторизован");
     }
   }, [isLoggedIn, loadCardsets]);
 

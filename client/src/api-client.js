@@ -27,12 +27,17 @@ apiClient.interceptors.request.use(
       url: config.url,
       headers: config.headers,
       data: config.data,
+      baseURL: config.baseURL,
+      fullURL: config.baseURL + config.url,
     });
 
     return config;
   },
   (error) => {
-    debugLog("API Client", "Request Error", { error: error.message });
+    debugLog("API Client", "Request Error", {
+      error: error.message,
+      stack: error.stack,
+    });
     return Promise.reject(error);
   }
 );
@@ -44,15 +49,20 @@ apiClient.interceptors.response.use(
       status: response.status,
       url: response.config.url,
       data: response.data,
+      headers: response.headers,
     });
     return response;
   },
   (error) => {
     debugLog("API Client", "Response Error", {
       status: error.response?.status,
+      statusText: error.response?.statusText,
       url: error.config?.url,
+      method: error.config?.method,
       message: error.message,
       response: error.response?.data,
+      requestHeaders: error.config?.headers,
+      requestData: error.config?.data,
     });
 
     if (error.response?.status === 401) {

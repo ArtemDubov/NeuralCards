@@ -6,11 +6,17 @@ import "./Navigation.css";
 const Navigation = ({ activeTab, setActiveTab, onSearch }) => {
   const { t } = useLanguage();
 
+  // ДОБАВИТЬ ОТЛАДКУ ПЕРЕД tabs
+  console.log("=== NAVIGATION ===");
+  console.log("activeTab:", activeTab);
+
   const tabs = [
     { id: "sets", label: t("navigation.sets") },
+    { id: "favorites", label: "⭐ " + "Избранное" },
     { id: "training", label: t("navigation.training") },
-    { id: "favorites", label: t("navigation.favorites") },
   ];
+
+  console.log("tabs:", tabs);
 
   return (
     <div className="nav-container">
@@ -19,12 +25,14 @@ const Navigation = ({ activeTab, setActiveTab, onSearch }) => {
           <button
             key={tab.id}
             className={`btn-tp2 ${activeTab === tab.id ? "active" : ""}`}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() => {
+              console.log("Клик по табу:", tab.id);
+              setActiveTab(tab.id);
+            }}
           >
             {tab.label}
           </button>
         ))}
-        {/* ПЕРЕМЕСТИ ПОИСК СЮДА */}
         <div className="search-inline">
           <SearchBar onSearch={onSearch} />
         </div>

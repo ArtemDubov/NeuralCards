@@ -73,6 +73,44 @@
   color: var(--color-accent);
 }
 
+.sets-header-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Стили для избранного */
+.favorites-header {
+  margin-bottom: 2rem;
+}
+
+.favorites-section {
+  margin-bottom: 3rem;
+}
+
+.favorites-section h3 {
+  color: var(--color-accent);
+  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  border-bottom: 2px solid var(--color-border);
+  padding-bottom: 0.5rem;
+}
+
+.set-badge {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  background: var(--bg-secondary);
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+}
+
+.card-preview-header {
+  margin-bottom: 0.8rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
 /* Адаптивность для мобильных */
 @media (max-width: 768px) {
   .sets-header {
@@ -82,6 +120,25 @@
 
   .sets-header h2 {
     text-align: center;
+  }
+
+  .sets-header-controls {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .sets-header-controls .btn-tp8,
+  .sets-header-controls .btn-tp1 {
+    width: 100%;
+    text-align: center;
+  }
+
+  .favorites-section {
+    margin-bottom: 2rem;
+  }
+
+  .favorites-section h3 {
+    font-size: 1.1rem;
   }
 }
 
@@ -100,4 +157,110 @@
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+/* Стили для контейнера основного контента */
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  background: var(--color-bg-primary);
+  transition: all 0.4s ease;
+}
+
+/* Стили для вкладок контента */
+.tab-content {
+  background: var(--color-bg-card);
+  border-radius: var(--border-radius-lg);
+  padding: 2rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--color-border);
+  transition: all 0.3s ease;
+}
+
+.tab-content:hover {
+  border-color: var(--color-border-hover);
+  box-shadow: var(--shadow-medium);
+}
+
+/* Стили для пустых состояний */
+.empty-state {
+  text-align: center;
+  color: var(--color-text-secondary);
+  padding: 3rem 2rem;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.empty-state p {
+  margin: 0.5rem 0;
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.main-content > * {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Улучшения для мобильных устройств */
+@media (max-width: 480px) {
+  .main-content {
+    padding: 1rem 0.5rem;
+  }
+
+  .tab-content {
+    padding: 1rem;
+    border-radius: var(--border-radius);
+  }
+
+  .sets-header-controls {
+    gap: 0.5rem;
+  }
+}
+
+/* Специфичные стили для разных состояний */
+.search-in-progress {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.content-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+/* Стили для сетки в мобильной версии */
+@media (max-width: 768px) {
+  .sets-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Стили для кнопки избранного в активном состоянии */
+.btn-tp8.active {
+  background: var(--color-gold);
+  color: var(--color-bg-primary);
+  border-color: var(--color-gold);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+/* Плавные переходы для всех интерактивных элементов */
+.sets-header-controls button {
+  transition: all 0.3s ease;
+}
+
+.sets-header-controls button:hover {
+  transform: translateY(-2px);
 }

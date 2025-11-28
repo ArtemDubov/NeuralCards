@@ -1,5 +1,7 @@
 import React from "react";
 import { useLanguage } from "./contexts/LanguageContext";
+import FavoritesPage from "./features/favorites/components/FavoritesPage";
+import { FavoritesProvider } from "./contexts/FavoritesContext";
 import "./App.css";
 
 // Импорты стилей
@@ -36,7 +38,8 @@ function App() {
   const auth = useAuth();
   const data = useData();
   const ui = useUI();
-
+  console.log("=== APP RENDER ===");
+  console.log("activeTab:", ui.activeTab);
   const handleLoginSuccess = () => {
     data.loadCardsets();
   };
@@ -50,18 +53,55 @@ function App() {
   // Обработчик создания набора
   const handleCreateSet = async (e) => {
     e.preventDefault();
+
+    console.log("🟡 [App] handleCreateSet начал выполнение");
+    console.log("📝 [App] Данные формы:", ui.forms.set);
+
+    // Проверка авторизации
+    const token = localStorage.getItem("token");
+    console.log(
+      "🔑 [App] Токен в localStorage:",
+      token ? "присутствует" : "ОТСУТСТВУЕТ!"
+    );
+
+    if (!token) {
+      alert("Ошибка авторизации. Пожалуйста, войдите снова.");
+      auth.logout();
+      return;
+    }
+
     try {
-      await data.createSet({
+      console.log("🟡 [App] Начинаем создание набора...");
+
+      const setData = {
         title: ui.forms.set.title,
         description: "Мой новый набор",
         isPublic: false,
         tags: ui.forms.set.tags.map((tag) => ({ name: tag })),
-      });
+      };
+
+      console.log(
+        "📤 [App] Отправляемые данные набора:",
+        JSON.stringify(setData, null, 2)
+      );
+
+      await data.createSet(setData);
 
       ui.resetForm("set");
       ui.setActiveTab("sets");
+      console.log("✅ [App] Набор успешно создан!");
     } catch (error) {
-      console.error("Ошибка создания набора:", error);
+      console.error("❌ [App] Критическая ошибка создания набора:", error);
+      console.error("❌ [App] Детали ошибки:", {
+        message: error.message,
+        status: error.response?.status,
+        data: error.response?.data,
+        config: {
+          url: error.config?.url,
+          method: error.config?.method,
+          data: error.config?.data,
+        },
+      });
       alert("Ошибка при создании набора: " + error.message);
     }
   };
@@ -185,12 +225,41 @@ function App() {
 
       console.log(`${type === "set" ? "Набор" : "Карточка"} успешно удален!`);
     } catch (error) {
-      console.error("Ошибка удаления:", error);
-      alert(`Ошибка при удалении: ${error.message}`);
+      console.error("❌ Детали ошибки удаления:", {
+        message: error.message,
+        status: error.response?.status,
+        responseData: error.response?.data,
+        requestUrl: error.config?.url,
+        requestMethod: error.config?.method,
+        requestData: error.config?.data,
+      });
+
+      const errorMessage =
+        error.response?.data?.error ||
+        error.response?.data?.message ||
+        error.message ||
+        "Неизвестная ошибка сервера";
+
+      alert(`Ошибка при удалении: ${errorMessage}`);
+      ui.closeModal("deleteConfirmation");
     }
   };
 
   const renderMainContent = () => {
+    // ДОБАВИТЬ ЭТО УСЛОВИЕ ПЕРВЫМ
+    if (ui.activeTab === "favorites") {
+      return <FavoritesPage />;
+    }
+
+    if (ui.activeTab === "training") {
+      return (
+        <TrainingPage
+          key={`training-${ui.selectedSetForTraining?.id || "no-set"}`}
+          cardsets={data.cardsets}
+          selectedSetForTraining={ui.selectedSetForTraining}
+        />
+      );
+    }
     if (ui.activeTab === "training") {
       return (
         <TrainingPage
@@ -277,75 +346,77 @@ function App() {
 
   return (
     <div className="app">
-      <Header
-        user={auth.user}
-        onLogout={handleLogoutAndRedirect}
-        setActiveTab={ui.setActiveTab}
-        onSearch={data.handleSearch}
-      />
-
-      <div className="app-container">
-        <Navigation
-          activeTab={ui.activeTab}
+      <FavoritesProvider>
+        <Header
+          user={auth.user}
+          onLogout={handleLogoutAndRedirect}
           setActiveTab={ui.setActiveTab}
-          selectedSet={data.selectedSet}
           onSearch={data.handleSearch}
         />
 
-        {ui.activeTab === "profile" ? (
-          <ProfilePage user={auth.user} />
-        ) : (
-          renderMainContent()
-        )}
-      </div>
+        <div className="app-container">
+          <Navigation
+            activeTab={ui.activeTab}
+            setActiveTab={ui.setActiveTab}
+            selectedSet={data.selectedSet}
+            onSearch={data.handleSearch}
+          />
 
-      {/* Модальные окна */}
-      <ViewCardModal
-        isOpen={ui.modals.viewCard.isOpen}
-        onClose={() => ui.closeModal("viewCard")}
-        card={ui.modals.viewCard.card}
-        onEdit={(card) => {
-          ui.closeModal("viewCard");
-          ui.updateForm("card", {
-            frontText: card.front || "",
-            backText: card.back || "",
-            frontImage: null,
-            backImage: null,
-            frontAudio: null,
-            backAudio: null,
-          });
-          ui.openModal("editCard", { card });
-        }}
-      />
+          {ui.activeTab === "profile" ? (
+            <ProfilePage user={auth.user} />
+          ) : (
+            renderMainContent()
+          )}
+        </div>
 
-      {/* Модалка добавления карточки */}
-      <CardModal
-        isOpen={ui.modals.addCard.isOpen}
-        onClose={() => ui.closeModal("addCard")}
-        onSubmit={handleAddCard}
-        title="Создание карточки"
-        submitText="✅ Создать карточку"
-      />
+        {/* Модальные окна */}
+        <ViewCardModal
+          isOpen={ui.modals.viewCard.isOpen}
+          onClose={() => ui.closeModal("viewCard")}
+          card={ui.modals.viewCard.card}
+          onEdit={(card) => {
+            ui.closeModal("viewCard");
+            ui.updateForm("card", {
+              frontText: card.front || "",
+              backText: card.back || "",
+              frontImage: null,
+              backImage: null,
+              frontAudio: null,
+              backAudio: null,
+            });
+            ui.openModal("editCard", { card });
+          }}
+        />
 
-      {/* Модалка редактирования карточки */}
-      <CardModal
-        isOpen={ui.modals.editCard.isOpen}
-        onClose={() => ui.closeModal("editCard")}
-        onSubmit={handleEditCard}
-        title="Редактирование карточки"
-        editingCard={ui.modals.editCard.card}
-        submitText="💾 Сохранить изменения"
-      />
+        {/* Модалка добавления карточки */}
+        <CardModal
+          isOpen={ui.modals.addCard.isOpen}
+          onClose={() => ui.closeModal("addCard")}
+          onSubmit={handleAddCard}
+          title="Создание карточки"
+          submitText="✅ Создать карточку"
+        />
 
-      <ConfirmationModal
-        isOpen={ui.modals.deleteConfirmation.isOpen}
-        onClose={() => ui.closeModal("deleteConfirmation")}
-        onConfirm={handleConfirmDelete}
-        title={ui.modals.deleteConfirmation.title}
-        message={ui.modals.deleteConfirmation.message}
-        confirmText={t("modal.delete.confirm")}
-        cancelText={t("modal.delete.cancel")}
-      />
+        {/* Модалка редактирования карточки */}
+        <CardModal
+          isOpen={ui.modals.editCard.isOpen}
+          onClose={() => ui.closeModal("editCard")}
+          onSubmit={handleEditCard}
+          title="Редактирование карточки"
+          editingCard={ui.modals.editCard.card}
+          submitText="💾 Сохранить изменения"
+        />
+
+        <ConfirmationModal
+          isOpen={ui.modals.deleteConfirmation.isOpen}
+          onClose={() => ui.closeModal("deleteConfirmation")}
+          onConfirm={handleConfirmDelete}
+          title={ui.modals.deleteConfirmation.title}
+          message={ui.modals.deleteConfirmation.message}
+          confirmText={t("modal.delete.confirm")}
+          cancelText={t("modal.delete.cancel")}
+        />
+      </FavoritesProvider>
     </div>
   );
 }

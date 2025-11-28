@@ -88,25 +88,45 @@ const LoginPage = ({ onAuthSuccess }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    console.log("🟡 [LoginPage] Обработчик входа вызван");
+
+    if (!email || !password) {
+      console.log("❌ [LoginPage] Email или пароль не заполнены");
+      return;
+    }
+
+    console.log("🟡 [LoginPage] Вызываем auth.login...");
     const result = await auth.login(email, password);
+
     if (result.success) {
+      console.log("✅ [LoginPage] Вход успешен, вызываем onAuthSuccess");
       onAuthSuccess();
+    } else {
+      console.error("❌ [LoginPage] Ошибка входа:", result.error);
+      setErrors({ general: result.error });
     }
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    console.log("🟡 [LoginPage] Обработчик регистрации вызван");
 
     // Полная валидация
     const newErrors = {};
+    console.log("🟡 [LoginPage] Выполняем валидацию...");
 
     // Валидация имени
     if (!registerName.trim()) {
       newErrors.name = "Имя обязательно для заполнения";
+      console.log("❌ [LoginPage] Ошибка валидации: имя не заполнено");
     } else if (registerName.trim().length < 2) {
       newErrors.name = "Имя должно содержать минимум 2 символа";
+      console.log("❌ [LoginPage] Ошибка валидации: имя слишком короткое");
     } else if (!/^[\p{L} ]+$/u.test(registerName)) {
       newErrors.name = "Имя должно содержать только буквы и пробелы";
+      console.log(
+        "❌ [LoginPage] Ошибка валидации: имя содержит запрещенные символы"
+      );
     }
 
     // Валидация email
@@ -114,27 +134,40 @@ const LoginPage = ({ onAuthSuccess }) => {
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if (!registerEmail) {
       newErrors.email = "Email обязателен для заполнения";
+      console.log("❌ [LoginPage] Ошибка валидации: email не заполнен");
     } else if (!emailRegex.test(registerEmail)) {
       newErrors.email = "Введите корректный email адрес";
+      console.log("❌ [LoginPage] Ошибка валидации: email невалиден");
     }
 
     // Валидация пароля
     if (!registerPassword) {
       newErrors.password = "Пароль обязателен для заполнения";
+      console.log("❌ [LoginPage] Ошибка валидации: пароль не заполнен");
     } else if (registerPassword.length < 6) {
       newErrors.password = "Пароль должен содержать минимум 6 символов";
+      console.log("❌ [LoginPage] Ошибка валидации: пароль слишком короткий");
     }
 
     setErrors(newErrors);
-    if (Object.keys(newErrors).length > 0) return;
+    if (Object.keys(newErrors).length > 0) {
+      console.log("❌ [LoginPage] Валидация не пройдена, отмена регистрации");
+      return;
+    }
 
+    console.log("✅ [LoginPage] Валидация пройдена, вызываем auth.register...");
     const result = await auth.register(
       registerName,
       registerEmail,
       registerPassword
     );
+
     if (result.success) {
+      console.log("✅ [LoginPage] Регистрация успешна, вызываем onAuthSuccess");
       onAuthSuccess();
+    } else {
+      console.error("❌ [LoginPage] Ошибка регистрации:", result.error);
+      setErrors({ general: result.error });
     }
   };
 

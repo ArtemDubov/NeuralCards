@@ -8,15 +8,28 @@ const prisma = new PrismaClient();
 // Получить все наборы пользователя с карточками и тегами
 router.get("/", authMiddleware, async (req, res) => {
   try {
+    console.log("🔍 GET /api/cardsets - userId:", req.userId);
+
     const cardsets = await prisma.cardSet.findMany({
       where: { authorId: req.userId },
       include: {
         cards: true,
         tags: true,
+        favoriteCardsets: {
+          where: { userId: req.userId },
+        },
       },
     });
-    res.json(cardsets);
+
+    // Добавляем поле isFavorite к каждому набору
+    const cardsetsWithFavorites = cardsets.map((set) => ({
+      ...set,
+      isFavorite: set.favoriteCardsets.length > 0,
+    }));
+
+    res.json(cardsetsWithFavorites);
   } catch (error) {
+    console.error("❌ Ошибка получения наборов:", error);
     res.status(500).json({ error: "Ошибка получения наборов" });
   }
 });
@@ -26,7 +39,19 @@ router.post("/", authMiddleware, async (req, res) => {
   try {
     const { title, description, isPublic, tags } = req.body;
 
-    console.log("Полученные данные:", { title, description, isPublic, tags });
+    console.log("🔍 POST /api/cardsets - userId:", req.userId);
+    console.log("📦 Полученные данные:", {
+      title,
+      description,
+      isPublic,
+      tags,
+    });
+
+    // Проверяем что userId установлен
+    if (!req.userId) {
+      console.error("❌ userId не установлен в middleware");
+      return res.status(401).json({ error: "Пользователь не авторизован" });
+    }
 
     // Создаем данные для набора
     const data = {
@@ -54,10 +79,10 @@ router.post("/", authMiddleware, async (req, res) => {
       },
     });
 
-    console.log("Создан набор:", cardset);
+    console.log("✅ Создан набор:", cardset.id);
     res.json(cardset);
   } catch (error) {
-    console.error("Полная ошибка создания набора:", error);
+    console.error("❌ Ошибка создания набора:", error);
     res.status(500).json({ error: "Ошибка создания набора: " + error.message });
   }
 });
@@ -69,7 +94,9 @@ router.delete("/:setId", authMiddleware, async (req, res) => {
       where: { id: parseInt(req.params.setId) },
       include: {
         cards: true,
-        favorites: true,
+        favoriteCardsets: true, // ← НОВОЕ ИМЯ
+        author: true,
+        tags: true,
       },
     });
 

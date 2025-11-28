@@ -1,37 +1,45 @@
 import React, { useState, useEffect } from "react";
-import apiClient from "../../../../api-client";
+import { useFavorites } from "../../../../contexts/FavoritesContext";
 import StarIcon from "../../../shared/components/StarIcon";
 
 const FavoriteButton = ({ itemId, itemType = "cardset", onUpdate }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const {
+    isSetFavorite,
+    isCardFavorite,
+    toggleFavoriteSet,
+    toggleFavoriteCard,
+    loadFavorites,
+  } = useFavorites();
 
-  // Проверяем при загрузке, в избранном ли элемент
-  useEffect(() => {
-    const checkFavoriteStatus = async () => {
-      try {
-        const response = await apiClient.get("/api/favorites");
-        const favorites = response.data;
-        const isFav = favorites.some((fav) => fav.cardsetId === itemId);
-        setIsFavorite(isFav);
-      } catch (error) {
-        console.error("Ошибка проверки избранного:", error);
-      }
-    };
-
-    checkFavoriteStatus();
-  }, [itemId]);
+  // Определяем текущий статус избранного из контекста
+  const isFavorite =
+    itemType === "cardset" ? isSetFavorite(itemId) : isCardFavorite(itemId);
 
   const toggleFavorite = async () => {
+    if (isLoading) return;
+
+    setIsLoading(true);
     try {
-      if (isFavorite) {
-        await apiClient.delete(`/api/favorites/${itemId}`);
-      } else {
-        await apiClient.post(`/api/favorites/${itemId}`);
+      console.log(`🔄 [FavoriteButton] Переключение ${itemType} ${itemId}`);
+
+      if (itemType === "cardset") {
+        await toggleFavoriteSet(itemId);
+      } else if (itemType === "card") {
+        await toggleFavoriteCard(itemId);
       }
-      setIsFavorite(!isFavorite);
+
+      // Вызываем колбэк после успешного обновления
       onUpdate?.();
+
+      console.log("✅ [FavoriteButton] Обновление завершено");
     } catch (error) {
-      console.error("Ошибка обновления избранного:", error);
+      console.error("❌ [FavoriteButton] Ошибка обновления избранного:", error);
+
+      // Перезагружаем состояние в случае ошибки
+      await loadFavorites();
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -40,16 +48,20 @@ const FavoriteButton = ({ itemId, itemType = "cardset", onUpdate }) => {
       onClick={toggleFavorite}
       className={`favorite-btn ${isFavorite ? "favorite" : ""}`}
       title={isFavorite ? "Удалить из избранного" : "Добавить в избранное"}
+      disabled={isLoading}
       style={{
         background: "none",
         border: "none",
         padding: "5px",
-        cursor: "pointer",
+        cursor: isLoading ? "not-allowed" : "pointer",
         borderRadius: "4px",
         transition: "all 0.2s ease",
+        opacity: isLoading ? 0.6 : 1,
       }}
       onMouseEnter={(e) => {
-        e.target.style.background = "rgba(255, 215, 0, 0.1)";
+        if (!isLoading) {
+          e.target.style.background = "rgba(255, 215, 0, 0.1)";
+        }
       }}
       onMouseLeave={(e) => {
         e.target.style.background = "none";

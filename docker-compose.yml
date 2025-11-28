@@ -3,11 +3,12 @@ services:
     image: postgres:15
     environment:
       POSTGRES_DB: neuraltrident
-      POSTGRES_USER: neural_user
-      POSTGRES_PASSWORD: neural_password
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
     volumes:
+      - postgres_data:/var/lib/postgresql/data
       - postgres_data:/var/lib/postgresql/data
 
   app:
@@ -15,7 +16,7 @@ services:
     ports:
       - "5001:5001"
     environment:
-      DATABASE_URL: "postgresql://neural_user:neural_password@postgres:5432/neuraltrident"
+      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/neuraltrident"
     depends_on:
       - postgres
     volumes:

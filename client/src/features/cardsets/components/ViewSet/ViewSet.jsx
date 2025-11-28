@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLanguage } from "../../../../contexts/LanguageContext";
+import { useFavorites } from "../../../../contexts/FavoritesContext";
+import FavoriteButton from "../../../favorites/components/FavoriteButton/FavoriteButton";
 import "./ViewSet.css";
 
 const ViewSet = ({
@@ -9,11 +11,23 @@ const ViewSet = ({
   showDeleteModal,
   setIsAddCardModalOpen,
   onStartTraining,
-  onEditCard, // Добавляем этот пропс
+  onEditCard,
 }) => {
   const { t } = useLanguage();
+  const [showFavorites, setShowFavorites] = useState(false);
+  const { isCardFavorite } = useFavorites();
 
   if (!selectedSet) return null;
+
+  // Используем контекст для фильтрации избранных карточек
+  const displayedCards = showFavorites
+    ? (selectedSet.cards || []).filter((card) => isCardFavorite(card.id))
+    : selectedSet.cards || [];
+
+  const handleFavoriteUpdate = () => {
+    // При изменении избранного просто перерисовываем компонент
+    // Контекст уже обновлен, поэтому карточки автоматически отфильтруются
+  };
 
   return (
     <div className="tab-content container-tp5">
@@ -27,11 +41,21 @@ const ViewSet = ({
 
         <div className="viewset-actions">
           <span className="cards-count-badge">
-            {selectedSet.cards ? selectedSet.cards.length : 0}{" "}
-            {t("sets.cards_count")}
+            {displayedCards.length} {t("sets.cards_count")}
+            {showFavorites && " ⭐"}
           </span>
 
-          {selectedSet.cards && selectedSet.cards.length > 0 && (
+          <button
+            className={`btn-tp8 ${showFavorites ? "active" : ""}`}
+            onClick={() => setShowFavorites(!showFavorites)}
+            title={
+              showFavorites ? "Показать все карточки" : "Показать избранные"
+            }
+          >
+            ⭐ {showFavorites ? "Все карточки" : "Избранные"}
+          </button>
+
+          {displayedCards.length > 0 && (
             <button
               className="btn-tp1 training-btn"
               onClick={onStartTraining}
@@ -65,9 +89,9 @@ const ViewSet = ({
       )}
 
       <div className="cards-section">
-        {selectedSet.cards && selectedSet.cards.length > 0 ? (
+        {displayedCards.length > 0 ? (
           <div className="cards-grid">
-            {selectedSet.cards.map((card) => (
+            {displayedCards.map((card) => (
               <div key={card.id} className="card-preview container-tp4">
                 <div
                   className="card-preview-content"
@@ -101,13 +125,17 @@ const ViewSet = ({
                   </div>
                 </div>
 
-                {/* Кнопки действий с карточкой */}
                 <div className="card-actions">
+                  <FavoriteButton
+                    itemId={card.id}
+                    itemType="card"
+                    onUpdate={handleFavoriteUpdate}
+                  />
                   <button
                     className="card-edit-btn"
                     onClick={(e) => {
                       e.stopPropagation();
-                      onEditCard(card); // Вызываем переданную функцию
+                      onEditCard(card);
                     }}
                     title="Редактировать карточку"
                   >
@@ -128,7 +156,11 @@ const ViewSet = ({
             ))}
           </div>
         ) : (
-          <p className="empty-state">{t("sets.cards.empty")}</p>
+          <p className="empty-state">
+            {showFavorites
+              ? "В этом наборе нет избранных карточек"
+              : t("sets.cards.empty")}
+          </p>
         )}
       </div>
     </div>
