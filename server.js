@@ -48,6 +48,7 @@ app.use("/api/cardsets", require("./server/routes/cardsets"));
 app.use("/api/cardsets", require("./server/routes/cards"));
 app.use("/api/tags", require("./server/routes/tags"));
 app.use("/api/search", require("./server/routes/search"));
+app.use("/api/training", require("./server/routes/training"));
 app.use("/api/profile", require("./server/routes/profile"));
 
 // Регистрация пользователя

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLanguage } from "../../../../contexts/LanguageContext";
 import "./CardModal.css";
 
@@ -7,92 +7,161 @@ const CardModal = ({
   onClose,
   onSubmit,
   title,
-  cardFrontText,
-  setCardFrontText,
-  cardBackText,
-  setCardBackText,
-  frontImage,
-  setFrontImage,
-  backImage,
-  setBackImage,
-  frontAudio,
-  setFrontAudio,
-  backAudio,
-  setBackAudio,
-  isUploading,
   submitText,
+  editingCard = null,
 }) => {
   const { t } = useLanguage();
 
-  if (!isOpen) return null;
+  // Единое локальное состояние для всей формы
+  const [form, setForm] = useState({
+    frontText: "",
+    backText: "",
+    frontImage: null,
+    backImage: null,
+    frontAudio: null,
+    backAudio: null,
+    isUploading: false,
+  });
 
-  const handleFileChange = (e, setFile) => {
+  // Сбрасываем форму при закрытии и устанавливаем данные при редактировании
+  useEffect(() => {
+    if (isOpen) {
+      if (editingCard) {
+        // Заполняем форму данными редактируемой карточки
+        setForm({
+          frontText: editingCard.front || "",
+          backText: editingCard.back || "",
+          frontImage: null, // Новые файлы - null
+          backImage: null,
+          frontAudio: null,
+          backAudio: null,
+          isUploading: false,
+        });
+      } else {
+        // Сбрасываем форму для создания новой карточки
+        setForm({
+          frontText: "",
+          backText: "",
+          frontImage: null,
+          backImage: null,
+          frontAudio: null,
+          backAudio: null,
+          isUploading: false,
+        });
+      }
+    }
+  }, [isOpen, editingCard]);
+
+  // Обработчики изменений
+  const handleTextChange = (field, value) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleFileChange = (e, fieldName) => {
     const file = e.target.files[0];
-    if (file) setFile(file);
+    if (file) {
+      setForm((prev) => ({ ...prev, [fieldName]: file }));
+    }
   };
 
-  const removeFile = (setFile) => {
-    setFile(null);
+  const removeFile = (fieldName) => {
+    setForm((prev) => ({ ...prev, [fieldName]: null }));
+    // Сбрасываем input file
+    const fileInput = document.querySelector(
+      `input[data-field="${fieldName}"]`
+    );
+    if (fileInput) {
+      fileInput.value = "";
+    }
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Валидация
+    if (!form.frontText.trim() && !form.backText.trim()) {
+      alert("Заполните хотя бы одну сторону карточки");
+      return;
+    }
+
+    // Устанавливаем состояние загрузки
+    setForm((prev) => ({ ...prev, isUploading: true }));
+
+    // Передаем данные формы и состояние загрузки
+    onSubmit(form);
+  };
+
+  if (!isOpen) return null;
 
   return (
     <div className="modal-overlay">
       <div className="container-tp1 modal-content card-modal">
         <h2>{title}</h2>
 
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit}>
           {/* Front Side */}
           <div className="form-section">
             <h3>{t("cards.front")}</h3>
             <textarea
-              value={cardFrontText}
-              onChange={(e) => setCardFrontText(e.target.value)}
-              placeholder={t("cards.front")}
+              value={form.frontText}
+              onChange={(e) => handleTextChange("frontText", e.target.value)}
+              placeholder={
+                t("cards.front.placeholder") ||
+                "Введите вопрос или текст для лицевой стороны"
+              }
               rows="3"
             />
 
             <div className="file-upload-section">
               <label className="file-upload-btn">
-                <span>{t("cards.add.image")}</span>
+                <span>
+                  {form.frontImage
+                    ? "🔄 Заменить изображение"
+                    : t("cards.add.image")}
+                </span>
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => handleFileChange(e, setFrontImage)}
+                  onChange={(e) => handleFileChange(e, "frontImage")}
                   style={{ display: "none" }}
+                  data-field="frontImage"
                 />
               </label>
 
               <label className="file-upload-btn">
-                <span>{t("cards.add.audio")}</span>
+                <span>
+                  {form.frontAudio ? "🔄 Заменить аудио" : t("cards.add.audio")}
+                </span>
                 <input
                   type="file"
                   accept="audio/*"
-                  onChange={(e) => handleFileChange(e, setFrontAudio)}
+                  onChange={(e) => handleFileChange(e, "frontAudio")}
                   style={{ display: "none" }}
+                  data-field="frontAudio"
                 />
               </label>
             </div>
 
-            {(frontImage || frontAudio) && (
+            {(form.frontImage || form.frontAudio) && (
               <div className="file-preview">
-                {frontImage && (
+                {form.frontImage && (
                   <div className="preview-item">
-                    <span>📷 {frontImage.name}</span>
+                    <span>📷 {form.frontImage.name}</span>
                     <button
                       type="button"
-                      onClick={() => removeFile(setFrontImage)}
+                      onClick={() => removeFile("frontImage")}
                       className="btn-tp7"
                     >
                       {t("cards.remove")}
                     </button>
                   </div>
                 )}
-                {frontAudio && (
+                {form.frontAudio && (
                   <div className="preview-item">
-                    <span>🎵 {frontAudio.name}</span>
+                    <span>🎵 {form.frontAudio.name}</span>
                     <button
                       type="button"
-                      onClick={() => removeFile(setFrontAudio)}
+                      onClick={() => removeFile("frontAudio")}
                       className="btn-tp7"
                     >
                       {t("cards.remove")}
@@ -107,54 +176,65 @@ const CardModal = ({
           <div className="form-section">
             <h3>{t("cards.back")}</h3>
             <textarea
-              value={cardBackText}
-              onChange={(e) => setCardBackText(e.target.value)}
-              placeholder={t("cards.back")}
+              value={form.backText}
+              onChange={(e) => handleTextChange("backText", e.target.value)}
+              placeholder={
+                t("cards.back.placeholder") ||
+                "Введите ответ или текст для обратной стороны"
+              }
               rows="3"
             />
 
             <div className="file-upload-section">
               <label className="file-upload-btn">
-                <span>{t("cards.add.image")}</span>
+                <span>
+                  {form.backImage
+                    ? "🔄 Заменить изображение"
+                    : t("cards.add.image")}
+                </span>
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => handleFileChange(e, setBackImage)}
+                  onChange={(e) => handleFileChange(e, "backImage")}
                   style={{ display: "none" }}
+                  data-field="backImage"
                 />
               </label>
 
               <label className="file-upload-btn">
-                <span>{t("cards.add.audio")}</span>
+                <span>
+                  {form.backAudio ? "🔄 Заменить аудио" : t("cards.add.audio")}
+                </span>
                 <input
                   type="file"
                   accept="audio/*"
-                  onChange={(e) => handleFileChange(e, setBackAudio)}
+                  onChange={(e) => handleFileChange(e, "backAudio")}
                   style={{ display: "none" }}
+                  data-field="backAudio"
                 />
               </label>
             </div>
 
-            {(backImage || backAudio) && (
+            {(form.backImage || form.backAudio) && (
               <div className="file-preview">
-                {backImage && (
+                {form.backImage && (
                   <div className="preview-item">
-                    <span>📷 {backImage.name}</span>
+                    <span>📷 {form.backImage.name}</span>
                     <button
                       type="button"
-                      onClick={() => removeFile(setBackImage)}
+                      onClick={() => removeFile("backImage")}
                       className="btn-tp7"
                     >
                       {t("cards.remove")}
                     </button>
                   </div>
                 )}
-                {backAudio && (
+                {form.backAudio && (
                   <div className="preview-item">
-                    <span>🎵 {backAudio.name}</span>
+                    <span>🎵 {form.backAudio.name}</span>
                     <button
                       type="button"
-                      onClick={() => removeFile(setBackAudio)}
+                      onClick={() => removeFile("backAudio")}
                       className="btn-tp7"
                     >
                       {t("cards.remove")}
@@ -165,17 +245,32 @@ const CardModal = ({
             )}
           </div>
 
+          <div className="form-validation">
+            {!form.frontText.trim() && !form.backText.trim() && (
+              <div className="validation-error">
+                ⚠️ Заполните хотя бы одну сторону карточки
+              </div>
+            )}
+          </div>
+
           <div className="modal-actions">
             <button
               type="button"
               className="btn-tp3"
               onClick={onClose}
-              disabled={isUploading}
+              disabled={form.isUploading}
             >
               {t("cards.cancel")}
             </button>
-            <button type="submit" className="btn-tp1" disabled={isUploading}>
-              {submitText}
+            <button
+              type="submit"
+              className="btn-tp1"
+              disabled={
+                form.isUploading ||
+                (!form.frontText.trim() && !form.backText.trim())
+              }
+            >
+              {form.isUploading ? "📤 Загрузка..." : submitText}
             </button>
           </div>
         </form>

@@ -1,158 +1,126 @@
-import React from "react";
-import { useLanguage } from "../../../../contexts/LanguageContext"; // ← исправленный путь
-import "../../../cardsets/components/CardsetList/CardsetList.css";
-import "../../../cardsets/components/ViewSet/ViewSet.css";
+import React, { memo } from "react";
+import { useLanguage } from "../../../../contexts/LanguageContext";
 import "./SearchResults.css";
 
-const SearchResults = ({
-  searchResults,
-  isSearching,
-  handleViewSet,
-  showDeleteModal,
-  searchQuery,
-}) => {
-  const { t } = useLanguage();
+const SearchResults = memo(
+  ({ searchResults, isSearching, searchQuery, onViewSet, onViewCard }) => {
+    const { t } = useLanguage();
 
-  if (!searchResults) return null;
+    if (!searchResults) return null;
 
-  console.log("🎯 Rendering SearchResults:", {
-    query: searchResults.query,
-    cardsetsCount: searchResults.cardsets?.length || 0,
-    cardsCount: searchResults.cards?.length || 0,
-    isSearching,
-  });
+    const { cardsets, cards, query } = searchResults;
+    const hasSets = cardsets.length > 0;
+    const hasCards = cards.length > 0;
+    const hasResults = hasSets || hasCards;
 
-  return (
-    <div className="search-results">
-      <h2 className="main-content-title">
-        {t("search.resultsFor")} "{searchResults.query}"
-      </h2>
+    if (isSearching) {
+      return (
+        <div className="search-results">
+          <div className="search-results__loading">
+            <div className="loading-spinner"></div>
+            <p>Поиск "{query}"...</p>
+          </div>
+        </div>
+      );
+    }
 
-      {isSearching && (
-        <div className="search-loading">{t("search.searching")}</div>
-      )}
+    if (!hasResults) {
+      return (
+        <div className="search-results">
+          <div className="search-results__empty">
+            <div className="empty-icon">🔍</div>
+            <h3>Ничего не найдено</h3>
+            <p>
+              По запросу "{query}" ничего не найдено. Попробуйте изменить
+              запрос.
+            </p>
+          </div>
+        </div>
+      );
+    }
 
-      {/* Показываем наборы */}
-      <div className="search-section">
-        <h3 className="search-section-title">
-          {t("search.cardsets")} ({searchResults.cardsets?.length || 0})
-        </h3>
-        {!searchResults.cardsets || searchResults.cardsets.length === 0 ? (
-          <p className="search-no-results">{t("search.noCardsets")}</p>
-        ) : (
-          <div className="sets-grid">
-            {searchResults.cardsets.map((set) => (
-              <div key={set.id} className="cardset-item">
-                <div className="set-header">
-                  <div
-                    className="set-content"
-                    onClick={() => handleViewSet(set)}
-                    style={{ cursor: "pointer", flex: 1 }}
-                  >
-                    <h3>{set.title}</h3>
-                    <span className="cards-count">
-                      {set.cards ? set.cards.length : 0} {t("sets.cards_count")}
-                    </span>
-                  </div>
-                  <div className="set-actions">
-                    <button
-                      className="btn-tp1"
-                      onClick={() => handleViewSet(set)}
+    return (
+      <div className="search-results">
+        <div className="search-results__header">
+          <h2>Результаты поиска</h2>
+          <div className="search-results__stats">
+            Найдено: {cardsets.length} наборов, {cards.length} карточек
+          </div>
+        </div>
+
+        {hasSets && (
+          <section className="search-results__section">
+            <h3>Наборы карточек</h3>
+            <div className="search-results__grid">
+              {cardsets.map((set) => (
+                <div key={set.id} className="cardset-item container-tp2">
+                  <div className="set-header">
+                    <div
+                      className="set-content"
+                      onClick={() => onViewSet(set)}
+                      style={{ cursor: "pointer", flex: 1 }}
                     >
-                      {t("sets.view")}
-                    </button>
-                    <button
-                      className="btn-tp4"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        showDeleteModal("set", set.id, set.title);
-                      }}
-                      title={t("delete")}
-                    >
-                      ✕
-                    </button>
-                  </div>
-                </div>
-
-                {set.tags && set.tags.length > 0 && (
-                  <div className="set-tags">
-                    {set.tags.map((tag, index) => (
-                      <span key={index} className="tag">
-                        {tag}
+                      <h3>{set.title}</h3>
+                      <span className="cards-count">
+                        {set.cards?.length || 0} {t("sets.cards_count")}
                       </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Показываем карточки */}
-      <div className="search-section">
-        <h3 className="search-section-title">
-          {t("search.cards")} ({searchResults.cards?.length || 0})
-        </h3>
-        {!searchResults.cards || searchResults.cards.length === 0 ? (
-          <p className="search-no-results">{t("search.noCards")}</p>
-        ) : (
-          <div className="search-results-grid">
-            {searchResults.cards.map((card) => (
-              <div key={card.id} className="search-result-item card-item">
-                <div className="search-item-content">
-                  <div className="card-sides">
-                    <div className="card-side">
-                      <strong>{t("card.front")}:</strong>
-                      <p>{card.front}</p>
-                      {card.imageUrl && (
-                        <div className="card-media-preview">
-                          <span>🖼️ {t("card.image")}</span>
-                        </div>
-                      )}
-                      {card.audioUrl && (
-                        <div className="card-media-preview">
-                          <span>🔊 {t("card.audio")}</span>
+                      {set.tags && set.tags.length > 0 && (
+                        <div className="set-tags">
+                          {set.tags.map((tag) => (
+                            <span key={tag} className="tag">
+                              {tag}
+                            </span>
+                          ))}
                         </div>
                       )}
                     </div>
-                    <div className="card-side">
-                      <strong>{t("card.back")}:</strong>
-                      <p>{card.back}</p>
-                      {card.backImageUrl && (
-                        <div className="card-media-preview">
-                          <span>🖼️ {t("card.image")}</span>
-                        </div>
-                      )}
-                      {card.backAudioUrl && (
-                        <div className="card-media-preview">
-                          <span>🔊 {t("card.audio")}</span>
-                        </div>
-                      )}
+                    <div className="set-actions">
+                      <button
+                        onClick={() => onViewSet(set)}
+                        className="btn-secondary"
+                      >
+                        Открыть
+                      </button>
                     </div>
                   </div>
-                  {card.cardsetTitle && (
-                    <div className="card-set-info">
-                      {t("search.fromSet")}: {card.cardsetTitle}
-                    </div>
-                  )}
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {hasCards && (
+          <section className="search-results__section">
+            <h3>Отдельные карточки</h3>
+            <div className="search-results__grid">
+              {cards.map((card) => (
+                <div key={card.id} className="card-item container-tp2">
+                  <div className="card-preview">
+                    <div className="card-side">
+                      <strong>Лицевая сторона:</strong>
+                      <p>{card.front || "—"}</p>
+                    </div>
+                    <div className="card-side">
+                      <strong>Обратная сторона:</strong>
+                      <p>{card.back || "—"}</p>
+                    </div>
+                  </div>
+                  <div className="card-actions">
+                    <button
+                      onClick={() => onViewCard(card)}
+                      className="btn-secondary"
+                    >
+                      Просмотр
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
         )}
       </div>
-
-      {/* Общее сообщение если ничего не найдено */}
-      {!isSearching &&
-        (!searchResults.cardsets || searchResults.cardsets.length === 0) &&
-        (!searchResults.cards || searchResults.cards.length === 0) && (
-          <div className="search-no-results-overall">
-            <p>{t("search.noResults")}</p>
-          </div>
-        )}
-    </div>
-  );
-};
+    );
+  }
+);
 
 export default SearchResults;

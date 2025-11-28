@@ -17,6 +17,8 @@ model User {
   updatedAt DateTime @updatedAt
   cardsets  CardSet[]
   favorites Favorite[]
+  progress  CardProgress[]
+  sessions  StudySession[]
 }
 
 model CardSet {
@@ -32,6 +34,7 @@ model CardSet {
   favorites   Favorite[]
   tags        Tag[]     @relation("CardSetToTag") // Правильная связь many-to-many
   search_vector Unsupported("tsvector")?
+  sessions    StudySession[]
 }
 
 model Tag {
@@ -53,6 +56,7 @@ model FlashCard {
   cardsetId   Int
   cardset     CardSet  @relation(fields: [cardsetId], references: [id], onDelete: Cascade)
   search_vector Unsupported("tsvector")?
+  progress    CardProgress[]
 }
 
 model Favorite {
@@ -64,4 +68,29 @@ model Favorite {
   createdAt DateTime @default(now())
   
   @@unique([userId, cardsetId])
+}
+
+model CardProgress {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cardId    Int
+  card      FlashCard @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  difficulty Int     @default(0) // 0-легко, 1-средне, 2-трудно
+  nextReview DateTime // Когда показывать снова
+  interval  Int       @default(1) // Интервал в днях
+  createdAt DateTime @default(now())
+  
+  @@unique([userId, cardId])
+}
+
+model StudySession {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cardsetId Int
+  cardset   CardSet  @relation(fields: [cardsetId], references: [id], onDelete: Cascade)
+  score     Int?     // Для викторины
+  completed Boolean @default(false)
+  createdAt DateTime @default(now())
 }

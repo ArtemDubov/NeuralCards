@@ -3,12 +3,7 @@ import { useLanguage } from "../../../../contexts/LanguageContext";
 import FavoriteButton from "../../../favorites/components/FavoriteButton/FavoriteButton";
 import "./CardsetList.css";
 
-const CardsetList = ({
-  cardsets,
-  handleViewSet,
-  showDeleteModal,
-  onFavoriteUpdate,
-}) => {
+const CardsetList = ({ cardsets, handleViewSet, showDeleteModal }) => {
   const { t } = useLanguage();
 
   if (cardsets.length === 0) {
@@ -18,7 +13,6 @@ const CardsetList = ({
   return (
     <div className="sets-grid">
       {cardsets.map((set) => {
-        // Исправленная обработка тегов из новой версии
         const tagsArray = set.tags
           ? Array.isArray(set.tags)
             ? set.tags.map((tag) => (typeof tag === "string" ? tag : tag.name))
@@ -49,21 +43,12 @@ const CardsetList = ({
                 </span>
               </div>
               <div className="set-actions">
-                <FavoriteButton
-                  itemId={set.id}
-                  itemType="cardset"
-                  onUpdate={onFavoriteUpdate}
-                />
+                <FavoriteButton itemId={set.id} itemType="cardset" />
                 <button
                   className="btn-tp4"
                   onClick={(e) => {
                     e.stopPropagation();
-                    showDeleteModal(
-                      "set",
-                      set.id,
-                      t("modal.delete.title"),
-                      t("modal.delete.set").replace("{title}", set.title)
-                    );
+                    showDeleteModal(set.id, set.title);
                   }}
                   title={t("sets.delete")}
                 >
@@ -72,7 +57,6 @@ const CardsetList = ({
               </div>
             </div>
 
-            {/* Теги в правом нижнем углу */}
             {tagsArray.length > 0 && (
               <div className="set-tags">
                 {tagsArray.map((tag, index) => (

@@ -9,7 +9,7 @@ const FavoriteButton = ({ itemId, itemType = "cardset", onUpdate }) => {
   useEffect(() => {
     const checkFavoriteStatus = async () => {
       try {
-        const response = await apiClient.get("/favorites");
+        const response = await apiClient.get("/api/favorites");
         const favorites = response.data;
         const isFav = favorites.some((fav) => fav.cardsetId === itemId);
         setIsFavorite(isFav);
@@ -24,9 +24,9 @@ const FavoriteButton = ({ itemId, itemType = "cardset", onUpdate }) => {
   const toggleFavorite = async () => {
     try {
       if (isFavorite) {
-        await apiClient.delete(`/favorites/${itemId}`);
+        await apiClient.delete(`/api/favorites/${itemId}`);
       } else {
-        await apiClient.post(`/favorites/${itemId}`);
+        await apiClient.post(`/api/favorites/${itemId}`);
       }
       setIsFavorite(!isFavorite);
       onUpdate?.();

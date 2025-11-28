@@ -8,6 +8,8 @@ const ViewSet = ({
   handleViewCard,
   showDeleteModal,
   setIsAddCardModalOpen,
+  onStartTraining,
+  onEditCard, // Добавляем этот пропс
 }) => {
   const { t } = useLanguage();
 
@@ -15,7 +17,6 @@ const ViewSet = ({
 
   return (
     <div className="tab-content container-tp5">
-      {/* НОВАЯ СТРУКТУРА: название набора и кнопка назад в одной строке */}
       <div className="viewset-header-main">
         <div className="viewset-title-section">
           <h2>{selectedSet.title}</h2>
@@ -25,23 +26,27 @@ const ViewSet = ({
         </div>
 
         <div className="viewset-actions">
-          {/* Количество карточек теперь здесь - слева от кнопки добавления */}
           <span className="cards-count-badge">
             {selectedSet.cards ? selectedSet.cards.length : 0}{" "}
             {t("sets.cards_count")}
           </span>
-          <button
-            className="btn-tp1"
-            onClick={() => {
-              setIsAddCardModalOpen(true);
-            }}
-          >
+
+          {selectedSet.cards && selectedSet.cards.length > 0 && (
+            <button
+              className="btn-tp1 training-btn"
+              onClick={onStartTraining}
+              title={t("training.start.tooltip")}
+            >
+              🎯 {t("training.start")}
+            </button>
+          )}
+
+          <button className="btn-tp1" onClick={setIsAddCardModalOpen}>
             {t("sets.add.card")}
           </button>
         </div>
       </div>
 
-      {/* Только теги остаются здесь */}
       {selectedSet.tags && selectedSet.tags.length > 0 && (
         <div className="tags-section">
           <div className="tags-list">
@@ -63,12 +68,11 @@ const ViewSet = ({
         {selectedSet.cards && selectedSet.cards.length > 0 ? (
           <div className="cards-grid">
             {selectedSet.cards.map((card) => (
-              <div
-                key={card.id}
-                className="card-preview container-tp4"
-                onClick={() => handleViewCard(card)}
-              >
-                <div className="card-preview-content">
+              <div key={card.id} className="card-preview container-tp4">
+                <div
+                  className="card-preview-content"
+                  onClick={() => handleViewCard(card)}
+                >
                   <div className="card-preview-front">
                     <div className="card-text" title={card.front}>
                       {card.front}
@@ -96,21 +100,30 @@ const ViewSet = ({
                     </div>
                   </div>
                 </div>
-                <button
-                  className="card-delete-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    showDeleteModal(
-                      "card",
-                      card.id,
-                      t("modal.delete.title"),
-                      t("modal.delete.card")
-                    );
-                  }}
-                  title={t("sets.delete")}
-                >
-                  ✕
-                </button>
+
+                {/* Кнопки действий с карточкой */}
+                <div className="card-actions">
+                  <button
+                    className="card-edit-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEditCard(card); // Вызываем переданную функцию
+                    }}
+                    title="Редактировать карточку"
+                  >
+                    ✏️
+                  </button>
+                  <button
+                    className="card-delete-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      showDeleteModal(card.id);
+                    }}
+                    title={t("sets.delete")}
+                  >
+                    ✕
+                  </button>
+                </div>
               </div>
             ))}
           </div>

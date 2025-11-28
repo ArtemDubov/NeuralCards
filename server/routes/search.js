@@ -96,4 +96,67 @@ router.get("/unified-search", authMiddleware, async (req, res) => {
   }
 });
 
+// 🔍 ПОИСК НАБОРОВ
+router.get("/cardsets", authMiddleware, async (req, res) => {
+  try {
+    const { query } = req.query;
+    const cardsets = await prisma.cardSet.findMany({
+      where: {
+        authorId: req.userId,
+        OR: [
+          { title: { contains: query, mode: "insensitive" } },
+          { description: { contains: query, mode: "insensitive" } },
+        ],
+      },
+      take: 10,
+    });
+    res.json(cardsets);
+  } catch (error) {
+    res.status(500).json({ error: "Ошибка поиска наборов" });
+  }
+});
+
+// 🔍 ПОИСК КАРТОЧЕК
+router.get("/cards", authMiddleware, async (req, res) => {
+  try {
+    const { query } = req.query;
+    const cards = await prisma.flashCard.findMany({
+      where: {
+        cardset: { authorId: req.userId },
+        OR: [
+          { front: { contains: query, mode: "insensitive" } },
+          { back: { contains: query, mode: "insensitive" } },
+        ],
+      },
+      take: 10,
+    });
+    res.json(cards);
+  } catch (error) {
+    res.status(500).json({ error: "Ошибка поиска карточек" });
+  }
+});
+
+// 🔍 ПОИСК ПО ТЕГАМ
+router.get("/tags", authMiddleware, async (req, res) => {
+  try {
+    const { tags } = req.query;
+    const tagArray = tags.split(",").map((tag) => tag.trim());
+
+    const cardsets = await prisma.cardSet.findMany({
+      where: {
+        authorId: req.userId,
+        tags: {
+          some: {
+            name: { in: tagArray },
+          },
+        },
+      },
+      take: 10,
+    });
+    res.json(cardsets);
+  } catch (error) {
+    res.status(500).json({ error: "Ошибка поиска по тегам" });
+  }
+});
+
 module.exports = router;

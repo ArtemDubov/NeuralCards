@@ -43,3 +43,178 @@
     font-size: 1rem;
   }
 }
+
+/* Стили для прогресса и кнопок сложности */
+.progress-stats {
+  margin: 10px 0;
+  padding: 10px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+}
+
+.progress-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+  font-size: 0.9em;
+}
+
+.due-count {
+  color: var(--accent-color);
+  font-weight: bold;
+}
+
+.difficulty-buttons {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.difficulty-buttons h4 {
+  margin-bottom: 15px;
+  color: var(--text-primary);
+}
+
+.difficulty-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.difficulty-easy {
+  background: var(--success-color);
+}
+.difficulty-medium {
+  background: var(--warning-color);
+}
+.difficulty-hard {
+  background: var(--error-color);
+}
+.difficulty-wrong {
+  background: var(--gray-color);
+}
+
+.session-stats {
+  margin: 20px 0;
+  padding: 15px;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 8px 0;
+}
+
+.loading,
+.error-message {
+  text-align: center;
+  padding: 20px;
+  margin: 20px 0;
+  border-radius: 8px;
+}
+
+.loading {
+  background: var(--info-color);
+  color: white;
+}
+
+.error-message {
+  background: var(--error-color);
+  color: white;
+}
+
+.back-button {
+  margin-bottom: 15px;
+}
+
+/* Стили для выбора набора */
+.sets-selection {
+  padding: 20px;
+}
+
+.training-info {
+  background: var(--container-bg);
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.requirements {
+  color: var(--text-secondary);
+  font-size: 0.9em;
+  margin-top: 10px;
+}
+
+.training-set-card {
+  padding: 15px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.training-set-card:hover {
+  transform: translateY(-2px);
+}
+
+.training-set-card.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Стили для экрана завершения */
+.completion-screen {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.completion-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin: 30px 0;
+}
+
+.stat-item {
+  background: var(--container-bg);
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.9em;
+  color: var(--text-secondary);
+  margin-bottom: 5px;
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: var(--text-primary);
+}
+
+.completion-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .completion-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .completion-actions {
+    flex-direction: column;
+  }
+
+  .completion-actions button {
+    width: 100%;
+  }
+}

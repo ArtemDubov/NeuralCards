@@ -6,8 +6,12 @@ import LanguageSwitcher from "../../../shared/components/LanguageSwitcher/Langua
 import { useLanguage } from "../../../../contexts/LanguageContext";
 import ThemeSwitcher from "../../../shared/components/ThemeSwitcher/ThemeSwitcher";
 import "./LoginPage.css";
+import { useAuth } from "../../../../hooks/useAuth"; // ← ПРАВИЛЬНЫЙ ПУТЬ
 
-const LoginPage = ({ onLogin, email, setEmail, password, setPassword }) => {
+const LoginPage = ({ onAuthSuccess }) => {
+  const auth = useAuth();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isLoginForm, setIsLoginForm] = useState(true);
   const { t } = useLanguage();
   const [registerEmail, setRegisterEmail] = useState("");
@@ -82,6 +86,14 @@ const LoginPage = ({ onLogin, email, setEmail, password, setPassword }) => {
     setEmailDomain("");
   };
 
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const result = await auth.login(email, password);
+    if (result.success) {
+      onAuthSuccess();
+    }
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -116,8 +128,14 @@ const LoginPage = ({ onLogin, email, setEmail, password, setPassword }) => {
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
-    // Вызываем onLogin с третьим параметром (имя) для регистрации
-    await onLogin(registerEmail, registerPassword, registerName);
+    const result = await auth.register(
+      registerName,
+      registerEmail,
+      registerPassword
+    );
+    if (result.success) {
+      onAuthSuccess();
+    }
   };
 
   return (
@@ -138,10 +156,7 @@ const LoginPage = ({ onLogin, email, setEmail, password, setPassword }) => {
           setEmail={setEmail}
           password={password}
           setPassword={setPassword}
-          handleLogin={(e) => {
-            e.preventDefault();
-            onLogin(email, password);
-          }}
+          handleLogin={handleLogin}
         />
       ) : (
         <RegistrationForm

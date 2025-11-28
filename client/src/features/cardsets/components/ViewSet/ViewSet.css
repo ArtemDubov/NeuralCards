@@ -306,3 +306,134 @@
 }
 
 /* ... и все остальные ваши стили */
+/* Стили для кнопки тренировки */
+.training-btn {
+  background: var(--accent-color);
+  margin-right: 10px;
+}
+
+.training-btn:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Адаптивность для кнопок */
+.viewset-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cards-count-badge {
+  background: var(--bg-secondary);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+
+.card-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.card-preview:hover .card-actions {
+  opacity: 1;
+}
+
+.card-edit-btn,
+.card-delete-btn {
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 4px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.card-edit-btn:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: scale(1.1);
+}
+
+.card-delete-btn:hover {
+  background: #ff4757;
+  color: white;
+  transform: scale(1.1);
+}
+
+.card-preview {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.card-preview:hover {
+  transform: translateY(-2px);
+}
+
+.card-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.card-preview:hover .card-actions {
+  opacity: 1;
+}
+
+.card-edit-btn,
+.card-delete-btn {
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-edit-btn:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: scale(1.1);
+}
+
+.card-delete-btn:hover {
+  background: #ff4757;
+  color: white;
+  transform: scale(1.1);
+}
+
+.card-preview {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.card-preview:hover {
+  transform: translateY(-2px);
+}

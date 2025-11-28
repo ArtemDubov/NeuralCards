@@ -5,7 +5,8 @@ const debugLog = (component, action, data = null) => {
   console.log(`[${timestamp}] [${component}] ${action}`, data || "");
 };
 
-const API_URL = "http://localhost:5001/api";
+// ИЗМЕНИТЬ: убрать /api из baseURL
+const API_URL = "http://localhost:5001"; // ← ТАК ПРАВИЛЬНО
 
 // Создаем экземпляр axios с базовой конфигурацией
 const apiClient = axios.create({

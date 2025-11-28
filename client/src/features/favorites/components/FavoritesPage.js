@@ -13,10 +13,19 @@ const FavoritesPage = () => {
 
   const loadFavorites = async () => {
     try {
-      const response = await apiClient.get("/favorites");
+      const response = await apiClient.get("/api/favorites");
       setFavorites(response.data);
     } catch (error) {
       console.error("Ошибка загрузки избранного:", error);
+    }
+  };
+
+  const handleRemoveFavorite = async (cardsetId) => {
+    try {
+      await apiClient.delete(`/api/favorites/${cardsetId}`);
+      setFavorites((prev) => prev.filter((f) => f.cardsetId !== cardsetId));
+    } catch (error) {
+      console.error("Ошибка удаления из избранного:", error);
     }
   };
 
@@ -53,16 +62,7 @@ const FavoritesPage = () => {
                   <FavoriteButton
                     itemId={fav.cardsetId}
                     itemType="cardset"
-                    onUpdate={async () => {
-                      try {
-                        await apiClient.delete(`/favorites/${fav.cardsetId}`);
-                        setFavorites((prev) =>
-                          prev.filter((f) => f.cardsetId !== fav.cardsetId)
-                        );
-                      } catch (error) {
-                        console.error("Ошибка удаления из избранного:", error);
-                      }
-                    }}
+                    onUpdate={() => handleRemoveFavorite(fav.cardsetId)}
                   />
                 </div>
               </div>
