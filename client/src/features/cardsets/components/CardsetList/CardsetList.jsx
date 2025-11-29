@@ -39,9 +39,15 @@ const CardsetList = ({ cardsets, handleViewSet, showDeleteModal }) => {
           : [];
 
         // Используем контекст вместо set.isFavorite
+        // Используем контекст вместо set.isFavorite
         const isFavorite = isSetFavorite(set.id);
 
-        console.log("Set:", set.id, "isFavorite:", isFavorite);
+        console.log(
+          "🔄 CardsetList render - Set:",
+          set.id,
+          "isFavorite:",
+          isFavorite
+        );
 
         return (
           <div

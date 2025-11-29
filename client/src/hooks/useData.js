@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import apiClient from "../api-client";
-import { useAuth } from "./useAuth";
+import { useAuth } from "../contexts/AuthContext";
 
 export const useData = () => {
   const auth = useAuth(); // Получаем весь объект auth

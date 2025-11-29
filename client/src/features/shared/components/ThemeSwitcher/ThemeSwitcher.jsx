@@ -1,30 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useLanguage } from "../../../../contexts/LanguageContext";
+import { useTheme } from "../../../../contexts/ThemeContext";
 
 const ThemeSwitcher = () => {
   const { t } = useLanguage();
-  const [currentTheme, setCurrentTheme] = useState("ocean");
-  const [isOpen, setIsOpen] = useState(false);
+  const {
+    currentTheme,
+    isDropdownOpen,
+    themes,
+    switchTheme,
+    toggleDropdown,
+    closeDropdown,
+  } = useTheme();
+
   const dropdownRef = useRef(null);
 
-  const themes = [
-    { id: "ocean", name: t("theme.ocean"), icon: "🌊" },
-    { id: "dark", name: t("theme.dark"), icon: "🌙" },
-    { id: "forest", name: t("theme.forest"), icon: "🌲" },
-    { id: "sunset", name: t("theme.sunset"), icon: "🌅" },
-    { id: "light", name: t("theme.light"), icon: "☀️" },
-  ];
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("neuraltrident-theme") || "ocean";
-    setCurrentTheme(savedTheme);
-    document.documentElement.setAttribute("data-theme", savedTheme);
-  }, []);
-
+  // Обработчик клика вне дропдауна
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setIsOpen(false);
+        closeDropdown();
       }
     };
 
@@ -32,29 +27,20 @@ const ThemeSwitcher = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [closeDropdown]);
 
-  const switchTheme = (themeId) => {
-    setCurrentTheme(themeId);
-    document.documentElement.setAttribute("data-theme", themeId);
-    localStorage.setItem("neuraltrident-theme", themeId);
-  };
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const currentThemeInfo = themes.find((t) => t.id === currentTheme);
+  // Получаем информацию о текущей теме с переводом
+  const currentThemeInfo = themes.find((theme) => theme.id === currentTheme);
 
   return (
     <div className="theme-switcher-container" ref={dropdownRef}>
       <div className="theme-switcher-dropdown">
         <button className="theme-current btn-tp7" onClick={toggleDropdown}>
           <span className="theme-icon">{currentThemeInfo?.icon}</span>
-          <span className="theme-arrow">{isOpen ? "▲" : "▼"}</span>
+          <span className="theme-arrow">{isDropdownOpen ? "▲" : "▼"}</span>
         </button>
 
-        <div className={`theme-options ${isOpen ? "open" : ""}`}>
+        <div className={`theme-options ${isDropdownOpen ? "open" : ""}`}>
           {themes.map((theme) => (
             <button
               key={theme.id}
@@ -65,7 +51,7 @@ const ThemeSwitcher = () => {
             >
               <span className="theme-option-icon">{theme.icon}</span>
               <span className="theme-option-name text-primary dropdown-text-active">
-                {theme.name}
+                {t(theme.nameKey)}
               </span>
             </button>
           ))}

@@ -5,7 +5,7 @@ import LoginForm from "../LoginForm/LoginForm";
 import LanguageSwitcher from "../../../shared/components/LanguageSwitcher/LanguageSwitcher";
 import { useLanguage } from "../../../../contexts/LanguageContext";
 import ThemeSwitcher from "../../../shared/components/ThemeSwitcher/ThemeSwitcher";
-import { useAuth } from "../../../../hooks/useAuth";
+import { useAuth } from "../../../../contexts/AuthContext";
 
 const LoginPage = ({ onAuthSuccess }) => {
   const auth = useAuth();

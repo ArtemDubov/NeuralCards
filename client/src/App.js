@@ -1,3 +1,4 @@
+// App.js
 import React from "react";
 import { useLanguage } from "./contexts/LanguageContext";
 import FavoritesPage from "./features/favorites/components/FavoritesPage";
@@ -18,7 +19,7 @@ import SearchResults from "./features/search/components/SearchResults/SearchResu
 import { TrainingPage } from "./features/training/components/TrainingPage";
 
 // Импорты новых хуков
-import { useAuth } from "./hooks/useAuth";
+import { useAuth } from "./contexts/AuthContext";
 import { useData } from "./hooks/useData";
 import { useUI } from "./hooks/useUI";
 import apiClient from "./api-client";

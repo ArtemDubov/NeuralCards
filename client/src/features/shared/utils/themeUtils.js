@@ -1,4 +1,4 @@
-// Утилиты для работы с темами
+// Утилиты для работы с темами (совместимость со старым кодом)
 export const themeUtils = {
   // Получить текущую тему
   getCurrentTheme: () => {
@@ -39,5 +39,19 @@ export const themeUtils = {
       { id: "sunset", name: "🌅 Закат", icon: "🌅" },
       { id: "light", name: "☀️ Светлая", icon: "☀️" },
     ];
+  },
+
+  // Новые функции для контекста
+  getSystemTheme: () => {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  },
+
+  watchSystemTheme: (callback) => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+    const handler = (e) => callback(e.matches ? "dark" : "light");
+    mediaQuery.addEventListener("change", handler);
+    return () => mediaQuery.removeEventListener("change", handler);
   },
 };

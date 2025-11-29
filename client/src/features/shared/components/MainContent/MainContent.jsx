@@ -3,6 +3,7 @@ import { useLanguage } from "../../../../contexts/LanguageContext";
 import CardsetList from "../../../cardsets/components/CardsetList/CardsetList";
 import CreateSetForm from "../../../cardsets/components/CreateSetForm/CreateSetForm";
 import ViewSet from "../../../cardsets/components/ViewSet/ViewSet";
+import { useFavorites } from "../../../../contexts/FavoritesContext";
 
 const MainContent = ({
   activeTab,
@@ -28,6 +29,7 @@ const MainContent = ({
   onResetForm,
 }) => {
   const { t } = useLanguage();
+  const { isSetFavorite } = useFavorites();
   const [showFavorites, setShowFavorites] = useState(false);
 
   const handleStartTraining = (set) => {
@@ -40,7 +42,7 @@ const MainContent = ({
     let filtered = searchResults !== null ? searchResults.cardsets : cardsets;
 
     if (showFavorites) {
-      filtered = filtered.filter((set) => set.isFavorite);
+      filtered = filtered.filter((set) => isSetFavorite(set.id));
     }
 
     return filtered;
