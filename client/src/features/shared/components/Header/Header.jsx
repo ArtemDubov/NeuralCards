@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useLanguage } from "../../../../contexts/LanguageContext";
-import "./Header.css";
+
 import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
 

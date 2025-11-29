@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useLanguage } from "../../../../contexts/LanguageContext";
 import { useFavorites } from "../../../../contexts/FavoritesContext";
 import FavoriteButton from "../../../favorites/components/FavoriteButton/FavoriteButton";
-import "./CardsetList.css";
 
 const CardsetList = ({ cardsets, handleViewSet, showDeleteModal }) => {
   const { t } = useLanguage();

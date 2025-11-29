@@ -1,5 +1,4 @@
 import React from "react";
-import "./RegistrationForm.css";
 import { useLanguage } from "../../../../contexts/LanguageContext";
 
 const RegistrationForm = ({

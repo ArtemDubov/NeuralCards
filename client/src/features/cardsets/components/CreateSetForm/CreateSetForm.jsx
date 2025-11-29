@@ -1,7 +1,6 @@
 import React from "react";
 import { useLanguage } from "../../../../contexts/LanguageContext";
 import TagsInput from "../../../shared/components/TagsInput/TagsInput";
-import "./CreateSetForm.css";
 
 const CreateSetForm = ({ formData, onUpdateForm, onCreateSet, onCancel }) => {
   const { t } = useLanguage();

@@ -3,7 +3,6 @@ import { useLanguage } from "../../../../contexts/LanguageContext";
 import CardsetList from "../../../cardsets/components/CardsetList/CardsetList";
 import CreateSetForm from "../../../cardsets/components/CreateSetForm/CreateSetForm";
 import ViewSet from "../../../cardsets/components/ViewSet/ViewSet";
-import "./MainContent.css";
 
 const MainContent = ({
   activeTab,

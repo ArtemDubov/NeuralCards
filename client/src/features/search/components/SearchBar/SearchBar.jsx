@@ -1,7 +1,6 @@
 // features/search/components/SearchBar/SearchBar.jsx
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useLanguage } from "../../../../contexts/LanguageContext";
-import "./SearchBar.css";
 
 const SearchBar = ({ onSearch, initialValue = "", autoFocus = false }) => {
   const { t } = useLanguage();

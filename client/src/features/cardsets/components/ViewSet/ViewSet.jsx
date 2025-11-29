@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useLanguage } from "../../../../contexts/LanguageContext";
 import { useFavorites } from "../../../../contexts/FavoritesContext";
 import FavoriteButton from "../../../favorites/components/FavoriteButton/FavoriteButton";
-import "./ViewSet.css";
 
 const ViewSet = ({
   selectedSet,

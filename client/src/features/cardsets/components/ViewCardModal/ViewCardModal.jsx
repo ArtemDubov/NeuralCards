@@ -1,5 +1,4 @@
 import React from "react";
-import "./ViewCardModal.css";
 
 const ViewCardModal = ({ isOpen, onClose, card, onEdit }) => {
   if (!isOpen || !card) return null;

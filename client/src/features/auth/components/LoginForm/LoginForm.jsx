@@ -1,5 +1,4 @@
 import React from "react";
-import "./LoginForm.css";
 import { useLanguage } from "../../../../contexts/LanguageContext";
 
 const LoginForm = ({ email, setEmail, password, setPassword, handleLogin }) => {

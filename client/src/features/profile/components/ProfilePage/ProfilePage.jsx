@@ -1,6 +1,5 @@
 import React from "react";
 import { useLanguage } from "../../../../contexts/LanguageContext";
-import "./ProfilePage.css";
 
 const ProfilePage = ({ user }) => {
   const { t } = useLanguage();

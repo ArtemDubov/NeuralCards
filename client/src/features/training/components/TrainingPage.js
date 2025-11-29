@@ -5,7 +5,6 @@ import TrainingSession from "./TrainingSession";
 import ModeSelection from "./ModeSelection";
 import SetSelection from "./SetSelection";
 import CompletionScreen from "./CompletionScreen";
-import "./TrainingPage.css";
 
 export function TrainingPage({ cardsets, selectedSetForTraining }) {
   const { t } = useLanguage();

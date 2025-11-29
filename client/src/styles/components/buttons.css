@@ -1,4 +1,25 @@
-/* client/src/styles/GlobalBtn.css */
+/* === СИСТЕМА КНОПОК (на основе GlobalBtn.css) === */
+
+/* Базовые стили кнопок */
+button {
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: var(--btn-transition);
+  margin: 0.25rem;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+button:active {
+  transform: translateY(0) !important;
+}
 
 /* btn-tp1 - Основные action-кнопки (формы, подтверждения) */
 .btn-tp1 {
@@ -157,6 +178,21 @@
   transform: translateY(-2px);
 }
 
+/* Активное состояние для навигационных кнопок */
+.btn-tp2.active {
+  background-color: var(--color-neural-accent);
+  border-color: var(--color-neural-accent);
+  color: white;
+}
+
+/* Стили для избранного */
+.btn-tp8.active {
+  background: var(--color-gold);
+  color: var(--color-bg-primary);
+  border-color: var(--color-gold);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
 /* Модификаторы размеров */
 .btn-small {
   padding: var(--btn-padding-small);
@@ -175,25 +211,4 @@
 
 .btn-auto {
   width: auto;
-}
-
-/* Активное состояние для навигационных кнопок */
-.btn-tp2.active {
-  background-color: var(--color-neural-accent);
-  border-color: var(--color-neural-accent);
-  color: white;
-}
-
-/* Состояния отключения */
-.btn-tp1:disabled,
-.btn-tp2:disabled,
-.btn-tp3:disabled,
-.btn-tp4:disabled,
-.btn-tp5:disabled,
-.btn-tp6:disabled,
-.btn-tp7:disabled,
-.btn-tp8:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none !important;
 }

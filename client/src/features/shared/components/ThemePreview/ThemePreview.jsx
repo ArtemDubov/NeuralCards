@@ -1,5 +1,4 @@
 import React from "react";
-import "./ThemePreview.css";
 
 const ThemePreview = ({ theme, isActive, onClick }) => {
   const themeInfo = {

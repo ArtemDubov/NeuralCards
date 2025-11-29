@@ -1,8 +1,0 @@
-.auth-tabs {
-  display: flex;
-  background: var(--color-bg-secondary);
-  border-radius: 12px;
-  padding: 0.3rem;
-  margin-bottom: 1.5rem;
-  gap: 0.3rem;
-}

@@ -1,4 +1,4 @@
-/* client/src/styles/Theme.css */
+/* === ОСНОВНЫЕ ПЕРЕМЕННЫЕ ТЕМЫ === */
 :root {
   /* 🎨 ОСНОВНАЯ ЦВЕТОВАЯ ПАЛИТРА */
   --color-primary: #667eea;
@@ -22,7 +22,7 @@
   --color-border: rgba(79, 195, 247, 0.3);
   --color-border-hover: rgba(79, 195, 247, 0.6);
 
-  /* 🌈 ГРАДИЕНТЫ - универсальные формулы */
+  /* 🌈 ГРАДИЕНТЫ */
   --gradient-primary: linear-gradient(
     135deg,
     var(--color-accent) 0%,
@@ -41,20 +41,15 @@
   --gradient-success: linear-gradient(
     135deg,
     var(--color-success) 0%,
-    var(
-        --color-success-dark,
-        color-mix(in srgb, var(--color-success) 80%, black)
-      )
-      100%
+    color-mix(in srgb, var(--color-success) 80%, black) 100%
   );
   --gradient-error: linear-gradient(
     135deg,
     var(--color-error) 0%,
-    var(--color-error-dark, color-mix(in srgb, var(--color-error) 80%, black))
-      100%
+    color-mix(in srgb, var(--color-error) 80%, black) 100%
   );
 
-  /* ✨ ТЕНИ И ЭФФЕКТЫ - динамические на основе цветов темы */
+  /* ✨ ТЕНИ И ЭФФЕКТЫ */
   --shadow-small: 0 2px 8px
     color-mix(in srgb, var(--color-bg-primary) 80%, transparent);
   --shadow-medium: 0 4px 12px
@@ -64,7 +59,7 @@
   --shadow-glow: 0 0 20px
     color-mix(in srgb, var(--color-accent) 40%, transparent);
 
-  /* 📏 РАЗМЕРЫ (общие для всей системы) */
+  /* 📏 РАЗМЕРЫ */
   --border-radius-sm: 4px;
   --border-radius: 8px;
   --border-radius-lg: 12px;
@@ -81,60 +76,14 @@
   --transition: 0.3s ease;
   --transition-slow: 0.5s ease;
 
-  /* 🎯 ДОПОЛНИТЕЛЬНЫЕ ПЕРЕМЕННЫЕ ДЛЯ ПОЛНОЙ ПОДДЕРЖКИ */
+  /* 🎯 ДОПОЛНИТЕЛЬНЫЕ ПЕРЕМЕННЫЕ */
   --color-sea-wave: var(--color-accent);
   --color-neural-accent: var(--color-primary);
   --color-light-foam: var(--color-text-secondary);
   --color-deep-ocean: var(--color-bg-primary);
   --color-gold: #ffd700;
 
-  /* 🔧 СЕМАНТИЧЕСКИЕ ПЕРЕМЕННЫЕ ДЛЯ КОМПОНЕНТОВ */
-  --container-tp1-bg: var(--gradient-secondary);
-  --container-tp1-border: 2px solid var(--color-accent);
-  --container-tp1-radius: var(--border-radius-xl);
-  --container-tp1-padding: var(--spacing-xl);
-  --container-tp1-shadow: var(--shadow-large);
-
-  --container-tp2-bg: var(--color-bg-card);
-  --container-tp2-border: 1px solid var(--color-border);
-  --container-tp2-radius: var(--border-radius-lg);
-  --container-tp2-padding: var(--spacing-lg);
-  --container-tp2-shadow: var(--shadow-glow);
-  --container-tp2-hover-border: var(--color-accent);
-  --container-tp2-hover-transform: translateY(-5px);
-
-  --container-tp3-bg: transparent;
-  --container-tp3-border: none;
-  --container-tp3-radius: 0;
-  --container-tp3-padding: 0;
-  --container-tp3-shadow: none;
-
-  --container-tp4-bg: var(--color-bg-card);
-  --container-tp4-border: 1px solid var(--color-border);
-  --container-tp4-radius: var(--border-radius);
-  --container-tp4-padding: var(--spacing);
-  --container-tp4-hover-border: var(--color-accent);
-  --container-tp4-hover-transform: translateY(-2px);
-
-  --container-tp5-bg: transparent;
-  --container-tp5-border: none;
-  --container-tp5-radius: 0;
-  --container-tp5-padding: var(--spacing-xl);
-  --container-tp5-shadow: none;
-
-  --container-tp6-bg: transparent;
-  --container-tp6-border: none;
-  --container-tp6-radius: 0;
-  --container-tp6-padding: var(--spacing);
-  --container-tp6-shadow: none;
-
-  --container-tp9-bg: var(--container-tp1-bg);
-  --container-tp9-border: var(--container-tp1-border);
-  --container-tp9-radius: var(--container-tp1-radius);
-  --container-tp9-padding: 2.5rem;
-  --container-tp9-shadow: var(--container-tp1-shadow);
-
-  /* 🎯 ПЕРЕМЕННЫЕ ДЛЯ КНОПОК */
+  /* === ПЕРЕМЕННЫЕ ДЛЯ КНОПОК (из GlobalBtn.css) === */
   --btn-tp1-bg: var(--gradient-primary);
   --btn-tp1-color: var(--color-text-primary);
   --btn-tp1-hover: var(--gradient-primary-reverse);
@@ -197,7 +146,94 @@
   --btn-shadow: var(--shadow-medium);
   --btn-shadow-hover: 0 5px 15px
     color-mix(in srgb, var(--color-primary) 40%, transparent);
+}
 
-  /* 🔧 ОБЩИЕ ПЕРЕМЕННЫЕ */
-  --container-transition: var(--transition);
+/* === АЛЬТЕРНАТИВНЫЕ ТЕМЫ === */
+
+[data-theme="dark"] {
+  --color-primary: #7c3aed;
+  --color-primary-dark: #6d28d9;
+  --color-secondary: #5b21b6;
+  --color-accent: #60a5fa;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+
+  --color-bg-primary: #000000;
+  --color-bg-secondary: #0f0f0f;
+  --color-bg-card: rgba(15, 15, 15, 0.8);
+  --color-bg-overlay: rgba(0, 0, 0, 0.95);
+
+  --color-text-primary: #e5e7eb;
+  --color-text-secondary: #d1d5db;
+  --color-text-muted: rgba(209, 213, 219, 0.6);
+
+  --color-border: rgba(96, 165, 250, 0.2);
+  --color-border-hover: rgba(96, 165, 250, 0.4);
+}
+
+[data-theme="forest"] {
+  --color-primary: #059669;
+  --color-primary-dark: #047857;
+  --color-secondary: #0f766e;
+  --color-accent: #10b981;
+  --color-success: #22c55e;
+  --color-warning: #eab308;
+  --color-error: #dc2626;
+
+  --color-bg-primary: #052e16;
+  --color-bg-secondary: #14532d;
+  --color-bg-card: rgba(20, 83, 45, 0.6);
+  --color-bg-overlay: rgba(5, 46, 22, 0.9);
+
+  --color-text-primary: #f0fdf4;
+  --color-text-secondary: #dcfce7;
+  --color-text-muted: rgba(220, 252, 231, 0.6);
+
+  --color-border: rgba(16, 185, 129, 0.3);
+  --color-border-hover: rgba(16, 185, 129, 0.6);
+}
+
+[data-theme="light"] {
+  --color-primary: #3b82f6;
+  --color-primary-dark: #2563eb;
+  --color-secondary: #8b5cf6;
+  --color-accent: #06b6d4;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #f8fafc;
+  --color-bg-card: rgba(248, 250, 252, 0.8);
+  --color-bg-overlay: rgba(255, 255, 255, 0.9);
+
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #475569;
+  --color-text-muted: rgba(71, 85, 105, 0.6);
+
+  --color-border: rgba(59, 130, 246, 0.3);
+  --color-border-hover: rgba(59, 130, 246, 0.6);
+}
+
+[data-theme="sunset"] {
+  --color-primary: #ea580c;
+  --color-primary-dark: #c2410c;
+  --color-secondary: #dc2626;
+  --color-accent: #f97316;
+  --color-success: #16a34a;
+  --color-warning: #eab308;
+  --color-error: #b91c1c;
+
+  --color-bg-primary: #451a03;
+  --color-bg-secondary: #7c2d12;
+  --color-bg-card: rgba(124, 45, 18, 0.6);
+  --color-bg-overlay: rgba(69, 26, 3, 0.9);
+
+  --color-text-primary: #fffbeb;
+  --color-text-secondary: #fed7aa;
+  --color-text-muted: rgba(254, 215, 170, 0.6);
+
+  --color-border: rgba(249, 115, 22, 0.3);
+  --color-border-hover: rgba(249, 115, 22, 0.6);
 }

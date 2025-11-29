@@ -1,5 +1,4 @@
 import React from "react";
-import "./AuthTabs.css";
 import { useLanguage } from "../../../../contexts/LanguageContext";
 
 const AuthTabs = ({ isLoginForm, setIsLoginForm }) => {

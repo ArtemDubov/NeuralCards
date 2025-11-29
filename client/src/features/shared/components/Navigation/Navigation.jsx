@@ -1,7 +1,6 @@
 import React from "react";
 import { useLanguage } from "../../../../contexts/LanguageContext";
 import SearchBar from "../../../search/components/SearchBar/SearchBar";
-import "./Navigation.css";
 
 const Navigation = ({ activeTab, setActiveTab, onSearch }) => {
   const { t } = useLanguage();

@@ -2,18 +2,8 @@ import React from "react";
 import { useLanguage } from "./contexts/LanguageContext";
 import FavoritesPage from "./features/favorites/components/FavoritesPage";
 import { FavoritesProvider } from "./contexts/FavoritesContext";
-import "./App.css";
 
-// Импорты стилей
-import "./styles/Theme.css";
-import "./styles/ThemeOcean.css";
-import "./styles/ThemeDark.css";
-import "./styles/ThemeForest.css";
-import "./styles/ThemeSunset.css";
-import "./styles/ThemeLight.css";
-import "./styles/Global.css";
-import "./styles/GlobalBtn.css";
-import "./styles/GlobalContainer.css";
+import "./styles/main.css";
 
 // Импорты компонентов
 import { ConfirmationModal } from "./features/shared/components/ConfirmationModal";

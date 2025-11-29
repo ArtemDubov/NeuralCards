@@ -1,6 +1,5 @@
 import React, { memo } from "react";
 import { useLanguage } from "../../../../contexts/LanguageContext";
-import "./SearchResults.css";
 
 const SearchResults = memo(
   ({ searchResults, isSearching, searchQuery, onViewSet, onViewCard }) => {

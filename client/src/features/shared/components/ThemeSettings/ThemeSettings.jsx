@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import ThemePreview from "../../../shared/components/ThemePreview/ThemePreview";
-import "./ThemeSettings.css";
 
 const ThemeSettings = () => {
   const [currentTheme, setCurrentTheme] = useState("ocean");

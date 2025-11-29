@@ -5,7 +5,6 @@ import LoginForm from "../LoginForm/LoginForm";
 import LanguageSwitcher from "../../../shared/components/LanguageSwitcher/LanguageSwitcher";
 import { useLanguage } from "../../../../contexts/LanguageContext";
 import ThemeSwitcher from "../../../shared/components/ThemeSwitcher/ThemeSwitcher";
-import "./LoginPage.css";
 import { useAuth } from "../../../../hooks/useAuth"; // ← ПРАВИЛЬНЫЙ ПУТЬ
 
 const LoginPage = ({ onAuthSuccess }) => {
