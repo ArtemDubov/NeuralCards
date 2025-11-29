@@ -28,11 +28,8 @@ const SearchResults = memo(
         <div className="search-results">
           <div className="search-results__empty">
             <div className="empty-icon">🔍</div>
-            <h3>Ничего не найдено</h3>
-            <p>
-              По запросу "{query}" ничего не найдено. Попробуйте изменить
-              запрос.
-            </p>
+            <h3>{t("search.results.empty.title")}</h3>
+            <p>{t("search.results.empty.message", { query })}</p>
           </div>
         </div>
       );
@@ -41,7 +38,7 @@ const SearchResults = memo(
     return (
       <div className="search-results">
         <div className="search-results__header">
-          <h2>Результаты поиска</h2>
+          <h2>{t("search.results.title")}</h2>
           <div className="search-results__stats">
             Найдено: {cardsets.length} наборов, {cards.length} карточек
           </div>
@@ -49,7 +46,7 @@ const SearchResults = memo(
 
         {hasSets && (
           <section className="search-results__section">
-            <h3>Наборы карточек</h3>
+            <h3>{t("search.results.sets")}</h3>
             <div className="search-results__grid">
               {cardsets.map((set) => (
                 <div key={set.id} className="cardset-item container-tp2">
@@ -90,7 +87,7 @@ const SearchResults = memo(
 
         {hasCards && (
           <section className="search-results__section">
-            <h3>Отдельные карточки</h3>
+            <h3>{t("search.results.cards")}</h3>
             <div className="search-results__grid">
               {cards.map((card) => (
                 <div key={card.id} className="card-item container-tp2">

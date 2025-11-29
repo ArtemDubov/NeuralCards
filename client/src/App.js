@@ -288,8 +288,8 @@ function App() {
           ui.openModal("deleteConfirmation", {
             type: "set",
             id: setId,
-            title: "Удаление набора",
-            message: `Вы уверены, что хотите удалить набор "${title}"?`,
+            title: t("modal.delete.set.title"),
+            message: t("modal.delete.set", { title }),
           })
         }
         onViewSet={(set) => {
@@ -302,8 +302,8 @@ function App() {
           ui.openModal("deleteConfirmation", {
             type: "card",
             id: cardId,
-            title: "Удаление карточки",
-            message: "Вы уверены, что хотите удалить эту карточку?",
+            title: t("modal.delete.card.title"),
+            message: t("modal.delete.card"),
           })
         }
         onViewCard={(card) => ui.openModal("viewCard", { card })}
@@ -383,8 +383,8 @@ function App() {
           isOpen={ui.modals.addCard.isOpen}
           onClose={() => ui.closeModal("addCard")}
           onSubmit={handleAddCard}
-          title="Создание карточки"
-          submitText="✅ Создать карточку"
+          title={t("card.create.title")}
+          submitText={t("card.create.button")}
         />
 
         {/* Модалка редактирования карточки */}
@@ -392,9 +392,9 @@ function App() {
           isOpen={ui.modals.editCard.isOpen}
           onClose={() => ui.closeModal("editCard")}
           onSubmit={handleEditCard}
-          title="Редактирование карточки"
+          title={t("card.edit.title")}
           editingCard={ui.modals.editCard.card}
-          submitText="💾 Сохранить изменения"
+          submitText={t("card.edit.button")}
         />
 
         <ConfirmationModal

@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from "react";
+import { useLanguage } from "../contexts/LanguageContext";
 import apiClient from "../api-client";
 
 // 🎯 Базовый класс тренировки для наследования
@@ -67,8 +68,9 @@ class PracticeEngine extends TrainingEngine {
 
 // 🎯 Режим "Викторина"
 class QuizEngine extends TrainingEngine {
-  constructor(set, onUpdate, onComplete) {
+  constructor(set, onUpdate, onComplete, t) {
     super(set, onUpdate, onComplete);
+    this.t = t; // Сохраняем функцию перевода
     this.state = {
       currentQuestion: 0,
       score: 0,
@@ -94,7 +96,7 @@ class QuizEngine extends TrainingEngine {
         .slice(0, 3);
 
       while (wrongAnswers.length < 3) {
-        wrongAnswers.push("Нет варианта");
+        wrongAnswers.push(this.t("quiz.no.option")); // Используем сохраненную функцию t
       }
 
       const allAnswers = [card.back, ...wrongAnswers];
@@ -207,36 +209,36 @@ class SprintEngine extends TrainingEngine {
   }
 }
 
-// 🎯 Реестр всех режимов тренировок
-const TRAINING_MODES = {
+// 🎯 Базовые данные режимов тренировок (без переводов)
+const TRAINING_MODES_BASE = {
   practice: {
     id: "practice",
-    name: "Практика",
-    description: "Интервальные повторения для эффективного запоминания",
+    nameKey: "training.mode.practice",
+    descriptionKey: "training.mode.practice.description",
     icon: "🔄",
     engine: PracticeEngine,
     minCards: 1,
   },
   quiz: {
     id: "quiz",
-    name: "Викторина",
-    description: "Выберите правильный ответ из нескольких вариантов",
+    nameKey: "training.mode.quiz",
+    descriptionKey: "training.mode.quiz.description",
     icon: "🎯",
-    engine: QuizEngine,
+    engine: QuizEngine, // Будет принимать t как параметр
     minCards: 4,
   },
   sprint: {
     id: "sprint",
-    name: "Спринт",
-    description: "Быстрые ответы на время",
+    nameKey: "training.mode.sprint",
+    descriptionKey: "training.mode.sprint.description",
     icon: "⚡",
     engine: SprintEngine,
     minCards: 1,
   },
-  // 🎯 ДОБАВЛЯЕМ НОВЫЕ РЕЖИМЫ ЗДЕСЬ!
 };
 
 export const useTraining = () => {
+  const { t } = useLanguage();
   const [state, setState] = useState({
     isTraining: false,
     engineState: {},
@@ -246,76 +248,114 @@ export const useTraining = () => {
 
   const currentEngineRef = useRef(null);
 
-  // 🎯 Получить информацию о всех режимах
+  // 🎯 Получить информацию о всех режимах (с переводами)
   const getTrainingModes = useCallback(() => {
-    return Object.values(TRAINING_MODES);
-  }, []);
+    return Object.values(TRAINING_MODES_BASE).map((mode) => ({
+      ...mode,
+      name: t(mode.nameKey),
+      description: t(mode.descriptionKey),
+    }));
+  }, [t]);
 
-  // 🎯 Получить информацию о конкретном режиме
-  const getTrainingMode = useCallback((modeId) => {
-    return TRAINING_MODES[modeId];
-  }, []);
+  // 🎯 Получить информацию о конкретном режиме (с переводами)
+  const getTrainingMode = useCallback(
+    (modeId) => {
+      const mode = TRAINING_MODES_BASE[modeId];
+      if (!mode) return null;
+
+      return {
+        ...mode,
+        name: t(mode.nameKey),
+        description: t(mode.descriptionKey),
+      };
+    },
+    [t]
+  );
 
   // 🎯 Начать тренировку
-  const startTraining = useCallback((modeId, set) => {
-    const mode = TRAINING_MODES[modeId];
-    if (!mode) {
-      setState((prev) => ({ ...prev, error: "Режим тренировки не найден" }));
-      return false;
-    }
+  const startTraining = useCallback(
+    (modeId, set) => {
+      const mode = TRAINING_MODES_BASE[modeId];
+      if (!mode) {
+        setState((prev) => ({ ...prev, error: t("training.mode.not_found") }));
+        return false;
+      }
 
-    // Проверка минимального количества карточек
-    if (set.cards?.length < mode.minCards) {
-      setState((prev) => ({
-        ...prev,
-        error: `Для этого режима нужно минимум ${mode.minCards} карточек`,
-      }));
-      return false;
-    }
-
-    setState((prev) => ({
-      ...prev,
-      loading: true,
-      error: null,
-    }));
-
-    try {
-      const engine = new mode.engine(
-        set,
-        (engineState) => {
-          setState((prev) => ({
-            ...prev,
-            engineState: { ...engineState },
-          }));
-        },
-        () => {
-          setState((prev) => ({
-            ...prev,
-            isTraining: false,
-          }));
-        }
-      );
-
-      currentEngineRef.current = engine;
-      engine.start();
+      // Проверка минимального количества карточек
+      if (set.cards?.length < mode.minCards) {
+        setState((prev) => ({
+          ...prev,
+          error: t("training.minimum.cards.required", {
+            minCards: mode.minCards,
+          }),
+        }));
+        return false;
+      }
 
       setState((prev) => ({
         ...prev,
-        isTraining: true,
-        loading: false,
-        engineState: {},
+        loading: true,
+        error: null,
       }));
 
-      return true;
-    } catch (error) {
-      setState((prev) => ({
-        ...prev,
-        error: error.message,
-        loading: false,
-      }));
-      return false;
-    }
-  }, []);
+      try {
+        // Для QuizEngine передаем функцию перевода
+        const engine =
+          mode.id === "quiz"
+            ? new mode.engine(
+                set,
+                (engineState) => {
+                  setState((prev) => ({
+                    ...prev,
+                    engineState: { ...engineState },
+                  }));
+                },
+                () => {
+                  setState((prev) => ({
+                    ...prev,
+                    isTraining: false,
+                  }));
+                },
+                t
+              )
+            : new mode.engine(
+                set,
+                (engineState) => {
+                  setState((prev) => ({
+                    ...prev,
+                    engineState: { ...engineState },
+                  }));
+                },
+                () => {
+                  setState((prev) => ({
+                    ...prev,
+                    isTraining: false,
+                  }));
+                }
+              );
+
+        currentEngineRef.current = engine;
+        engine.start();
+
+        setState((prev) => ({
+          ...prev,
+          isTraining: true,
+          loading: false,
+          engineState: {},
+        }));
+
+        return true;
+      } catch (error) {
+        setState((prev) => ({
+          ...prev,
+          error: error.message,
+          loading: false,
+        }));
+        return false;
+      }
+    },
+    [t]
+  );
 
   // 🎯 Отправить ответ
   const submitAnswer = useCallback((...args) => {

@@ -94,7 +94,7 @@ router.delete("/:setId", authMiddleware, async (req, res) => {
       where: { id: parseInt(req.params.setId) },
       include: {
         cards: true,
-        favoriteCardsets: true, // ← НОВОЕ ИМЯ
+        favoriteCardsets: true,
         author: true,
         tags: true,
       },

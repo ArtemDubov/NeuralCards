@@ -25,10 +25,8 @@ const ThemeSettings = () => {
 
   return (
     <div className="theme-settings container-tp5">
-      <h2>Настройки темы</h2>
-      <p className="settings-description">
-        Выберите тему оформления, которая вам больше нравится
-      </p>
+      <h2>{t("theme.settings.title")}</h2>
+      <p className="settings-description">{t("theme.settings.description")}</p>
 
       <div className="themes-grid">
         {themes.map((theme) => (
@@ -43,9 +41,7 @@ const ThemeSettings = () => {
 
       <div className="current-theme-info">
         <h3>Текущая тема: {themes.find((t) => t.id === currentTheme)?.name}</h3>
-        <p>
-          Все элементы интерфейса автоматически адаптируются под выбранную тему
-        </p>
+        <p>{t("theme.settings.adaptive")}</p>
       </div>
     </div>
   );

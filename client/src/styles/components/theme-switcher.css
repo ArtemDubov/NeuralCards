@@ -1,13 +1,14 @@
-.language-switcher-container {
+/* === THEME SWITCHER === */
+.theme-switcher-container {
   position: relative;
   display: inline-block;
 }
 
-.language-switcher-dropdown {
+.theme-switcher-dropdown {
   position: relative;
 }
 
-.language-current {
+.theme-current {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -18,26 +19,22 @@
   transition: var(--transition);
 }
 
-.language-current:hover {
+.theme-current:hover {
   background: var(--color-bg-card);
   transform: scale(1.05);
 }
 
-.language-flag {
-  width: 20px;
-  height: 15px;
-  object-fit: cover;
-  border-radius: 2px;
-  border: 1px solid var(--color-border);
+.theme-icon {
+  font-size: 1.2rem;
 }
 
-.language-arrow {
+.theme-arrow {
   font-size: 0.8rem;
   opacity: 0.7;
   transition: var(--transition);
 }
 
-.language-options {
+.theme-options {
   position: absolute;
   top: 100%;
   right: 0;
@@ -48,20 +45,20 @@
   padding: 0.5rem;
   min-width: 150px;
   box-shadow: var(--shadow-medium);
-  z-index: 10003331;
+  z-index: 10003330;
   display: none;
   opacity: 0;
   transform: translateY(-10px);
   transition: all 0.3s ease;
 }
 
-.language-options.open {
+.theme-options.open {
   display: block;
   opacity: 1;
   transform: translateY(0);
 }
 
-.language-option {
+.theme-option {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -76,17 +73,17 @@
   text-align: left;
 }
 
-.language-option:hover {
+.theme-option:hover {
   background: var(--color-bg-card);
 }
 
-.language-option.active {
+.theme-option.active {
   background: var(--color-bg-card);
   border-left: 3px solid var(--color-accent);
   font-weight: 600;
 }
 
-.language-option.active::after {
+.theme-option.active::after {
   content: "✓";
   position: absolute;
   right: 12px;
@@ -94,35 +91,79 @@
   font-weight: bold;
 }
 
-.language-option-flag {
+.theme-option-icon {
+  font-size: 1.1rem;
   width: 20px;
-  height: 15px;
-  object-fit: cover;
-  border-radius: 2px;
-  border: 1px solid var(--color-border);
+  text-align: center;
 }
 
-.language-option-name {
+.theme-option-name {
   font-size: 0.9rem;
   font-weight: 500;
 }
 
+/* Цветовые preview для опций тем */
+.theme-option[data-theme="ocean"]:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.1),
+    rgba(79, 195, 247, 0.1)
+  );
+  border-left: 3px solid #4fc3f7;
+}
+
+.theme-option[data-theme="dark"]:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.1),
+    rgba(96, 165, 250, 0.1)
+  );
+  border-left: 3px solid #60a5fa;
+}
+
+.theme-option[data-theme="forest"]:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(5, 150, 105, 0.1),
+    rgba(16, 185, 129, 0.1)
+  );
+  border-left: 3px solid #10b981;
+}
+
+.theme-option[data-theme="sunset"]:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(234, 88, 12, 0.1),
+    rgba(249, 115, 22, 0.1)
+  );
+  border-left: 3px solid #f97316;
+}
+
+.theme-option[data-theme="light"]:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.1),
+    rgba(6, 182, 212, 0.1)
+  );
+  border-left: 3px solid #06b6d4;
+}
+
 /* Анимация стрелки */
-.language-arrow {
+.theme-arrow {
   transition: transform 0.3s ease;
 }
 
-.language-switcher-dropdown.open .language-arrow {
+.theme-switcher-dropdown.open .theme-arrow {
   transform: rotate(180deg);
 }
 
 /* Плавное появление выпадающего списка */
-.language-options {
+.theme-options {
   transform-origin: top right;
-  animation: languageDropdownAppear 0.3s ease;
+  animation: themeDropdownAppear 0.3s ease;
 }
 
-@keyframes languageDropdownAppear {
+@keyframes themeDropdownAppear {
   from {
     opacity: 0;
     transform: translateY(-10px) scale(0.95);

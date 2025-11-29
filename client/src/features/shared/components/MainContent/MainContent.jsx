@@ -59,122 +59,147 @@ const MainContent = ({
     );
 
     return (
-      <div className="tab-content container-tp5">
-        <div className="favorites-header">
-          <h2 className="main-content-title">⭐ Избранное</h2>
+      <div className="page-container favorites-page">
+        <div className="page-header">
+          <h2>{t("favorites.title")}</h2>
+          <div className="favorites-count">
+            {favoriteSets.length} {t("favorites.sets.count")},{" "}
+            {allFavoriteCards.length} {t("favorites.cards.count")}
+          </div>
         </div>
 
-        {/* Избранные наборы */}
-        <section className="favorites-section">
-          <h3>Избранные наборы ({favoriteSets.length})</h3>
-          {favoriteSets.length > 0 ? (
-            <CardsetList
-              cardsets={favoriteSets}
-              handleViewSet={onViewSet}
-              showDeleteModal={onDeleteSet}
-            />
-          ) : (
-            <p className="empty-state">Нет избранных наборов</p>
-          )}
-        </section>
+        <div className="content-card">
+          {/* Избранные наборы */}
+          <section
+            className="favorites-section"
+            style={{ marginBottom: "2rem" }}
+          >
+            <h3 style={{ color: "var(--color-gold)", marginBottom: "1rem" }}>
+              {t("favorites.sets.title")} ({favoriteSets.length})
+            </h3>
+            {favoriteSets.length > 0 ? (
+              <div className="sets-grid">
+                <CardsetList
+                  cardsets={favoriteSets}
+                  handleViewSet={onViewSet}
+                  showDeleteModal={onDeleteSet}
+                />
+              </div>
+            ) : (
+              <div className="empty-state">
+                <div className="empty-icon">📚</div>
+                <h3>{t("favorites.sets.empty.title")}</h3>
+                <p>{t("favorites.sets.empty.message")}</p>
+              </div>
+            )}
+          </section>
 
-        {/* Избранные карточки */}
-        <section className="favorites-section">
-          <h3>Избранные карточки ({allFavoriteCards.length})</h3>
-          {allFavoriteCards.length > 0 ? (
-            <div className="cards-grid">
-              {allFavoriteCards.map((card) => (
-                <div
-                  key={`${card.id}-${card.parentSet.id}`}
-                  className="card-preview container-tp4"
-                >
-                  <div className="card-preview-header">
-                    <span className="set-badge">
-                      Из набора: {card.parentSet.title}
-                    </span>
-                  </div>
+          {/* Избранные карточки */}
+          <section className="favorites-section">
+            <h3 style={{ color: "var(--color-gold)", marginBottom: "1rem" }}>
+              {t("favorites.cards.title")} ({allFavoriteCards.length})
+            </h3>
+            {allFavoriteCards.length > 0 ? (
+              <div className="cards-grid">
+                {allFavoriteCards.map((card) => (
                   <div
-                    className="card-preview-content"
-                    onClick={() => onViewCard(card)}
+                    key={`${card.id}-${card.parentSet.id}`}
+                    className="card-preview"
                   >
-                    <div className="card-preview-front">
-                      <div className="card-text" title={card.front}>
-                        {card.front}
-                      </div>
-                      <div className="card-media-indicators">
-                        {card.imageUrl && (
-                          <span className="media-indicator">🖼️</span>
-                        )}
-                        {card.audioUrl && (
-                          <span className="media-indicator">🎵</span>
-                        )}
-                      </div>
+                    <div className="card-preview-header">
+                      <span className="set-badge">
+                        {t("favorites.from.set")}: {card.parentSet.title}
+                      </span>
                     </div>
-                    <div className="card-preview-back">
-                      <div className="card-text" title={card.back}>
-                        {card.back}
+                    <div
+                      className="card-preview-content"
+                      onClick={() => onViewCard(card)}
+                    >
+                      <div className="card-preview-front">
+                        <div className="card-text" title={card.front}>
+                          {card.front}
+                        </div>
+                        <div className="card-media-indicators">
+                          {card.imageUrl && (
+                            <span className="media-indicator">🖼️</span>
+                          )}
+                          {card.audioUrl && (
+                            <span className="media-indicator">🎵</span>
+                          )}
+                        </div>
                       </div>
-                      <div className="card-media-indicators">
-                        {card.backImageUrl && (
-                          <span className="media-indicator">🖼️</span>
-                        )}
-                        {card.backAudioUrl && (
-                          <span className="media-indicator">🎵</span>
-                        )}
+                      <div className="card-preview-back">
+                        <div className="card-text" title={card.back}>
+                          {card.back}
+                        </div>
+                        <div className="card-media-indicators">
+                          {card.backImageUrl && (
+                            <span className="media-indicator">🖼️</span>
+                          )}
+                          {card.backAudioUrl && (
+                            <span className="media-indicator">🎵</span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="empty-state">Нет избранных карточек</p>
-          )}
-        </section>
+                ))}
+              </div>
+            ) : (
+              <div className="empty-state">
+                <div className="empty-icon">🃏</div>
+                <h3>{t("favorites.cards.empty.title")}</h3>
+                <p>{t("favorites.cards.empty.message")}</p>
+              </div>
+            )}
+          </section>
+        </div>
       </div>
     );
   };
 
   const filteredCardsets = getFilteredCardsets();
 
-  return (
-    <main className="main-content container-tp5">
-      {activeTab === "favorites" && renderFavoritesContent()}
+  // Рендер для вкладки "Мои наборы"
+  const renderSetsContent = () => {
+    return (
+      <div className="page-container sets-page">
+        <div className="page-header">
+          <h2>
+            {showFavorites
+              ? t("sets.favorites.title")
+              : searchResults !== null
+              ? t("search.results.title") + `: "${searchResults.query}"`
+              : t("sets.my_sets")}
+          </h2>
 
-      {activeTab === "sets" && (
-        <div className="container-tp2">
-          <div className="sets-header">
-            <h2 className="main-content-title">
+          <div className="sets-header-controls">
+            {/* Кнопка переключения избранного */}
+            <button
+              className={`btn-tp8 ${showFavorites ? "active" : ""}`}
+              onClick={() => setShowFavorites(!showFavorites)}
+              title={
+                showFavorites ? t("sets.show.all") : t("sets.show.favorites")
+              }
+            >
+              ⭐{" "}
               {showFavorites
-                ? "⭐ Избранные наборы"
-                : searchResults !== null
-                ? `Результаты поиска: "${searchResults.query}"`
-                : t("sets.my_sets")}
-            </h2>
+                ? t("sets.show.all.cards")
+                : t("sets.show.favorites.cards")}
+            </button>
 
-            <div className="sets-header-controls">
-              {/* Кнопка переключения избранного */}
+            {searchResults === null && !showFavorites && (
               <button
-                className={`btn-tp8 ${showFavorites ? "active" : ""}`}
-                onClick={() => setShowFavorites(!showFavorites)}
-                title={
-                  showFavorites ? "Показать все наборы" : "Показать избранное"
-                }
+                className="btn-tp1"
+                onClick={() => setActiveTab("create")}
               >
-                ⭐ {showFavorites ? "Все наборы" : "Избранное"}
+                {t("navigation.create")}
               </button>
-
-              {searchResults === null && !showFavorites && (
-                <button
-                  className="btn-tp1"
-                  onClick={() => setActiveTab("create")}
-                >
-                  {t("navigation.create")}
-                </button>
-              )}
-            </div>
+            )}
           </div>
+        </div>
 
+        <div className="content-card">
           {isSearching && (
             <div className="search-indicator">🔍 {t("search.in_progress")}</div>
           )}
@@ -182,32 +207,44 @@ const MainContent = ({
           {searchResults !== null &&
             filteredCardsets.length === 0 &&
             !isSearching && (
-              <div className="no-results">
-                <div className="no-results-icon">😔</div>
-                <h3>Ничего не найдено</h3>
-                <p>Попробуйте изменить запрос поиска</p>
+              <div className="empty-state">
+                <div className="empty-icon">😔</div>
+                <h3>{t("search.results.empty.title")}</h3>
+                <p>{t("search.try_again")}</p>
               </div>
             )}
 
           {showFavorites && filteredCardsets.length === 0 && !isSearching && (
-            <div className="no-results">
-              <div className="no-results-icon">⭐</div>
-              <h3>Нет избранных наборов</h3>
-              <p>Добавьте наборы в избранное, чтобы они отображались здесь</p>
+            <div className="empty-state">
+              <div className="empty-icon">⭐</div>
+              <h3>{t("favorites.sets.empty.title")}</h3>
+              <p>{t("favorites.sets.empty.message")}</p>
             </div>
           )}
 
-          <CardsetList
-            cardsets={filteredCardsets}
-            handleViewSet={onViewSet}
-            showDeleteModal={onDeleteSet}
-          />
+          {filteredCardsets.length > 0 && (
+            <div className="sets-grid">
+              <CardsetList
+                cardsets={filteredCardsets}
+                handleViewSet={onViewSet}
+                showDeleteModal={onDeleteSet}
+              />
+            </div>
+          )}
         </div>
-      )}
+      </div>
+    );
+  };
 
-      {activeTab === "create" && (
-        <div className="tab-content container-tp5">
+  // Рендер для создания набора
+  const renderCreateContent = () => {
+    return (
+      <div className="page-container create-page">
+        <div className="page-header">
           <h2>{t("sets.create.title")}</h2>
+        </div>
+
+        <div className="content-card">
           <CreateSetForm
             formData={forms.set}
             onUpdateForm={onUpdateForm}
@@ -218,9 +255,16 @@ const MainContent = ({
             }}
           />
         </div>
-      )}
+      </div>
+    );
+  };
 
-      {activeTab === "view-set" && selectedSet && (
+  // Рендер для просмотра набора
+  const renderViewSetContent = () => {
+    if (!selectedSet) return null;
+
+    return (
+      <div className="page-container viewset-page">
         <ViewSet
           selectedSet={selectedSet}
           setActiveTab={setActiveTab}
@@ -230,7 +274,16 @@ const MainContent = ({
           onStartTraining={() => handleStartTraining(selectedSet)}
           onEditCard={onEditCard}
         />
-      )}
+      </div>
+    );
+  };
+
+  return (
+    <main className="main-content">
+      {activeTab === "favorites" && renderFavoritesContent()}
+      {activeTab === "sets" && renderSetsContent()}
+      {activeTab === "create" && renderCreateContent()}
+      {activeTab === "view-set" && renderViewSetContent()}
     </main>
   );
 };

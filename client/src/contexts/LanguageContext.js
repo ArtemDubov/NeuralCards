@@ -35,7 +35,7 @@ export const LanguageProvider = ({ children }) => {
       setTranslations(translationModule.default);
       setLanguage(newLang);
       localStorage.setItem("neuraltrident-language", newLang);
-      localStorage.setItem("selectedLanguage", newLang); // ← ДОБАВЬ ЭТУ СТРОКУ
+      localStorage.setItem("selectedLanguage", newLang);
     } catch (error) {
       console.error("Error switching language:", error);
     }

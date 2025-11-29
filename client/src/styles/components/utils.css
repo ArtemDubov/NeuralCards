@@ -1,0 +1,183 @@
+/* === УТИЛИТЫ И ОБЩИЕ СТИЛИ === */
+
+/* Пустые состояния */
+.empty-state {
+  text-align: center;
+  color: var(--color-text-secondary);
+  padding: 2rem;
+  font-style: italic;
+  opacity: 0.7;
+}
+
+.empty-favorites {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--color-text-secondary);
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.empty-favorites h3 {
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+}
+
+.empty-favorites p {
+  opacity: 0.8;
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.no-results {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 2rem;
+}
+
+.no-results-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.7;
+}
+
+.no-results h3 {
+  color: var(--color-sea-wave);
+  margin-bottom: 0.5rem;
+}
+
+.no-results p {
+  color: var(--color-light-foam);
+  opacity: 0.8;
+  margin: 0;
+}
+
+/* Тренировка */
+.training-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.training-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.progress-info {
+  color: var(--color-accent);
+  font-weight: bold;
+  background: rgba(79, 195, 247, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+}
+
+.training-card {
+  background: var(--color-bg-card);
+  backdrop-filter: blur(10px);
+  border: 2px solid var(--color-accent);
+  border-radius: var(--border-radius-xl);
+  padding: 2rem;
+  margin: 2rem 0;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  position: relative;
+}
+
+.training-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-glow);
+  transform: translateY(-5px);
+}
+
+.training-card.show-answer {
+  border-color: var(--color-primary);
+  background: var(--color-bg-secondary);
+}
+
+.card-content {
+  text-align: center;
+}
+
+.card-content h3 {
+  color: var(--color-accent);
+  margin-bottom: 1rem;
+}
+
+.card-hint {
+  position: absolute;
+  bottom: 1rem;
+  color: var(--color-accent);
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
+
+.training-controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+/* Адаптивность компонентов */
+@media (max-width: 768px) {
+  .card-sides-container,
+  .card-view-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .modal-overlay {
+    padding: 1rem;
+  }
+
+  .card-modal,
+  .card-view-modal {
+    padding: 1rem;
+  }
+
+  .cardset-item {
+    padding: 1rem;
+    min-height: 100px;
+  }
+
+  .set-header h3 {
+    font-size: 1rem;
+  }
+
+  .set-actions {
+    gap: 0.3rem;
+  }
+
+  .card-actions {
+    opacity: 1;
+  }
+
+  .favorite-card-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .favorite-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+}

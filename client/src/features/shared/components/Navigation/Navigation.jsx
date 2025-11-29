@@ -11,7 +11,7 @@ const Navigation = ({ activeTab, setActiveTab, onSearch }) => {
 
   const tabs = [
     { id: "sets", label: t("navigation.sets") },
-    { id: "favorites", label: "⭐ " + "Избранное" },
+    { id: "favorites", label: t("navigation.favorites.with_icon") },
     { id: "training", label: t("navigation.training") },
   ];
 

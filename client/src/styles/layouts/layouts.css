@@ -464,3 +464,70 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* === ЕДИНАЯ СИСТЕМА СТРАНИЦ === */
+
+/* Контейнер страницы */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Заголовок страницы */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.page-header h1 {
+  color: var(--color-accent);
+  margin: 0;
+  font-size: 2rem;
+}
+
+.page-header h2 {
+  color: var(--color-accent);
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+/* Специфичные цвета для разных страниц */
+.favorites-page .page-header {
+  border-bottom-color: var(--color-gold);
+}
+
+.favorites-page .page-header h2 {
+  color: var(--color-gold);
+}
+
+.profile-page .page-header {
+  border-bottom-color: var(--color-secondary);
+}
+
+/* Сетка контента */
+.content-grid {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* Универсальная карточка контента */
+.content-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.content-card:hover {
+  border-color: var(--color-border-hover);
+  box-shadow: var(--shadow-medium);
+  transform: translateY(-2px);
+}

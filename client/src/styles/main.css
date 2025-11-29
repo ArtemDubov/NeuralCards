@@ -1,7 +1,17 @@
 /* Главный файл стилей Neural Trident */
+
+/* Базовые стили */
 @import "./base/reset.css";
 @import "./base/variables.css";
+
+/* UI Компоненты */
 @import "./components/buttons.css";
+@import "./components/cards.css";
+@import "./components/modals.css";
 @import "./components/forms.css";
-@import "./components/components.css";
+@import "./components/utils.css";
+@import "./components/language-switcher.css";
+@import "./components/theme-switcher.css";
+
+/* Layout */
 @import "./layouts/layouts.css";

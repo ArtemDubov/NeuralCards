@@ -31,45 +31,71 @@ export function TrainingPage({ cardsets, selectedSetForTraining }) {
   // 1. Выбор режима тренировки
   if (!activeMode && !training.isTraining) {
     return (
-      <ModeSelection
-        trainingModes={training.getTrainingModes()}
-        onSelectMode={(modeId) => {
-          setActiveMode(modeId);
-        }}
-        onBack={() => window.history.back()}
-      />
+      <div className="page-container training-page">
+        <div className="page-header">
+          <h2>🎯 {t("training.choose.mode")}</h2>
+          <div className="sets-header-controls">
+            <button className="btn-tp3" onClick={() => window.history.back()}>
+              {t("sets.back")}
+            </button>
+          </div>
+        </div>
+        <div className="content-card">
+          <ModeSelection
+            trainingModes={training.getTrainingModes()}
+            onSelectMode={(modeId) => {
+              setActiveMode(modeId);
+            }}
+            onBack={() => window.history.back()}
+          />
+        </div>
+      </div>
     );
   }
 
   // 2. Выбор набора карточек
   if (activeMode && !selectedSet && !training.isTraining) {
     return (
-      <SetSelection
-        cardsets={cardsets}
-        trainingMode={training.getTrainingMode(activeMode)}
-        onSelectSet={(set) => {
-          setSelectedSet(set);
-          training.startTraining(activeMode, set);
-        }}
-        onBack={() => setActiveMode(null)}
-      />
+      <div className="page-container training-page">
+        <div className="page-header">
+          <h2>🎯 Выбор набора</h2>
+          <div className="progress-info">
+            Режим: {training.getTrainingMode(activeMode)?.name}
+          </div>
+        </div>
+        <div className="content-card">
+          <SetSelection
+            cardsets={cardsets}
+            trainingMode={training.getTrainingMode(activeMode)}
+            onSelectSet={(set) => {
+              setSelectedSet(set);
+              training.startTraining(activeMode, set);
+            }}
+            onBack={() => setActiveMode(null)}
+          />
+        </div>
+      </div>
     );
   }
 
   // 3. Экран завершения тренировки
   if (!training.isTraining && training.engineState.completed) {
     return (
-      <CompletionScreen
-        trainingMode={training.getTrainingMode(activeMode)}
-        selectedSet={selectedSet}
-        progress={training.getProgress()}
-        onRestart={() => training.startTraining(activeMode, selectedSet)}
-        onSelectNewSet={() => {
-          training.endTraining();
-          setActiveMode(null);
-          setSelectedSet(null);
-        }}
-      />
+      <div className="page-container training-page">
+        <div className="content-card">
+          <CompletionScreen
+            trainingMode={training.getTrainingMode(activeMode)}
+            selectedSet={selectedSet}
+            progress={training.getProgress()}
+            onRestart={() => training.startTraining(activeMode, selectedSet)}
+            onSelectNewSet={() => {
+              training.endTraining();
+              setActiveMode(null);
+              setSelectedSet(null);
+            }}
+          />
+        </div>
+      </div>
     );
   }
 
@@ -89,8 +115,10 @@ export function TrainingPage({ cardsets, selectedSetForTraining }) {
   // 5. Загрузка
   if (training.loading) {
     return (
-      <div className="training-container container-tp6">
-        <div className="loading">Загрузка тренировки...</div>
+      <div className="page-container training-page">
+        <div className="content-card">
+          <div className="loading">Загрузка тренировки...</div>
+        </div>
       </div>
     );
   }
@@ -98,18 +126,22 @@ export function TrainingPage({ cardsets, selectedSetForTraining }) {
   // 6. Ошибка
   if (training.error) {
     return (
-      <div className="training-container container-tp6">
-        <div className="error-message">{training.error}</div>
-        <button className="btn-tp3" onClick={training.endTraining}>
-          Назад
-        </button>
+      <div className="page-container training-page">
+        <div className="content-card">
+          <div className="error-message">{training.error}</div>
+          <button className="btn-tp3" onClick={training.endTraining}>
+            {t("sets.back")}
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="training-container container-tp6">
-      <div className="loading">Подготовка тренировки...</div>
+    <div className="page-container training-page">
+      <div className="content-card">
+        <div className="loading">Подготовка тренировки...</div>
+      </div>
     </div>
   );
 }

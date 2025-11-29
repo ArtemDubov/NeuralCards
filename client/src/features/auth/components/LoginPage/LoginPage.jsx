@@ -5,7 +5,7 @@ import LoginForm from "../LoginForm/LoginForm";
 import LanguageSwitcher from "../../../shared/components/LanguageSwitcher/LanguageSwitcher";
 import { useLanguage } from "../../../../contexts/LanguageContext";
 import ThemeSwitcher from "../../../shared/components/ThemeSwitcher/ThemeSwitcher";
-import { useAuth } from "../../../../hooks/useAuth"; // ← ПРАВИЛЬНЫЙ ПУТЬ
+import { useAuth } from "../../../../hooks/useAuth";
 
 const LoginPage = ({ onAuthSuccess }) => {
   const auth = useAuth();
@@ -116,13 +116,13 @@ const LoginPage = ({ onAuthSuccess }) => {
 
     // Валидация имени
     if (!registerName.trim()) {
-      newErrors.name = "Имя обязательно для заполнения";
+      newErrors.name = t("validation.name.required");
       console.log("❌ [LoginPage] Ошибка валидации: имя не заполнено");
     } else if (registerName.trim().length < 2) {
-      newErrors.name = "Имя должно содержать минимум 2 символа";
+      newErrors.name = t("validation.name.minLength");
       console.log("❌ [LoginPage] Ошибка валидации: имя слишком короткое");
     } else if (!/^[\p{L} ]+$/u.test(registerName)) {
-      newErrors.name = "Имя должно содержать только буквы и пробелы";
+      newErrors.name = t("validation.name.lettersOnly");
       console.log(
         "❌ [LoginPage] Ошибка валидации: имя содержит запрещенные символы"
       );
@@ -132,19 +132,19 @@ const LoginPage = ({ onAuthSuccess }) => {
     const emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if (!registerEmail) {
-      newErrors.email = "Email обязателен для заполнения";
+      newErrors.email = t("validation.email.required");
       console.log("❌ [LoginPage] Ошибка валидации: email не заполнен");
     } else if (!emailRegex.test(registerEmail)) {
-      newErrors.email = "Введите корректный email адрес";
+      newErrors.email = t("validation.email.invalid");
       console.log("❌ [LoginPage] Ошибка валидации: email невалиден");
     }
 
     // Валидация пароля
     if (!registerPassword) {
-      newErrors.password = "Пароль обязателен для заполнения";
+      newErrors.password = t("validation.password.required");
       console.log("❌ [LoginPage] Ошибка валидации: пароль не заполнен");
     } else if (registerPassword.length < 6) {
-      newErrors.password = "Пароль должен содержать минимум 6 символов";
+      newErrors.password = t("validation.password.minLength");
       console.log("❌ [LoginPage] Ошибка валидации: пароль слишком короткий");
     }
 
@@ -209,9 +209,7 @@ const LoginPage = ({ onAuthSuccess }) => {
         />
       )}
 
-      <p className="test-credentials">
-        Тестовый аккаунт: test3@mail.ru / 123456
-      </p>
+      <p className="test-credentials">{t("auth.test.credentials")}</p>
     </div>
   );
 };

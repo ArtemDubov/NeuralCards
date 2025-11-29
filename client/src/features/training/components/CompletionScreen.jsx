@@ -11,18 +11,18 @@ const CompletionScreen = ({
   const { t } = useLanguage();
 
   const getCompletionMessage = () => {
-    if (!progress) return "Тренировка завершена!";
+    if (!progress) return t("training.completion.finished");
 
     if (progress.score !== undefined) {
       const percentage = Math.round((progress.score / progress.total) * 100);
 
-      if (percentage >= 90) return "Отличный результат! 🎉";
-      if (percentage >= 70) return "Хорошая работа! 👍";
-      if (percentage >= 50) return "Неплохо! 😊";
-      return "Продолжайте тренироваться! 💪";
+      if (percentage >= 90) return t("training.completion.excellent");
+      if (percentage >= 70) return t("training.completion.good");
+      if (percentage >= 50) return t("training.completion.ok");
+      return t("training.completion.keep_going");
     }
 
-    return "Тренировка завершена!";
+    return t("training.completion.finished");
   };
 
   return (
@@ -31,12 +31,12 @@ const CompletionScreen = ({
 
       <div className="completion-stats">
         <div className="stat-item">
-          <span className="stat-label">Режим</span>
+          <span className="stat-label">{t("training.completion.mode")}</span>
           <span className="stat-value">{trainingMode?.name}</span>
         </div>
 
         <div className="stat-item">
-          <span className="stat-label">Набор</span>
+          <span className="stat-label">{t("training.completion.set")}</span>
           <span className="stat-value">{selectedSet?.title}</span>
         </div>
 
@@ -45,7 +45,9 @@ const CompletionScreen = ({
             {progress.completed !== undefined &&
               progress.total !== undefined && (
                 <div className="stat-item">
-                  <span className="stat-label">Прогресс</span>
+                  <span className="stat-label">
+                    {t("training.completion.progress")}
+                  </span>
                   <span className="stat-value">
                     {progress.completed}/{progress.total}
                   </span>
@@ -54,7 +56,9 @@ const CompletionScreen = ({
 
             {progress.score !== undefined && (
               <div className="stat-item">
-                <span className="stat-label">Результат</span>
+                <span className="stat-label">
+                  {t("training.completion.result")}
+                </span>
                 <span className="stat-value">
                   {progress.score} из {progress.total}(
                   {Math.round((progress.score / progress.total) * 100)}%)
@@ -64,7 +68,9 @@ const CompletionScreen = ({
 
             {progress.timeLeft !== undefined && (
               <div className="stat-item">
-                <span className="stat-label">Оставшееся время</span>
+                <span className="stat-label">
+                  {t("training.completion.time_left")}
+                </span>
                 <span className="stat-value">{progress.timeLeft} сек</span>
               </div>
             )}

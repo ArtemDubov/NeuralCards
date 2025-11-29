@@ -16,9 +16,9 @@ const PracticeSession = ({
     <div className="training-container container-tp6">
       <div className="training-header">
         <button className="btn-tp3" onClick={onEnd}>
-          ← Завершить
+          {t("training.finish")}
         </button>
-        <h2>Практика: {selectedSet?.title}</h2>
+        <h2>{t("training.title", { title: selectedSet?.title })}</h2>
       </div>
 
       {engineState.currentCard && (
@@ -27,18 +27,26 @@ const PracticeSession = ({
           <div className="training-card">
             {engineState.showAnswer ? (
               <div className="card-back">
-                <h3>Ответ:</h3>
+                <h3>{t("card.back.side")}</h3>
                 <p>{engineState.currentCard.back}</p>
                 <div className="difficulty-buttons">
-                  <button onClick={() => onAnswer(0, true)}>Легко</button>
-                  <button onClick={() => onAnswer(1, true)}>Средне</button>
-                  <button onClick={() => onAnswer(2, true)}>Сложно</button>
-                  <button onClick={() => onAnswer(2, false)}>Не знаю</button>
+                  <button onClick={() => onAnswer(0, true)}>
+                    {t("difficulty.easy")}
+                  </button>
+                  <button onClick={() => onAnswer(1, true)}>
+                    {t("difficulty.medium")}
+                  </button>
+                  <button onClick={() => onAnswer(2, true)}>
+                    {t("difficulty.hard")}
+                  </button>
+                  <button onClick={() => onAnswer(2, false)}>
+                    {t("difficulty.wrong")}
+                  </button>
                 </div>
               </div>
             ) : (
               <div className="card-front">
-                <h3>Вопрос:</h3>
+                <h3>{t("card.front.side")}</h3>
                 <p>{engineState.currentCard.front}</p>
                 <button
                   onClick={() =>
@@ -48,7 +56,7 @@ const PracticeSession = ({
                     }))
                   }
                 >
-                  Показать ответ
+                  {t("training.card.hint")}
                 </button>
               </div>
             )}
@@ -75,7 +83,7 @@ const QuizSession = ({
     <div className="training-container container-tp6">
       <div className="training-header">
         <button className="btn-tp3" onClick={onEnd}>
-          ← Завершить
+          Завершить
         </button>
         <h2>Викторина: {selectedSet?.title}</h2>
         <div className="quiz-progress">

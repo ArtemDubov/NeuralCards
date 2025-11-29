@@ -1,13 +1,14 @@
 import React from "react";
-
+import { useLanguage } from "../../../../contexts/LanguageContext";
 const ViewCardModal = ({ isOpen, onClose, card, onEdit }) => {
+  const { t } = useLanguage();
   if (!isOpen || !card) return null;
 
   return (
     <div className="modal-overlay">
       <div className="card-view-modal container-tp1">
         <div className="modal-header">
-          <h2>Просмотр карточки</h2>
+          <h2>{t("card.view.title")}</h2>
           <div className="view-card-actions">
             <button
               className="edit-card-btn"
@@ -24,7 +25,7 @@ const ViewCardModal = ({ isOpen, onClose, card, onEdit }) => {
 
         <div className="card-view-container">
           <div className="card-view-side front-view">
-            <h3>🟦 Вопрос</h3>
+            <h3>{t("card.front.side")}</h3>
             <div className="card-view-content">
               <p className="card-view-text">{card.front}</p>
 
@@ -61,7 +62,7 @@ const ViewCardModal = ({ isOpen, onClose, card, onEdit }) => {
           </div>
 
           <div className="card-view-side back-view">
-            <h3>🟩 Ответ</h3>
+            <h3>{t("card.back.side")}</h3>
             <div className="card-view-content">
               <p className="card-view-text">{card.back}</p>
 
@@ -90,7 +91,7 @@ const ViewCardModal = ({ isOpen, onClose, card, onEdit }) => {
                       src={`http://localhost:5001${card.backAudioUrl}`}
                       type="audio/ogg"
                     />
-                    Ваш браузер не поддерживает аудио элемент.
+                    {t("audio.not.supported")}
                   </audio>
                 </div>
               )}

@@ -11,7 +11,8 @@ const SetSelection = ({ cardsets, trainingMode, onSelectSet, onBack }) => {
           ← {t("sets.back")}
         </button>
         <h2>
-          {trainingMode?.name || "Тренировка"} - {t("sets.view")}
+          {trainingMode?.name || t("training.set.selection.title")} -{" "}
+          {t("sets.view")}
         </h2>
       </div>
 
@@ -19,7 +20,7 @@ const SetSelection = ({ cardsets, trainingMode, onSelectSet, onBack }) => {
         <div className="training-info">
           <p>{trainingMode?.description}</p>
           <div className="requirements">
-            Минимум карточек: {trainingMode?.minCards || 1}
+            {t("training.min_cards")}: {trainingMode?.minCards || 1}
           </div>
         </div>
 
@@ -56,7 +57,7 @@ const SetSelection = ({ cardsets, trainingMode, onSelectSet, onBack }) => {
         {cardsets.length === 0 && (
           <div className="empty-state">
             <p>{t("sets.empty")}</p>
-            <p>Создайте набор карточек, чтобы начать тренировку</p>
+            <p>{t("training.create.set.hint")}</p>
           </div>
         )}
       </div>

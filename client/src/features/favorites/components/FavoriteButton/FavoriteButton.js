@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useFavorites } from "../../../../contexts/FavoritesContext";
 import StarIcon from "../../../shared/components/StarIcon";
+import { useLanguage } from "../../../../contexts/LanguageContext";
 
 const FavoriteButton = ({ itemId, itemType = "cardset", onUpdate }) => {
+  const { t } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
   const {
     isSetFavorite,
@@ -47,7 +49,7 @@ const FavoriteButton = ({ itemId, itemType = "cardset", onUpdate }) => {
     <button
       onClick={toggleFavorite}
       className={`favorite-btn ${isFavorite ? "favorite" : ""}`}
-      title={isFavorite ? "Удалить из избранного" : "Добавить в избранное"}
+      title={isFavorite ? t("favorites.remove") : t("favorites.add")}
       disabled={isLoading}
       style={{
         background: "none",

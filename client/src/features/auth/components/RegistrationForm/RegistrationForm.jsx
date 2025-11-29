@@ -32,8 +32,8 @@ const RegistrationForm = ({
           maxLength={16}
         />
         <div className="input-hint">
-          {registerName.length}/16 символов • Только буквы • Один пробел между
-          словами
+          {registerName.length}
+          {t("auth.name.hint")}
         </div>
         {errors.name && <span className="error-text">{errors.name}</span>}
       </div>

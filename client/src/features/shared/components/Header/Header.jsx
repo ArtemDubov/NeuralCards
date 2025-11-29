@@ -48,7 +48,7 @@ const Header = ({ user, onLogout, setActiveTab, onSearch }) => {
         <div className="header-logo">
           <h1>{t("app.title")}</h1>
           <p className="welcome-text">
-            {t("welcome").replace("{name}", user?.name || "Гость")}
+            {t("welcome").replace("{name}", user?.name || t("user.guest"))}
           </p>
         </div>
         <div className="header-actions">
@@ -89,7 +89,7 @@ const Header = ({ user, onLogout, setActiveTab, onSearch }) => {
                   </div>
                   <div className="dropdown-user-info">
                     <div className="dropdown-user-name">
-                      {user?.name || "Гость"}
+                      {user?.name || t("user.guest")}
                     </div>
                     <div className="dropdown-user-email">
                       {user?.email || ""}

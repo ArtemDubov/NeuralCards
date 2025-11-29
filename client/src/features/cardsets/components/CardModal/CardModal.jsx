@@ -79,7 +79,7 @@ const CardModal = ({
 
     // Валидация
     if (!form.frontText.trim() && !form.backText.trim()) {
-      alert("Заполните хотя бы одну сторону карточки");
+      alert(t("card.validation.empty"));
       return;
     }
 
@@ -115,7 +115,7 @@ const CardModal = ({
               <label className="file-upload-btn">
                 <span>
                   {form.frontImage
-                    ? "🔄 Заменить изображение"
+                    ? t("card.replace.image")
                     : t("cards.add.image")}
                 </span>
                 <input
@@ -129,7 +129,9 @@ const CardModal = ({
 
               <label className="file-upload-btn">
                 <span>
-                  {form.frontAudio ? "🔄 Заменить аудио" : t("cards.add.audio")}
+                  {form.frontAudio
+                    ? t("card.replace.audio")
+                    : t("cards.add.audio")}
                 </span>
                 <input
                   type="file"
@@ -188,7 +190,7 @@ const CardModal = ({
               <label className="file-upload-btn">
                 <span>
                   {form.backImage
-                    ? "🔄 Заменить изображение"
+                    ? t("card.replace.image")
                     : t("cards.add.image")}
                 </span>
                 <input
@@ -202,7 +204,9 @@ const CardModal = ({
 
               <label className="file-upload-btn">
                 <span>
-                  {form.backAudio ? "🔄 Заменить аудио" : t("cards.add.audio")}
+                  {form.backAudio
+                    ? t("card.replace.audio")
+                    : t("cards.add.audio")}
                 </span>
                 <input
                   type="file"
@@ -247,7 +251,7 @@ const CardModal = ({
           <div className="form-validation">
             {!form.frontText.trim() && !form.backText.trim() && (
               <div className="validation-error">
-                ⚠️ Заполните хотя бы одну сторону карточки
+                ⚠️ {t("card.validation.empty")}
               </div>
             )}
           </div>
@@ -269,7 +273,7 @@ const CardModal = ({
                 (!form.frontText.trim() && !form.backText.trim())
               }
             >
-              {form.isUploading ? "📤 Загрузка..." : submitText}
+              {form.isUploading ? t("card.uploading") : submitText}
             </button>
           </div>
         </form>

@@ -48,10 +48,12 @@ const ViewSet = ({
             className={`btn-tp8 ${showFavorites ? "active" : ""}`}
             onClick={() => setShowFavorites(!showFavorites)}
             title={
-              showFavorites ? "Показать все карточки" : "Показать избранные"
+              showFavorites ? t("sets.show.all") : t("sets.show.favorites")
             }
           >
-            ⭐ {showFavorites ? "Все карточки" : "Избранные"}
+            {showFavorites
+              ? t("sets.show.all.cards")
+              : t("sets.show.favorites.cards")}
           </button>
 
           {displayedCards.length > 0 && (
@@ -157,7 +159,7 @@ const ViewSet = ({
         ) : (
           <p className="empty-state">
             {showFavorites
-              ? "В этом наборе нет избранных карточек"
+              ? t("sets.no.favorites.cards")
               : t("sets.cards.empty")}
           </p>
         )}
