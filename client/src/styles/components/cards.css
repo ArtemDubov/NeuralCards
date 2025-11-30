@@ -1,115 +1,85 @@
-/* === КАРТОЧКИ === */
+/* === КАРТОЧКИ И НАБОРЫ С ФИКСИРОВАННЫМИ РАЗМЕРАМИ === */
 
-/* Карточки наборов */
-.cardset-item {
+/* ОСНОВНЫЕ СТИЛИ ДЛЯ КАРТОЧЕК И НАБОРОВ */
+.cardset-item,
+.card-preview {
   position: relative;
   background: var(--color-bg-card);
   border: 1px solid var(--color-border);
   border-radius: 12px;
   padding: 1.2rem;
-  transition: all 0.3s ease;
-  max-width: 320px;
-  min-height: 120px;
+  transition: var(--transition);
   backdrop-filter: blur(5px);
   cursor: pointer;
-}
 
-.cardset-item:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-medium);
-  border-color: var(--color-border-hover);
-}
+  /* ФИКСИРОВАННЫЕ РАЗМЕРЫ */
+  width: 320px;
+  height: 180px;
+  min-width: 320px;
+  min-height: 180px;
+  max-width: 320px;
+  max-height: 180px;
 
-.cardset-item.favorite {
-  border: 2px solid var(--color-gold);
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
-  background: rgba(255, 215, 0, 0.05);
-}
+  /* Соотношение сторон 16:9 */
+  aspect-ratio: 16/9;
 
-.cardset-content-wrapper {
-  flex: 1;
-  cursor: pointer;
-}
-
-.set-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1rem;
-}
-
-.set-header h3 {
-  margin: 0;
-  color: var(--color-accent);
-  flex: 1;
-  font-size: 1.1rem;
-  line-height: 1.3;
-}
-
-.cards-count {
-  color: var(--color-accent);
-  display: block;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-  opacity: 0.8;
-}
-
-.set-actions {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  margin-left: 0.5rem;
-}
-
-.set-actions .btn-tp4 {
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8rem;
-  border-radius: 4px;
-  min-width: auto;
-}
-
-.set-tags {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  justify-content: flex-end;
-  max-width: 70%;
-}
-
-/* Карточки в режиме просмотра */
-.card-preview {
-  position: relative;
-  padding: 1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-radius: 12px;
-  min-height: 120px;
+  /* Flex для внутреннего контента */
   display: flex;
   flex-direction: column;
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  backdrop-filter: blur(5px);
 }
 
+/* Ховер-эффекты */
+.cardset-item:hover,
 .card-preview:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-medium);
   border-color: var(--color-border-hover);
 }
 
+/* Избранные элементы */
+.cardset-item.favorite,
+.card-preview.favorite {
+  border: 2px solid var(--color-gold);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+  background: rgba(255, 215, 0, 0.05);
+}
+
+/* СЕТКИ ДЛЯ ОТОБРАЖЕНИЯ */
+.sets-grid,
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+/* АДАПТИВНЫЕ СТИЛИ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ */
+@media (max-width: 768px) {
+  .cardset-item,
+  .card-preview {
+    width: 100%;
+    max-width: 100%;
+    min-width: unset;
+    height: 160px;
+    min-height: 160px;
+    max-height: 160px;
+  }
+
+  .sets-grid,
+  .cards-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* ОБНОВЛЕННЫЕ ВНУТРЕННИЕ СТИЛИ ДЛЯ КАРТОЧЕК */
 .card-preview-content {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  overflow: hidden;
+  padding-right: 70px; /* Место для кнопок */
 }
 
 .card-preview-front,
@@ -118,6 +88,8 @@
   justify-content: space-between;
   align-items: flex-start;
   gap: 0.5rem;
+  min-height: 0;
+  flex-shrink: 0;
 }
 
 .card-preview-front {
@@ -133,57 +105,118 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   color: var(--color-text-primary);
+  margin: 0;
 }
 
-.card-media-indicators {
+/* ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ НАБОРОВ */
+.cardset-content-wrapper {
+  flex: 1;
+  cursor: pointer;
   display: flex;
-  gap: 0.25rem;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.set-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  min-height: 0;
+}
+
+.set-header h3 {
+  margin: 0;
+  color: var(--color-accent);
+  flex: 1;
+  font-size: 1.1rem;
+  line-height: 1.3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.cards-count {
+  color: var(--color-accent);
+  display: block;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.set-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-left: 0.5rem;
   flex-shrink: 0;
 }
 
-.media-indicator {
-  font-size: 0.75rem;
-  opacity: 0.7;
-}
-
-.media-indicators {
+/* ТЕГИ В НАБОРАХ */
+.set-tags {
+  margin-top: auto;
   display: flex;
-  gap: 0.5rem;
-  justify-content: center;
-  margin-top: 0.5rem;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: flex-start;
+  max-width: 100%;
+  overflow: hidden;
 }
 
-/* Действия карточек */
+/* КНОПКИ ДЕЙСТВИЙ */
 .card-actions {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 10px;
+  right: 10px;
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   gap: 4px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.card-preview:hover .card-actions {
   opacity: 1;
 }
 
+.card-actions-top {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+/* УНИФИЦИРОВАННЫЕ СТИЛИ ДЛЯ КНОПОК */
+.set-actions .btn-tp4,
+.card-delete-btn,
 .card-edit-btn,
-.card-delete-btn {
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
-  border-radius: 4px;
-  width: 28px;
-  height: 28px;
+.card-actions .favorite-btn {
+  width: 24px;
+  height: 24px;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  min-width: auto;
+  border: none;
   cursor: pointer;
-  font-size: 12px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  color: var(--color-text-primary);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.set-actions .btn-tp4,
+.card-delete-btn {
+  background: rgba(220, 53, 69, 0.1);
+  color: var(--color-error);
+}
+
+.set-actions .btn-tp4:hover,
+.card-delete-btn:hover {
+  background: var(--color-error);
+  color: white;
+  transform: scale(1.1);
+}
+
+.card-edit-btn {
+  background: rgba(var(--color-primary-rgb), 0.1);
+  color: var(--color-primary);
 }
 
 .card-edit-btn:hover {
@@ -192,92 +225,15 @@
   transform: scale(1.1);
 }
 
-.card-delete-btn:hover {
-  background: var(--color-error);
-  color: white;
-  transform: scale(1.1);
-}
-
-/* Избранные карточки */
-.favorite-card {
-  background: rgba(255, 215, 0, 0.05);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 215, 0, 0.3);
-  border-radius: var(--border-radius-xl);
-  padding: 1.5rem;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.favorite-card:hover {
-  border-color: var(--color-gold);
-  box-shadow: 0 0 25px rgba(255, 215, 0, 0.2);
-  transform: translateY(-5px);
-}
-
-.favorite-card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 1rem;
-}
-
-.favorite-card-header h3 {
-  color: var(--color-gold);
-  margin: 0;
-  flex: 1;
-  margin-right: 1rem;
-}
-
-.favorite-actions {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-
-.favorite-description {
-  color: var(--color-text-secondary);
-  opacity: 0.9;
-  margin-bottom: 1rem;
-  line-height: 1.5;
-}
-
-.favorite-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.85rem;
-  color: var(--color-accent);
-}
-
-.cards-count,
-.favorite-date {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-}
-
-/* Кнопка избранного */
-.favorite-btn {
+.card-actions .favorite-btn {
   background: none;
-  border: none;
-  padding: 5px;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
 }
 
-.favorite-btn:hover {
-  background: rgba(255, 215, 0, 0.1);
+.card-actions .favorite-btn:hover {
   transform: scale(1.1);
 }
 
-.favorite-btn.favorite {
+.card-actions .favorite-btn.favorite {
   color: var(--color-gold);
 }
 
@@ -302,6 +258,17 @@
   font-size: 14px;
   color: var(--color-accent);
   font-weight: 500;
+}
+
+.set-tags {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: flex-end;
+  max-width: 70%;
 }
 
 /* Заголовок набора */
@@ -339,4 +306,22 @@
   font-size: 0.9rem;
   font-weight: 600;
   white-space: nowrap;
+}
+
+.card-media-indicators {
+  display: flex;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.media-indicator {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+.media-indicators {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 0.5rem;
 }

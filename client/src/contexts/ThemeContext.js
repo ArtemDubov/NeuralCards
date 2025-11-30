@@ -106,6 +106,12 @@ export const ThemeProvider = ({ children }) => {
     (themeId) => {
       console.log("🎨 [ThemeProvider] Переключаем тему на:", themeId);
 
+      // ВРЕМЕННО применяем transition ко ВСЕМ элементам
+      const style = document.createElement("style");
+      style.textContent = `* { transition: var(--transition) !important; }`;
+      style.id = "theme-transition-override";
+      document.head.appendChild(style);
+
       // Сохраняем в localStorage
       localStorage.setItem("neuraltrident-theme", themeId);
 
@@ -115,6 +121,16 @@ export const ThemeProvider = ({ children }) => {
       // Обновляем состояние
       dispatch({ type: "SET_THEME", payload: themeId });
       dispatch({ type: "CLOSE_DROPDOWN" });
+
+      // Убираем временный стиль через 100ms
+      setTimeout(() => {
+        const styleElement = document.getElementById(
+          "theme-transition-override"
+        );
+        if (styleElement) {
+          styleElement.remove();
+        }
+      }, 100);
     },
     [applyTheme]
   );

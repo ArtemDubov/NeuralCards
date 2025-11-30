@@ -14,6 +14,20 @@ const FavoriteButton = ({ itemId, itemType = "cardset", onUpdate }) => {
     loadFavorites,
   } = useFavorites();
 
+  const favoriteBtnStyle = {
+    width: "24px",
+    height: "24px",
+    padding: "0",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "4px",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    transition: "all 0.2s ease",
+  };
+
   // Определяем текущий статус избранного из контекста
   const isFavorite =
     itemType === "cardset" ? isSetFavorite(itemId) : isCardFavorite(itemId);
@@ -51,23 +65,7 @@ const FavoriteButton = ({ itemId, itemType = "cardset", onUpdate }) => {
       className={`favorite-btn ${isFavorite ? "favorite" : ""}`}
       title={isFavorite ? t("favorites.remove") : t("favorites.add")}
       disabled={isLoading}
-      style={{
-        background: "none",
-        border: "none",
-        padding: "5px",
-        cursor: isLoading ? "not-allowed" : "pointer",
-        borderRadius: "4px",
-        transition: "all 0.2s ease",
-        opacity: isLoading ? 0.6 : 1,
-      }}
-      onMouseEnter={(e) => {
-        if (!isLoading) {
-          e.target.style.background = "rgba(255, 215, 0, 0.1)";
-        }
-      }}
-      onMouseLeave={(e) => {
-        e.target.style.background = "none";
-      }}
+      style={favoriteBtnStyle}
     >
       <StarIcon filled={isFavorite} />
     </button>

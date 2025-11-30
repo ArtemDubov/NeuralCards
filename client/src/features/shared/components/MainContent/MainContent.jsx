@@ -281,7 +281,7 @@ const MainContent = ({
   };
 
   return (
-    <main className="main-content">
+    <main>
       {activeTab === "favorites" && renderFavoritesContent()}
       {activeTab === "sets" && renderSetsContent()}
       {activeTab === "create" && renderCreateContent()}

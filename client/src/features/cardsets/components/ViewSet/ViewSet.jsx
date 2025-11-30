@@ -93,7 +93,12 @@ const ViewSet = ({
         {displayedCards.length > 0 ? (
           <div className="cards-grid">
             {displayedCards.map((card) => (
-              <div key={card.id} className="card-preview container-tp4">
+              <div
+                key={card.id}
+                className={`card-preview container-tp4 ${
+                  isCardFavorite(card.id) ? "favorite" : ""
+                }`}
+              >
                 <div
                   className="card-preview-content"
                   onClick={() => handleViewCard(card)}
@@ -126,31 +131,37 @@ const ViewSet = ({
                   </div>
                 </div>
 
+                {/* ОБНОВЛЕННЫЕ КНОПКИ - ИДЕНТИЧНО НАБОРАМ */}
                 <div className="card-actions">
-                  <FavoriteButton
-                    itemId={card.id}
-                    itemType="card"
-                    onUpdate={handleFavoriteUpdate}
-                  />
+                  <div className="card-actions-top">
+                    {/* Кнопка избранного - слева */}
+                    <FavoriteButton
+                      itemId={card.id}
+                      itemType="card"
+                      onUpdate={handleFavoriteUpdate}
+                    />
+                    {/* Кнопка удаления - справа */}
+                    <button
+                      className="btn-tp4 card-delete-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        showDeleteModal(card.id);
+                      }}
+                      title={t("sets.delete")}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  {/* Кнопка редактирования - под кнопкой удаления */}
                   <button
                     className="card-edit-btn"
                     onClick={(e) => {
                       e.stopPropagation();
                       onEditCard(card);
                     }}
-                    title="Редактировать карточку"
+                    title={t("sets.edit")}
                   >
                     ✏️
-                  </button>
-                  <button
-                    className="card-delete-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      showDeleteModal(card.id);
-                    }}
-                    title={t("sets.delete")}
-                  >
-                    ✕
                   </button>
                 </div>
               </div>

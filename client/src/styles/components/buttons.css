@@ -212,3 +212,52 @@ button:active {
 .btn-auto {
   width: auto;
 }
+
+/* === АУРА ДЛЯ КНОПКИ ИЗБРАННОГО ПРИ НАВЕДЕНИИ === */
+.favorite-btn {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.favorite-btn:hover::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: 8px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 215, 0, 0.4) 0%,
+    rgba(255, 215, 0, 0) 70%
+  );
+  animation: aura-pulse 1.5s ease-in-out infinite;
+  z-index: -1;
+}
+
+.favorite-btn:hover {
+  transform: scale(1.1);
+  z-index: 1;
+}
+
+@keyframes aura-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+/* Усиление эффекта для активной (избранной) звезды */
+.favorite-btn.favorite:hover::before {
+  background: radial-gradient(
+    circle,
+    rgba(255, 215, 0, 0.6) 0%,
+    rgba(255, 215, 0, 0) 70%
+  );
+}

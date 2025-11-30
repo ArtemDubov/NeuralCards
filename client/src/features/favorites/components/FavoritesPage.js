@@ -104,18 +104,10 @@ const FavoritesPage = ({ handleViewCard }) => {
 
   return (
     <div className="page-container favorites-page">
+      {/* ЗАГОЛОВОК С КНОПКАМИ ВКЛАДОК */}
       <div className="page-header">
         <h2>⭐ {t("favorites.title")}</h2>
-        <div className="favorites-count">
-          {activeTab === "sets" ? favoriteSets.length : favoriteCards.length}{" "}
-          {activeTab === "sets"
-            ? t("favorites.sets.count")
-            : t("favorites.cards.count")}
-        </div>
-      </div>
-
-      <div className="content-card">
-        <div className="favorites-tabs">
+        <div className="favorites-tabs-header">
           <button
             className={`btn-tp5 ${activeTab === "sets" ? "active" : ""}`}
             onClick={() => setActiveTab("sets")}
@@ -129,6 +121,10 @@ const FavoritesPage = ({ handleViewCard }) => {
             {t("favorites.cards.tab")} ({favoriteCards.length})
           </button>
         </div>
+      </div>
+
+      <div className="content-card">
+        {/* УБРАЛИ КНОПКИ ВКЛАДОК ОТСЮДА */}
 
         {activeTab === "sets" ? (
           favoriteSets.length === 0 ? (
@@ -185,7 +181,7 @@ const FavoritesPage = ({ handleViewCard }) => {
             {favoriteCards.map((fav) => {
               const cardInfo = getCardInfo(fav);
               return (
-                <div key={cardInfo.id} className="card-preview">
+                <div key={cardInfo.id} className="card-preview favorite">
                   <div
                     className="card-preview-content"
                     onClick={() => handleViewCard(cardInfo)}

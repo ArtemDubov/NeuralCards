@@ -12,7 +12,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background: var(--color-bg-primary);
   color: var(--color-text-primary);
-  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 code {

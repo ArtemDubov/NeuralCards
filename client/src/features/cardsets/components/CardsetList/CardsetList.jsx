@@ -39,7 +39,6 @@ const CardsetList = ({ cardsets, handleViewSet, showDeleteModal }) => {
           : [];
 
         // Используем контекст вместо set.isFavorite
-        // Используем контекст вместо set.isFavorite
         const isFavorite = isSetFavorite(set.id);
 
         console.log(
@@ -67,10 +66,7 @@ const CardsetList = ({ cardsets, handleViewSet, showDeleteModal }) => {
                   flexDirection: "column",
                 }}
               >
-                <h3>
-                  {set.title}
-                  {isFavorite && <span style={{ marginLeft: "8px" }}>⭐</span>}
-                </h3>
+                <h3>{set.title}</h3>
                 <span className="cards-count">
                   {set.cards ? set.cards.length : 0} {t("sets.cards_count")}
                 </span>

@@ -11,7 +11,7 @@ const ViewCardModal = ({ isOpen, onClose, card, onEdit }) => {
           <h2>{t("card.view.title")}</h2>
           <div className="view-card-actions">
             <button
-              className="edit-card-btn"
+              className="btn-tp4"
               onClick={() => onEdit(card)}
               title="Редактировать карточку"
             >

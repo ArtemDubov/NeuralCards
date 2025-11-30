@@ -71,10 +71,8 @@
   --spacing-lg: 1.5rem;
   --spacing-xl: 2rem;
 
-  /* 🔄 ПЕРЕХОДЫ */
-  --transition-fast: 0.15s ease;
+  /* 🔄 ПЕРЕХОД */
   --transition: 0.3s ease;
-  --transition-slow: 0.5s ease;
 
   /* 🎯 ДОПОЛНИТЕЛЬНЫЕ ПЕРЕМЕННЫЕ */
   --color-sea-wave: var(--color-accent);
