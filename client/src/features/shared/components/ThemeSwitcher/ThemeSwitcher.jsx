@@ -1,25 +1,16 @@
 import React, { useRef, useEffect } from "react";
-import { useLanguage } from "../../../../contexts/LanguageContext";
-import { useTheme } from "../../../../contexts/ThemeContext";
+import { useAppStore } from "../../../../shared/stores/appStore";
 
 const ThemeSwitcher = () => {
-  const { t } = useLanguage();
-  const {
-    currentTheme,
-    isDropdownOpen,
-    themes,
-    switchTheme,
-    toggleDropdown,
-    closeDropdown,
-  } = useTheme();
-
+  const { t, theme, themes, setTheme } = useAppStore();
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const dropdownRef = useRef(null);
 
   // Обработчик клика вне дропдауна
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        closeDropdown();
+        setIsDropdownOpen(false);
       }
     };
 
@@ -27,31 +18,49 @@ const ThemeSwitcher = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [closeDropdown]);
+  }, []);
 
   // Получаем информацию о текущей теме с переводом
-  const currentThemeInfo = themes.find((theme) => theme.id === currentTheme);
+  const currentThemeInfo = themes.find((t) => t.id === theme);
+
+  const handleToggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleSwitchTheme = (themeId) => {
+    setTheme(themeId);
+    setIsDropdownOpen(false);
+  };
 
   return (
-    <div className="theme-switcher-container" ref={dropdownRef}>
-      <div className="theme-switcher-dropdown">
-        <button className="theme-current btn-tp7" onClick={toggleDropdown}>
-          <span className="theme-icon">{currentThemeInfo?.icon}</span>
-          <span className="theme-arrow">{isDropdownOpen ? "▲" : "▼"}</span>
+    <div className="nt-theme__container" ref={dropdownRef}>
+      <div
+        className={`nt-theme__dropdown ${
+          isDropdownOpen ? "nt-theme__dropdown--open" : ""
+        }`}
+      >
+        <button className="nt-theme__current" onClick={handleToggleDropdown}>
+          <span className="nt-theme__icon">{currentThemeInfo?.icon}</span>
+          <span className="nt-theme__arrow">{isDropdownOpen ? "▲" : "▼"}</span>
         </button>
 
-        <div className={`theme-options ${isDropdownOpen ? "open" : ""}`}>
-          {themes.map((theme) => (
+        <div
+          className={`nt-theme__options ${
+            isDropdownOpen ? "nt-theme__options--open" : ""
+          }`}
+        >
+          {themes.map((themeItem) => (
             <button
-              key={theme.id}
-              className={`theme-option ${
-                currentTheme === theme.id ? "active" : ""
+              key={themeItem.id}
+              className={`nt-theme__option ${
+                theme === themeItem.id ? "nt-theme__option--active" : ""
               }`}
-              onClick={() => switchTheme(theme.id)}
+              data-theme={themeItem.id}
+              onClick={() => handleSwitchTheme(themeItem.id)}
             >
-              <span className="theme-option-icon">{theme.icon}</span>
-              <span className="theme-option-name text-primary dropdown-text-active">
-                {t(theme.nameKey)}
+              <span className="nt-theme__option-icon">{themeItem.icon}</span>
+              <span className="nt-theme__option-name">
+                {t(themeItem.nameKey)}
               </span>
             </button>
           ))}

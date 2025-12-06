@@ -1,6 +1,6 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
-const authMiddleware = require("../middleware/auth");
+const authMiddleware = require("../middleware");
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -87,6 +87,101 @@ router.post("/", authMiddleware, async (req, res) => {
   }
 });
 
+// ОБНОВИТЬ НАБОР КАРТОЧЕК С ТЕГАМИ (НОВЫЙ ENDPOINT)
+router.put("/:setId", authMiddleware, async (req, res) => {
+  try {
+    const { title, description, isPublic, tags } = req.body;
+    const { setId } = req.params;
+
+    console.log("✏️ PUT /api/cardsets/:setId - userId:", req.userId);
+    console.log("📦 Данные для обновления:", {
+      setId,
+      title,
+      description,
+      isPublic,
+      tags,
+    });
+
+    // Проверяем, что набор существует и принадлежит пользователю
+    const existingSet = await prisma.cardSet.findFirst({
+      where: {
+        id: parseInt(setId),
+        authorId: req.userId,
+      },
+      include: {
+        tags: true,
+      },
+    });
+
+    if (!existingSet) {
+      return res
+        .status(404)
+        .json({ error: "Набор не найден или у вас нет прав" });
+    }
+
+    // Подготавливаем данные для обновления
+    const data = {
+      title: title !== undefined ? title : existingSet.title,
+      description:
+        description !== undefined ? description : existingSet.description,
+      isPublic: isPublic !== undefined ? isPublic : existingSet.isPublic,
+    };
+
+    // Обновляем теги, если они переданы
+    if (tags !== undefined) {
+      if (tags && tags.length > 0) {
+        // Преобразуем теги в правильный формат (массив объектов)
+        const tagsArray = Array.isArray(tags) ? tags : [tags];
+
+        // Используем connectOrCreate для тегов
+        data.tags = {
+          set: [], // Сначала очищаем все теги
+          connectOrCreate: tagsArray.map((tag) => {
+            // Обрабатываем как строку, так и объект
+            const tagName = typeof tag === "string" ? tag : tag.name || tag;
+            return {
+              where: { name: tagName.trim() },
+              create: { name: tagName.trim() },
+            };
+          }),
+        };
+      } else {
+        // Если теги переданы как пустой массив, удаляем все теги
+        data.tags = {
+          set: [],
+        };
+      }
+    }
+
+    // Обновляем набор
+    const updatedSet = await prisma.cardSet.update({
+      where: { id: parseInt(setId) },
+      data: data,
+      include: {
+        tags: true,
+        cards: true,
+        favoriteCardsets: {
+          where: { userId: req.userId },
+        },
+      },
+    });
+
+    // Добавляем поле isFavorite
+    const setWithFavorite = {
+      ...updatedSet,
+      isFavorite: updatedSet.favoriteCardsets.length > 0,
+    };
+
+    console.log("✅ Набор обновлен:", setWithFavorite.id);
+    res.json(setWithFavorite);
+  } catch (error) {
+    console.error("❌ Ошибка обновления набора:", error);
+    res
+      .status(500)
+      .json({ error: "Ошибка обновления набора: " + error.message });
+  }
+});
+
 // Удаление набора
 router.delete("/:setId", authMiddleware, async (req, res) => {
   try {
@@ -125,8 +220,8 @@ router.get("/search", authMiddleware, async (req, res) => {
   try {
     const { query } = req.query;
 
-    console.log("🔍 Search query:", query); // Добавьте эту строку
-    console.log("🔍 User ID:", req.userId); // И эту
+    console.log("🔍 Search query:", query);
+    console.log("🔍 User ID:", req.userId);
 
     if (!query || query.trim().length === 0) {
       return res.status(400).json({ error: "Пустой поисковый запрос" });
@@ -186,7 +281,7 @@ router.get("/search", authMiddleware, async (req, res) => {
       },
     });
 
-    console.log("🔍 Search results:", searchResults.length); // И эту
+    console.log("🔍 Search results:", searchResults.length);
     res.json(searchResults);
   } catch (error) {
     console.error("Ошибка поиска:", error);

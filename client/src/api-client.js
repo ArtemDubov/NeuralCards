@@ -17,6 +17,10 @@ const apiClient = axios.create({
 // Интерцептор запросов
 apiClient.interceptors.request.use(
   (config) => {
+    console.log(
+      `➡️ ${config.method?.toUpperCase()} ${config.url}`,
+      config.data || ""
+    );
     const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -45,6 +49,7 @@ apiClient.interceptors.request.use(
 // Интерцептор ответов
 apiClient.interceptors.response.use(
   (response) => {
+    console.log(`⬅️ ${response.status} ${response.config.url}`);
     debugLog("API Client", "Response Success", {
       status: response.status,
       url: response.config.url,

@@ -1,0 +1,62 @@
+/* ============================================
+   БАЗОВЫЕ СТИЛИ ВСЕХ ТРЕНИРОВОК
+   (содержимое из sessions/base.css с улучшениями)
+   ============================================ */
+
+.nt-training-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--nt-space-md);
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.nt-training-card-label {
+  color: var(--nt-text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: var(--nt-space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--nt-space-xs);
+}
+
+.nt-training-card-label-icon {
+  font-size: 1.2rem;
+}
+
+.nt-training-card-hint {
+  color: var(--nt-text-muted);
+  font-size: 0.8rem;
+  margin-top: var(--nt-space-md);
+  font-style: italic;
+}
+
+.nt-training-empty-state,
+.nt-training-loading {
+  text-align: center;
+  padding: var(--nt-space-xl);
+  color: var(--nt-text-secondary);
+}
+
+.nt-training-empty-icon {
+  font-size: 3rem;
+  margin-bottom: var(--nt-space-md);
+  opacity: 0.5;
+}
+
+/* Новые базовые стили для тренировок */
+.nt-training-session {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.nt-training-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--nt-space-lg);
+}

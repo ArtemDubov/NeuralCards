@@ -1,0 +1,91 @@
+/* ============================================
+   КАРТОЧКИ ДЛЯ ТРЕНИРОВОК
+   (содержимое из sessions/cards.css с переименованными классами)
+   ============================================ */
+
+.nt-training-card {
+  background: var(--nt-bg-card);
+  backdrop-filter: blur(10px);
+  border: 2px solid var(--nt-color-accent);
+  border-radius: var(--nt-radius-xl);
+  padding: var(--nt-space-xl);
+  margin: var(--nt-space-md) 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: var(--nt-transition-base);
+  position: relative;
+  min-height: 200px;
+}
+
+.nt-training-card:hover {
+  border-color: var(--nt-color-primary);
+  box-shadow: var(--nt-shadow-lg);
+  transform: translateY(-2px);
+}
+
+.nt-training-card__text {
+  color: var(--nt-text-primary);
+  font-size: 1.4rem;
+  line-height: 1.6;
+  text-align: center;
+  margin: 0;
+  padding: var(--nt-space-lg);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--nt-radius-lg);
+  width: 100%;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.nt-training-card--flipped {
+  border-color: var(--nt-color-secondary);
+}
+
+.nt-training-card--correct {
+  border-color: var(--nt-color-success);
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.nt-training-card--wrong {
+  border-color: var(--nt-color-error);
+  background: rgba(255, 107, 107, 0.1);
+}
+
+.nt-training-card--active {
+  border-color: var(--nt-color-gold);
+  box-shadow: var(--nt-shadow-gold);
+}
+
+.nt-training-card__header {
+  position: absolute;
+  top: var(--nt-space-md);
+  left: var(--nt-space-md);
+  right: var(--nt-space-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nt-training-card__footer {
+  position: absolute;
+  bottom: var(--nt-space-md);
+  left: var(--nt-space-md);
+  right: var(--nt-space-md);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nt-training-card__hint {
+  color: var(--nt-text-muted);
+  font-size: 0.8rem;
+  font-style: italic;
+  margin-top: var(--nt-space-sm);
+}

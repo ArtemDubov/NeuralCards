@@ -1,0 +1,56 @@
+/* ============================================
+   VISIBILITY УТИЛИТЫ: Display, Visibility, Cursors
+   ============================================ */
+
+/* DISPLAY */
+.nt-util__hidden {
+  display: none;
+}
+.nt-util__block {
+  display: block;
+}
+.nt-util__inline {
+  display: inline;
+}
+.nt-util__inline-block {
+  display: inline-block;
+}
+.nt-util__inline-flex {
+  display: inline-flex;
+}
+
+/* VISIBILITY */
+.nt-util__visible {
+  visibility: visible;
+}
+.nt-util__invisible {
+  visibility: hidden;
+}
+
+/* CURSORS */
+.nt-util__cursor-pointer {
+  cursor: pointer;
+}
+.nt-util__cursor-default {
+  cursor: default;
+}
+.nt-util__cursor-not-allowed {
+  cursor: not-allowed;
+}
+.nt-util__cursor-wait {
+  cursor: wait;
+}
+.nt-util__cursor-text {
+  cursor: text;
+}
+.nt-util__cursor-move {
+  cursor: move;
+}
+
+/* POINTER EVENTS */
+.nt-util__pointer-events-none {
+  pointer-events: none;
+}
+.nt-util__pointer-events-auto {
+  pointer-events: auto;
+}

@@ -1,0 +1,19 @@
+/* ============================================
+   ГЛАВНЫЙ ФАЙЛ ИМПОРТА СТИЛЕЙ ТРЕНИРОВОК v2.0
+   ============================================ */
+
+/* ЯДРО ТРЕНИРОВОК */
+@import "./core/training-base.css";
+@import "./core/training-layout.css";
+@import "./core/training-animations.css";
+@import "./core/training-utils.css";
+
+/* КОМПОНЕНТЫ */
+@import "./components/training-card.css";
+
+/* РЕЖИМЫ ТРЕНИРОВОК */
+@import "./modes/practice.css";
+
+/* СТРАНИЦЫ */
+@import "./pages/selection.css";
+@import "./pages/completion.css";

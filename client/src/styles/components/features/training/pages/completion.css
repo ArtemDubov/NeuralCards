@@ -1,0 +1,116 @@
+/* ============================================
+   ЭКРАН ЗАВЕРШЕНИЯ ТРЕНИРОВКИ
+   (содержимое из completion/completion.css)
+   ============================================ */
+
+.nt-training-completion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
+
+.nt-training-completion-header {
+  text-align: center;
+  margin-bottom: var(--nt-space-xl);
+}
+
+.nt-training-completion-icon {
+  font-size: 3.5rem;
+  margin-bottom: var(--nt-space-md);
+  animation: nt-training-pulse 1.5s ease-in-out infinite;
+  color: var(--nt-color-success);
+}
+
+@keyframes nt-training-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.nt-training-completion-title {
+  color: var(--nt-color-accent);
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.nt-training-completion-stats {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--nt-radius-lg);
+  padding: var(--nt-space-lg);
+  margin-bottom: var(--nt-space-xl);
+  border: 1px solid var(--nt-border-primary);
+}
+
+.nt-training-stat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--nt-space-md) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nt-training-stat-row:last-child {
+  border-bottom: none;
+}
+
+.nt-training-stat-label {
+  color: var(--nt-text-secondary);
+  font-weight: 500;
+}
+
+.nt-training-stat-value {
+  color: var(--nt-text-primary);
+  font-weight: 600;
+  text-align: right;
+}
+
+/* Цветовая индикация процентов */
+.nt-training-stat-value--excellent {
+  color: var(--nt-color-success);
+  background: rgba(76, 175, 80, 0.2);
+  padding: var(--nt-space-xs) var(--nt-space-md);
+  border-radius: var(--nt-radius-full);
+}
+
+.nt-training-stat-value--good {
+  color: #ffc107;
+  background: rgba(255, 193, 7, 0.2);
+  padding: var(--nt-space-xs) var(--nt-space-md);
+  border-radius: var(--nt-radius-full);
+}
+
+.nt-training-stat-value--poor {
+  color: var(--nt-color-error);
+  background: rgba(244, 67, 54, 0.2);
+  padding: var(--nt-space-xs) var(--nt-space-md);
+  border-radius: var(--nt-radius-full);
+}
+
+.nt-training-completion-actions {
+  display: flex;
+  gap: var(--nt-space-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .nt-training-completion {
+    min-height: 50vh;
+    padding: var(--nt-space-md);
+  }
+
+  .nt-training-stat-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--nt-space-xs);
+  }
+
+  .nt-training-completion-actions {
+    flex-direction: column;
+  }
+}

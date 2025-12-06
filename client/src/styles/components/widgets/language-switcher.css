@@ -1,0 +1,143 @@
+/* src/styles/components/widgets/language-switcher.css */
+
+/* ============================================
+   ПЕРЕКЛЮЧАТЕЛЬ ЯЗЫКОВ
+   ============================================ */
+
+.nt-language__container {
+  position: relative;
+  display: inline-block;
+}
+
+.nt-language__dropdown {
+  position: relative;
+}
+
+.nt-language__current {
+  display: flex;
+  align-items: center;
+  gap: var(--nt-space-xs);
+  padding: var(--nt-space-sm) var(--nt-space-md); /* одинаковые отступы */
+  border-radius: var(--nt-radius-full);
+  min-width: 60px;
+  height: 44px; /* ⚡ ФИКСИРОВАННАЯ ВЫСОТА */
+  justify-content: center;
+  transition: var(--nt-transition-base);
+  background: var(--nt-bg-card);
+  border: 1px solid var(--nt-border-light);
+  cursor: pointer;
+  box-sizing: border-box; /* важно для точных размеров */
+}
+
+.nt-language__current:focus-visible {
+  outline: 2px solid var(--nt-color-accent);
+}
+
+.nt-language__flag {
+  width: 20px;
+  height: 15px;
+  object-fit: cover;
+  border-radius: var(--nt-radius-xs);
+  border: 1px solid var(--nt-border-light);
+}
+
+.nt-language__arrow {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  transition: var(--nt-transition-base);
+}
+
+.nt-language__options {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: var(--nt-space-sm);
+  background: var(--nt-bg-secondary);
+  border: 1px solid var(--nt-border-primary);
+  border-radius: var(--nt-radius-lg);
+  padding: var(--nt-space-sm);
+  min-width: 150px;
+  box-shadow: var(--nt-shadow-lg);
+  z-index: 10003331;
+  display: none;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.nt-language__options--open {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nt-language__option {
+  display: flex;
+  align-items: center;
+  gap: var(--nt-space-sm);
+  width: 100%;
+  padding: var(--nt-space-sm);
+  border: none;
+  background: transparent;
+  color: var(--nt-text-primary);
+  border-radius: var(--nt-radius-sm);
+  cursor: pointer;
+  transition: var(--nt-transition-base);
+  text-align: left;
+}
+
+.nt-language__option:hover {
+  background: var(--nt-bg-hover);
+}
+
+.nt-language__option--active {
+  background: var(--nt-bg-hover);
+  border-left: 3px solid var(--nt-color-accent);
+  font-weight: 600;
+}
+
+.nt-language__option--active::after {
+  content: "✓";
+  position: absolute;
+  right: var(--nt-space-sm);
+  color: var(--nt-color-accent);
+  font-weight: bold;
+}
+
+.nt-language__option-flag {
+  width: 20px;
+  height: 15px;
+  object-fit: cover;
+  border-radius: var(--nt-radius-xs);
+  border: 1px solid var(--nt-border-light);
+}
+
+.nt-language__option-name {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* АНИМАЦИИ */
+.nt-language__arrow {
+  transition: transform 0.3s ease;
+}
+
+.nt-language__dropdown--open .nt-language__arrow {
+  transform: rotate(180deg);
+}
+
+.nt-language__options {
+  transform-origin: top right;
+  animation: nt-language-dropdown 0.3s ease;
+}
+
+@keyframes nt-language-dropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

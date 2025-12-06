@@ -1,73 +1,37 @@
-import React, { useState, useEffect } from "react";
-import { useFavorites } from "../../../../contexts/FavoritesContext";
+import React from "react";
+import {
+  useToggleFavoriteSet,
+  useToggleFavoriteCard,
+} from "../../../../api/favorites";
 import StarIcon from "../../../shared/components/StarIcon";
-import { useLanguage } from "../../../../contexts/LanguageContext";
+import { useAppStore } from "../../../../shared/stores/appStore";
 
-const FavoriteButton = ({ itemId, itemType = "cardset", onUpdate }) => {
-  const { t } = useLanguage();
-  const [isLoading, setIsLoading] = useState(false);
-  const {
-    isSetFavorite,
-    isCardFavorite,
-    toggleFavoriteSet,
-    toggleFavoriteCard,
-    loadFavorites,
-  } = useFavorites();
+const FavoriteButton = ({ itemId, itemType = "cardset" }) => {
+  const { t } = useAppStore();
 
-  const favoriteBtnStyle = {
-    width: "24px",
-    height: "24px",
-    padding: "0",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: "4px",
-    background: "none",
-    border: "none",
-    cursor: "pointer",
-    transition: "all 0.2s ease",
-  };
+  const toggleFavoriteSet = useToggleFavoriteSet();
+  const toggleFavoriteCard = useToggleFavoriteCard();
 
-  // Определяем текущий статус избранного из контекста
-  const isFavorite =
-    itemType === "cardset" ? isSetFavorite(itemId) : isCardFavorite(itemId);
+  const toggleMutation =
+    itemType === "cardset" ? toggleFavoriteSet : toggleFavoriteCard;
 
-  const toggleFavorite = async () => {
-    if (isLoading) return;
-
-    setIsLoading(true);
+  const handleToggle = async () => {
     try {
-      console.log(`🔄 [FavoriteButton] Переключение ${itemType} ${itemId}`);
-
-      if (itemType === "cardset") {
-        await toggleFavoriteSet(itemId);
-      } else if (itemType === "card") {
-        await toggleFavoriteCard(itemId);
-      }
-
-      // Вызываем колбэк после успешного обновления
-      onUpdate?.();
-
-      console.log("✅ [FavoriteButton] Обновление завершено");
+      await toggleMutation.mutateAsync(itemId);
     } catch (error) {
-      console.error("❌ [FavoriteButton] Ошибка обновления избранного:", error);
-
-      // Перезагружаем состояние в случае ошибки
-      await loadFavorites();
-    } finally {
-      setIsLoading(false);
+      console.error("Ошибка обновления избранного:", error);
     }
   };
 
   return (
     <button
-      onClick={toggleFavorite}
-      className={`favorite-btn ${isFavorite ? "favorite" : ""}`}
-      title={isFavorite ? t("favorites.remove") : t("favorites.add")}
-      disabled={isLoading}
-      style={favoriteBtnStyle}
+      onClick={handleToggle}
+      className="nt-btn nt-btn--favorite"
+      title={t("favorites.toggle")}
+      disabled={toggleMutation.isPending}
     >
-      <StarIcon filled={isFavorite} />
+      <StarIcon filled={false} />
+      {toggleMutation.isPending && "..."}
     </button>
   );
 };

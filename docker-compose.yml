@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   postgres:
     image: postgres:15
@@ -8,7 +10,6 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
       - postgres_data:/var/lib/postgresql/data
 
   app:
@@ -34,9 +35,12 @@ services:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
+      - WDS_SOCKET_PORT=0
     volumes:
       - ./client/src:/app/src
       - ./client/public:/app/public
+      - /app/node_modules/.vite
+      - /app/node_modules/.cache
     stdin_open: true
     tty: true
     depends_on:

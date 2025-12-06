@@ -1,0 +1,219 @@
+/* ============================================
+   СИСТЕМА МОДАЛЬНЫХ ОКОН NEURAL TRIDENT
+   Классы: .nt-modal .nt-modal__{part}
+   ============================================ */
+
+/* ОВЕРЛЕЙ */
+.nt-modal__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--nt-bg-overlay);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: var(--nt-space-lg);
+}
+
+/* МОДАЛЬНОЕ ОКНО */
+.nt-modal {
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--nt-bg-card);
+  border-radius: var(--nt-radius-xl);
+  padding: var(--nt-space-xl);
+  border: 2px solid var(--nt-color-accent);
+  box-shadow: var(--nt-shadow-xl);
+}
+
+/* ЗАГОЛОВОК МОДАЛКИ */
+.nt-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--nt-space-xl);
+  padding-bottom: var(--nt-space-md);
+  border-bottom: 2px solid var(--nt-color-primary);
+}
+
+.nt-modal__title {
+  color: var(--nt-color-accent);
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.nt-modal__close {
+  background: transparent;
+  border: none;
+  color: var(--nt-color-accent);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: var(--nt-space-xs);
+  border-radius: var(--nt-radius-sm);
+  transition: var(--nt-transition-base);
+}
+
+.nt-modal__close:hover {
+  background: var(--nt-color-accent);
+  color: var(--nt-bg-primary);
+}
+
+/* КОНТЕНТ МОДАЛКИ */
+.nt-modal__content {
+  margin-bottom: var(--nt-space-xl);
+}
+
+/* ФУТЕР МОДАЛКИ */
+.nt-modal__footer {
+  border-top: 1px solid var(--nt-color-accent);
+  padding-top: var(--nt-space-lg);
+}
+
+.nt-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--nt-space-md);
+  margin-top: var(--nt-space-md);
+}
+
+/* КАРТОЧКИ В МОДАЛКЕ */
+.nt-modal__cards-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--nt-space-xl);
+  margin-bottom: var(--nt-space-xl);
+}
+
+.nt-modal__card-side {
+  background: rgba(227, 242, 253, 0.1);
+  backdrop-filter: blur(10px);
+  border: 2px solid;
+  border-radius: var(--nt-radius-lg);
+  padding: var(--nt-space-lg);
+  transition: var(--nt-transition-base);
+}
+
+.nt-modal__card-side--front {
+  border-color: var(--nt-color-accent);
+}
+
+.nt-modal__card-side--back {
+  border-color: var(--nt-color-primary);
+}
+
+.nt-modal__card-side-title {
+  color: var(--nt-text-secondary);
+  margin: 0 0 var(--nt-space-lg) 0;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.nt-modal__card-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nt-space-md);
+}
+
+.nt-modal__card-textarea {
+  width: 100%;
+  padding: var(--nt-space-md);
+  border: 1px solid var(--nt-color-accent);
+  border-radius: var(--nt-radius-md);
+  background: rgba(227, 242, 253, 0.1);
+  color: var(--nt-text-secondary);
+  font-size: 1rem;
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+.nt-modal__card-textarea::placeholder {
+  color: var(--nt-text-muted);
+}
+
+.nt-modal__card-textarea:focus {
+  outline: none;
+  border-color: var(--nt-color-primary);
+  box-shadow: var(--nt-shadow-sm);
+}
+
+/* ПРОСМОТР КАРТОЧКИ */
+.nt-modal__view-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--nt-space-xl);
+}
+
+.nt-modal__view-side {
+  background: rgba(227, 242, 253, 0.1);
+  backdrop-filter: blur(10px);
+  border: 2px solid;
+  border-radius: var(--nt-radius-lg);
+  padding: var(--nt-space-lg);
+}
+
+.nt-modal__view-side--front {
+  border-color: var(--nt-color-accent);
+}
+
+.nt-modal__view-side--back {
+  border-color: var(--nt-color-primary);
+}
+
+.nt-modal__view-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nt-space-md);
+}
+
+.nt-modal__view-text {
+  font-size: 1.1rem;
+  line-height: 1.5;
+  color: var(--nt-text-secondary);
+  margin: 0;
+}
+
+/* МЕДИА В КАРТОЧКАХ */
+.nt-modal__media {
+  margin-top: var(--nt-space-md);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: var(--nt-space-sm);
+}
+
+.nt-modal__image {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: var(--nt-radius-md);
+  border: 2px solid var(--nt-color-accent);
+}
+
+.nt-modal__audio {
+  width: 100%;
+  max-width: 300px;
+}
+
+/* АДАПТИВНОСТЬ */
+@media (max-width: 768px) {
+  .nt-modal__overlay {
+    padding: var(--nt-space-md);
+  }
+
+  .nt-modal {
+    padding: var(--nt-space-md);
+  }
+
+  .nt-modal__cards-container,
+  .nt-modal__view-container {
+    grid-template-columns: 1fr;
+    gap: var(--nt-space-md);
+  }
+}

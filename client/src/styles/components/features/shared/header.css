@@ -1,0 +1,213 @@
+/* ============================================
+   ШАПКА ПРИЛОЖЕНИЯ
+   ============================================ */
+
+.nt-app__header {
+  background: var(--nt-bg-secondary);
+  padding: var(--nt-space-md) var(--nt-space-xl);
+  border-bottom: 2px solid var(--nt-color-accent);
+}
+
+@media (max-width: 768px) {
+  .nt-app__header {
+    padding: var(--nt-space-md);
+  }
+}
+
+.nt-app__header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .nt-app__header-content {
+    flex-direction: column;
+    gap: var(--nt-space-md);
+  }
+}
+
+.nt-app__logo h1 {
+  color: var(--nt-color-accent);
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.nt-app__welcome {
+  margin: 0;
+  color: var(--nt-text-secondary);
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.nt-app__header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--nt-space-md);
+}
+
+@media (max-width: 768px) {
+  .nt-app__header-actions {
+    gap: var(--nt-space-sm);
+  }
+}
+
+/* АВАТАРКА В ХЕДЕРЕ */
+.nt-app__header-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--nt-gradient-primary);
+  border: 2px solid var(--nt-color-accent);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: var(--nt-transition-base);
+}
+
+.nt-app__header-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: var(--nt-shadow-lg);
+}
+
+.nt-app__header-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--nt-color-primary);
+}
+
+.nt-app__header-avatar-initial {
+  color: var(--nt-color-white);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* ВЫПАДАЮЩЕЕ МЕНЮ ПОЛЬЗОВАТЕЛЯ */
+.nt-header__dropdown-container {
+  position: relative;
+}
+
+.nt-header__dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: var(--nt-bg-card);
+  border: 1px solid var(--nt-color-accent);
+  border-radius: var(--nt-radius-lg);
+  box-shadow: var(--nt-shadow-xl);
+  z-index: 50;
+  min-width: 256px;
+  overflow: hidden;
+}
+
+.nt-header__dropdown-header {
+  padding: var(--nt-space-md);
+  border-bottom: 1px solid var(--nt-color-primary);
+}
+
+.nt-header__dropdown-user {
+  display: flex;
+  align-items: center;
+  gap: var(--nt-space-md);
+}
+
+.nt-header__dropdown-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--nt-gradient-secondary);
+  border: 2px solid var(--nt-color-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.nt-header__dropdown-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nt-header__dropdown-avatar-initial {
+  color: var(--nt-color-white);
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nt-header__dropdown-user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.nt-header__dropdown-name {
+  color: var(--nt-text-primary);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nt-header__dropdown-email {
+  color: var(--nt-text-secondary);
+  font-size: 0.875rem;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nt-header__dropdown-options {
+  padding: var(--nt-space-sm) 0;
+}
+
+.nt-header__dropdown-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--nt-space-md);
+  padding: var(--nt-space-md);
+  border: none;
+  background: transparent;
+  color: var(--nt-text-primary);
+  cursor: pointer;
+  transition: var(--nt-transition-base);
+  border-bottom: 1px solid var(--nt-border-light);
+  text-align: left;
+}
+
+.nt-header__dropdown-option:last-child {
+  border-bottom: none;
+}
+
+.nt-header__dropdown-option:hover {
+  background: var(--nt-bg-hover);
+}
+
+.nt-header__dropdown-option-icon {
+  font-size: 1.25rem;
+  width: 24px;
+  text-align: center;
+}
+
+.nt-header__dropdown-option-text {
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.nt-header__dropdown-option--logout {
+  color: var(--nt-color-error);
+}
+
+.nt-header__dropdown-option--logout:hover {
+  background: var(--nt-color-error);
+  color: var(--nt-color-white);
+}

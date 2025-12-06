@@ -1,0 +1,30 @@
+/* styles/utilities/index.css */
+
+/* ==========================================================
+   UTILITIES INDEX – ONE‑STOP IMPORT
+   Импорт всех utility-классов проекта
+   ========================================================== */
+
+/* Layout utilities */
+@import "./layout.css";
+
+/* Spacing utilities */
+@import "./spacing.css";
+
+/* Typography utilities */
+@import "./typography.css";
+
+/* Border utilities */
+@import "./borders.css";
+
+/* Effects utilities (shadows, animations, hover‑bg) */
+@import "./effects.css";
+
+/* Positioning utilities */
+@import "./positioning.css";
+
+/* Responsive utilities */
+@import "./responsive.css";
+
+/* Visibility utilities */
+@import "./visibility.css";

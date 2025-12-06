@@ -1,18 +1,18 @@
 import React from "react";
-import { useLanguage } from "../../../../contexts/LanguageContext";
+import { useAppStore } from "../../../../shared/stores/appStore";
 
 const AuthTabs = ({ isLoginForm, setIsLoginForm }) => {
-  const { t } = useLanguage();
+  const { t } = useAppStore();
   return (
-    <div className="auth-tabs">
+    <div className="nt-auth__tabs">
       <button
-        className={`btn-tp5 ${isLoginForm ? "active" : ""}`}
+        className={`nt-auth__tab ${isLoginForm ? "nt-auth__tab--active" : ""}`}
         onClick={() => setIsLoginForm(true)}
       >
         {t("auth.login")}
       </button>
       <button
-        className={`btn-tp5 ${!isLoginForm ? "active" : ""}`}
+        className={`nt-auth__tab ${!isLoginForm ? "nt-auth__tab--active" : ""}`}
         onClick={() => setIsLoginForm(false)}
       >
         {t("auth.register")}

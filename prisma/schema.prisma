@@ -4,8 +4,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url = "file:./dev.db"
 }
 
 model User {
@@ -13,13 +13,12 @@ model User {
   email     String   @unique
   password  String
   name      String?
+  isPremium Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   cardsets  CardSet[]
-  // УДАЛИТЬ эту строку: favorites Favorite[]
   progress  CardProgress[]
   sessions  StudySession[]
-  // ДОБАВИТЬ эти связи:
   favoriteCardsets FavoriteCardset[]
   favoriteCards     FavoriteCard[]
 }

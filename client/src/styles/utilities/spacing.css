@@ -1,0 +1,92 @@
+/* ============================================
+   SPACING УТИЛИТЫ: Margin, Padding
+   ============================================ */
+
+/* MARGIN */
+.nt-util__m-0 {
+  margin: 0;
+}
+.nt-util__mt-xs {
+  margin-top: var(--nt-space-xs);
+}
+.nt-util__mt-sm {
+  margin-top: var(--nt-space-sm);
+}
+.nt-util__mt-md {
+  margin-top: var(--nt-space-md);
+}
+.nt-util__mt-lg {
+  margin-top: var(--nt-space-lg);
+}
+.nt-util__mt-xl {
+  margin-top: var(--nt-space-xl);
+}
+
+.nt-util__mb-xs {
+  margin-bottom: var(--nt-space-xs);
+}
+.nt-util__mb-sm {
+  margin-bottom: var(--nt-space-sm);
+}
+.nt-util__mb-md {
+  margin-bottom: var(--nt-space-md);
+}
+.nt-util__mb-lg {
+  margin-bottom: var(--nt-space-lg);
+}
+.nt-util__mb-xl {
+  margin-bottom: var(--nt-space-xl);
+}
+
+.nt-util__ml-xs {
+  margin-left: var(--nt-space-xs);
+}
+.nt-util__ml-sm {
+  margin-left: var(--nt-space-sm);
+}
+.nt-util__ml-md {
+  margin-left: var(--nt-space-md);
+}
+
+.nt-util__mr-xs {
+  margin-right: var(--nt-space-xs);
+}
+.nt-util__mr-sm {
+  margin-right: var(--nt-space-sm);
+}
+.nt-util__mr-md {
+  margin-right: var(--nt-space-md);
+}
+
+/* PADDING */
+.nt-util__p-0 {
+  padding: 0;
+}
+.nt-util__p-xs {
+  padding: var(--nt-space-xs);
+}
+.nt-util__p-sm {
+  padding: var(--nt-space-sm);
+}
+.nt-util__p-md {
+  padding: var(--nt-space-md);
+}
+.nt-util__p-lg {
+  padding: var(--nt-space-lg);
+}
+.nt-util__p-xl {
+  padding: var(--nt-space-xl);
+}
+
+.nt-util__pt-xs {
+  padding-top: var(--nt-space-xs);
+}
+.nt-util__pb-xs {
+  padding-bottom: var(--nt-space-xs);
+}
+.nt-util__pl-xs {
+  padding-left: var(--nt-space-xs);
+}
+.nt-util__pr-xs {
+  padding-right: var(--nt-space-xs);
+}

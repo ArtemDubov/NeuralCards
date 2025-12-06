@@ -1,237 +1,139 @@
-/* === ОСНОВНЫЕ ПЕРЕМЕННЫЕ ТЕМЫ === */
+/* src/styles/base/variables.css */
+
+/* ==========================================================
+   NEURAL TRIDENT – CSS VARIABLES (global theme definitions)
+   ========================================================== */
+
+/* ---------- 1. Цветовая палитра ---------- */
 :root {
-  /* 🎨 ОСНОВНАЯ ЦВЕТОВАЯ ПАЛИТРА */
-  --color-primary: #667eea;
-  --color-primary-dark: #5a6fd8;
-  --color-secondary: #764ba2;
-  --color-accent: #4fc3f7;
-  --color-success: #4caf50;
-  --color-warning: #ff9800;
-  --color-error: #ff6b6b;
+  /* Основные цвета бренда */
+  --nt-color-primary: #667eea;
+  --nt-color-primary-dark: #5a6fd8;
+  --nt-color-primary-light: #7c8eea;
+  --nt-color-secondary: #764ba2;
+  --nt-color-accent: #4fc3f7;
 
-  /* 🌗 НЕЙТРАЛЬНЫЕ ЦВЕТА */
-  --color-bg-primary: #0a1a2d;
-  --color-bg-secondary: #1e3a5f;
-  --color-bg-card: rgba(30, 58, 95, 0.6);
-  --color-bg-overlay: rgba(10, 26, 45, 0.9);
+  /* Системные (статусные) цвета */
+  --nt-color-success: #4caf50;
+  --nt-color-warning: #ff9800;
+  --nt-color-error: #ff6b6b;
+  --nt-color-info: #2196f3;
 
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #e3f2fd;
-  --color-text-muted: rgba(255, 255, 255, 0.6);
+  /* Нейтральные оттенки */
+  --nt-color-white: #ffffff;
+  --nt-color-black: #000000;
+  --nt-color-gray-100: #f8fafc;
+  --nt-color-gray-200: #e2e8f0;
+  --nt-color-gray-300: #cbd5e1;
+  --nt-color-gray-400: #94a3b8;
+  --nt-color-gray-500: #64748b;
+  --nt-color-gray-600: #475569;
+  --nt-color-gray-700: #334155;
+  --nt-color-gray-800: #1e293b;
+  --nt-color-gray-900: #0f172a;
 
-  --color-border: rgba(79, 195, 247, 0.3);
-  --color-border-hover: rgba(79, 195, 247, 0.6);
+  /* ---------- 2. Фоны ---------- */
+  --nt-bg-primary: #0a1a2d; /* Океан — основной фон */
+  --nt-bg-secondary: #1e3a5f;
+  --nt-bg-tertiary: #2a4a7a;
+  --nt-bg-card: rgba(30, 58, 95, 0.6);
+  --nt-bg-overlay: rgba(10, 26, 45, 0.9);
+  --nt-bg-hover: rgba(79, 195, 247, 0.1);
 
-  /* 🌈 ГРАДИЕНТЫ */
-  --gradient-primary: linear-gradient(
-    135deg,
-    var(--color-accent) 0%,
-    var(--color-primary) 100%
-  );
-  --gradient-primary-reverse: linear-gradient(
-    135deg,
-    var(--color-primary) 0%,
-    var(--color-accent) 100%
-  );
-  --gradient-secondary: linear-gradient(
-    135deg,
-    var(--color-primary) 0%,
-    var(--color-secondary) 100%
-  );
-  --gradient-success: linear-gradient(
-    135deg,
-    var(--color-success) 0%,
-    color-mix(in srgb, var(--color-success) 80%, black) 100%
-  );
-  --gradient-error: linear-gradient(
-    135deg,
-    var(--color-error) 0%,
-    color-mix(in srgb, var(--color-error) 80%, black) 100%
-  );
+  /* ---------- 3. Текст ---------- */
+  --nt-text-primary: var(--nt-color-white);
+  --nt-text-secondary: #e3f2fd;
+  --nt-text-tertiary: #b3e5fc;
+  --nt-text-muted: rgba(255, 255, 255, 0.6);
+  --nt-text-disabled: rgba(255, 255, 255, 0.38);
 
-  /* ✨ ТЕНИ И ЭФФЕКТЫ */
-  --shadow-small: 0 2px 8px
-    color-mix(in srgb, var(--color-bg-primary) 80%, transparent);
-  --shadow-medium: 0 4px 12px
-    color-mix(in srgb, var(--color-primary) 30%, transparent);
-  --shadow-large: 0 8px 24px
-    color-mix(in srgb, var(--color-bg-primary) 60%, transparent);
-  --shadow-glow: 0 0 20px
-    color-mix(in srgb, var(--color-accent) 40%, transparent);
+  /* ---------- 4. Границы ---------- */
+  --nt-border-primary: rgba(79, 195, 247, 0.3);
+  --nt-border-hover: rgba(79, 195, 247, 0.6);
+  --nt-border-light: rgba(255, 255, 255, 0.1);
+  --nt-border-dark: rgba(0, 0, 0, 0.2);
 
-  /* 📏 РАЗМЕРЫ */
-  --border-radius-sm: 4px;
-  --border-radius: 8px;
-  --border-radius-lg: 12px;
-  --border-radius-xl: 16px;
+  /* ---------- 5. Специальные цвета ---------- */
+  --nt-color-gold: #ffd700;
+  --nt-color-gold-light: #fff176;
+  --nt-color-gold-dark: #ffb300;
 
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
+  /* ---------- 6. Радиусы и отступы ---------- */
+  --nt-radius-xs: 2px;
+  --nt-radius-sm: 4px;
+  --nt-radius-md: 8px;
+  --nt-radius-lg: 12px;
+  --nt-radius-xl: 16px;
+  --nt-radius-2xl: 24px;
+  --nt-radius-full: 9999px;
 
-  /* 🔄 ПЕРЕХОД */
-  --transition: 0.3s ease;
+  --nt-space-xs: 0.25rem; /* 4px */
+  --nt-space-sm: 0.5rem; /* 8px */
+  --nt-space-md: 1rem; /* 16px */
+  --nt-space-lg: 1.5rem; /* 24px */
+  --nt-space-xl: 2rem; /* 32px */
+  --nt-space-2xl: 3rem; /* 48px */
 
-  /* 🎯 ДОПОЛНИТЕЛЬНЫЕ ПЕРЕМЕННЫЕ */
-  --color-sea-wave: var(--color-accent);
-  --color-neural-accent: var(--color-primary);
-  --color-light-foam: var(--color-text-secondary);
-  --color-deep-ocean: var(--color-bg-primary);
-  --color-gold: #ffd700;
-
-  /* === ПЕРЕМЕННЫЕ ДЛЯ КНОПОК (из GlobalBtn.css) === */
-  --btn-tp1-bg: var(--gradient-primary);
-  --btn-tp1-color: var(--color-text-primary);
-  --btn-tp1-hover: var(--gradient-primary-reverse);
-
-  --btn-tp2-bg: transparent;
-  --btn-tp2-color: var(--color-text-secondary);
-  --btn-tp2-border: 1px solid var(--color-accent);
-  --btn-tp2-hover-bg: var(--color-accent);
-  --btn-tp2-hover-color: var(--color-bg-primary);
-
-  --btn-tp3-bg: color-mix(in srgb, var(--color-text-primary) 10%, transparent);
-  --btn-tp3-color: var(--color-accent);
-  --btn-tp3-border: 1px solid var(--color-accent);
-  --btn-tp3-hover-bg: var(--color-accent);
-  --btn-tp3-hover-color: var(--color-bg-primary);
-
-  --btn-tp4-bg: color-mix(in srgb, var(--color-error) 20%, transparent);
-  --btn-tp4-color: var(--color-error);
-  --btn-tp4-border: 1px solid var(--color-error);
-  --btn-tp4-hover-bg: var(--color-error);
-  --btn-tp4-hover-color: var(--color-text-primary);
-
-  --btn-tp5-bg: transparent;
-  --btn-tp5-color: var(--color-text-secondary);
-  --btn-tp5-hover-bg: color-mix(in srgb, var(--color-accent) 20%, transparent);
-  --btn-tp5-active-bg: var(--color-accent);
-  --btn-tp5-active-color: var(--color-bg-primary);
-
-  --btn-tp6-bg: linear-gradient(
-    135deg,
-    var(--color-success) 0%,
-    var(--color-accent) 100%
-  );
-  --btn-tp6-color: var(--color-text-primary);
-  --btn-tp6-hover: scale(1.02);
-
-  --btn-tp7-bg: none;
-  --btn-tp7-color: var(--color-text-secondary);
-  --btn-tp7-hover-bg: color-mix(
-    in srgb,
-    var(--color-text-primary) 20%,
-    transparent
-  );
-
-  --btn-tp8-bg: color-mix(in srgb, var(--color-gold) 10%, transparent);
-  --btn-tp8-color: var(--color-gold);
-  --btn-tp8-border: 1px solid
-    color-mix(in srgb, var(--color-gold) 30%, transparent);
-  --btn-tp8-hover-bg: color-mix(in srgb, var(--color-gold) 20%, transparent);
-
-  /* 📏 РАЗМЕРЫ КНОПОК */
-  --btn-padding-base: 0.7rem 1.5rem;
-  --btn-padding-small: 0.5rem 1rem;
-  --btn-padding-large: 0.8rem 2rem;
-  --btn-border-radius: 8px;
-  --btn-border-radius-round: 20px;
-  --btn-transition: all 0.3s ease;
-
-  /* 🌈 ТЕНИ КНОПОК */
-  --btn-shadow: var(--shadow-medium);
-  --btn-shadow-hover: 0 5px 15px
-    color-mix(in srgb, var(--color-primary) 40%, transparent);
+  /* ---------- 7. Брейкпоинты ---------- */
+  --nt-screen-sm: 640px;
+  --nt-screen-md: 768px;
+  --nt-screen-lg: 1024px;
+  --nt-screen-xl: 1280px;
+  --nt-screen-2xl: 1536px;
 }
 
-/* === АЛЬТЕРНАТИВНЫЕ ТЕМЫ === */
+/* -----------------------------------------------------------------
+   ТЕМЫ (переопределяют только цветовые переменные)
+   ----------------------------------------------------------------- */
+[data-theme="ocean"] {
+  /* дефолт – оставляем пустым */
+}
 
 [data-theme="dark"] {
-  --color-primary: #7c3aed;
-  --color-primary-dark: #6d28d9;
-  --color-secondary: #5b21b6;
-  --color-accent: #60a5fa;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
+  --nt-color-primary: #7c3aed;
+  --nt-color-secondary: #5b21b6;
+  --nt-color-accent: #60a5fa;
 
-  --color-bg-primary: #000000;
-  --color-bg-secondary: #0f0f0f;
-  --color-bg-card: rgba(15, 15, 15, 0.8);
-  --color-bg-overlay: rgba(0, 0, 0, 0.95);
+  --nt-bg-primary: #000000;
+  --nt-bg-secondary: #0f0f0f;
+  --nt-bg-tertiary: #1a1a1a;
+  --nt-bg-card: #1f2937;
+  --nt-bg-overlay: rgba(0, 0, 0, 0.8);
+  --nt-bg-hover: rgba(124, 58, 237, 0.15);
 
-  --color-text-primary: #e5e7eb;
-  --color-text-secondary: #d1d5db;
-  --color-text-muted: rgba(209, 213, 219, 0.6);
+  --nt-text-primary: #e5e7eb;
+  --nt-text-secondary: #d1d5db;
+  --nt-text-muted: rgba(229, 231, 235, 0.6);
 
-  --color-border: rgba(96, 165, 250, 0.2);
-  --color-border-hover: rgba(96, 165, 250, 0.4);
+  --nt-border-primary: rgba(124, 58, 237, 0.3);
 }
-
 [data-theme="forest"] {
-  --color-primary: #059669;
-  --color-primary-dark: #047857;
-  --color-secondary: #0f766e;
-  --color-accent: #10b981;
-  --color-success: #22c55e;
-  --color-warning: #eab308;
-  --color-error: #dc2626;
+  --nt-color-primary: #059669;
+  --nt-color-secondary: #0f766e;
+  --nt-color-accent: #10b981;
 
-  --color-bg-primary: #052e16;
-  --color-bg-secondary: #14532d;
-  --color-bg-card: rgba(20, 83, 45, 0.6);
-  --color-bg-overlay: rgba(5, 46, 22, 0.9);
-
-  --color-text-primary: #f0fdf4;
-  --color-text-secondary: #dcfce7;
-  --color-text-muted: rgba(220, 252, 231, 0.6);
-
-  --color-border: rgba(16, 185, 129, 0.3);
-  --color-border-hover: rgba(16, 185, 129, 0.6);
+  --nt-bg-primary: #052e16;
+  --nt-bg-secondary: #14532d;
+  --nt-bg-tertiary: #1e6c41;
+  --nt-bg-card: #065f46;
 }
-
-[data-theme="light"] {
-  --color-primary: #3b82f6;
-  --color-primary-dark: #2563eb;
-  --color-secondary: #8b5cf6;
-  --color-accent: #06b6d4;
-  --color-success: #10b981;
-  --color-warning: #f59e0b;
-  --color-error: #ef4444;
-
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f8fafc;
-  --color-bg-card: rgba(248, 250, 252, 0.8);
-  --color-bg-overlay: rgba(255, 255, 255, 0.9);
-
-  --color-text-primary: #1e293b;
-  --color-text-secondary: #475569;
-  --color-text-muted: rgba(71, 85, 105, 0.6);
-
-  --color-border: rgba(59, 130, 246, 0.3);
-  --color-border-hover: rgba(59, 130, 246, 0.6);
-}
-
 [data-theme="sunset"] {
-  --color-primary: #ea580c;
-  --color-primary-dark: #c2410c;
-  --color-secondary: #dc2626;
-  --color-accent: #f97316;
-  --color-success: #16a34a;
-  --color-warning: #eab308;
-  --color-error: #b91c1c;
+  --nt-color-primary: #ea580c;
+  --nt-color-secondary: #dc2626;
+  --nt-color-accent: #f97316;
 
-  --color-bg-primary: #451a03;
-  --color-bg-secondary: #7c2d12;
-  --color-bg-card: rgba(124, 45, 18, 0.6);
-  --color-bg-overlay: rgba(69, 26, 3, 0.9);
+  --nt-bg-primary: #451a03;
+  --nt-bg-secondary: #7c2d12;
+  --nt-bg-tertiary: #9a3412;
+  --nt-bg-card: #9a3412;
+}
+[data-theme="light"] {
+  --nt-color-primary: #3b82f6;
+  --nt-color-secondary: #8b5cf6;
+  --nt-color-accent: #06b6d4;
 
-  --color-text-primary: #fffbeb;
-  --color-text-secondary: #fed7aa;
-  --color-text-muted: rgba(254, 215, 170, 0.6);
-
-  --color-border: rgba(249, 115, 22, 0.3);
-  --color-border-hover: rgba(249, 115, 22, 0.6);
+  --nt-bg-primary: #ffffff;
+  --nt-bg-secondary: #f8fafc;
+  --nt-bg-tertiary: #f1f5f9;
+  --nt-bg-card: #f3f4f6;
 }

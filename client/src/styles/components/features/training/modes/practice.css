@@ -1,0 +1,337 @@
+/* ============================================
+   РЕЖИМ: ПРАКТИКА (ПОВТОРЕНИЕ)
+   (содержимое из sessions/modes/practice.css с обновленными классами)
+   ============================================ */
+
+.nt-practice-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--nt-space-lg);
+  gap: var(--nt-space-xl);
+  max-width: 800px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+/* ЗАГОЛОВОК СЕССИИ */
+.nt-practice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: var(--nt-space-md) 0;
+  border-bottom: 1px solid var(--nt-border-primary);
+}
+
+.nt-practice-title {
+  display: flex;
+  align-items: center;
+  gap: var(--nt-space-sm);
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--nt-text-primary);
+}
+
+.nt-practice-icon {
+  font-size: 1.5rem;
+  color: var(--nt-color-accent);
+}
+
+.nt-practice-progress {
+  font-size: 1rem;
+  color: var(--nt-text-secondary);
+  font-weight: 500;
+  background: var(--nt-bg-secondary);
+  padding: var(--nt-space-sm) var(--nt-space-md);
+  border-radius: var(--nt-radius-full);
+}
+
+.nt-practice-close-btn {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* КАРТОЧКА */
+.nt-practice-card {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.nt-practice-card-container {
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.nt-practice-card-wrapper {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+
+.nt-practice-card-wrapper--flipped .nt-practice-card-flipper {
+  transform: rotateY(180deg);
+}
+
+.nt-practice-card-wrapper--animating .nt-practice-card-flipper {
+  transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.nt-practice-card-flipper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.nt-practice-card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: var(--nt-radius-lg);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--nt-shadow-md);
+}
+
+.nt-practice-card-front {
+  background: var(--nt-gradient-card);
+  border: 2px solid var(--nt-color-primary);
+}
+
+.nt-practice-card-back {
+  background: var(--nt-gradient-card);
+  border: 2px solid var(--nt-color-secondary);
+  transform: rotateY(180deg);
+}
+
+.nt-practice-card-header {
+  padding: var(--nt-space-md);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.nt-practice-card-label {
+  display: flex;
+  align-items: center;
+  gap: var(--nt-space-xs);
+  margin-bottom: var(--nt-space-xs);
+}
+
+.nt-practice-card-label-icon {
+  font-size: 1.25rem;
+}
+
+.nt-practice-card-label-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--nt-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nt-practice-card-hint {
+  font-size: 0.8rem;
+  color: var(--nt-text-muted);
+  opacity: 0.7;
+}
+
+.nt-practice-card-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--nt-space-lg);
+  overflow-y: auto;
+}
+
+.nt-practice-card-text {
+  font-size: 1.4rem;
+  line-height: 1.5;
+  text-align: center;
+  color: var(--nt-text-primary);
+  word-break: break-word;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+/* КНОПКИ УПРАВЛЕНИЯ */
+.nt-practice-controls {
+  display: flex;
+  gap: var(--nt-space-lg);
+  width: 100%;
+  max-width: 500px;
+  justify-content: center;
+  margin-top: var(--nt-space-md);
+}
+
+.nt-practice-control-btn {
+  flex: 1;
+  min-width: 180px;
+  padding: var(--nt-space-md) var(--nt-space-lg);
+  border: none;
+  border-radius: var(--nt-radius-lg);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--nt-transition-base);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--nt-space-xs);
+}
+
+.nt-practice-control-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* КНОПКА "НЕ ПОМНЮ" (слева) */
+.nt-practice-btn-forget {
+  background: linear-gradient(135deg, #ff6b6b, #ff4757);
+  color: var(--nt-color-white);
+  order: 1;
+}
+
+.nt-practice-btn-forget:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
+}
+
+/* КНОПКА "ПОМНЮ" (справа) */
+.nt-practice-btn-remember {
+  background: linear-gradient(135deg, #51cf66, #2b8a3e);
+  color: var(--nt-color-white);
+  order: 2;
+}
+
+.nt-practice-btn-remember:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(43, 138, 62, 0.3);
+}
+
+.nt-practice-control-icon {
+  font-size: 1.75rem;
+}
+
+.nt-practice-control-text {
+  font-size: 1.1rem;
+}
+
+.nt-practice-control-hint {
+  font-size: 0.8rem;
+  opacity: 0.9;
+  font-weight: normal;
+}
+
+/* СТАТИСТИКА */
+.nt-practice-stats {
+  width: 100%;
+  max-width: 500px;
+  margin-top: var(--nt-space-md);
+}
+
+.nt-practice-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--nt-space-md);
+}
+
+.nt-practice-stat-box {
+  background: var(--nt-bg-secondary);
+  border-radius: var(--nt-radius-lg);
+  padding: var(--nt-space-md);
+  text-align: center;
+  border: 1px solid var(--nt-border-primary);
+}
+
+.nt-practice-stat-label {
+  font-size: 0.85rem;
+  color: var(--nt-text-secondary);
+  margin-bottom: var(--nt-space-xs);
+  font-weight: 500;
+}
+
+.nt-practice-stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.nt-practice-stat--learned {
+  color: #2b8a3e;
+}
+
+.nt-practice-stat--repeats {
+  color: #ff4757;
+}
+
+.nt-practice-stat--remaining {
+  color: var(--nt-color-primary);
+}
+
+.nt-practice-stat--progress {
+  color: var(--nt-color-accent);
+}
+
+/* АДАПТИВНОСТЬ */
+@media (max-width: 768px) {
+  .nt-practice-container {
+    padding: var(--nt-space-md);
+    gap: var(--nt-space-lg);
+  }
+
+  .nt-practice-card-wrapper {
+    height: 220px;
+  }
+
+  .nt-practice-controls {
+    flex-direction: row;
+    gap: var(--nt-space-md);
+  }
+
+  .nt-practice-control-btn {
+    min-width: 140px;
+    padding: var(--nt-space-sm) var(--nt-space-md);
+  }
+
+  .nt-practice-control-hint {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .nt-practice-card-wrapper {
+    height: 200px;
+  }
+
+  .nt-practice-card-text {
+    font-size: 1.2rem;
+  }
+
+  .nt-practice-controls {
+    flex-direction: row;
+    gap: var(--nt-space-sm);
+  }
+
+  .nt-practice-control-btn {
+    min-width: 120px;
+    padding: var(--nt-space-sm);
+  }
+
+  .nt-practice-control-icon {
+    font-size: 1.5rem;
+  }
+}

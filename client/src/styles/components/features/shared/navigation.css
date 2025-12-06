@@ -1,0 +1,59 @@
+/* src/styles/components/features/shared/navigation.css */
+
+/* ============================================
+   НАВИГАЦИЯ ПРИЛОЖЕНИЯ
+   ============================================ */
+
+.nt-app__nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--nt-bg-secondary);
+  padding: var(--nt-space-md) var(--nt-space-xl);
+  border-bottom: 1px solid var(--nt-color-accent);
+  flex-wrap: wrap;
+  gap: var(--nt-space-md);
+}
+
+@media (max-width: 768px) {
+  .nt-app__nav {
+    flex-direction: column;
+    gap: var(--nt-space-md);
+    padding: var(--nt-space-md);
+  }
+}
+
+.nt-app__nav-buttons {
+  display: flex;
+  align-items: center;
+  gap: var(--nt-space-md);
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .nt-app__nav-buttons {
+    flex-direction: column;
+    gap: var(--nt-space-sm);
+  }
+}
+
+.nt-app__nav-search {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+@media (max-width: 768px) {
+  .nt-app__nav-search {
+    margin-left: 0;
+    width: 100%;
+  }
+}
+
+/* Кнопки в навигации – убрали !important, порядок импорта
+   гарантирует нужный приоритет. */
+.nt-app__nav .nt-btn {
+  padding: var(--nt-space-sm) var(--nt-space-lg);
+  border: 1px solid transparent;
+  box-sizing: border-box;
+}

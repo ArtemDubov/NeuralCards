@@ -1,0 +1,55 @@
+/* ============================================
+   ЛОАДЕР (ИНДИКАТОР ЗАГРУЗКИ)
+   ============================================ */
+
+.nt-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+  flex-direction: column;
+  gap: var(--nt-space-md);
+}
+
+.nt-loader__spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--nt-border-primary);
+  border-top-color: var(--nt-color-accent);
+  border-radius: 50%;
+  animation: nt-spin 1s linear infinite;
+}
+
+.nt-loader__text {
+  color: var(--nt-text-secondary);
+  font-size: 0.9rem;
+}
+
+@keyframes nt-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ВАРИАНТЫ */
+.nt-loader--small .nt-loader__spinner {
+  width: 24px;
+  height: 24px;
+  border-width: 2px;
+}
+
+.nt-loader--large .nt-loader__spinner {
+  width: 60px;
+  height: 60px;
+  border-width: 4px;
+}
+
+.nt-loader--fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--nt-bg-overlay);
+  z-index: 9999;
+}

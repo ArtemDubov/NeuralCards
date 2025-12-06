@@ -1,13 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useLanguage } from "../../../../contexts/LanguageContext";
-
+import { useAppStore } from "../../../../shared/stores/appStore";
 import ThemeSwitcher from "../ThemeSwitcher/ThemeSwitcher";
 import LanguageSwitcher from "../LanguageSwitcher/LanguageSwitcher";
+import PremiumButton from "../../../premium/components/PremiumButton/PremiumButton";
+import { usePremium } from "../../../../hooks/usePremium";
 
-const Header = ({ user, onLogout, setActiveTab, onSearch }) => {
-  const { t } = useLanguage();
+const Header = ({ user, onLogout, setActiveTab }) => {
+  const { t } = useAppStore();
+  const { isPremium } = usePremium();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const avatarRef = useRef(null);
 
   const handleAvatarClick = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -23,97 +26,143 @@ const Header = ({ user, onLogout, setActiveTab, onSearch }) => {
     onLogout();
   };
 
-  // Закрытие dropdown при клике вне его области
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setIsDropdownOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Получаем первую букву имени для аватара
   const getInitial = () => {
     return user?.name ? user.name.charAt(0).toUpperCase() : "Г";
   };
 
   return (
-    <header className="app-header">
-      <div className="header-content">
-        <div className="header-logo">
-          <h1>{t("app.title")}</h1>
-          <p className="welcome-text">
+    <header className="nt-app__header">
+      <div className="nt-app__header-content">
+        <div className="nt-app__logo">
+          <h1 className="nt-util__text-accent">{t("app.title")}</h1>
+          <p className="nt-app__welcome">
             {t("welcome").replace("{name}", user?.name || t("user.guest"))}
           </p>
         </div>
-        <div className="header-actions">
-          {/* Добавляем переключатель языка */}
+        <div className="nt-app__header-actions">
           <LanguageSwitcher />
-          {/* Добавляем переключатель тем */}
           <ThemeSwitcher />
-          {/* Аватар пользователя с dropdown меню */}
-          <div className="avatar-dropdown" ref={dropdownRef}>
-            <button className="avatar-btn" onClick={handleAvatarClick}>
-              <div className="avatar-circle">
-                {user?.avatar ? (
-                  <img
-                    src={user.avatar}
-                    alt="Avatar"
-                    className="avatar-image"
-                  />
-                ) : (
-                  <span className="avatar-initial">{getInitial()}</span>
-                )}
-              </div>
+
+          {/* УБИРАЕМ КНОПКУ ПРЕМИУМА ИЗ ХЕДЕРА - остаётся только в выпадающем меню */}
+
+          <div className="nt-header__dropdown-container" ref={dropdownRef}>
+            {/* АВАТАРКА В ХЕДЕРЕ */}
+            <button
+              ref={avatarRef}
+              className="nt-app__header-avatar"
+              onClick={handleAvatarClick}
+              title={user?.name || t("user.guest")}
+            >
+              {user?.avatar ? (
+                <img
+                  src={user.avatar}
+                  alt="Avatar"
+                  className="nt-app__header-avatar-img"
+                />
+              ) : (
+                <span className="nt-app__header-avatar-initial">
+                  {getInitial()}
+                </span>
+              )}
             </button>
+
+            {/* ВЫПАДАЮЩЕЕ МЕНЮ */}
             {isDropdownOpen && (
-              <div className="dropdown-menu">
-                <div className="dropdown-header">
-                  <div className="dropdown-avatar">
-                    {user?.avatar ? (
-                      <img
-                        src={user.avatar}
-                        alt="Avatar"
-                        className="dropdown-avatar-image"
-                      />
-                    ) : (
-                      <span className="dropdown-avatar-initial">
-                        {getInitial()}
-                      </span>
-                    )}
-                  </div>
-                  <div className="dropdown-user-info">
-                    <div className="dropdown-user-name">
-                      {user?.name || t("user.guest")}
+              <div
+                className="nt-header__dropdown-menu"
+                style={{
+                  maxWidth: "calc(100vw - 40px)",
+                }}
+              >
+                {/* ЗАГОЛОВОК МЕНЮ */}
+                <div className="nt-header__dropdown-header">
+                  <div className="nt-header__dropdown-user">
+                    <div className="nt-header__dropdown-avatar">
+                      {user?.avatar ? (
+                        <img
+                          src={user.avatar}
+                          alt="Avatar"
+                          className="nt-header__dropdown-avatar-img"
+                        />
+                      ) : (
+                        <span className="nt-header__dropdown-avatar-initial">
+                          {getInitial()}
+                        </span>
+                      )}
                     </div>
-                    <div className="dropdown-user-email">
-                      {user?.email || ""}
+                    <div className="nt-header__dropdown-user-info">
+                      <div className="nt-header__dropdown-name">
+                        {user?.name || t("user.guest")}
+                      </div>
+                      <div className="nt-header__dropdown-email">
+                        {user?.email || ""}
+                      </div>
+                      <div className="nt-header__dropdown-premium-status">
+                        {isPremium ? (
+                          <span style={{ color: "#2E7D32", fontWeight: "600" }}>
+                            ⭐ Премиум активен
+                          </span>
+                        ) : (
+                          <span style={{ color: "#FFA500" }}>
+                            ⭐ Базовый аккаунт
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="dropdown-divider"></div>
+                {/* БЛОК ПРЕМИУМ В МЕНЮ - остаётся только здесь */}
+                <div className="nt-header__dropdown-premium">
+                  <div className="nt-header__dropdown-premium-info">
+                    <div className="nt-header__dropdown-premium-label">
+                      Премиум подписка
+                    </div>
+                    <div
+                      className={`nt-header__dropdown-premium-status ${
+                        isPremium
+                          ? "nt-header__dropdown-premium-status--active"
+                          : ""
+                      }`}
+                    >
+                      {isPremium ? "Активна" : "Не активна"}
+                    </div>
+                  </div>
+                  <PremiumButton compact={true} />
+                </div>
 
-                <button
-                  className="dropdown-item profile-item"
-                  onClick={handleProfileClick}
-                >
-                  <span className="dropdown-icon">👤</span>
-                  {t("profile.title")}
-                </button>
+                {/* ОПЦИИ МЕНЮ */}
+                <div className="nt-header__dropdown-options">
+                  <button
+                    className="nt-header__dropdown-option"
+                    onClick={handleProfileClick}
+                  >
+                    <span className="nt-header__dropdown-option-icon">👤</span>
+                    <span className="nt-header__dropdown-option-text">
+                      {t("profile.title")}
+                    </span>
+                  </button>
 
-                <button
-                  className="dropdown-item logout-item"
-                  onClick={handleLogout}
-                >
-                  <span className="dropdown-icon">🚪</span>
-                  {t("logout")}
-                </button>
+                  <button
+                    className="nt-header__dropdown-option nt-header__dropdown-option--logout"
+                    onClick={handleLogout}
+                  >
+                    <span className="nt-header__dropdown-option-icon">🚪</span>
+                    <span className="nt-header__dropdown-option-text">
+                      {t("logout")}
+                    </span>
+                  </button>
+                </div>
               </div>
             )}
           </div>

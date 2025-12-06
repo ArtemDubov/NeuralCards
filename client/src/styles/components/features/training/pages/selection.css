@@ -1,0 +1,191 @@
+/* ============================================
+   ВЫБОР РЕЖИМА И НАБОРА ДЛЯ ТРЕНИРОВКИ
+   (содержимое из selection/selection.css)
+   ============================================ */
+
+.nt-training-selection {
+  width: 100%;
+}
+
+/* СЕТКА РЕЖИМОВ */
+.nt-training-modes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--nt-space-lg);
+  margin-top: var(--nt-space-xl);
+}
+
+/* КАРТОЧКА РЕЖИМА */
+.nt-training-mode-card {
+  background: var(--nt-bg-card);
+  border: 2px solid var(--nt-border-primary);
+  border-radius: var(--nt-radius-xl);
+  padding: var(--nt-space-lg);
+  text-align: center;
+  transition: var(--nt-transition-base);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 200px;
+}
+
+.nt-training-mode-card:hover {
+  border-color: var(--nt-color-accent);
+  transform: translateY(-5px);
+  box-shadow: var(--nt-shadow-lg);
+}
+
+.nt-training-mode-icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--nt-space-md);
+  color: var(--nt-color-accent);
+}
+
+.nt-training-mode-title {
+  color: var(--nt-text-primary);
+  margin: 0 0 var(--nt-space-sm) 0;
+  font-size: 1.2rem;
+}
+
+.nt-training-mode-description {
+  color: var(--nt-text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.4;
+  margin-bottom: var(--nt-space-md);
+  flex-grow: 1;
+}
+
+.nt-training-mode-requirements {
+  color: var(--nt-text-muted);
+  font-size: 0.8rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: var(--nt-space-xs) var(--nt-space-md);
+  border-radius: var(--nt-radius-full);
+  margin-top: auto;
+}
+
+/* ВЫБОР НАБОРА */
+.nt-training-set-selection {
+  width: 100%;
+}
+
+.nt-training-set-item.disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  border-color: var(--nt-text-muted);
+  position: relative;
+}
+
+.nt-training-set-item.disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.nt-training-set-item.disabled::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--nt-radius-lg);
+  pointer-events: none;
+}
+
+.nt-training-warning {
+  color: var(--nt-color-warning);
+  background: rgba(255, 152, 0, 0.1);
+  padding: var(--nt-space-sm);
+  border-radius: var(--nt-radius-md);
+  font-size: 0.85rem;
+  margin-top: var(--nt-space-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--nt-space-xs);
+}
+
+.nt-training-availability {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-left: var(--nt-space-xs);
+  flex-shrink: 0;
+  cursor: help;
+}
+
+.nt-training-availability--yes {
+  background: rgba(76, 175, 80, 0.15);
+  color: var(--nt-color-success);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+}
+
+.nt-training-availability--no {
+  background: rgba(255, 152, 0, 0.15);
+  color: var(--nt-color-warning);
+  border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+/* ТРЕБОВАНИЯ РЕЖИМА */
+.nt-training-requirements {
+  background: var(--nt-bg-card);
+  border: 1px solid var(--nt-border-primary);
+  border-radius: var(--nt-radius-lg);
+  padding: var(--nt-space-lg);
+  margin: var(--nt-space-md) 0 var(--nt-space-lg);
+  display: flex;
+  gap: var(--nt-space-xl);
+  flex-wrap: wrap;
+}
+
+.nt-training-requirement-item {
+  display: flex;
+  align-items: center;
+  gap: var(--nt-space-sm);
+}
+
+.nt-training-requirement-label {
+  color: var(--nt-text-secondary);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.nt-training-requirement-value {
+  color: var(--nt-color-accent);
+  font-weight: 600;
+  font-size: 1rem;
+  background: rgba(79, 195, 247, 0.1);
+  padding: var(--nt-space-xs) var(--nt-space-md);
+  border-radius: var(--nt-radius-full);
+  white-space: nowrap;
+}
+
+.nt-training-requirement-value--warning {
+  color: var(--nt-color-warning);
+  background: rgba(255, 152, 0, 0.1);
+}
+
+/* АДАПТИВНОСТЬ */
+@media (max-width: 768px) {
+  .nt-training-modes-grid {
+    grid-template-columns: 1fr;
+    gap: var(--nt-space-md);
+  }
+
+  .nt-training-mode-card {
+    min-height: 180px;
+    padding: var(--nt-space-md);
+  }
+
+  .nt-training-requirements {
+    flex-direction: column;
+    gap: var(--nt-space-md);
+    padding: var(--nt-space-md);
+  }
+}

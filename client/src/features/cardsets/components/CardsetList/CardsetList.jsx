@@ -1,103 +1,166 @@
-import React, { useEffect } from "react";
-import { useLanguage } from "../../../../contexts/LanguageContext";
-import { useFavorites } from "../../../../contexts/FavoritesContext";
+import React from "react";
+import { useAppStore } from "../../../../shared/stores/appStore";
+import { useIsSetFavorite } from "../../../../api/favorites";
 import FavoriteButton from "../../../favorites/components/FavoriteButton/FavoriteButton";
+import { useUIStore } from "../../../../shared/stores/uiStore";
 
 const CardsetList = ({ cardsets, handleViewSet, showDeleteModal }) => {
-  const { t } = useLanguage();
-  const { isSetFavorite } = useFavorites();
-
-  // Слушаем события обновления избранного для перерисовки
-  useEffect(() => {
-    const handleFavoritesUpdate = () => {
-      // Компонент автоматически перерисуется благодаря контексту
-      console.log("🔄 [CardsetList] Получен сигнал обновления избранного");
-    };
-
-    window.addEventListener("favoritesUpdated", handleFavoritesUpdate);
-    return () => {
-      window.removeEventListener("favoritesUpdated", handleFavoritesUpdate);
-    };
-  }, []);
-
-  if (cardsets.length === 0) {
-    return <p className="empty-state">{t("sets.empty")}</p>;
-  }
+  const { t } = useAppStore();
 
   return (
-    <div className="sets-grid">
-      {cardsets.map((set) => {
-        const tagsArray = set.tags
-          ? Array.isArray(set.tags)
-            ? set.tags.map((tag) => (typeof tag === "string" ? tag : tag.name))
-            : typeof set.tags === "string"
-            ? set.tags
-                .split(",")
-                .map((tag) => tag.trim())
-                .filter((tag) => tag)
-            : []
-          : [];
+    <>
+      {cardsets.map((set) => (
+        <CardsetItem
+          key={set.id}
+          set={set}
+          handleViewSet={handleViewSet}
+          showDeleteModal={showDeleteModal}
+          t={t}
+        />
+      ))}
+    </>
+  );
+};
 
-        // Используем контекст вместо set.isFavorite
-        const isFavorite = isSetFavorite(set.id);
+const CardsetItem = ({ set: cardSet, handleViewSet, showDeleteModal, t }) => {
+  const isFavorite = useIsSetFavorite(cardSet.id);
+  const ui = useUIStore();
 
-        console.log(
-          "🔄 CardsetList render - Set:",
-          set.id,
-          "isFavorite:",
-          isFavorite
-        );
+  // Получаем теги (аналогично ViewSet.jsx)
+  const getTagsArray = () => {
+    if (!cardSet.tags) return [];
+    if (Array.isArray(cardSet.tags)) {
+      return cardSet.tags.map((tag) =>
+        typeof tag === "string" ? tag : tag.name || tag
+      );
+    }
+    if (typeof cardSet.tags === "string") {
+      return cardSet.tags.split(",").map((tag) => tag.trim());
+    }
+    return [];
+  };
 
-        return (
+  const tagsArray = getTagsArray();
+  const MAX_VISIBLE_TAGS = 2;
+  const visibleTags = tagsArray.slice(0, MAX_VISIBLE_TAGS);
+  const remainingTags = tagsArray.length - MAX_VISIBLE_TAGS;
+
+  return (
+    <div
+      className={`nt-card nt-card--set ${
+        isFavorite ? "nt-card--favorite" : ""
+      }`}
+      onClick={() => handleViewSet(cardSet)}
+      style={{
+        cursor: "pointer",
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "180px",
+      }}
+    >
+      <div
+        className="nt-card__content"
+        style={{ flex: 1, display: "flex", flexDirection: "column" }}
+      >
+        {/* Заголовок */}
+        <h3 className="nt-card__title" style={{ marginBottom: "4px" }}>
+          {cardSet.title}
+        </h3>
+
+        {/* === ТЕГИ С ОТСТУПОМ === */}
+        {tagsArray.length > 0 && (
           <div
-            key={set.id}
-            className={`cardset-item container-tp2 ${
-              isFavorite ? "favorite" : ""
-            }`}
+            className="nt-card__tags"
+            style={{
+              marginBottom: "12px",
+              maxHeight: "28px",
+              overflow: "hidden",
+            }}
           >
-            <div className="set-header">
-              <div
-                className="set-content"
-                onClick={() => handleViewSet(set)}
+            {visibleTags.map((tag, index) => (
+              <span
+                key={index}
+                className="tag"
                 style={{
+                  fontSize: "0.75rem",
+                  padding: "3px 8px",
+                  marginRight: "4px",
+                  maxWidth: "80px",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  display: "inline-block",
+                }}
+                title={tag}
+              >
+                {tag.length > 12 ? tag.substring(0, 10) + "..." : tag}
+              </span>
+            ))}
+
+            {remainingTags > 0 && (
+              <span
+                className="tag"
+                style={{
+                  fontSize: "0.75rem",
+                  padding: "3px 8px",
+                  backgroundColor: "rgba(128, 128, 128, 0.1)",
                   cursor: "pointer",
-                  flex: 1,
-                  display: "flex",
-                  flexDirection: "column",
+                }}
+                title={tagsArray.slice(MAX_VISIBLE_TAGS).join(", ")}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  alert(`Все теги: ${tagsArray.join(", ")}`);
                 }}
               >
-                <h3>{set.title}</h3>
-                <span className="cards-count">
-                  {set.cards ? set.cards.length : 0} {t("sets.cards_count")}
-                </span>
-              </div>
-              <div className="set-actions">
-                <FavoriteButton itemId={set.id} itemType="cardset" />
-                <button
-                  className="btn-tp4"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    showDeleteModal(set.id, set.title);
-                  }}
-                  title={t("sets.delete")}
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-
-            {tagsArray.length > 0 && (
-              <div className="set-tags">
-                {tagsArray.map((tag, index) => (
-                  <span key={index} className="tag">
-                    {tag}
-                  </span>
-                ))}
-              </div>
+                +{remainingTags}
+              </span>
             )}
           </div>
-        );
-      })}
+        )}
+
+        {/* Футер прижимаем вниз */}
+        <div className="nt-card__footer" style={{ marginTop: "auto" }}>
+          <span className="nt-card__subtitle">
+            {(cardSet.cards && cardSet.cards.length) || 0}{" "}
+            {t("sets.cards_count")}
+          </span>
+          {cardSet.createdAt && (
+            <span className="nt-card__text">
+              {new Date(cardSet.createdAt).toLocaleDateString()}
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Кнопки справа */}
+      <div className="nt-card__actions" onClick={(e) => e.stopPropagation()}>
+        <div className="nt-card__actions--top">
+          <FavoriteButton itemId={cardSet.id} itemType="cardset" />
+
+          <button
+            className="nt-btn nt-btn--danger nt-btn--icon"
+            onClick={(e) => {
+              e.stopPropagation();
+              showDeleteModal(cardSet.id, cardSet.title);
+            }}
+            title={t("sets.delete")}
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Кнопка редактирования - ОБНОВЛЕНО */}
+        <button
+          className="nt-btn nt-btn--secondary nt-btn--icon"
+          onClick={(e) => {
+            e.stopPropagation();
+            ui.openModal("editSet", cardSet);
+          }}
+          title={t("sets.edit")}
+        >
+          ✏️
+        </button>
+      </div>
     </div>
   );
 };

@@ -1,184 +1,101 @@
-import React, { useState } from "react";
-import { useLanguage } from "../../../../contexts/LanguageContext";
+import React, { useState, useMemo } from "react";
+import { useAppStore } from "../../../../shared/stores/appStore";
 import CardsetList from "../../../cardsets/components/CardsetList/CardsetList";
 import CreateSetForm from "../../../cardsets/components/CreateSetForm/CreateSetForm";
 import ViewSet from "../../../cardsets/components/ViewSet/ViewSet";
-import { useFavorites } from "../../../../contexts/FavoritesContext";
+import { useFavoriteSets } from "../../../../api/favorites";
+import { useCardsets } from "../../../../api/cardsets";
+import { useQueryClient } from "@tanstack/react-query";
+import { useUIStore } from "../../../../shared/stores/uiStore";
+import { useAuthStore } from "../../../../shared/stores/authStore";
+
+import FavoritesPage from "../../../favorites/components/FavoritesPage";
+import { TrainingPage } from "../../../training/components/TrainingPage";
+import ProfilePage from "../../../profile/components/ProfilePage/ProfilePage";
 
 const MainContent = ({
   activeTab,
-  cardsets,
   selectedSet,
-  searchResults,
-  isSearching,
-
-  // Методы
   onCreateSet,
   onDeleteSet,
   onViewSet,
-  onAddCard,
-  onDeleteCard,
-  onViewCard,
-  onEditCard,
   setActiveTab,
   setSelectedSetForTraining,
-
-  // Формы
   forms,
   onUpdateForm,
   onResetForm,
 }) => {
-  const { t } = useLanguage();
-  const { isSetFavorite } = useFavorites();
+  const { t } = useAppStore();
   const [showFavorites, setShowFavorites] = useState(false);
+  const queryClient = useQueryClient();
+  const { user } = useAuthStore();
+  const ui = useUIStore(); // ← уже есть
+
+  const { data: cardsets = [], isLoading, isError, error } = useCardsets();
+
+  // Получаем избранные наборы
+  const { data: favoriteSets = [] } = useFavoriteSets();
+
+  // Функция для фильтрации наборов - используем useMemo
+  const filteredCardsets = useMemo(() => {
+    let filtered = cardsets;
+
+    if (showFavorites) {
+      const favoriteSetIds = new Set(
+        favoriteSets.map((fav) => fav.cardsetId || fav.id || fav.cardset?.id)
+      );
+      filtered = filtered.filter((set) => favoriteSetIds.has(set.id));
+    }
+
+    return filtered;
+  }, [cardsets, showFavorites, favoriteSets]);
 
   const handleStartTraining = (set) => {
     setSelectedSetForTraining(set);
     setActiveTab("training");
   };
 
-  // Функция для фильтрации наборов
-  const getFilteredCardsets = () => {
-    let filtered = searchResults !== null ? searchResults.cardsets : cardsets;
+  // Функция для просмотра карточки в избранном
+  const handleViewCard = (card) => {
+    ui.openModal("viewCard", {
+      ...card,
+      cardsetId: card.cardset?.id,
+    });
+  };
 
-    if (showFavorites) {
-      filtered = filtered.filter((set) => isSetFavorite(set.id));
+  // Функция для просмотра набора в избранном
+  const handleViewSetFromFavorites = (setInfo) => {
+    // Находим полный набор по ID
+    const fullSet = cardsets.find((set) => set.id === setInfo.id);
+
+    if (fullSet) {
+      // Открываем набор для просмотра
+      onViewSet(fullSet);
+      // Переключаемся на вкладку просмотра набора
+      setActiveTab("view-set");
+    } else {
+      // Если набор не найден в локальных данных, открываем в модальном окне
+      ui.openModal("viewSet", {
+        ...setInfo,
+        isFromFavorites: true,
+      });
     }
-
-    return filtered;
   };
-
-  // Функция для рендеринга избранного
-  const renderFavoritesContent = () => {
-    const favoriteSets = cardsets.filter((set) => set.isFavorite);
-    const allFavoriteCards = cardsets.flatMap((set) =>
-      (set.cards || [])
-        .filter((card) => card.isFavorite)
-        .map((card) => ({
-          ...card,
-          parentSet: set,
-        }))
-    );
-
-    return (
-      <div className="page-container favorites-page">
-        <div className="page-header">
-          <h2>{t("favorites.title")}</h2>
-          <div className="favorites-count">
-            {favoriteSets.length} {t("favorites.sets.count")},{" "}
-            {allFavoriteCards.length} {t("favorites.cards.count")}
-          </div>
-        </div>
-
-        <div className="content-card">
-          {/* Избранные наборы */}
-          <section
-            className="favorites-section"
-            style={{ marginBottom: "2rem" }}
-          >
-            <h3 style={{ color: "var(--color-gold)", marginBottom: "1rem" }}>
-              {t("favorites.sets.title")} ({favoriteSets.length})
-            </h3>
-            {favoriteSets.length > 0 ? (
-              <div className="sets-grid">
-                <CardsetList
-                  cardsets={favoriteSets}
-                  handleViewSet={onViewSet}
-                  showDeleteModal={onDeleteSet}
-                />
-              </div>
-            ) : (
-              <div className="empty-state">
-                <div className="empty-icon">📚</div>
-                <h3>{t("favorites.sets.empty.title")}</h3>
-                <p>{t("favorites.sets.empty.message")}</p>
-              </div>
-            )}
-          </section>
-
-          {/* Избранные карточки */}
-          <section className="favorites-section">
-            <h3 style={{ color: "var(--color-gold)", marginBottom: "1rem" }}>
-              {t("favorites.cards.title")} ({allFavoriteCards.length})
-            </h3>
-            {allFavoriteCards.length > 0 ? (
-              <div className="cards-grid">
-                {allFavoriteCards.map((card) => (
-                  <div
-                    key={`${card.id}-${card.parentSet.id}`}
-                    className="card-preview"
-                  >
-                    <div className="card-preview-header">
-                      <span className="set-badge">
-                        {t("favorites.from.set")}: {card.parentSet.title}
-                      </span>
-                    </div>
-                    <div
-                      className="card-preview-content"
-                      onClick={() => onViewCard(card)}
-                    >
-                      <div className="card-preview-front">
-                        <div className="card-text" title={card.front}>
-                          {card.front}
-                        </div>
-                        <div className="card-media-indicators">
-                          {card.imageUrl && (
-                            <span className="media-indicator">🖼️</span>
-                          )}
-                          {card.audioUrl && (
-                            <span className="media-indicator">🎵</span>
-                          )}
-                        </div>
-                      </div>
-                      <div className="card-preview-back">
-                        <div className="card-text" title={card.back}>
-                          {card.back}
-                        </div>
-                        <div className="card-media-indicators">
-                          {card.backImageUrl && (
-                            <span className="media-indicator">🖼️</span>
-                          )}
-                          {card.backAudioUrl && (
-                            <span className="media-indicator">🎵</span>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="empty-state">
-                <div className="empty-icon">🃏</div>
-                <h3>{t("favorites.cards.empty.title")}</h3>
-                <p>{t("favorites.cards.empty.message")}</p>
-              </div>
-            )}
-          </section>
-        </div>
-      </div>
-    );
-  };
-
-  const filteredCardsets = getFilteredCardsets();
 
   // Рендер для вкладки "Мои наборы"
   const renderSetsContent = () => {
     return (
-      <div className="page-container sets-page">
-        <div className="page-header">
-          <h2>
-            {showFavorites
-              ? t("sets.favorites.title")
-              : searchResults !== null
-              ? t("search.results.title") + `: "${searchResults.query}"`
-              : t("sets.my_sets")}
+      <div className="nt-page__container">
+        <div className="nt-page__header">
+          <h2 className="nt-page__title">
+            {showFavorites ? t("sets.favorites.title") : t("sets.my_sets")}
           </h2>
 
-          <div className="sets-header-controls">
-            {/* Кнопка переключения избранного */}
+          <div className="nt-page__header-controls">
             <button
-              className={`btn-tp8 ${showFavorites ? "active" : ""}`}
+              className={`nt-btn nt-btn--gold ${
+                showFavorites ? "nt-btn--active" : ""
+              }`}
               onClick={() => setShowFavorites(!showFavorites)}
               title={
                 showFavorites ? t("sets.show.all") : t("sets.show.favorites")
@@ -190,10 +107,10 @@ const MainContent = ({
                 : t("sets.show.favorites.cards")}
             </button>
 
-            {searchResults === null && !showFavorites && (
+            {!showFavorites && (
               <button
-                className="btn-tp1"
-                onClick={() => setActiveTab("create")}
+                className="nt-btn nt-btn--primary"
+                onClick={() => ui.openModal("createSet")} // ← ИЗМЕНЕНО ТОЛЬКО ЗДЕСЬ!
               >
                 {t("navigation.create")}
               </button>
@@ -201,31 +118,57 @@ const MainContent = ({
           </div>
         </div>
 
-        <div className="content-card">
-          {isSearching && (
-            <div className="search-indicator">🔍 {t("search.in_progress")}</div>
-          )}
-
-          {searchResults !== null &&
-            filteredCardsets.length === 0 &&
-            !isSearching && (
-              <div className="empty-state">
-                <div className="empty-icon">😔</div>
-                <h3>{t("search.results.empty.title")}</h3>
-                <p>{t("search.try_again")}</p>
-              </div>
-            )}
-
-          {showFavorites && filteredCardsets.length === 0 && !isSearching && (
-            <div className="empty-state">
-              <div className="empty-icon">⭐</div>
-              <h3>{t("favorites.sets.empty.title")}</h3>
-              <p>{t("favorites.sets.empty.message")}</p>
+        <div className="nt-content__grid">
+          {isLoading && (
+            <div className="nt-loader">
+              <div className="nt-loader__spinner"></div>
+              <p>{t("sets.loading") || "Загрузка наборов..."}</p>
             </div>
           )}
 
-          {filteredCardsets.length > 0 && (
-            <div className="sets-grid">
+          {isError && (
+            <div className="nt-form__error--general">
+              ❌ {t("sets.load_error") || "Ошибка загрузки"}
+              {error?.message && `: ${error.message}`}
+              <button
+                className="nt-btn nt-btn--secondary nt-util__mt-sm"
+                onClick={() =>
+                  queryClient.refetchQueries({ queryKey: ["cardsets"] })
+                }
+              >
+                Повторить
+              </button>
+            </div>
+          )}
+
+          {!isLoading && !isError && filteredCardsets.length === 0 && (
+            <div className="nt-util__empty-state">
+              <div className="nt-util__empty-icon">
+                {showFavorites ? "⭐" : "📚"}
+              </div>
+              <h3 className="nt-util__empty-title">
+                {showFavorites
+                  ? t("favorites.sets.empty.title")
+                  : t("sets.empty")}
+              </h3>
+              <p className="nt-util__empty-text">
+                {showFavorites
+                  ? t("favorites.sets.empty.message")
+                  : t("sets.create_first")}
+              </p>
+              {!showFavorites && (
+                <button
+                  className="nt-btn nt-btn--primary nt-empty-state__button"
+                  onClick={() => ui.openModal("createSet")} // ← ИЛИ ЗДЕСЬ ТОЖЕ МОЖНО ДОБАВИТЬ
+                >
+                  {t("sets.create.first")}
+                </button>
+              )}
+            </div>
+          )}
+
+          {!isLoading && !isError && filteredCardsets.length > 0 && (
+            <div className="nt-cards-grid">
               <CardsetList
                 cardsets={filteredCardsets}
                 handleViewSet={onViewSet}
@@ -238,15 +181,15 @@ const MainContent = ({
     );
   };
 
-  // Рендер для создания набора
+  // Рендер для создания набора - ОСТАВЛЯЕМ НА СЛУЧАЙ
   const renderCreateContent = () => {
     return (
-      <div className="page-container create-page">
-        <div className="page-header">
-          <h2>{t("sets.create.title")}</h2>
+      <div className="nt-page__container">
+        <div className="nt-page__header">
+          <h2 className="nt-page__title">{t("sets.create.title")}</h2>
         </div>
 
-        <div className="content-card">
+        <div className="nt-content__card">
           <CreateSetForm
             formData={forms.set}
             onUpdateForm={onUpdateForm}
@@ -266,26 +209,59 @@ const MainContent = ({
     if (!selectedSet) return null;
 
     return (
-      <div className="page-container viewset-page">
+      <div className="nt-page__container">
         <ViewSet
           selectedSet={selectedSet}
           setActiveTab={setActiveTab}
-          handleViewCard={onViewCard}
-          showDeleteModal={onDeleteCard}
-          setIsAddCardModalOpen={onAddCard}
           onStartTraining={() => handleStartTraining(selectedSet)}
-          onEditCard={onEditCard}
         />
       </div>
     );
   };
 
+  // Рендер для избранного
+  const renderFavoritesContent = () => {
+    return (
+      <div className="nt-page__container">
+        <FavoritesPage
+          handleViewCard={handleViewCard}
+          handleViewSet={handleViewSetFromFavorites} // ← ПЕРЕДАЕМ ФУНКЦИЮ
+        />
+      </div>
+    );
+  };
+
+  // Рендер для тренировки
+  const renderTrainingContent = () => {
+    return (
+      <div className="nt-page__container">
+        <TrainingPage
+          cardsets={cardsets}
+          selectedSetForTraining={selectedSet}
+          onBackToSets={() => setActiveTab("sets")}
+        />
+      </div>
+    );
+  };
+
+  // Рендер для профиля
+  const renderProfileContent = () => {
+    return (
+      <div className="nt-page__container">
+        <ProfilePage user={user} />
+      </div>
+    );
+  };
+
+  // Главный рендер
   return (
-    <main>
-      {activeTab === "favorites" && renderFavoritesContent()}
+    <main className="nt-main__content">
       {activeTab === "sets" && renderSetsContent()}
       {activeTab === "create" && renderCreateContent()}
       {activeTab === "view-set" && renderViewSetContent()}
+      {activeTab === "favorites" && renderFavoritesContent()}
+      {activeTab === "training" && renderTrainingContent()}
+      {activeTab === "profile" && renderProfileContent()}
     </main>
   );
 };

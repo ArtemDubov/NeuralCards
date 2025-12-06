@@ -1,0 +1,62 @@
+# Определяем путь к рабочему столу и названия файлов
+$desktopPath = [Environment]::GetFolderPath("Desktop")
+$cssFolderPath = "C:\Users\Артём Дубов\Desktop\NeuralTrident\client\src\styles"
+$cssFilesOutput = Join-Path $desktopPath "styles_files_list.txt"
+$cssContentOutput = Join-Path $desktopPath "styles_content.txt"
+
+Write-Host "🔄 Начинаем анализ папки со стилями..."
+
+# Удаляем предыдущие файлы если существуют
+if (Test-Path $cssFilesOutput) { Remove-Item $cssFilesOutput }
+if (Test-Path $cssContentOutput) { Remove-Item $cssContentOutput }
+
+# Функция для безопасного чтения файлов
+function Read-FileContent {
+    param($FilePath)
+    try {
+        $content = Get-Content $FilePath -Raw -Encoding UTF8
+        return $content
+    }
+    catch {
+        try {
+            $content = Get-Content $FilePath -Raw -Encoding Default
+            return $content
+        }
+        catch {
+            return "[ОШИБКА ЧТЕНИЯ ФАЙЛА: $($_.Exception.Message)]"
+        }
+    }
+}
+
+# 1) ФАЙЛ С ПЕРЕЧНЕМ CSS ФАЙЛОВ ИЗ ПАПКИ STYLES
+"ПЕРЕЧЕНЬ ВСЕХ CSS ФАЙЛОВ ИЗ ПАПКИ STYLES" | Out-File $cssFilesOutput -Encoding UTF8
+"Дата: $(Get-Date)" | Out-File $cssFilesOutput -Encoding UTF8 -Append
+"Путь к папке: $cssFolderPath" | Out-File $cssFilesOutput -Encoding UTF8 -Append
+"Всего файлов: $(@(Get-ChildItem $cssFolderPath -Recurse -File -Include '*.css','*.scss','*.sass','*.less').Count)" | Out-File $cssFilesOutput -Encoding UTF8 -Append
+"=" * 80 | Out-File $cssFilesOutput -Encoding UTF8 -Append
+
+Get-ChildItem $cssFolderPath -Recurse -File -Include '*.css','*.scss','*.sass','*.less' | Sort-Object FullName | ForEach-Object {
+    "$($_.FullName) ($($_.Length) байт)" | Out-File $cssFilesOutput -Encoding UTF8 -Append
+}
+
+# 2) ФАЙЛ С СОДЕРЖИМЫМ CSS ФАЙЛОВ ИЗ ПАПКИ STYLES
+"ПОЛНОЕ СОДЕРЖИМОЕ CSS ФАЙЛОВ ИЗ ПАПКИ STYLES" | Out-File $cssContentOutput -Encoding UTF8
+"Дата: $(Get-Date)" | Out-File $cssContentOutput -Encoding UTF8 -Append
+"Путь к папке: $cssFolderPath" | Out-File $cssContentOutput -Encoding UTF8 -Append
+"Всего файлов: $(@(Get-ChildItem $cssFolderPath -Recurse -File -Include '*.css','*.scss','*.sass','*.less').Count)" | Out-File $cssContentOutput -Encoding UTF8 -Append
+"=" * 80 | Out-File $cssContentOutput -Encoding UTF8 -Append
+
+Get-ChildItem $cssFolderPath -Recurse -File -Include '*.css','*.scss','*.sass','*.less' | Sort-Object FullName | ForEach-Object {
+    "`n" + "=" * 60 | Out-File $cssContentOutput -Encoding UTF8 -Append
+    "ФАЙЛ: $($_.FullName)" | Out-File $cssContentOutput -Encoding UTF8 -Append
+    "РАЗМЕР: $($_.Length) байт" | Out-File $cssContentOutput -Encoding UTF8 -Append
+    "-" * 40 | Out-File $cssContentOutput -Encoding UTF8 -Append
+    $content = Read-FileContent -FilePath $_.FullName
+    $content | Out-File $cssContentOutput -Encoding UTF8 -Append
+}
+
+Write-Host "✅ Анализ завершен! Созданы файлы на рабочем столе:"
+Write-Host "   📄 styles_files_list.txt - перечень файлов из папки styles"
+Write-Host "   📄 styles_content.txt - содержимое файлов из папки styles"
+Write-Host "`n📁 Путь к исходной папке: $cssFolderPath"
+Write-Host "📁 Результаты на рабочем столе: $desktopPath"

@@ -1,11 +1,22 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
-const TagsInput = ({ tags, setTags, placeholder = "Добавьте теги..." }) => {
+const TagsInput = ({ tags = [], setTags, placeholder = "Введите теги..." }) => {
   const [inputValue, setInputValue] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
 
-  // ДОБАВЛЕНО: защита от не-массива
-  const safeTags = Array.isArray(tags) ? tags : [];
+  // Нормализуем теги при получении
+  const normalizedTags = Array.isArray(tags)
+    ? tags
+        .map((tag) => {
+          if (typeof tag === "string") return tag;
+          if (tag && typeof tag === "object") {
+            return tag.name || tag.title || String(tag);
+          }
+          return String(tag);
+        })
+        .filter((tag) => tag.trim() !== "")
+    : [];
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -14,67 +25,77 @@ const TagsInput = ({ tags, setTags, placeholder = "Добавьте теги..."
   const handleInputKeyDown = (e) => {
     if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
-      addTag();
+      addTag(inputValue.trim());
     } else if (
       e.key === "Backspace" &&
       inputValue === "" &&
-      safeTags.length > 0
+      normalizedTags.length > 0
     ) {
-      removeTag(safeTags.length - 1);
+      removeTag(normalizedTags.length - 1);
     }
   };
 
-  const addTag = () => {
-    const tag = inputValue.trim();
-    if (tag && !safeTags.includes(tag)) {
-      setTags([...safeTags, tag]);
+  const addTag = (tag) => {
+    if (tag && !normalizedTags.includes(tag)) {
+      const newTags = [...normalizedTags, tag];
+      setTags(newTags);
     }
     setInputValue("");
   };
 
-  const removeTag = (indexToRemove) => {
-    setTags(safeTags.filter((_, index) => index !== indexToRemove));
+  const removeTag = (index) => {
+    const newTags = normalizedTags.filter((_, i) => i !== index);
+    setTags(newTags);
+  };
+
+  const handleInputFocus = () => {
+    setIsFocused(true);
   };
 
   const handleInputBlur = () => {
+    setIsFocused(false);
     if (inputValue.trim()) {
-      addTag();
+      addTag(inputValue.trim());
     }
+  };
+
+  const handleContainerClick = () => {
+    inputRef.current?.focus();
   };
 
   return (
     <div
-      className="tags-input-container"
-      onClick={() => inputRef.current?.focus()}
+      className={`nt-tags-input ${isFocused ? "nt-tags-input--focused" : ""}`}
+      onClick={handleContainerClick}
     >
-      <div className="tags-list">
-        {/* ИСПОЛЬЗУЕМ safeTags вместо tags */}
-        {safeTags.map((tag, index) => (
-          <span key={index} className="tag">
-            {tag}
+      <div className="nt-tags-input__tags">
+        {normalizedTags.map((tag, index) => (
+          <div key={index} className="nt-tag">
+            <span className="nt-tag__text">{tag}</span>
             <button
               type="button"
+              className="nt-tag__remove"
               onClick={(e) => {
                 e.stopPropagation();
                 removeTag(index);
               }}
-              className="btn-tp7"
             >
               ×
             </button>
-          </span>
+          </div>
         ))}
+        <input
+          ref={inputRef}
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          onKeyDown={handleInputKeyDown}
+          onFocus={handleInputFocus}
+          onBlur={handleInputBlur}
+          placeholder={normalizedTags.length === 0 ? placeholder : ""}
+          className="nt-tags-input__input"
+        />
       </div>
-      <input
-        ref={inputRef}
-        type="text"
-        value={inputValue}
-        onChange={handleInputChange}
-        onKeyDown={handleInputKeyDown}
-        onBlur={handleInputBlur}
-        placeholder={safeTags.length === 0 ? placeholder : ""}
-        className="tags-input"
-      />
     </div>
   );
 };

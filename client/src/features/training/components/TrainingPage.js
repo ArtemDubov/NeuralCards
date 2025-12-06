@@ -1,147 +1,83 @@
-import React, { useEffect } from "react";
-import { useLanguage } from "../../../contexts/LanguageContext";
-import { useTraining } from "../../../hooks/useTraining";
-import TrainingSession from "./TrainingSession";
-import ModeSelection from "./ModeSelection";
-import SetSelection from "./SetSelection";
-import CompletionScreen from "./CompletionScreen";
+import React, { useState } from "react";
+import { useTrainingStore } from "../../../shared/stores/training-legacy-adapter";
+import { useTrainingSession } from "../hooks/useTrainingSession";
+import { ModeSelection } from "./ModeSelection";
+import { SetSelection } from "./SetSelection";
+import { SessionWrapper } from "./sessions/SessionWrapper";
+import { CompletionScreen } from "./CompletionScreen";
 
-export function TrainingPage({ cardsets, selectedSetForTraining }) {
-  const { t } = useLanguage();
-  const training = useTraining();
+export const TrainingPage = ({ cardsets, onBackToSets }) => {
+  const [selectedMode, setSelectedMode] = useState(null);
+  const [selectedSet, setSelectedSet] = useState(null);
 
-  // Используем локальное состояние для режима и набора
-  const [activeMode, setActiveMode] = React.useState(null);
-  const [selectedSet, setSelectedSet] = React.useState(selectedSetForTraining);
+  const { startSession } = useTrainingStore();
+  const session = useTrainingSession();
 
-  // Автовыбор набора если передан пропс
-  useEffect(() => {
-    if (selectedSetForTraining && !selectedSet) {
-      setSelectedSet(selectedSetForTraining);
+  // Единая функция возврата - как в других местах
+  const handleBack = () => {
+    if (onBackToSets) {
+      onBackToSets();
     }
-  }, [selectedSetForTraining, selectedSet]);
+  };
 
-  // Очистка при размонтировании
-  useEffect(() => {
-    return () => training.cleanup();
-  }, [training]);
-
-  // Рендер разных экранов в зависимости от состояния
-
-  // 1. Выбор режима тренировки
-  if (!activeMode && !training.isTraining) {
-    return (
-      <div className="page-container training-page">
-        <div className="page-header">
-          <h2>🎯 {t("training.choose.mode")}</h2>
-          <div className="sets-header-controls">
-            <button className="btn-tp3" onClick={() => window.history.back()}>
-              {t("sets.back")}
-            </button>
-          </div>
-        </div>
-        <div className="content-card">
-          <ModeSelection
-            trainingModes={training.getTrainingModes()}
-            onSelectMode={(modeId) => {
-              setActiveMode(modeId);
-            }}
-            onBack={() => window.history.back()}
-          />
-        </div>
-      </div>
-    );
+  if (!selectedMode) {
+    return <ModeSelection onSelectMode={setSelectedMode} onBack={handleBack} />;
   }
 
-  // 2. Выбор набора карточек
-  if (activeMode && !selectedSet && !training.isTraining) {
+  if (selectedMode && !selectedSet) {
     return (
-      <div className="page-container training-page">
-        <div className="page-header">
-          <h2>🎯 Выбор набора</h2>
-          <div className="progress-info">
-            Режим: {training.getTrainingMode(activeMode)?.name}
-          </div>
-        </div>
-        <div className="content-card">
-          <SetSelection
-            cardsets={cardsets}
-            trainingMode={training.getTrainingMode(activeMode)}
-            onSelectSet={(set) => {
-              setSelectedSet(set);
-              training.startTraining(activeMode, set);
-            }}
-            onBack={() => setActiveMode(null)}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  // 3. Экран завершения тренировки
-  if (!training.isTraining && training.engineState.completed) {
-    return (
-      <div className="page-container training-page">
-        <div className="content-card">
-          <CompletionScreen
-            trainingMode={training.getTrainingMode(activeMode)}
-            selectedSet={selectedSet}
-            progress={training.getProgress()}
-            onRestart={() => training.startTraining(activeMode, selectedSet)}
-            onSelectNewSet={() => {
-              training.endTraining();
-              setActiveMode(null);
-              setSelectedSet(null);
-            }}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  // 4. Активная тренировка
-  if (training.isTraining && selectedSet) {
-    return (
-      <TrainingSession
-        training={training}
-        selectedSet={selectedSet}
-        activeMode={activeMode}
-        onAnswer={training.submitAnswer}
-        onEnd={training.endTraining}
+      <SetSelection
+        cardsets={cardsets}
+        modeId={selectedMode}
+        onSelectSet={(set) => {
+          setSelectedSet(set);
+          startSession(selectedMode, set);
+        }}
+        onBack={() => setSelectedMode(null)}
       />
     );
   }
 
-  // 5. Загрузка
-  if (training.loading) {
+  if (session.isActive) {
     return (
-      <div className="page-container training-page">
-        <div className="content-card">
-          <div className="loading">Загрузка тренировки...</div>
-        </div>
-      </div>
+      <SessionWrapper
+        mode={selectedMode}
+        cards={session.cards}
+        onAnswer={session.handleAnswer}
+        onEnd={() => {
+          session.endSession();
+          setSelectedMode(null);
+          setSelectedSet(null);
+        }}
+        onBack={handleBack}
+      />
     );
   }
 
-  // 6. Ошибка
-  if (training.error) {
+  if (session.isCompleted) {
     return (
-      <div className="page-container training-page">
-        <div className="content-card">
-          <div className="error-message">{training.error}</div>
-          <button className="btn-tp3" onClick={training.endTraining}>
-            {t("sets.back")}
-          </button>
-        </div>
-      </div>
+      <CompletionScreen
+        modeId={selectedMode}
+        set={selectedSet}
+        stats={session.session?.stats}
+        onRestart={() => {
+          session.endSession();
+          session.startSession(selectedMode, selectedSet);
+        }}
+        onNewSet={() => {
+          session.endSession();
+          setSelectedMode(null);
+          setSelectedSet(null);
+        }}
+        onBack={handleBack}
+      />
     );
   }
 
   return (
-    <div className="page-container training-page">
-      <div className="content-card">
-        <div className="loading">Подготовка тренировки...</div>
-      </div>
+    <div className="-loader">
+      <div className="-loader__spinner"></div>
+      <p>Загрузка...</p>
     </div>
   );
-}
+};

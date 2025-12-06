@@ -1,24 +1,34 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import RegistrationForm from "../RegistrationForm/RegistrationForm";
 import AuthTabs from "../AuthTabs/AuthTabs";
 import LoginForm from "../LoginForm/LoginForm";
 import LanguageSwitcher from "../../../shared/components/LanguageSwitcher/LanguageSwitcher";
-import { useLanguage } from "../../../../contexts/LanguageContext";
+import { useAppStore } from "../../../../shared/stores/appStore";
 import ThemeSwitcher from "../../../shared/components/ThemeSwitcher/ThemeSwitcher";
-import { useAuth } from "../../../../contexts/AuthContext";
+import { useAuthStore } from "../../../../shared/stores/authStore";
 
-const LoginPage = ({ onAuthSuccess }) => {
-  const auth = useAuth();
+const LoginPage = () => {
+  const { login, register } = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoginForm, setIsLoginForm] = useState(true);
-  const { t } = useLanguage();
+  const { t } = useAppStore();
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [registerName, setRegisterName] = useState("");
   const [errors, setErrors] = useState({});
   const [showDomainDropdown, setShowDomainDropdown] = useState(false);
   const [emailDomain, setEmailDomain] = useState("");
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Упрощенная инициализация
+  useEffect(() => {
+    console.log("LoginPage: монтирование");
+    setIsInitialized(true);
+    return () => {
+      console.log("LoginPage: размонтирование");
+    };
+  }, []);
 
   const emailDomains = [
     "gmail.com",
@@ -31,30 +41,23 @@ const LoginPage = ({ onAuthSuccess }) => {
     "protonmail.com",
   ];
 
-  // Умная валидация имени БЕЗ работы с DOM
   const handleNameChange = (e) => {
     const value = e.target.value;
-
     let newValue = value;
 
-    // Проверка длины
     if (value.length > 16) {
       newValue = value.slice(0, 16);
     }
 
-    // Проверка на пробел в начале
     if (value.startsWith(" ")) {
       newValue = value.trimStart();
     }
 
-    // Проверка на два пробела подряд
     if (value.includes("  ")) {
       newValue = value.replace(/  +/g, " ");
     }
 
-    // Проверка на запрещённые символы (только буквы и пробелы)
     const cleanValue = newValue.replace(/[^\p{L}\s]/gu, "");
-
     setRegisterName(cleanValue);
     if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
   };
@@ -63,7 +66,6 @@ const LoginPage = ({ onAuthSuccess }) => {
     const value = e.target.value;
     setRegisterEmail(value);
 
-    // Показываем dropdown если есть @ и текст после него
     const atIndex = value.indexOf("@");
     if (atIndex !== -1 && value.length > atIndex + 1) {
       const currentDomain = value.substring(atIndex + 1);
@@ -87,94 +89,84 @@ const LoginPage = ({ onAuthSuccess }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("🟡 [LoginPage] Обработчик входа вызван");
 
     if (!email || !password) {
-      console.log("❌ [LoginPage] Email или пароль не заполнены");
+      setErrors({ general: t("validation.required") });
       return;
     }
 
-    console.log("🟡 [LoginPage] Вызываем auth.login...");
-    const result = await auth.login(email, password);
+    const result = await login(email, password);
 
     if (result.success) {
-      console.log("✅ [LoginPage] Вход успешен, вызываем onAuthSuccess");
-      onAuthSuccess();
+      console.log("Login successful, reloading page");
+      window.location.reload();
     } else {
-      console.error("❌ [LoginPage] Ошибка входа:", result.error);
       setErrors({ general: result.error });
     }
   };
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    console.log("🟡 [LoginPage] Обработчик регистрации вызван");
 
-    // Полная валидация
     const newErrors = {};
-    console.log("🟡 [LoginPage] Выполняем валидацию...");
 
-    // Валидация имени
     if (!registerName.trim()) {
       newErrors.name = t("validation.name.required");
-      console.log("❌ [LoginPage] Ошибка валидации: имя не заполнено");
     } else if (registerName.trim().length < 2) {
       newErrors.name = t("validation.name.minLength");
-      console.log("❌ [LoginPage] Ошибка валидации: имя слишком короткое");
     } else if (!/^[\p{L} ]+$/u.test(registerName)) {
       newErrors.name = t("validation.name.lettersOnly");
-      console.log(
-        "❌ [LoginPage] Ошибка валидации: имя содержит запрещенные символы"
-      );
     }
 
-    // Валидация email
     const emailRegex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     if (!registerEmail) {
       newErrors.email = t("validation.email.required");
-      console.log("❌ [LoginPage] Ошибка валидации: email не заполнен");
     } else if (!emailRegex.test(registerEmail)) {
       newErrors.email = t("validation.email.invalid");
-      console.log("❌ [LoginPage] Ошибка валидации: email невалиден");
     }
 
-    // Валидация пароля
     if (!registerPassword) {
       newErrors.password = t("validation.password.required");
-      console.log("❌ [LoginPage] Ошибка валидации: пароль не заполнен");
     } else if (registerPassword.length < 6) {
       newErrors.password = t("validation.password.minLength");
-      console.log("❌ [LoginPage] Ошибка валидации: пароль слишком короткий");
     }
 
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) {
-      console.log("❌ [LoginPage] Валидация не пройдена, отмена регистрации");
       return;
     }
 
-    console.log("✅ [LoginPage] Валидация пройдена, вызываем auth.register...");
-    const result = await auth.register(
+    const result = await register(
       registerName,
       registerEmail,
       registerPassword
     );
 
     if (result.success) {
-      console.log("✅ [LoginPage] Регистрация успешна, вызываем onAuthSuccess");
-      onAuthSuccess();
+      console.log("Registration successful, reloading page");
+      window.location.reload();
     } else {
-      console.error("❌ [LoginPage] Ошибка регистрации:", result.error);
       setErrors({ general: result.error });
     }
   };
 
+  if (!isInitialized) {
+    return (
+      <div className="nt-auth__container">
+        <div className="nt-loader">
+          <div className="nt-loader__spinner"></div>
+          <p>Загрузка страницы входа...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="app login-container">
-      <div className="login-header">
-        <h1>{t("app.title")}</h1>
-        <div className="login-switchers">
+    <div className="nt-auth__container">
+      <div className="nt-auth__header">
+        <h1 className="nt-auth__title">{t("app.title")}</h1>
+        <div className="nt-util__flex nt-util__gap-md nt-util__items-center">
           <LanguageSwitcher />
           <ThemeSwitcher />
         </div>
@@ -183,33 +175,44 @@ const LoginPage = ({ onAuthSuccess }) => {
       <AuthTabs isLoginForm={isLoginForm} setIsLoginForm={setIsLoginForm} />
 
       {isLoginForm ? (
-        <LoginForm
-          email={email}
-          setEmail={setEmail}
-          password={password}
-          setPassword={setPassword}
-          handleLogin={handleLogin}
-        />
+        <div className="nt-form" style={{ maxWidth: "400px", width: "100%" }}>
+          <LoginForm
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
+            handleLogin={handleLogin}
+          />
+          {errors.general && (
+            <div className="nt-form__error--general nt-util__mt-md">
+              {errors.general}
+            </div>
+          )}
+        </div>
       ) : (
-        <RegistrationForm
-          registerEmail={registerEmail}
-          setRegisterEmail={setRegisterEmail}
-          registerPassword={registerPassword}
-          setRegisterPassword={setRegisterPassword}
-          registerName={registerName}
-          setRegisterName={setRegisterName}
-          errors={errors}
-          emailDomain={emailDomain}
-          showDomainDropdown={showDomainDropdown}
-          emailDomains={emailDomains}
-          handleDomainSelect={handleDomainSelect}
-          handleEmailChange={handleEmailChange}
-          handleNameChange={handleNameChange}
-          handleRegister={handleRegister}
-        />
+        <div style={{ maxWidth: "400px", width: "100%" }}>
+          <RegistrationForm
+            registerEmail={registerEmail}
+            setRegisterEmail={setRegisterEmail}
+            registerPassword={registerPassword}
+            setRegisterPassword={setRegisterPassword}
+            registerName={registerName}
+            setRegisterName={setRegisterName}
+            errors={errors}
+            emailDomain={emailDomain}
+            showDomainDropdown={showDomainDropdown}
+            emailDomains={emailDomains}
+            handleDomainSelect={handleDomainSelect}
+            handleEmailChange={handleEmailChange}
+            handleNameChange={handleNameChange}
+            handleRegister={handleRegister}
+          />
+        </div>
       )}
 
-      <p className="test-credentials">{t("auth.test.credentials")}</p>
+      <p className="nt-util__text-muted nt-util__text-center nt-util__mt-xl nt-util__text-sm">
+        {t("auth.test.credentials")}
+      </p>
     </div>
   );
 };

@@ -1,0 +1,46 @@
+/* ============================================
+   LAYOUT КОМПОНЕНТОВ ТРЕНИРОВОК
+   (содержимое из ui/layout.css)
+   ============================================ */
+
+.nt-training-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--nt-space-xl);
+  padding: var(--nt-space-md);
+  background: var(--nt-bg-card);
+  border-radius: var(--nt-radius-lg);
+  border: 1px solid var(--nt-border-primary);
+  flex-wrap: wrap;
+  gap: var(--nt-space-md);
+}
+
+.nt-training-progress {
+  color: var(--nt-text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  padding: var(--nt-space-sm) var(--nt-space-md);
+  border-radius: var(--nt-radius-full);
+  font-weight: bold;
+  font-size: 0.9rem;
+  min-width: 80px;
+  text-align: center;
+}
+
+/* Дополнительные layout-классы */
+.nt-training-grid {
+  display: grid;
+  gap: var(--nt-space-lg);
+  width: 100%;
+}
+
+.nt-training-flex {
+  display: flex;
+  width: 100%;
+}
+
+.nt-training-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

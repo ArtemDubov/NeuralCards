@@ -1,5 +1,5 @@
 import React from "react";
-import { useLanguage } from "../../../../contexts/LanguageContext";
+import { useAppStore } from "../../../../shared/stores/appStore";
 
 const RegistrationForm = ({
   registerEmail,
@@ -17,46 +17,50 @@ const RegistrationForm = ({
   handleNameChange,
   handleRegister,
 }) => {
-  const { t } = useLanguage();
+  const { t } = useAppStore();
+
   return (
-    <form onSubmit={handleRegister} className="auth-form container-tp9">
-      {/* Поле имени с защитой от ошибок */}
-      <div className="input-group">
-        <input
-          type="text"
-          placeholder={t("auth.name")}
-          value={registerName}
-          onChange={handleNameChange}
-          className={`form-input ${errors.name ? "error" : ""}`}
-          required
-          maxLength={16}
-        />
-        <div className="input-hint">
-          {registerName.length}
-          {t("auth.name.hint")}
+    <form onSubmit={handleRegister} className="nt-form">
+      <div className="nt-form__group">
+        <div className="nt-auth__email-wrapper">
+          <input
+            type="text"
+            placeholder={t("auth.name")}
+            value={registerName}
+            onChange={handleNameChange}
+            className={`nt-form__input ${
+              errors.name ? "nt-form__input--error" : ""
+            }`}
+            required
+            maxLength={16}
+          />
+          <div className="nt-form__hint">
+            {registerName.length}/16 {t("auth.name.hint")}
+          </div>
+          {errors.name && <span className="nt-form__error">{errors.name}</span>}
         </div>
-        {errors.name && <span className="error-text">{errors.name}</span>}
       </div>
 
-      {/* Поле email с автодополнением */}
-      <div className="input-group">
-        <div className="email-input-wrapper">
+      <div className="nt-form__group">
+        <div className="nt-auth__email-wrapper">
           <input
             type="email"
             placeholder={t("auth.email")}
             value={registerEmail}
             onChange={handleEmailChange}
-            className={`form-input ${errors.email ? "error" : ""}`}
+            className={`nt-form__input ${
+              errors.email ? "nt-form__input--error" : ""
+            }`}
             required
           />
           {showDomainDropdown && (
-            <div className="domain-dropdown">
+            <div className="nt-auth__domain-dropdown">
               {emailDomains
                 .filter((domain) => domain.startsWith(emailDomain))
                 .map((domain) => (
                   <div
                     key={domain}
-                    className="domain-option"
+                    className="nt-auth__domain-option"
                     onClick={() => handleDomainSelect(domain)}
                   >
                     @{domain}
@@ -64,31 +68,33 @@ const RegistrationForm = ({
                 ))}
             </div>
           )}
+          {errors.email && (
+            <span className="nt-form__error">{errors.email}</span>
+          )}
         </div>
-        {errors.email && <span className="error-text">{errors.email}</span>}
       </div>
 
-      {/* Поле пароля */}
-      <div className="input-group">
+      <div className="nt-form__group">
         <input
           type="password"
           placeholder={t("auth.password")}
           value={registerPassword}
           onChange={(e) => setRegisterPassword(e.target.value)}
-          className={`form-input ${errors.password ? "error" : ""}`}
+          className={`nt-form__input ${
+            errors.password ? "nt-form__input--error" : ""
+          }`}
           required
         />
         {errors.password && (
-          <span className="error-text">{errors.password}</span>
+          <span className="nt-form__error">{errors.password}</span>
         )}
       </div>
 
-      {/* Общая ошибка */}
       {errors.general && (
-        <div className="error-message general-error">{errors.general}</div>
+        <div className="nt-form__error--general">{errors.general}</div>
       )}
 
-      <button type="submit" className="btn-tp1">
+      <button type="submit" className="nt-btn nt-btn--primary nt-btn--full">
         {t("auth.signup")}
       </button>
     </form>

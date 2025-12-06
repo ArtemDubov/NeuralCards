@@ -1,6 +1,6 @@
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
-const authMiddleware = require("../middleware/auth");
+const authMiddleware = require("../middleware");
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -118,7 +118,6 @@ router.get("/cards", authMiddleware, async (req, res) => {
   }
 });
 
-// ДОБАВЬТЕ этот роут в favorites.js после роута для /cards
 router.get("/cardsets", authMiddleware, async (req, res) => {
   try {
     console.log(

@@ -1,11 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useLanguage } from "../../../../contexts/LanguageContext";
-
-// Импортируем SVG флаги
+import { useAppStore } from "../../../../shared/stores/appStore";
 import { RuFlag, EnFlag, EsFlag } from "../../../../assets";
 
 const LanguageSwitcher = () => {
-  const { language, switchLanguage, t } = useLanguage();
+  const { language, setLanguage, t } = useAppStore();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -29,7 +27,7 @@ const LanguageSwitcher = () => {
   }, []);
 
   const handleLanguageSwitch = (langId) => {
-    switchLanguage(langId);
+    setLanguage(langId);
     setIsOpen(false);
   };
 
@@ -40,34 +38,40 @@ const LanguageSwitcher = () => {
   const currentLanguage = languages.find((lang) => lang.id === language);
 
   return (
-    <div className="language-switcher-container" ref={dropdownRef}>
-      <div className="language-switcher-dropdown">
-        <button className="language-current btn-tp7" onClick={toggleDropdown}>
+    <div className="nt-language__container" ref={dropdownRef}>
+      <div
+        className={`nt-language__dropdown ${
+          isOpen ? "nt-language__dropdown--open" : ""
+        }`}
+      >
+        <button className="nt-language__current" onClick={toggleDropdown}>
           <img
             src={currentLanguage?.flag}
             alt={t(currentLanguage?.name)}
-            className="language-flag"
+            className="nt-language__flag"
           />
-          <span className="language-arrow">{isOpen ? "▲" : "▼"}</span>
+          <span className="nt-language__arrow">{isOpen ? "▲" : "▼"}</span>
         </button>
 
-        <div className={`language-options ${isOpen ? "open" : ""}`}>
+        <div
+          className={`nt-language__options ${
+            isOpen ? "nt-language__options--open" : ""
+          }`}
+        >
           {languages.map((lang) => (
             <button
               key={lang.id}
-              className={`language-option ${
-                language === lang.id ? "active" : ""
+              className={`nt-language__option ${
+                language === lang.id ? "nt-language__option--active" : ""
               }`}
               onClick={() => handleLanguageSwitch(lang.id)}
             >
               <img
                 src={lang.flag}
                 alt={t(lang.name)}
-                className="language-option-flag"
+                className="nt-language__option-flag"
               />
-              <span className="text-primary dropdown-text-active">
-                {t(lang.name)}
-              </span>
+              <span className="nt-language__option-name">{t(lang.name)}</span>
             </button>
           ))}
         </div>

@@ -1,0 +1,29 @@
+/* ==========================================================
+   APP – лишь анимация логотипа (все глобальные стили в main.css)
+   ========================================================== */
+
+.App {
+  text-align: center;
+}
+
+/* Логотип */
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+/* Анимация вращения, но только если пользователь не запросил reduced‑motion */
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

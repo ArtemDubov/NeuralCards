@@ -1,0 +1,99 @@
+/* ============================================
+   TYPOGRAPHY УТИЛИТЫ: Text, Colors, Alignment
+   ============================================ */
+
+/* TEXT ALIGNMENT */
+.nt-util__text-center {
+  text-align: center;
+}
+.nt-util__text-left {
+  text-align: left;
+}
+.nt-util__text-right {
+  text-align: right;
+}
+
+/* TEXT COLORS */
+.nt-util__text-primary {
+  color: var(--nt-text-primary);
+}
+.nt-util__text-secondary {
+  color: var(--nt-text-secondary);
+}
+.nt-util__text-accent {
+  color: var(--nt-color-accent);
+}
+.nt-util__text-success {
+  color: var(--nt-color-success);
+}
+.nt-util__text-error {
+  color: var(--nt-color-error);
+}
+.nt-util__text-warning {
+  color: var(--nt-color-warning);
+}
+.nt-util__text-gold {
+  color: var(--nt-color-gold);
+}
+.nt-util__text-muted {
+  color: var(--nt-text-muted);
+}
+
+/* TEXT STYLES */
+.nt-util__truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nt-util__line-clamp-1 {
+  display: -webkit-box;
+
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.nt-util__line-clamp-2 {
+  display: -webkit-box;
+
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.nt-util__line-clamp-3 {
+  display: -webkit-box;
+
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* FONT WEIGHTS */
+.nt-util__font-normal {
+  font-weight: normal;
+}
+.nt-util__font-medium {
+  font-weight: 500;
+}
+.nt-util__font-semibold {
+  font-weight: 600;
+}
+.nt-util__font-bold {
+  font-weight: bold;
+}
+
+/* TEXT SIZES */
+.nt-util__text-xs {
+  font-size: 0.75rem;
+}
+.nt-util__text-sm {
+  font-size: 0.875rem;
+}
+.nt-util__text-base {
+  font-size: 1rem;
+}
+.nt-util__text-lg {
+  font-size: 1.125rem;
+}
+.nt-util__text-xl {
+  font-size: 1.25rem;
+}

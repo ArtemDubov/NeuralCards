@@ -1,225 +1,206 @@
-import React, { useState, useEffect, useCallback } from "react";
-import apiClient from "../../../api-client";
+import React, { useState } from "react";
+import { useAllFavorites } from "../../../api/favorites";
 import FavoriteButton from "./FavoriteButton/FavoriteButton";
-import { useLanguage } from "../../../contexts/LanguageContext";
+import { useAppStore } from "../../../shared/stores/appStore";
 
-const FavoritesPage = ({ handleViewCard }) => {
-  const { t } = useLanguage();
-  const [favoriteSets, setFavoriteSets] = useState([]);
-  const [favoriteCards, setFavoriteCards] = useState([]);
+const FavoritesPage = ({ handleViewCard, handleViewSet }) => {
+  const { t } = useAppStore();
   const [activeTab, setActiveTab] = useState("sets");
-  const [loading, setLoading] = useState(true);
+  const { sets, cards, isLoading } = useAllFavorites();
 
-  console.log("=== FAVORITES PAGE RENDER ===");
-  console.log("favoriteSets:", favoriteSets);
-  console.log("favoriteCards:", favoriteCards);
-  console.log("activeTab:", activeTab);
-  console.log("loading:", loading);
-
-  // Используем useCallback для мемоизации функции
-  const loadFavorites = useCallback(async () => {
-    try {
-      setLoading(true);
-      console.log("📥 [FavoritesPage] Загрузка избранного...");
-
-      // Загружаем избранные наборы и карточки параллельно
-      const [setsResponse, cardsResponse] = await Promise.all([
-        apiClient.get("/api/favorites"),
-        apiClient.get("/api/favorites/cards"),
-      ]);
-
-      console.log("📦 [FavoritesPage] Избранные наборы:", setsResponse.data);
-      console.log("📦 [FavoritesPage] Избранные карточки:", cardsResponse.data);
-
-      setFavoriteSets(setsResponse.data);
-      setFavoriteCards(cardsResponse.data);
-    } catch (error) {
-      console.error("❌ [FavoritesPage] Ошибка загрузки избранного:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Загружаем данные при монтировании
-  useEffect(() => {
-    loadFavorites();
-  }, [loadFavorites]);
-
-  // Добавляем обработчик событий для обновления при изменениях извне
-  useEffect(() => {
-    const handleFavoritesUpdate = () => {
-      console.log("🔄 [FavoritesPage] Получен сигнал обновления избранного");
-      loadFavorites();
-    };
-
-    // Слушаем кастомные события от FavoriteButton
-    window.addEventListener("favoritesUpdated", handleFavoritesUpdate);
-
-    return () => {
-      window.removeEventListener("favoritesUpdated", handleFavoritesUpdate);
-    };
-  }, [loadFavorites]);
-
-  // Функция для получения информации о карточке
-  const getCardInfo = (fav) => {
-    return {
-      id: fav.cardId || fav.id,
-      question:
-        fav.card?.front ||
-        fav.front ||
-        fav.card?.question ||
-        fav.question ||
-        t("cards.front.empty"),
-      answer:
-        fav.card?.back ||
-        fav.back ||
-        fav.card?.answer ||
-        fav.answer ||
-        t("cards.back.empty"),
-      cardset: fav.card?.cardset || fav.cardset || null,
-      imageUrl: fav.card?.imageUrl || fav.imageUrl || null,
-      audioUrl: fav.card?.audioUrl || fav.audioUrl || null,
-      backImageUrl: fav.card?.backImageUrl || fav.backImageUrl || null,
-      backAudioUrl: fav.card?.backAudioUrl || fav.backAudioUrl || null,
-    };
-  };
-
-  // Функция для получения информации о наборе
-  const getSetInfo = (fav) => {
-    return {
-      id: fav.cardsetId || fav.id,
-      title: fav.cardSet?.title || fav.title || t("sets.unknown"),
-      cards: fav.cardSet?.cards || fav.cards || [],
-      author: fav.cardSet?.author || fav.author || null,
-    };
-  };
-
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="page-container favorites-page">
-        <div className="loading">{t("loading.progress")}</div>
+      <div className="nt-page__container">
+        <div className="nt-loader">{t("loading.progress")}</div>
       </div>
     );
   }
 
+  // Функция для обработки клика на набор (если handleViewSet не передан)
+  const handleSetClick = (setInfo) => {
+    if (handleViewSet) {
+      handleViewSet(setInfo);
+    } else {
+      // Вариант по умолчанию: открываем модальное окно или перенаправляем
+      console.log("Открыть набор:", setInfo.title);
+      // Можно открыть в модальном окне:
+      // openSetModal(setInfo);
+
+      // Или перейти на страницу набора:
+      // window.location.href = `/#cardsets/${setInfo.id}`;
+    }
+  };
+
   return (
-    <div className="page-container favorites-page">
-      {/* ЗАГОЛОВОК С КНОПКАМИ ВКЛАДОК */}
-      <div className="page-header">
-        <h2>⭐ {t("favorites.title")}</h2>
-        <div className="favorites-tabs-header">
+    <div className="nt-favorites__page">
+      <div className="nt-page__header">
+        <h2 className="nt-page__title">⭐ {t("favorites.title")}</h2>
+        <div className="nt-favorites__header-tabs">
           <button
-            className={`btn-tp5 ${activeTab === "sets" ? "active" : ""}`}
+            className={`nt-btn ${
+              activeTab === "sets"
+                ? "nt-btn--active nt-btn--gold"
+                : "nt-btn--secondary"
+            }`}
             onClick={() => setActiveTab("sets")}
           >
-            {t("favorites.sets.tab")} ({favoriteSets.length})
+            {t("favorites.sets.tab")} ({sets.length})
           </button>
           <button
-            className={`btn-tp5 ${activeTab === "cards" ? "active" : ""}`}
+            className={`nt-btn ${
+              activeTab === "cards"
+                ? "nt-btn--active nt-btn--gold"
+                : "nt-btn--secondary"
+            }`}
             onClick={() => setActiveTab("cards")}
           >
-            {t("favorites.cards.tab")} ({favoriteCards.length})
+            {t("favorites.cards.tab")} ({cards.length})
           </button>
         </div>
       </div>
 
-      <div className="content-card">
-        {/* УБРАЛИ КНОПКИ ВКЛАДОК ОТСЮДА */}
-
+      <div className="nt-content__grid">
         {activeTab === "sets" ? (
-          favoriteSets.length === 0 ? (
-            <div className="empty-state">
-              <div className="empty-icon">📚</div>
-              <h3>{t("favorites.sets.empty.title")}</h3>
-              <p>{t("favorites.sets.empty.message")}</p>
+          sets.length === 0 ? (
+            <div className="nt-favorites__empty">
+              <div className="nt-favorites__empty-icon">📚</div>
+              <h3 className="nt-favorites__empty-title">
+                {t("favorites.sets.empty.title")}
+              </h3>
+              <p className="nt-favorites__empty-text">
+                {t("favorites.sets.empty.message")}
+              </p>
             </div>
           ) : (
-            <div className="sets-grid">
-              {favoriteSets.map((fav) => {
-                const setInfo = getSetInfo(fav);
+            <div className="nt-favorites__grid">
+              {sets.map((fav) => {
+                const setInfo = {
+                  id: fav.cardsetId || fav.id,
+                  title: fav.cardSet?.title || fav.title || t("sets.unknown"),
+                  description:
+                    fav.cardSet?.description || fav.description || "",
+                  cards: fav.cardSet?.cards || fav.cards || [],
+                  author: fav.cardSet?.author || fav.author || null,
+                  tags: fav.cardSet?.tags || fav.tags || [],
+                  createdAt: fav.cardSet?.createdAt || fav.createdAt,
+                };
+
                 return (
-                  <div key={setInfo.id} className="cardset-item favorite">
-                    <div className="set-header">
-                      <div
-                        className="set-content"
-                        style={{ cursor: "default", flex: 1 }}
-                      >
-                        <h3>{setInfo.title}</h3>
-                        <span className="cards-count">
+                  <div
+                    key={setInfo.id}
+                    className="nt-card nt-card--set nt-card--favorite"
+                    onClick={() => handleSetClick(setInfo)}
+                    style={{ cursor: "pointer" }}
+                  >
+                    <div className="nt-card__header">
+                      <div className="nt-card__content" style={{ flex: 1 }}>
+                        <h3 className="nt-card__title">{setInfo.title}</h3>
+                        <p className="nt-card__subtitle">
                           {setInfo.cards.length} {t("sets.cards_count")}
-                        </span>
+                        </p>
+                        {setInfo.description && (
+                          <p className="nt-card__text nt-util__line-clamp-2">
+                            {setInfo.description}
+                          </p>
+                        )}
                         {setInfo.author && (
-                          <span className="set-author">
+                          <p className="nt-card__text nt-card__text--small">
                             {t("favorites.author")}:{" "}
                             {setInfo.author.name ||
                               setInfo.author.email ||
                               t("favorites.author.unknown")}
-                          </span>
+                          </p>
                         )}
                       </div>
-                      <div className="set-actions">
+                      <div
+                        className="nt-card__actions"
+                        onClick={(e) => e.stopPropagation()}
+                      >
                         <FavoriteButton
                           itemId={setInfo.id}
                           itemType="cardset"
-                          onUpdate={loadFavorites}
                         />
                       </div>
                     </div>
+
+                    {setInfo.tags && setInfo.tags.length > 0 && (
+                      <div className="nt-card__footer">
+                        <div className="nt-card__tags">
+                          {Array.isArray(setInfo.tags)
+                            ? setInfo.tags
+                                .slice(0, 3)
+                                .map((tag, index) => {
+                                  const tagName =
+                                    typeof tag === "string" ? tag : tag.name;
+                                  return tagName ? (
+                                    <span key={index} className="tag">
+                                      {tagName}
+                                    </span>
+                                  ) : null;
+                                })
+                                .filter(Boolean)
+                            : null}
+                          {setInfo.tags.length > 3 && (
+                            <span className="tag">
+                              +{setInfo.tags.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 );
               })}
             </div>
           )
-        ) : favoriteCards.length === 0 ? (
-          <div className="empty-state">
-            <div className="empty-icon">🃏</div>
-            <h3>{t("favorites.cards.empty.title")}</h3>
-            <p>{t("favorites.cards.empty.message")}</p>
+        ) : cards.length === 0 ? (
+          <div className="nt-favorites__empty">
+            <div className="nt-favorites__empty-icon">🃏</div>
+            <h3 className="nt-favorites__empty-title">
+              {t("favorites.cards.empty.title")}
+            </h3>
+            <p className="nt-favorites__empty-text">
+              {t("favorites.cards.empty.message")}
+            </p>
           </div>
         ) : (
-          <div className="cards-grid">
-            {favoriteCards.map((fav) => {
-              const cardInfo = getCardInfo(fav);
+          <div className="nt-cards-grid">
+            {cards.map((fav) => {
+              const cardInfo = {
+                id: fav.cardId || fav.id,
+                front: fav.card?.front || fav.front || "",
+                back: fav.card?.back || fav.back || "",
+                imageUrl: fav.card?.imageUrl || fav.imageUrl,
+                audioUrl: fav.card?.audioUrl || fav.audioUrl,
+                cardset: fav.card?.cardset || fav.cardset,
+              };
+
               return (
-                <div key={cardInfo.id} className="card-preview favorite">
+                <div
+                  key={cardInfo.id}
+                  className="nt-card nt-card--preview nt-card--favorite"
+                >
                   <div
-                    className="card-preview-content"
+                    className="nt-card__content"
                     onClick={() => handleViewCard(cardInfo)}
+                    style={{ cursor: "pointer" }}
                   >
-                    <div className="card-preview-front">
-                      <div className="card-text" title={cardInfo.question}>
-                        {cardInfo.question}
+                    <div className="nt-card__body">
+                      <div className="nt-card__title" title={cardInfo.front}>
+                        {cardInfo.front}
                       </div>
-                      <div className="card-media-indicators">
-                        {cardInfo.imageUrl && (
-                          <span className="media-indicator">🖼️</span>
-                        )}
-                        {cardInfo.audioUrl && (
-                          <span className="media-indicator">🎵</span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="card-preview-back">
-                      <div className="card-text" title={cardInfo.answer}>
-                        {cardInfo.answer}
-                      </div>
-                      <div className="card-media-indicators">
-                        {cardInfo.backImageUrl && (
-                          <span className="media-indicator">🖼️</span>
-                        )}
-                        {cardInfo.backAudioUrl && (
-                          <span className="media-indicator">🎵</span>
-                        )}
+                      <p className="nt-card__text" title={cardInfo.back}>
+                        {cardInfo.back}
+                      </p>
+                      <div className="nt-card__tags">
+                        {cardInfo.imageUrl && <span className="tag">🖼️</span>}
+                        {cardInfo.audioUrl && <span className="tag">🎵</span>}
                       </div>
                     </div>
                   </div>
 
-                  <div className="card-actions">
-                    <FavoriteButton
-                      itemId={cardInfo.id}
-                      itemType="card"
-                      onUpdate={loadFavorites}
-                    />
+                  <div className="nt-card__actions">
+                    <FavoriteButton itemId={cardInfo.id} itemType="card" />
                   </div>
                 </div>
               );

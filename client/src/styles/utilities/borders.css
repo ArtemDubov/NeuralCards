@@ -1,0 +1,64 @@
+/* ============================================
+   BORDER УТИЛИТЫ: Borders, Radius
+   ============================================ */
+
+/* BORDERS */
+.nt-util__border {
+  border: 1px solid var(--nt-border-primary);
+}
+.nt-util__border-t {
+  border-top: 1px solid var(--nt-border-primary);
+}
+.nt-util__border-b {
+  border-bottom: 1px solid var(--nt-border-primary);
+}
+.nt-util__border-l {
+  border-left: 1px solid var(--nt-border-primary);
+}
+.nt-util__border-r {
+  border-right: 1px solid var(--nt-border-primary);
+}
+
+.nt-util__border-accent {
+  border-color: var(--nt-color-accent);
+}
+.nt-util__border-success {
+  border-color: var(--nt-color-success);
+}
+.nt-util__border-error {
+  border-color: var(--nt-color-error);
+}
+.nt-util__border-gold {
+  border-color: var(--nt-color-gold);
+}
+
+/* BORDER RADIUS */
+.nt-util__rounded-xs {
+  border-radius: var(--nt-radius-xs);
+}
+.nt-util__rounded-sm {
+  border-radius: var(--nt-radius-sm);
+}
+.nt-util__rounded-md {
+  border-radius: var(--nt-radius-md);
+}
+.nt-util__rounded-lg {
+  border-radius: var(--nt-radius-lg);
+}
+.nt-util__rounded-xl {
+  border-radius: var(--nt-radius-xl);
+}
+.nt-util__rounded-full {
+  border-radius: var(--nt-radius-full);
+}
+
+/* BORDER STYLES */
+.nt-util__border-dashed {
+  border-style: dashed;
+}
+.nt-util__border-dotted {
+  border-style: dotted;
+}
+.nt-util__border-none {
+  border: none;
+}

@@ -1,17 +1,74 @@
-/* Главный файл стилей Neural Trident */
+/* src/styles/main.css */
 
-/* Базовые стили */
-@import "./base/reset.css";
+/* ==========================================================
+   GLOBAL STYLES – ONE ENTRY POINT
+   ========================================================== */
+
+/* -------------------------------------------------
+   1️⃣ Переменные (доступны всем ниже)
+   ------------------------------------------------- */
 @import "./base/variables.css";
 
-/* UI Компоненты */
-@import "./components/buttons.css";
-@import "./components/cards.css";
-@import "./components/modals.css";
-@import "./components/forms.css";
-@import "./components/utils.css";
-@import "./components/language-switcher.css";
-@import "./components/theme-switcher.css";
+/* -------------------------------------------------
+   2️⃣ Токены (градиенты, тени, переходы)
+   ------------------------------------------------- */
+@import "./core/tokens.css";
 
-/* Layout */
+/* -------------------------------------------------
+   3️⃣ Сброс браузерных стилей
+   ------------------------------------------------- */
+@import "./base/reset.css";
+
+/* -------------------------------------------------
+   4️⃣ Layout – базовые контейнеры, grid, flex‑утилиты
+   ------------------------------------------------- */
 @import "./layouts/layouts.css";
+
+/* -------------------------------------------------
+   5️⃣ UI‑компоненты (общие для всего приложения)
+   ------------------------------------------------- */
+@import "./components/features/shared/header.css";
+@import "./components/features/shared/navigation.css";
+
+/* ------------------- common UI ------------------- */
+@import "./components/common/buttons.css";
+@import "./components/common/cards.css";
+
+/* UI‑файлы, которые теперь находятся в подпапке ui/ */
+@import "./components/common/forms.css";
+@import "./components/common/modals.css";
+@import "./components/common/tags.css";
+@import "./components/common/page-header.css";
+@import "./components/common/page-controls.css";
+@import "./components/common/grids.css";
+@import "./components/common/loader.css";
+
+/* -------------------------------------------------
+   6️⃣ Виджеты (язык, тема)
+   ------------------------------------------------- */
+@import "./components/widgets/language-switcher.css";
+@import "./components/widgets/theme-switcher.css";
+
+/* -------------------------------------------------
+   7️⃣ Утилиты (атомарные helper‑классы)
+   ------------------------------------------------- */
+@import "./utilities/index.css";
+
+/* -------------------------------------------------
+   8️⃣ Темы – переопределяют только цвета
+   ------------------------------------------------- */
+@import "./themes/ocean.css";
+@import "./themes/dark.css";
+@import "./themes/forest.css";
+@import "./themes/sunset.css";
+@import "./themes/light.css";
+
+/* -------------------------------------------------
+   9️⃣ Фичи (страницы) – используют переменные и токены
+   ------------------------------------------------- */
+@import "./components/features/auth/auth.css";
+@import "./components/features/cardsets/cardsets.css";
+@import "./components/features/favorites/favorites.css";
+@import "./components/features/profile/profile.css";
+@import "./components/features/training/index.css";
+@import "./components/features/premium/premium-button.css";

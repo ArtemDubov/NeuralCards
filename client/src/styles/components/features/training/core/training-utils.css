@@ -1,0 +1,85 @@
+/* ============================================
+   УТИЛИТЫ И ОБЩИЕ СТИЛИ ТРЕНИРОВОК
+   (содержимое из ui/utils.css + дополнения)
+   ============================================ */
+
+.nt-training-empty-state {
+  text-align: center;
+  padding: var(--nt-space-xl);
+  color: var(--nt-text-secondary);
+}
+
+.nt-training-empty-icon {
+  font-size: 3rem;
+  margin-bottom: var(--nt-space-md);
+  opacity: 0.5;
+}
+
+/* Утилиты для тренировок */
+.nt-training-text-center {
+  text-align: center;
+}
+
+.nt-training-text-large {
+  font-size: 1.4rem;
+  line-height: 1.6;
+}
+
+.nt-training-text-xlarge {
+  font-size: 1.8rem;
+  line-height: 1.5;
+}
+
+.nt-training-mb-lg {
+  margin-bottom: var(--nt-space-lg);
+}
+
+.nt-training-mt-lg {
+  margin-top: var(--nt-space-lg);
+}
+
+.nt-training-p-lg {
+  padding: var(--nt-space-lg);
+}
+
+.nt-training-full-width {
+  width: 100%;
+}
+
+.nt-training-full-height {
+  height: 100%;
+}
+
+.nt-training-pointer {
+  cursor: pointer;
+}
+
+.nt-training-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.nt-training-hidden {
+  display: none;
+}
+
+.nt-training-visible {
+  display: block;
+}
+
+.nt-training-rounded-lg {
+  border-radius: var(--nt-radius-lg);
+}
+
+.nt-training-rounded-xl {
+  border-radius: var(--nt-radius-xl);
+}
+
+.nt-training-shadow-md {
+  box-shadow: var(--nt-shadow-md);
+}
+
+.nt-training-shadow-lg {
+  box-shadow: var(--nt-shadow-lg);
+}

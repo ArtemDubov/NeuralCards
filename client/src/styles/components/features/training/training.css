@@ -1,0 +1,31 @@
+/* ==========================================================
+   TRAINING – CORE + COMPONENTS + MODES
+   ========================================================== */
+
+/* CORE (база, layout, анимации, утилиты) */
+@import "./core/training-base.css";
+@import "./core/training-layout.css";
+@import "./core/training-animations.css";
+@import "./core/training-utils.css";
+
+/* COMPONENTS – карточка тренировки */
+@import "./components/training-card.css";
+
+/* MODES – только те, что реально используются сейчас */
+@import "./modes/practice.css";
+@import "./modes/quiz.css";
+@import "./modes/sprint.css";
+@import "./modes/memory.css";
+@import "./modes/wave.css";
+@import "./modes/exam.css";
+@import "./modes/audio.css";
+@import "./modes/circus.css";
+@import "./modes/countdown.css";
+@import "./modes/mixer.css";
+@import "./modes/ai.css";
+@import "./modes/tournament.css";
+@import "./modes/carousel.css";
+
+/* PAGES – выбор режима, завершение */
+@import "./pages/selection.css";
+@import "./pages/completion.css";

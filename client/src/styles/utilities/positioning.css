@@ -1,0 +1,85 @@
+/* ============================================
+   POSITIONING УТИЛИТЫ: Position, Overflow, Sizing
+   ============================================ */
+
+/* POSITION */
+.nt-util__relative {
+  position: relative;
+}
+.nt-util__absolute {
+  position: absolute;
+}
+.nt-util__fixed {
+  position: fixed;
+}
+.nt-util__sticky {
+  position: sticky;
+}
+
+.nt-util__top-0 {
+  top: 0;
+}
+.nt-util__right-0 {
+  right: 0;
+}
+.nt-util__bottom-0 {
+  bottom: 0;
+}
+.nt-util__left-0 {
+  left: 0;
+}
+
+/* OVERFLOW */
+.nt-util__overflow-auto {
+  overflow: auto;
+}
+.nt-util__overflow-hidden {
+  overflow: hidden;
+}
+.nt-util__overflow-scroll {
+  overflow: scroll;
+}
+.nt-util__overflow-visible {
+  overflow: visible;
+}
+
+.nt-util__overflow-x-auto {
+  overflow-x: auto;
+}
+.nt-util__overflow-y-auto {
+  overflow-y: auto;
+}
+
+/* SIZING */
+.nt-util__w-full {
+  width: 100%;
+}
+.nt-util__w-auto {
+  width: auto;
+}
+.nt-util__w-50 {
+  width: 50%;
+}
+.nt-util__w-75 {
+  width: 75%;
+}
+
+.nt-util__h-full {
+  height: 100%;
+}
+.nt-util__h-auto {
+  height: auto;
+}
+.nt-util__h-50 {
+  height: 50%;
+}
+.nt-util__h-75 {
+  height: 75%;
+}
+
+.nt-util__min-w-0 {
+  min-width: 0;
+}
+.nt-util__min-h-0 {
+  min-height: 0;
+}

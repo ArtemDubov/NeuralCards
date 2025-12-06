@@ -1,0 +1,257 @@
+/* src/styles/components/common/buttons.css */
+
+/* ============================================
+   СИСТЕМА КНОПОК NEURAL TRIDENT
+   ============================================ */
+
+/* БАЗОВАЯ КНОПКА */
+.nt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--nt-space-xs);
+  font-family: inherit;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: var(--nt-transition-base);
+  white-space: nowrap;
+  user-select: none;
+  border-radius: var(--nt-radius-md);
+}
+
+/* Отключённый */
+.nt-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Фокус‑видимый (заменяем :active) */
+.nt-btn:focus-visible:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* ------------------------------------
+   ТИПЫ КНОПОК
+   ------------------------------------ */
+.nt-btn--primary {
+  background: var(--nt-gradient-primary);
+  color: var(--nt-color-white);
+  padding: var(--nt-space-md) var(--nt-space-lg);
+  font-weight: 700;
+  box-shadow: var(--nt-shadow-md);
+}
+.nt-btn--primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--nt-shadow-lg);
+}
+
+.nt-btn--secondary {
+  background: transparent;
+  color: var(--nt-text-secondary);
+  border: 1px solid var(--nt-border-primary);
+  padding: var(--nt-space-md) var(--nt-space-lg);
+}
+
+.nt-btn--secondary:hover:not(:disabled) {
+  background: var(--nt-color-accent);
+  color: var(--nt-bg-primary);
+  border-color: var(--nt-color-accent);
+  transform: translateY(-2px);
+}
+
+.nt-btn--danger {
+  background: rgba(255, 107, 107, 0.1);
+  color: var(--nt-color-error);
+  border: 1px solid var(--nt-color-error);
+  padding: var(--nt-space-sm) var(--nt-space-md);
+  font-size: 0.9rem;
+}
+
+.nt-btn--danger:hover:not(:disabled) {
+  background: var(--nt-color-error);
+  color: var(--nt-color-white);
+  transform: scale(1.05);
+}
+
+.nt-btn--ghost {
+  background: transparent;
+  color: var(--nt-text-secondary);
+  border: 1px solid var(--nt-border-light);
+  padding: var(--nt-space-sm) var(--nt-space-md);
+}
+
+.nt-btn--ghost:hover:not(:disabled) {
+  background: var(--nt-bg-hover);
+  border-color: var(--nt-color-accent);
+  color: var(--nt-color-accent);
+}
+
+.nt-btn--success {
+  background: var(--nt-gradient-success);
+  color: var(--nt-color-white);
+  padding: var(--nt-space-md) var(--nt-space-lg);
+  font-weight: 600;
+}
+
+.nt-btn--success:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+.nt-btn--gold {
+  background: var(--nt-gradient-gold);
+  color: var(--nt-bg-primary);
+  border: 2px solid var(--nt-color-gold);
+  padding: var(--nt-space-sm) var(--nt-space-md);
+  font-weight: 700;
+  box-shadow: var(--nt-shadow-gold);
+}
+
+.nt-btn--gold:hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+  transform: scale(1.05);
+}
+
+/* ИКОНОЧНЫЕ КНОПКИ */
+.nt-btn--icon {
+  background: transparent;
+  color: var(--nt-text-secondary);
+  padding: var(--nt-space-sm);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+}
+
+.nt-btn--icon:hover:not(:disabled) {
+  background: var(--nt-bg-hover);
+  transform: scale(1.1);
+}
+
+/* КНОПКИ ДЛЯ ТРЕНИРОВОК */
+.nt-btn--training {
+  background: linear-gradient(
+    135deg,
+    var(--nt-color-success),
+    var(--nt-color-accent)
+  );
+  color: var(--nt-color-white);
+  border: 3px solid var(--nt-color-accent);
+  padding: 20px;
+  border-radius: var(--nt-radius-lg);
+  font-size: 1.1rem;
+  font-weight: 500;
+  min-height: 80px;
+  word-break: break-word;
+}
+
+.nt-btn--training:hover:not(:disabled) {
+  transform: scale(1.02);
+  border-color: var(--nt-color-primary);
+  box-shadow: var(--nt-shadow-md);
+}
+
+.nt-btn--training.selected {
+  border-color: var(--nt-color-primary);
+  background: var(--nt-gradient-primary);
+}
+
+.nt-btn--training.correct {
+  border-color: var(--nt-color-success);
+  background: var(--nt-gradient-success);
+}
+
+.nt-btn--training.wrong {
+  border-color: var(--nt-color-error);
+  background: var(--nt-gradient-error);
+}
+
+/* КНОПКА ИЗБРАННОГО С АУРОЙ */
+.nt-btn--favorite {
+  position: relative;
+  background: none;
+  color: var(--nt-text-secondary);
+  padding: var(--nt-space-sm);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+}
+
+.nt-btn--favorite:hover::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  border-radius: var(--nt-radius-md);
+  background: radial-gradient(
+    circle,
+    rgba(255, 215, 0, 0.4) 0%,
+    rgba(255, 215, 0, 0) 70%
+  );
+  animation: nt-aura-pulse 1.5s ease-in-out infinite;
+  z-index: -1;
+}
+
+.nt-btn--favorite:hover {
+  transform: scale(1.1);
+  z-index: 1;
+}
+
+.nt-btn--favorite.active {
+  color: var(--nt-color-gold);
+}
+
+.nt-btn--favorite.active:hover::before {
+  background: radial-gradient(
+    circle,
+    rgba(255, 215, 0, 0.6) 0%,
+    rgba(255, 215, 0, 0) 70%
+  );
+}
+
+@keyframes nt-aura-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+/* РАЗМЕРЫ КНОПОК */
+.nt-btn--small {
+  padding: var(--nt-space-sm) var(--nt-space-md);
+  font-size: 0.9rem;
+}
+
+.nt-btn--medium {
+  padding: var(--nt-space-md) var(--nt-space-lg);
+  font-size: 1rem;
+}
+
+.nt-btn--large {
+  padding: var(--nt-space-lg) var(--nt-space-xl);
+  font-size: 1.1rem;
+}
+
+.nt-btn--full {
+  width: 100%;
+}
+
+/* СОСТОЯНИЯ */
+.nt-btn--loading {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.nt-btn--active {
+  background: var(--nt-color-accent);
+  color: var(--nt-bg-primary);
+  border-color: var(--nt-color-accent);
+}

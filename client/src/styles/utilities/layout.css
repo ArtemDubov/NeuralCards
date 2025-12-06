@@ -1,0 +1,79 @@
+/* ============================================
+   LAYOUT УТИЛИТЫ: Flex, Grid, Display
+   ============================================ */
+
+/* FLEX УТИЛИТЫ */
+.nt-util__flex {
+  display: flex;
+}
+.nt-util__flex-col {
+  flex-direction: column;
+}
+.nt-util__flex-row {
+  flex-direction: row;
+}
+.nt-util__flex-wrap {
+  flex-wrap: wrap;
+}
+.nt-util__flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+.nt-util__items-start {
+  align-items: flex-start;
+}
+.nt-util__items-center {
+  align-items: center;
+}
+.nt-util__items-end {
+  align-items: flex-end;
+}
+.nt-util__items-stretch {
+  align-items: stretch;
+}
+
+.nt-util__justify-start {
+  justify-content: flex-start;
+}
+.nt-util__justify-center {
+  justify-content: center;
+}
+.nt-util__justify-end {
+  justify-content: flex-end;
+}
+.nt-util__justify-between {
+  justify-content: space-between;
+}
+.nt-util__justify-around {
+  justify-content: space-around;
+}
+
+.nt-util__gap-xs {
+  gap: var(--nt-space-xs);
+}
+.nt-util__gap-sm {
+  gap: var(--nt-space-sm);
+}
+.nt-util__gap-md {
+  gap: var(--nt-space-md);
+}
+.nt-util__gap-lg {
+  gap: var(--nt-space-lg);
+}
+.nt-util__gap-xl {
+  gap: var(--nt-space-xl);
+}
+
+/* GRID УТИЛИТЫ */
+.nt-util__grid {
+  display: grid;
+}
+.nt-util__grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.nt-util__grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.nt-util__grid-auto {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
