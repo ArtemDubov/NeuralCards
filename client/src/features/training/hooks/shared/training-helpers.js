@@ -85,10 +85,10 @@ export const filterAudioCards = (cards) => {
  * Смешивание карточек из нескольких наборов
  * Используется в: mixer, tournament (если наборы из разных тем)
  */
-export const mixCardsFromSets = (cardsets, maxCardsPerSet = null) => {
+export const mixCardsFromSets = (cardSets, maxCardsPerSet = null) => {
   const allCards = [];
 
-  cardsets.forEach((set) => {
+  cardSets.forEach((set) => {
     if (set.cards && Array.isArray(set.cards)) {
       const cardsToAdd = maxCardsPerSet
         ? set.cards.slice(0, maxCardsPerSet)

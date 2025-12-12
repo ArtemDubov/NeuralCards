@@ -8,7 +8,7 @@
   position: relative;
   background: var(--nt-bg-card);
   backdrop-filter: blur(5px);
-  border: 1px solid var(--nt-border-primary);
+  border: 2px solid var(--nt-border-primary);
   border-radius: var(--nt-radius-lg);
   transition: var(--nt-transition-base);
 }
@@ -16,7 +16,6 @@
 .nt-card:hover {
   transform: translateY(-2px);
   box-shadow: var(--nt-shadow-md);
-  border-color: var(--nt-border-hover);
 }
 
 /* КАРТОЧКА НАБОРА */
@@ -32,6 +31,27 @@
   aspect-ratio: 16/9;
   display: flex;
   flex-direction: column;
+}
+
+/* Специфичные стили для футера карточки набора */
+.nt-card--set .nt-card__footer {
+  flex-direction: column;
+  border-top: none;
+  padding-top: 0;
+  align-items: stretch;
+}
+
+.nt-card--set .nt-card__footer-info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: var(--nt-space-md);
+  border-top: 1px solid var(--nt-border-primary);
+}
+
+.nt-card--set .nt-card__tags {
+  margin-bottom: var(--nt-space-sm);
 }
 
 /* КАРТОЧКА КАРТОЧКИ (для превью) */

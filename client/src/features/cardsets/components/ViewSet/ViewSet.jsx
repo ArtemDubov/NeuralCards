@@ -1,10 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useAppStore } from "../../../../shared/stores/appStore";
 import { useIsCardFavorite } from "../../../../api/favorites";
 import FavoriteButton from "../../../favorites/components/FavoriteButton/FavoriteButton";
 import { useUIStore } from "../../../../shared/stores/uiStore";
-import { useCardset } from "../../../../api/cardsets";
+import { useCardSet } from "../../../../api/cardSets";
 import { useDataStore } from "../../../../shared/stores/dataStore";
+import { useCardAnimations } from "../../../../hooks/useCardAnimations";
+
+// Константа для отладки
+const DEBUG_ANIMATIONS = true;
+
+const log = (component, level, message, data = {}) => {
+  if (!DEBUG_ANIMATIONS) return;
+
+  const timestamp = new Date().toISOString().substr(11, 8);
+  const prefix = `[${component} ${timestamp}]`;
+
+  const logData = {
+    ...data,
+    level,
+  };
+
+  switch (level) {
+    case "error":
+      console.error(prefix, message, logData);
+      break;
+    case "warn":
+      console.warn(prefix, message, logData);
+      break;
+    case "info":
+      console.info(prefix, message, logData);
+      break;
+    default:
+      console.log(prefix, message, logData);
+  }
+};
 
 const ViewSet = ({ setActiveTab, onStartTraining }) => {
   const { t } = useAppStore();
@@ -12,13 +42,25 @@ const ViewSet = ({ setActiveTab, onStartTraining }) => {
   const { selectedSet } = useDataStore();
   const [showFavorites, setShowFavorites] = useState(false);
 
-  const { data: displaySet, isLoading, isError } = useCardset(selectedSet?.id);
+  // УБИРАЕМ локальное состояние newlyCreatedCardId - это источник проблемы 3
+  const [newlyCreatedCardId, setNewlyCreatedCardId] = useState(null);
+
+  const { data: displaySet, isLoading, isError } = useCardSet(selectedSet?.id);
   const currentSet = displaySet || selectedSet;
 
+  log("ViewSet", "info", "Component rendered", {
+    selectedSetId: selectedSet?.id,
+    displaySetExists: !!displaySet,
+    currentSetExists: !!currentSet,
+  });
+
+  // УБИРАЕМ useEffect для сброса ID - это вызывает лишние рендеры
+
   if (!currentSet) {
+    log("ViewSet", "warn", "No current set available");
     return (
       <div className="nt-content__card">
-        <p>{t("sets.not.selected") || "Набор не выбран"}</p>
+        <p>{t("sets.not.selected")}</p>
         <button
           className="nt-btn nt-btn--secondary nt-util__mt-md"
           onClick={() => setActiveTab("sets")}
@@ -30,21 +72,41 @@ const ViewSet = ({ setActiveTab, onStartTraining }) => {
   }
 
   const handleAddCard = () => {
-    ui.openModal("addCard", { setId: currentSet.id });
+    log("ViewSet", "info", "Opening add card modal", { setId: currentSet.id });
+    ui.openModal("addCard", {
+      setId: currentSet.id,
+      onSuccess: (newCard) => {
+        // Устанавливаем ID новой карточки для анимации
+        if (newCard?.id) {
+          log("ViewSet", "info", "New card added, setting ID for animation", {
+            newCardId: newCard.id,
+          });
+          setNewlyCreatedCardId(newCard.id);
+
+          // Автоматически сбрасываем через 2 секунды
+          setTimeout(() => {
+            setNewlyCreatedCardId(null);
+          }, 2000);
+        }
+      },
+    });
   };
 
   const handleEditSet = () => {
+    log("ViewSet", "info", "Opening edit set modal", { setId: currentSet.id });
     ui.openModal("editSet", currentSet);
   };
 
   const handleViewCard = (card) => {
+    log("ViewSet", "info", "Opening view card modal", { cardId: card.id });
     ui.openModal("viewCard", {
       ...card,
-      cardsetId: currentSet.id,
+      cardSetId: currentSet.id,
     });
   };
 
   const handleEditCard = (card) => {
+    log("ViewSet", "info", "Opening edit card modal", { cardId: card.id });
     ui.openModal("editCard", {
       ...card,
       setId: currentSet.id,
@@ -52,6 +114,7 @@ const ViewSet = ({ setActiveTab, onStartTraining }) => {
   };
 
   const handleDeleteCard = (cardId) => {
+    log("ViewSet", "info", "Opening delete confirmation modal", { cardId });
     ui.openModal("deleteConfirmation", {
       type: "card",
       id: cardId,
@@ -77,17 +140,24 @@ const ViewSet = ({ setActiveTab, onStartTraining }) => {
   const tagsArray = getTagsArray();
   const cardsArray = Array.isArray(currentSet.cards) ? currentSet.cards : [];
 
+  log("ViewSet", "debug", "Rendering set view", {
+    cardsCount: cardsArray.length,
+    tagsCount: tagsArray.length,
+    showFavorites,
+  });
+
   return (
     <div>
       <div className="nt-page__header">
-        <h2 className="nt-page__title">{currentSet.title || "Без названия"}</h2>
+        <h2 className="nt-page__title">
+          {currentSet.title || t("sets.no.title")}
+        </h2>
         <div className="nt-page__header-controls">
-          <span className="nt-util__bg-accent nt-util__text-primary nt-util__rounded-full nt-util__px-md nt-util__py-xs">
+          <span className="nt-set-view__card-count">
             {cardsArray.length} {t("sets.cards_count")}
             {showFavorites && " ⭐"}
           </span>
 
-          {/* Кнопка редактирования набора - ДОБАВЛЕНО */}
           <button
             className="nt-btn nt-btn--secondary"
             onClick={handleEditSet}
@@ -156,16 +226,24 @@ const ViewSet = ({ setActiveTab, onStartTraining }) => {
               handleDeleteCard={handleDeleteCard}
               handleEditCard={handleEditCard}
               t={t}
+              // Передаем только один источник триггера - пропс из ViewSet
+              isNew={newlyCreatedCardId === card.id}
             />
           ))
         ) : (
-          <div className="nt-util__empty-state">
-            <div className="nt-util__empty-icon">🃏</div>
-            <h3 className="nt-util__empty-title">
+          <div className="nt-empty-state">
+            <div className="nt-empty-state__icon">🃏</div>
+            <h3 className="nt-empty-state__title">
               {showFavorites
                 ? t("sets.no.favorites.cards")
                 : t("sets.cards.empty")}
             </h3>
+            {!showFavorites && (
+              <p className="nt-empty-state__text">
+                {t("sets.cards.empty.message") ||
+                  "Добавьте карточки для изучения"}
+              </p>
+            )}
           </div>
         )}
       </div>
@@ -180,16 +258,97 @@ const CardItem = ({
   handleDeleteCard,
   handleEditCard,
   t,
+  isNew = false,
 }) => {
   const isFavorite = useIsCardFavorite(card.id);
+  const ui = useUIStore();
+  const cardRef = useRef(null);
 
-  if (showFavorites && !isFavorite) return null;
+  // ИСПОЛЬЗУЕМ useCardAnimations вместо локальной логики
+  const { animateCardCreation, isAnimationEnabled } = useCardAnimations();
+
+  // Отслеживаем, была ли уже запущена анимация для этой карточки
+  const hasAnimatedRef = useRef(false);
+
+  log("CardItem", "debug", "Card item rendered", {
+    cardId: card.id,
+    isFavorite,
+    showFavorites,
+    isNew,
+    isAnimationEnabled: isAnimationEnabled(),
+    hasAnimated: hasAnimatedRef.current,
+  });
+
+  // Анимация создания новой карточки - ТОЛЬКО ЧЕРЕЗ animateCardCreation
+  useEffect(() => {
+    log("CardItem", "info", "useEffect for card animation check", {
+      cardId: card.id,
+      isNew,
+      isAnimationEnabled: isAnimationEnabled(),
+      hasAnimated: hasAnimatedRef.current,
+    });
+
+    // Запускаем анимацию только если:
+    // 1. Карточка новая (isNew === true)
+    // 2. Анимации включены
+    // 3. Еще не анимировали эту карточку
+    if (isNew && isAnimationEnabled() && !hasAnimatedRef.current) {
+      log("CardItem", "info", "Starting card creation animation", {
+        cardId: card.id,
+      });
+
+      hasAnimatedRef.current = true;
+
+      // Используем централизованную функцию анимации
+      animateCardCreation(card.id);
+    }
+  }, [isNew, animateCardCreation, isAnimationEnabled, card.id]);
+
+  if (showFavorites && !isFavorite) {
+    log("CardItem", "debug", "Card filtered out (not favorite)", {
+      cardId: card.id,
+    });
+    return null;
+  }
+
+  // Измененный обработчик удаления карточки
+  const handleDeleteClick = (e) => {
+    e.stopPropagation();
+
+    // Открываем модалку подтверждения
+    ui.openModal("deleteConfirmation", {
+      type: "card",
+      id: card.id,
+      title: t("modal.delete.card.title") || "Удаление карточки",
+      message:
+        t("modal.delete.card") ||
+        "Вы уверены, что хотите удалить эту карточку?",
+      // Дополнительные данные для анимации
+      animationData: {
+        elementId: `card-${card.id}`,
+        action: "delete",
+        elementType: "card",
+      },
+      // Передаем setId для карточки (нужен для API)
+      setId: card.cardSetId || card.setId,
+    });
+  };
+
+  const handleEditClick = (e) => {
+    e.stopPropagation();
+    log("CardItem", "info", "Card edit button clicked", { cardId: card.id });
+    handleEditCard(card);
+  };
+
+  log("CardItem", "debug", "Rendering card item", { cardId: card.id });
 
   return (
     <div
+      ref={cardRef}
+      data-animation-id={`card-${card.id}`}
       className={`nt-card nt-card--preview ${
         isFavorite ? "nt-card--favorite" : ""
-      }`}
+      } ${isAnimationEnabled() ? "premium-animation-wrapper" : ""}`}
     >
       <div
         className="nt-card__content"
@@ -215,10 +374,7 @@ const CardItem = ({
           <FavoriteButton itemId={card.id} itemType="card" />
           <button
             className="nt-btn nt-btn--danger nt-btn--icon"
-            onClick={(e) => {
-              e.stopPropagation();
-              handleDeleteCard(card.id);
-            }}
+            onClick={handleDeleteClick}
             title={t("sets.delete")}
           >
             ✕
@@ -226,10 +382,7 @@ const CardItem = ({
         </div>
         <button
           className="nt-btn nt-btn--secondary nt-btn--icon"
-          onClick={(e) => {
-            e.stopPropagation();
-            handleEditCard(card);
-          }}
+          onClick={handleEditClick}
           title={t("sets.edit")}
         >
           ✏️

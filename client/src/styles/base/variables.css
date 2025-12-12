@@ -1,64 +1,8 @@
 /* src/styles/base/variables.css */
-
-/* ==========================================================
-   NEURAL TRIDENT – CSS VARIABLES (global theme definitions)
-   ========================================================== */
-
-/* ---------- 1. Цветовая палитра ---------- */
 :root {
-  /* Основные цвета бренда */
-  --nt-color-primary: #667eea;
-  --nt-color-primary-dark: #5a6fd8;
-  --nt-color-primary-light: #7c8eea;
-  --nt-color-secondary: #764ba2;
-  --nt-color-accent: #4fc3f7;
+  /* ========== ТОЛЬКО СТРУКТУРНЫЕ ПЕРЕМЕННЫЕ ========== */
 
-  /* Системные (статусные) цвета */
-  --nt-color-success: #4caf50;
-  --nt-color-warning: #ff9800;
-  --nt-color-error: #ff6b6b;
-  --nt-color-info: #2196f3;
-
-  /* Нейтральные оттенки */
-  --nt-color-white: #ffffff;
-  --nt-color-black: #000000;
-  --nt-color-gray-100: #f8fafc;
-  --nt-color-gray-200: #e2e8f0;
-  --nt-color-gray-300: #cbd5e1;
-  --nt-color-gray-400: #94a3b8;
-  --nt-color-gray-500: #64748b;
-  --nt-color-gray-600: #475569;
-  --nt-color-gray-700: #334155;
-  --nt-color-gray-800: #1e293b;
-  --nt-color-gray-900: #0f172a;
-
-  /* ---------- 2. Фоны ---------- */
-  --nt-bg-primary: #0a1a2d; /* Океан — основной фон */
-  --nt-bg-secondary: #1e3a5f;
-  --nt-bg-tertiary: #2a4a7a;
-  --nt-bg-card: rgba(30, 58, 95, 0.6);
-  --nt-bg-overlay: rgba(10, 26, 45, 0.9);
-  --nt-bg-hover: rgba(79, 195, 247, 0.1);
-
-  /* ---------- 3. Текст ---------- */
-  --nt-text-primary: var(--nt-color-white);
-  --nt-text-secondary: #e3f2fd;
-  --nt-text-tertiary: #b3e5fc;
-  --nt-text-muted: rgba(255, 255, 255, 0.6);
-  --nt-text-disabled: rgba(255, 255, 255, 0.38);
-
-  /* ---------- 4. Границы ---------- */
-  --nt-border-primary: rgba(79, 195, 247, 0.3);
-  --nt-border-hover: rgba(79, 195, 247, 0.6);
-  --nt-border-light: rgba(255, 255, 255, 0.1);
-  --nt-border-dark: rgba(0, 0, 0, 0.2);
-
-  /* ---------- 5. Специальные цвета ---------- */
-  --nt-color-gold: #ffd700;
-  --nt-color-gold-light: #fff176;
-  --nt-color-gold-dark: #ffb300;
-
-  /* ---------- 6. Радиусы и отступы ---------- */
+  /* Радиусы */
   --nt-radius-xs: 2px;
   --nt-radius-sm: 4px;
   --nt-radius-md: 8px;
@@ -67,73 +11,42 @@
   --nt-radius-2xl: 24px;
   --nt-radius-full: 9999px;
 
-  --nt-space-xs: 0.25rem; /* 4px */
-  --nt-space-sm: 0.5rem; /* 8px */
-  --nt-space-md: 1rem; /* 16px */
-  --nt-space-lg: 1.5rem; /* 24px */
-  --nt-space-xl: 2rem; /* 32px */
-  --nt-space-2xl: 3rem; /* 48px */
+  /* Отступы */
+  --nt-space-xs: 0.25rem;
+  --nt-space-sm: 0.5rem;
+  --nt-space-md: 1rem;
+  --nt-space-lg: 1.5rem;
+  --nt-space-xl: 2rem;
+  --nt-space-2xl: 3rem;
 
-  /* ---------- 7. Брейкпоинты ---------- */
+  /* Брейкпоинты */
   --nt-screen-sm: 640px;
   --nt-screen-md: 768px;
   --nt-screen-lg: 1024px;
   --nt-screen-xl: 1280px;
   --nt-screen-2xl: 1536px;
-}
 
-/* -----------------------------------------------------------------
-   ТЕМЫ (переопределяют только цветовые переменные)
-   ----------------------------------------------------------------- */
-[data-theme="ocean"] {
-  /* дефолт – оставляем пустым */
-}
+  /* Шрифты */
+  --nt-font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  --nt-font-family-mono: "Courier New", monospace;
 
-[data-theme="dark"] {
-  --nt-color-primary: #7c3aed;
-  --nt-color-secondary: #5b21b6;
-  --nt-color-accent: #60a5fa;
+  /* Размеры шрифтов */
+  --nt-font-size-xs: 0.75rem;
+  --nt-font-size-sm: 0.875rem;
+  --nt-font-size-base: 1rem;
+  --nt-font-size-lg: 1.125rem;
+  --nt-font-size-xl: 1.25rem;
+  --nt-font-size-2xl: 1.5rem;
 
-  --nt-bg-primary: #000000;
-  --nt-bg-secondary: #0f0f0f;
-  --nt-bg-tertiary: #1a1a1a;
-  --nt-bg-card: #1f2937;
-  --nt-bg-overlay: rgba(0, 0, 0, 0.8);
-  --nt-bg-hover: rgba(124, 58, 237, 0.15);
+  /* Z-index слои */
+  --nt-z-dropdown: 1000;
+  --nt-z-modal: 2000;
+  --nt-z-tooltip: 3000;
 
-  --nt-text-primary: #e5e7eb;
-  --nt-text-secondary: #d1d5db;
-  --nt-text-muted: rgba(229, 231, 235, 0.6);
-
-  --nt-border-primary: rgba(124, 58, 237, 0.3);
-}
-[data-theme="forest"] {
-  --nt-color-primary: #059669;
-  --nt-color-secondary: #0f766e;
-  --nt-color-accent: #10b981;
-
-  --nt-bg-primary: #052e16;
-  --nt-bg-secondary: #14532d;
-  --nt-bg-tertiary: #1e6c41;
-  --nt-bg-card: #065f46;
-}
-[data-theme="sunset"] {
-  --nt-color-primary: #ea580c;
-  --nt-color-secondary: #dc2626;
-  --nt-color-accent: #f97316;
-
-  --nt-bg-primary: #451a03;
-  --nt-bg-secondary: #7c2d12;
-  --nt-bg-tertiary: #9a3412;
-  --nt-bg-card: #9a3412;
-}
-[data-theme="light"] {
-  --nt-color-primary: #3b82f6;
-  --nt-color-secondary: #8b5cf6;
-  --nt-color-accent: #06b6d4;
-
-  --nt-bg-primary: #ffffff;
-  --nt-bg-secondary: #f8fafc;
-  --nt-bg-tertiary: #f1f5f9;
-  --nt-bg-card: #f3f4f6;
+  /* Анимации */
+  --nt-transition-duration-fast: 150ms;
+  --nt-transition-duration-base: 250ms;
+  --nt-transition-duration-slow: 350ms;
+  --nt-transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
 }

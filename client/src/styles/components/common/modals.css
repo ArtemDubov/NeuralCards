@@ -17,6 +17,23 @@
   align-items: center;
   z-index: 1000;
   padding: var(--nt-space-lg);
+
+  /* Новая анимация появления */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: none;
+}
+
+.nt-modal__overlay--visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: all;
+}
+
+.nt-modal__overlay--transparent {
+  background: transparent;
+  backdrop-filter: none;
 }
 
 /* МОДАЛЬНОЕ ОКНО */
@@ -30,6 +47,16 @@
   padding: var(--nt-space-xl);
   border: 2px solid var(--nt-color-accent);
   box-shadow: var(--nt-shadow-xl);
+
+  /* Новая анимация появления */
+  opacity: 0;
+  transform: translateY(30px) scale(0.95);
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.nt-modal--animate-in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 /* ЗАГОЛОВОК МОДАЛКИ */
@@ -201,6 +228,41 @@
   max-width: 300px;
 }
 
+/* Текстовое содержимое модалки */
+.nt-modal__text-content {
+  padding: var(--nt-space-lg) 0;
+  text-align: center;
+}
+
+.nt-modal__message {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--nt-text-secondary);
+  margin: 0;
+}
+
+/* Размеры модальных окон */
+.nt-modal--small {
+  max-width: 400px;
+  width: 90%;
+}
+
+.nt-modal--medium {
+  max-width: 500px;
+  width: 90%;
+}
+
+.nt-modal--large {
+  max-width: 700px;
+  width: 90%;
+}
+
+/* Центрирование кнопок в модалках подтверждения */
+.nt-modal__actions--center {
+  justify-content: center;
+  gap: var(--nt-space-md);
+}
+
 /* АДАПТИВНОСТЬ */
 @media (max-width: 768px) {
   .nt-modal__overlay {
@@ -211,9 +273,21 @@
     padding: var(--nt-space-md);
   }
 
+  .nt-modal--small,
+  .nt-modal--medium,
+  .nt-modal--large {
+    width: 95%;
+    max-width: 95%;
+    margin: var(--nt-space-md);
+    padding: var(--nt-space-md);
+  }
+
   .nt-modal__cards-container,
   .nt-modal__view-container {
     grid-template-columns: 1fr;
     gap: var(--nt-space-md);
   }
 }
+
+/* Старые анимации - оставлены для обратной совместимости */
+/* Их можно удалить через некоторое время, когда все модалки перейдут на новую систему */

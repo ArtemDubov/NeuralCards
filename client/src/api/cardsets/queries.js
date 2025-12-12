@@ -1,42 +1,36 @@
 import { useQuery } from "@tanstack/react-query";
 import apiClient from "../../api-client";
 
-// Ключи для кэширования (БЕЗ as const)
-export const cardsetsKeys = {
-  all: ["cardsets"],
-  lists: () => [...cardsetsKeys.all, "list"],
-  list: (filters) => [...cardsetsKeys.lists(), { filters }],
-  details: () => [...cardsetsKeys.all, "detail"],
-  detail: (id) => [...cardsetsKeys.details(), id],
+export const cardSetsKeys = {
+  all: ["cardSets"],
+  details: () => [...cardSetsKeys.all, "detail"],
+  detail: (id) => [...cardSetsKeys.details(), id],
 };
 
-// Получить все наборы
-export const useCardsets = () => {
+export const useCardSets = () => {
   return useQuery({
-    queryKey: cardsetsKeys.all,
+    queryKey: cardSetsKeys.all,
     queryFn: async () => {
-      const response = await apiClient.get("/api/cardsets");
+      const response = await apiClient.get("/api/cardSets");
       return response.data;
     },
   });
 };
 
-// Получить конкретный набор
-export const useCardset = (id) => {
+export const useCardSet = (id) => {
   return useQuery({
-    queryKey: cardsetsKeys.detail(id),
+    queryKey: cardSetsKeys.detail(id),
     queryFn: async () => {
       if (!id || isNaN(id)) return null;
-
       try {
-        const response = await apiClient.get(`/api/cardsets/${id}`);
+        const response = await apiClient.get(`/api/cardSets/${id}`);
         return response.data;
       } catch (error) {
-        if (error.response?.status === 404) return null; // Набор удален
-        throw error; // Другие ошибки
+        if (error.response?.status === 404) return null;
+        throw error;
       }
     },
     enabled: !!id && !isNaN(id),
-    retry: false, // Не повторять запрос
+    retry: false,
   });
 };

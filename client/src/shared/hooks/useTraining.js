@@ -33,16 +33,16 @@ export const useTraining = () => {
 
   // === СОВМЕСТИМОСТЬ СО СТАРЫМ API ===
 
-  const startSession = (modeId, cardset) => {
+  const startSession = (modeId, cardSet) => {
     // Валидация
-    const validation = validateSessionStart(modeId, cardset, modes);
+    const validation = validateSessionStart(modeId, cardSet, modes);
     if (!validation.isValid) {
       console.error(validation.error);
       return false;
     }
 
     // Создание сессии
-    const newSession = createSession(modeId, cardset);
+    const newSession = createSession(modeId, cardSet);
     setSession(newSession);
     return true;
   };
@@ -87,8 +87,8 @@ export const useTraining = () => {
     };
   };
 
-  const isValidModeForCardset = (modeId, cardset) => {
-    const validation = validateSessionStart(modeId, cardset, modes);
+  const isValidModeForCardSet = (modeId, cardSet) => {
+    const validation = validateSessionStart(modeId, cardSet, modes);
     return validation.isValid;
   };
 
@@ -114,7 +114,7 @@ export const useTraining = () => {
     getProgress,
     getCurrentMode,
     getSessionStats,
-    isValidModeForCardset,
+    isValidModeForCardSet,
     isSessionCompleted: () => isSessionCompleted(session),
 
     // Конфиги и сервисы (для прямого доступа)

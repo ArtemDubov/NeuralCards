@@ -1,16 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useAppStore } from "../../../../shared/stores/appStore";
-import { RuFlag, EnFlag, EsFlag } from "../../../../assets";
+import { RuFlag, EnFlag, EsFlag, DeFlag, FrFlag } from "../../../../assets";
 
 const LanguageSwitcher = () => {
-  const { language, setLanguage, t } = useAppStore();
+  const { language, setLanguage, t, theme } = useAppStore();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  // Все 5 языков
   const languages = [
     { id: "ru", name: "language.russian", flag: RuFlag },
     { id: "en", name: "language.english", flag: EnFlag },
     { id: "es", name: "language.spanish", flag: EsFlag },
+    { id: "de", name: "language.german", flag: DeFlag },
+    { id: "fr", name: "language.french", flag: FrFlag },
   ];
 
   useEffect(() => {
@@ -38,7 +41,11 @@ const LanguageSwitcher = () => {
   const currentLanguage = languages.find((lang) => lang.id === language);
 
   return (
-    <div className="nt-language__container" ref={dropdownRef}>
+    <div
+      className="nt-language__container"
+      ref={dropdownRef}
+      data-theme={theme}
+    >
       <div
         className={`nt-language__dropdown ${
           isOpen ? "nt-language__dropdown--open" : ""

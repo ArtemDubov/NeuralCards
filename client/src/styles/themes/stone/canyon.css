@@ -1,0 +1,85 @@
+/* ==========================================================
+   ТЕМА – CANYON (величественный каньон)
+   Полная версия с 50+ переменными
+   ========================================================== */
+
+[data-theme="canyon"] {
+  /* ========== ОСНОВНЫЕ ЦВЕТА (6) ========== */
+  --nt-color-primary: #d84315; /* Терракотовый */
+  --nt-color-primary-dark: #bf360c;
+  --nt-color-primary-light: #ff5722;
+  --nt-color-secondary: #ff8a65; /* Светлый оранжевый */
+  --nt-color-accent: #26a69a; /* Бирюза воды в каньоне */
+  --nt-color-neutral: #8d6e63; /* Песчаный коричневый */
+
+  /* ========== ФОНЫ (8) ========== */
+  --nt-bg-primary: #3e2723; /* Тёмный шоколадный */
+  --nt-bg-secondary: #5d4037;
+  --nt-bg-tertiary: #795548;
+  --nt-bg-card: rgba(93, 64, 55, 0.85);
+  --nt-bg-overlay: rgba(62, 39, 35, 0.92);
+  --nt-bg-modal: #5d4037;
+  --nt-bg-tooltip: #a1887f;
+  --nt-bg-input: rgba(121, 85, 72, 0.8);
+
+  /* ========== ТЕКСТ (8) ========== */
+  --nt-text-primary: #fbe9e7; /* Тёплый светлый */
+  --nt-text-secondary: #ffccbc;
+  --nt-text-tertiary: #ffab91;
+  --nt-text-muted: rgba(251, 233, 231, 0.65);
+  --nt-text-disabled: rgba(251, 233, 231, 0.38);
+  --nt-text-inverse: #3e2723;
+  --nt-text-on-primary: #ffffff;
+  --nt-text-on-accent: #3e2723;
+
+  /* ========== ИНТЕРАКТИВНЫЕ СОСТОЯНИЯ (6) ========== */
+  --nt-state-hover: rgba(255, 87, 34, 0.15);
+  --nt-state-active: rgba(255, 87, 34, 0.25);
+  --nt-state-focus: rgba(255, 87, 34, 0.2);
+  --nt-state-selected: rgba(255, 87, 34, 0.12);
+  --nt-state-disabled: rgba(141, 110, 99, 0.2);
+  --nt-state-error: rgba(244, 67, 54, 0.15);
+
+  /* ========== ГРАНИЦЫ (6) ========== */
+  --nt-border-primary: rgba(255, 87, 34, 0.35);
+  --nt-border-secondary: rgba(38, 166, 154, 0.25);
+  --nt-border-light: rgba(251, 233, 231, 0.15);
+  --nt-border-dark: rgba(62, 39, 35, 0.2);
+  --nt-border-input: rgba(255, 87, 34, 0.4);
+  --nt-border-card: rgba(38, 166, 154, 0.2);
+
+  /* ========== ТЕНИ (9) ========== */
+  --nt-shadow-xs: 0 1px 2px rgba(216, 67, 21, 0.1);
+  --nt-shadow-sm: 0 2px 8px rgba(216, 67, 21, 0.12);
+  --nt-shadow-md: 0 4px 16px rgba(216, 67, 21, 0.15);
+  --nt-shadow-lg: 0 8px 32px rgba(216, 67, 21, 0.18);
+  --nt-shadow-xl: 0 12px 48px rgba(216, 67, 21, 0.2);
+  --nt-shadow-focus: 0 0 0 3px rgba(38, 166, 154, 0.3);
+  --nt-shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+  --nt-shadow-elevated: 0 8px 30px rgba(216, 67, 21, 0.15);
+  --nt-shadow-special: 0 0 20px rgba(38, 166, 154, 0.25);
+
+  /* ========== СПЕЦИАЛЬНЫЕ ЭЛЕМЕНТЫ (4) ========== */
+  --nt-color-link: #ff5722;
+  --nt-color-link-hover: #ff8a65;
+  --nt-color-card-border: rgba(38, 166, 154, 0.3);
+  --nt-color-icon: #ffab91;
+
+  /* ========== ГРАДИЕНТЫ (3) ========== */
+  --nt-gradient-primary: linear-gradient(135deg, #d84315 0%, #ff5722 100%);
+  --nt-gradient-background: linear-gradient(135deg, #3e2723 0%, #5d4037 100%);
+  --nt-gradient-card: linear-gradient(
+    135deg,
+    rgba(93, 64, 55, 0.9),
+    rgba(121, 85, 72, 0.95)
+  );
+
+  /* ========== ПЕРЕМЕННЫЕ ДЛЯ SWITCHER (7) ========== */
+  --nt-switcher-color: #26a69a;
+  --nt-switcher-bg: #5d4037;
+  --nt-switcher-indicator: #26a69a;
+  --nt-switcher-border: rgba(38, 166, 154, 0.4);
+  --nt-switcher-hover: rgba(38, 166, 154, 0.15);
+  --nt-switcher-active: rgba(38, 166, 154, 0.25);
+  --nt-switcher-checkmark: #26a69a;
+}

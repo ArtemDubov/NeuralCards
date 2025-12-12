@@ -6,7 +6,7 @@ export const useTrainingSession = () => {
     store;
 
   // Карточки из выбранного набора
-  const cards = session?.cardset?.cards || [];
+  const cards = session?.cardSet?.cards || [];
 
   // Флаги состояния
   const isCompleted = session?.stats?.isCompleted || false;

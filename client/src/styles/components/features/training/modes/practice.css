@@ -1,6 +1,5 @@
 /* ============================================
    РЕЖИМ: ПРАКТИКА (ПОВТОРЕНИЕ)
-   (содержимое из sessions/modes/practice.css с обновленными классами)
    ============================================ */
 
 .nt-practice-container {
@@ -9,7 +8,7 @@
   align-items: center;
   padding: var(--nt-space-lg);
   gap: var(--nt-space-xl);
-  max-width: 800px;
+  width: 100%;
   margin: 0 auto;
   min-height: 100vh;
 }
@@ -59,26 +58,89 @@
   font-weight: 600;
 }
 
-/* КАРТОЧКА */
-.nt-practice-card {
+/* ОСНОВНОЙ КОНТЕНТ */
+.nt-practice-main-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
+  gap: var(--nt-space-xl);
+  margin: var(--nt-space-lg) 0;
 }
 
+/* БЛОКИ СТАТИСТИКИ */
+.nt-practice-left-stats,
+.nt-practice-right-stats {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nt-space-md);
+  flex: 1;
+  max-width: 180px;
+}
+
+.nt-practice-stat-box {
+  background: var(--nt-bg-secondary);
+  border-radius: var(--nt-radius-lg);
+  padding: var(--nt-space-md);
+  text-align: center;
+  border: 1px solid var(--nt-border-primary);
+  min-width: 140px;
+}
+
+.nt-practice-stat-label {
+  font-size: 0.85rem;
+  color: var(--nt-text-secondary);
+  margin-bottom: var(--nt-space-xs);
+  font-weight: 500;
+}
+
+.nt-practice-stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.nt-practice-stat--learned {
+  color: #2b8a3e;
+}
+
+.nt-practice-stat--repeats {
+  color: #ff4757;
+}
+
+.nt-practice-stat--remaining {
+  color: var(--nt-color-primary);
+}
+
+.nt-practice-stat--progress {
+  color: var(--nt-color-accent);
+}
+
+/* КАРТОЧКА */
+.nt-practice-card {
+  flex: 2;
+  max-width: 400px;
+  margin: 0;
+}
+
+/* КОНТЕЙНЕР КАРТОЧКИ */
 .nt-practice-card-container {
   perspective: 1000px;
   cursor: pointer;
-}
-
-.nt-practice-card-wrapper {
   position: relative;
   width: 100%;
   height: 250px;
-  transform-style: preserve-3d;
-  transition: transform 0.6s;
 }
 
+/* ОБЩИЕ СТИЛИ КАРТОЧКИ */
+.nt-practice-card-wrapper {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+  position: relative;
+}
+
+/* ПЕРЕВОРОТ КАРТОЧКИ */
 .nt-practice-card-wrapper--flipped .nt-practice-card-flipper {
   transform: rotateY(180deg);
 }
@@ -108,13 +170,21 @@
 }
 
 .nt-practice-card-front {
-  background: var(--nt-gradient-card);
-  border: 2px solid var(--nt-color-primary);
+  background: linear-gradient(
+    135deg,
+    var(--nt-bg-card) 0%,
+    var(--nt-bg-secondary) 100%
+  );
+  border: 2px solid var(--nt-color-card-border);
 }
 
 .nt-practice-card-back {
-  background: var(--nt-gradient-card);
-  border: 2px solid var(--nt-color-secondary);
+  background: linear-gradient(
+    135deg,
+    var(--nt-bg-card) 0%,
+    var(--nt-bg-secondary) 100%
+  );
+  border: 2px solid var(--nt-color-card-border);
   transform: rotateY(180deg);
 }
 
@@ -168,6 +238,57 @@
   overflow-y: auto;
 }
 
+/* АНИМАЦИИ */
+/* Анимация входа сверху */
+@keyframes cardEnter {
+  0% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Анимации ухода */
+@keyframes cardExitLeft {
+  0% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-400px) rotate(-15deg);
+    opacity: 0;
+  }
+}
+
+@keyframes cardExitRight {
+  0% {
+    transform: translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(400px) rotate(15deg);
+    opacity: 0;
+  }
+}
+
+/* Применение анимаций */
+.nt-practice-card-wrapper--enter {
+  animation: cardEnter 0.3s ease-out forwards;
+}
+
+.nt-practice-card-wrapper--exit-left {
+  animation: cardExitLeft 0.5s ease-out forwards;
+  pointer-events: none;
+}
+
+.nt-practice-card-wrapper--exit-right {
+  animation: cardExitRight 0.5s ease-out forwards;
+  pointer-events: none;
+}
+
 /* КНОПКИ УПРАВЛЕНИЯ */
 .nt-practice-controls {
   display: flex;
@@ -175,7 +296,7 @@
   width: 100%;
   max-width: 500px;
   justify-content: center;
-  margin-top: var(--nt-space-md);
+  margin: var(--nt-space-md) auto 0;
 }
 
 .nt-practice-control-btn {
@@ -199,7 +320,7 @@
   cursor: not-allowed;
 }
 
-/* КНОПКА "НЕ ПОМНЮ" (слева) */
+/* КНОПКА "НЕ ПОМНЮ" */
 .nt-practice-btn-forget {
   background: linear-gradient(135deg, #ff6b6b, #ff4757);
   color: var(--nt-color-white);
@@ -211,7 +332,7 @@
   box-shadow: 0 5px 15px rgba(255, 71, 87, 0.3);
 }
 
-/* КНОПКА "ПОМНЮ" (справа) */
+/* КНОПКА "ПОМНЮ" */
 .nt-practice-btn-remember {
   background: linear-gradient(135deg, #51cf66, #2b8a3e);
   color: var(--nt-color-white);
@@ -231,61 +352,6 @@
   font-size: 1.1rem;
 }
 
-.nt-practice-control-hint {
-  font-size: 0.8rem;
-  opacity: 0.9;
-  font-weight: normal;
-}
-
-/* СТАТИСТИКА */
-.nt-practice-stats {
-  width: 100%;
-  max-width: 500px;
-  margin-top: var(--nt-space-md);
-}
-
-.nt-practice-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--nt-space-md);
-}
-
-.nt-practice-stat-box {
-  background: var(--nt-bg-secondary);
-  border-radius: var(--nt-radius-lg);
-  padding: var(--nt-space-md);
-  text-align: center;
-  border: 1px solid var(--nt-border-primary);
-}
-
-.nt-practice-stat-label {
-  font-size: 0.85rem;
-  color: var(--nt-text-secondary);
-  margin-bottom: var(--nt-space-xs);
-  font-weight: 500;
-}
-
-.nt-practice-stat-value {
-  font-size: 1.75rem;
-  font-weight: 700;
-}
-
-.nt-practice-stat--learned {
-  color: #2b8a3e;
-}
-
-.nt-practice-stat--repeats {
-  color: #ff4757;
-}
-
-.nt-practice-stat--remaining {
-  color: var(--nt-color-primary);
-}
-
-.nt-practice-stat--progress {
-  color: var(--nt-color-accent);
-}
-
 /* АДАПТИВНОСТЬ */
 @media (max-width: 768px) {
   .nt-practice-container {
@@ -293,7 +359,24 @@
     gap: var(--nt-space-lg);
   }
 
-  .nt-practice-card-wrapper {
+  .nt-practice-main-content {
+    flex-direction: column;
+    gap: var(--nt-space-lg);
+  }
+
+  .nt-practice-left-stats,
+  .nt-practice-right-stats {
+    flex-direction: row;
+    max-width: 100%;
+    justify-content: center;
+    gap: var(--nt-space-lg);
+  }
+
+  .nt-practice-stat-box {
+    min-width: 130px;
+  }
+
+  .nt-practice-card-container {
     height: 220px;
   }
 
@@ -306,14 +389,20 @@
     min-width: 140px;
     padding: var(--nt-space-sm) var(--nt-space-md);
   }
-
-  .nt-practice-control-hint {
-    display: none;
-  }
 }
 
 @media (max-width: 480px) {
-  .nt-practice-card-wrapper {
+  .nt-practice-left-stats,
+  .nt-practice-right-stats {
+    flex-direction: column;
+    gap: var(--nt-space-md);
+  }
+
+  .nt-practice-stat-box {
+    min-width: 100%;
+  }
+
+  .nt-practice-card-container {
     height: 200px;
   }
 
@@ -334,4 +423,16 @@
   .nt-practice-control-icon {
     font-size: 1.5rem;
   }
+}
+
+/* ФИКС: переворот работает всегда */
+.nt-practice-card-wrapper--flipped .nt-practice-card-flipper {
+  transform: rotateY(180deg) !important;
+}
+
+/* Отключаем transition для exit/enter, НО не трогаем transform */
+.nt-practice-card-wrapper--exit-left .nt-practice-card-flipper,
+.nt-practice-card-wrapper--exit-right .nt-practice-card-flipper,
+.nt-practice-card-wrapper--enter .nt-practice-card-flipper {
+  transition: none !important;
 }

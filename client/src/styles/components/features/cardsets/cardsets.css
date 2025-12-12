@@ -122,3 +122,65 @@
   background: #ffc107;
   color: var(--nt-bg-primary);
 }
+
+/* ============================================
+   ОБЩИЕ СТИЛИ ДЛЯ ПУСТЫХ СОСТОЯНИЙ
+   ============================================ */
+
+.nt-empty-state {
+  text-align: center;
+  padding: var(--nt-space-2xl) var(--nt-space-xl);
+  color: var(--nt-text-secondary);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.nt-empty-state__icon {
+  font-size: 4rem;
+  margin-bottom: var(--nt-space-md);
+  opacity: 0.7;
+  color: var(--nt-color-gold);
+}
+
+.nt-empty-state__title {
+  color: var(--nt-color-accent);
+  margin-bottom: var(--nt-space-md);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.nt-empty-state__text {
+  opacity: 0.8;
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: 1.6;
+  color: var(--nt-text-secondary);
+}
+
+/* Для сетки карточек */
+.nt-cards-grid .nt-empty-state {
+  grid-column: 1 / -1;
+}
+
+/* Для контента внутри карточек */
+.nt-content__card .nt-empty-state {
+  padding: var(--nt-space-xl) var(--nt-space-lg);
+}
+
+/* Счётчик карточек при просмотре набора */
+.nt-set-view__card-count {
+  display: inline-block;
+
+  background-color: var(--nt-color-primary);
+  color: var(--nt-text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  padding: var(--nt-space-xs) var(--nt-space-sm);
+  border-radius: var(--nt-radius-full);
+  border: 1px solid var(--nt-border-light);
+  box-shadow: var(--nt-shadow-sm);
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+}

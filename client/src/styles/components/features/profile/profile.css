@@ -89,3 +89,608 @@
   font-weight: 700;
   margin: 0;
 }
+
+/* Стили для нового заголовка профиля */
+.nt-premium-info-header {
+  background: var(--nt-bg-secondary);
+  border-radius: var(--nt-radius-md);
+  padding: var(--nt-space-sm) var(--nt-space-md);
+  margin-top: var(--nt-space-sm);
+  border-left: 3px solid var(--nt-color-accent);
+}
+
+.nt-premium-info-header .nt-util__text-sm {
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.nt-premium-status-indicator {
+  margin-left: var(--nt-space-md);
+}
+
+/* Улучшаем отображение бейджа статуса */
+.nt-badge--success {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 215, 0, 0.15),
+    rgba(255, 165, 0, 0.15)
+  );
+  color: #ffa500;
+  border: 1px solid rgba(255, 165, 0, 0.3);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.nt-badge--secondary {
+  background: var(--nt-bg-secondary);
+  color: var(--nt-text-secondary);
+  border: 1px solid var(--nt-border-primary);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .nt-page__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nt-premium-status-indicator {
+    margin-left: 0;
+    margin-top: var(--nt-space-sm);
+  }
+
+  .nt-premium-info-header {
+    margin-top: var(--nt-space-md);
+  }
+}
+
+/* ============================================
+   EMOJI PICKER
+   ============================================ */
+
+.nt-emoji-picker {
+  background: var(--nt-bg-secondary);
+  border: 1px solid var(--nt-border-primary);
+  border-radius: var(--nt-radius-lg);
+  padding: var(--nt-space-md);
+  max-width: 400px;
+  box-shadow: var(--nt-shadow-xl);
+  z-index: 10050;
+}
+
+.nt-emoji-picker__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--nt-space-md);
+}
+
+.nt-emoji-picker__header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--nt-text-primary);
+}
+
+.nt-emoji-picker__search {
+  margin-bottom: var(--nt-space-md);
+}
+
+.nt-emoji-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: var(--nt-space-sm);
+  max-height: 300px;
+  overflow-y: auto;
+  padding: var(--nt-space-sm);
+}
+
+.nt-emoji-picker__item {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  background: var(--nt-bg-card);
+  border: 1px solid var(--nt-border-light);
+  border-radius: var(--nt-radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.nt-emoji-picker__item:hover {
+  transform: scale(1.1);
+  background: var(--nt-bg-hover);
+  border-color: var(--nt-color-accent);
+}
+
+.nt-emoji-picker__item--selected {
+  background: var(--nt-bg-hover);
+  border-color: var(--nt-color-accent);
+  box-shadow: var(--nt-shadow-focus);
+}
+
+.nt-emoji-picker__item--remove {
+  grid-column: span 2;
+  width: auto;
+  font-size: 1rem;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--nt-space-xs);
+}
+
+.nt-emoji-picker__label {
+  font-size: 0.7rem;
+  opacity: 0.8;
+  color: var(--nt-text-secondary);
+}
+
+/* ============================================
+   АВАТАРКА ПРОФИЛЯ
+   ============================================ */
+
+.nt-profile__avatar-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--nt-space-xl);
+}
+
+.nt-profile__avatar-container {
+  text-align: center;
+}
+
+.nt-profile__avatar-display {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid var(--nt-border-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.nt-profile__avatar-display:hover {
+  transform: scale(1.05);
+  border-color: var(--nt-color-accent);
+  box-shadow: var(--nt-shadow-lg);
+}
+
+.nt-profile__avatar-emoji {
+  font-size: 4rem;
+}
+
+.nt-profile__avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.nt-profile__avatar-color {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nt-profile__avatar-color-initial {
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+}
+
+.nt-profile__avatar-initial {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--nt-text-primary);
+}
+
+.nt-profile__avatar-hint {
+  color: var(--nt-text-muted);
+  font-size: 0.9rem;
+  margin-top: var(--nt-space-sm);
+}
+
+/* ============================================
+   АВАТАР В ХЕДЕРЕ
+   ============================================ */
+
+.nt-app__header-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--nt-bg-card);
+  border: 2px solid var(--nt-border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+  overflow: hidden;
+}
+
+.nt-app__header-avatar:hover {
+  border-color: var(--nt-color-accent);
+  transform: scale(1.05);
+}
+
+.nt-app__header-avatar-emoji {
+  font-size: 1.5rem;
+}
+
+.nt-app__header-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.nt-app__header-avatar-initial {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--nt-text-primary);
+}
+
+/* ============================================
+   АВАТАР В ВЫПАДАЮЩЕМ МЕНЮ
+   ============================================ */
+
+.nt-header__dropdown-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--nt-bg-card);
+  border: 2px solid var(--nt-border-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--nt-space-md);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.nt-header__dropdown-avatar:hover {
+  border-color: var(--nt-color-accent);
+  transform: scale(1.05);
+}
+
+.nt-header__dropdown-avatar-emoji {
+  font-size: 1.8rem;
+}
+
+.nt-header__dropdown-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.nt-header__dropdown-avatar-initial {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--nt-text-primary);
+}
+
+/* ============================================
+   AVATAR PICKER МОДАЛЬНОЕ ОКНО
+   ============================================ */
+
+.nt-avatar-picker {
+  background: var(--nt-bg-secondary);
+  border: 1px solid var(--nt-border-primary);
+  border-radius: var(--nt-radius-lg);
+  max-width: 500px;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--nt-shadow-xl);
+}
+
+.nt-avatar-picker__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--nt-space-lg);
+  border-bottom: 1px solid var(--nt-border-light);
+}
+
+.nt-avatar-picker__header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--nt-text-primary);
+}
+
+.nt-avatar-picker__tabs {
+  display: flex;
+  border-bottom: 1px solid var(--nt-border-light);
+}
+
+.nt-avatar-picker__tab {
+  flex: 1;
+  padding: var(--nt-space-md);
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--nt-text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.nt-avatar-picker__tab:hover {
+  color: var(--nt-text-primary);
+  background: var(--nt-bg-hover);
+}
+
+.nt-avatar-picker__tab--active {
+  color: var(--nt-color-accent);
+  border-bottom-color: var(--nt-color-accent);
+}
+
+.nt-avatar-picker__content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--nt-space-lg);
+}
+
+.nt-avatar-picker__section {
+  margin-bottom: var(--nt-space-xl);
+}
+
+.nt-avatar-picker__section h4 {
+  margin: 0 0 var(--nt-space-md) 0;
+  font-size: 1rem;
+  color: var(--nt-text-secondary);
+}
+
+/* Сетка для эмодзи */
+.nt-avatar-picker__emoji-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: var(--nt-space-sm);
+}
+
+.nt-avatar-picker__emoji {
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
+  background: var(--nt-bg-card);
+  border: 1px solid var(--nt-border-light);
+  border-radius: var(--nt-radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nt-avatar-picker__emoji:hover {
+  transform: scale(1.1);
+  background: var(--nt-bg-hover);
+  border-color: var(--nt-color-accent);
+}
+
+.nt-avatar-picker__emoji--selected {
+  background: var(--nt-bg-hover);
+  border-color: var(--nt-color-accent);
+  box-shadow: var(--nt-shadow-focus);
+  transform: scale(1.1);
+}
+
+/* Сетка для цветов - 5 колонок для 25 элементов (24 цвета + прозрачный) */
+.nt-avatar-picker__color-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--nt-space-sm);
+}
+
+.nt-avatar-picker__color {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid var(--nt-border-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nt-avatar-picker__color:hover {
+  transform: scale(1.1);
+  border-color: var(--nt-text-primary);
+}
+
+/* Стиль для прозрачного фона с паттерном */
+.nt-avatar-picker__color[title="Прозрачный фон"] {
+  background-color: #f5f5f5;
+  background-image: linear-gradient(
+      45deg,
+      #ccc 25%,
+      transparent 25%,
+      transparent 75%,
+      #ccc 75%
+    ),
+    linear-gradient(45deg, #ccc 25%, transparent 25%, transparent 75%, #ccc 75%);
+  background-size: 8px 8px;
+  background-position: 0 0, 4px 4px;
+}
+
+.nt-avatar-picker__color[title="Прозрачный фон"] span {
+  font-size: 12px;
+  color: #666;
+}
+
+.nt-avatar-picker__color--selected {
+  border: 3px solid var(--nt-color-accent);
+  transform: scale(1.1);
+  box-shadow: var(--nt-shadow-focus);
+}
+
+/* Секция загрузки */
+.nt-avatar-picker__upload-section {
+  text-align: center;
+}
+
+.nt-avatar-picker__upload-hint {
+  color: var(--nt-text-muted);
+  margin-bottom: var(--nt-space-lg);
+  font-size: 0.9rem;
+}
+
+.nt-avatar-picker__upload-zone {
+  background: var(--nt-bg-card);
+  border: 2px dashed var(--nt-border-light);
+  border-radius: var(--nt-radius-lg);
+  padding: var(--nt-space-xl);
+  margin-bottom: var(--nt-space-xl);
+  transition: all 0.3s ease;
+}
+
+.nt-avatar-picker__upload-zone:hover {
+  border-color: var(--nt-color-accent);
+  background: var(--nt-bg-hover);
+}
+
+.nt-avatar-picker__upload-info {
+  color: var(--nt-text-muted);
+  font-size: 0.8rem;
+  margin-top: var(--nt-space-sm);
+}
+
+.nt-avatar-picker__footer {
+  padding: var(--nt-space-lg);
+  border-top: 1px solid var(--nt-border-light);
+  text-align: center;
+}
+
+/* Кнопки действий */
+.nt-avatar-picker__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--nt-space-md);
+  margin-bottom: var(--nt-space-md);
+}
+
+.nt-avatar-picker__remove-btn {
+  width: 100%;
+  text-align: center;
+  padding: var(--nt-space-sm);
+}
+
+/* Эмодзи на прозрачном фоне */
+.nt-profile__avatar-emoji-only,
+.nt-app__header-avatar-emoji-only {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+/* Адаптивность для палитры цветов */
+@media (max-width: 480px) {
+  .nt-avatar-picker__color-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .nt-avatar-picker__emoji-grid {
+    grid-template-columns: repeat(8, 1fr);
+  }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 360px) {
+  .nt-avatar-picker__color-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .nt-avatar-picker__emoji-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+/* ============================================
+   ВКЛАДКИ ПРОФИЛЯ
+   ============================================ */
+
+.nt-profile__tabs {
+  display: flex;
+  gap: var(--nt-space-sm);
+  margin: var(--nt-space-lg) 0;
+  border-bottom: 1px solid var(--nt-border-light);
+  padding-bottom: var(--nt-space-sm);
+}
+
+.nt-profile__tab {
+  padding: var(--nt-space-md) var(--nt-space-xl);
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--nt-text-secondary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  border-radius: var(--nt-radius-md) var(--nt-radius-md) 0 0;
+  display: flex;
+  align-items: center;
+  gap: var(--nt-space-sm);
+  font-size: 1rem;
+}
+
+.nt-profile__tab:hover {
+  color: var(--nt-text-primary);
+  background: var(--nt-bg-hover);
+}
+
+.nt-profile__tab.active {
+  color: var(--nt-color-accent);
+  border-bottom-color: var(--nt-color-accent);
+  background: rgba(var(--nt-color-accent-rgb), 0.1);
+}
+
+.nt-profile__tab i {
+  font-size: 1rem;
+}
+
+/* Адаптивность вкладок */
+@media (max-width: 768px) {
+  .nt-profile__tabs {
+    flex-direction: column;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .nt-profile__tab {
+    border-radius: var(--nt-radius-md);
+    border-bottom: 3px solid transparent;
+    justify-content: center;
+  }
+
+  .nt-profile__tab.active {
+    border-bottom: 3px solid var(--nt-color-accent);
+  }
+}
+
+@media (max-width: 480px) {
+  .nt-profile__tab {
+    padding: var(--nt-space-sm) var(--nt-space-md);
+    font-size: 0.9rem;
+  }
+}

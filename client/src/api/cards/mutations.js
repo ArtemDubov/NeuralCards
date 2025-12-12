@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../../api-client";
-import { cardsetsKeys } from "../cardsets/queries";
+import { cardSetsKeys } from '../cardSets';
 import { useDataStore } from "../../shared/stores/dataStore";
 
 // Добавить карточку
@@ -10,7 +10,7 @@ export const useAddCard = () => {
   return useMutation({
     mutationFn: async ({ setId, cardData }) => {
       const response = await apiClient.post(
-        `/api/cardsets/${setId}/cards`,
+        `/api/cards/${setId}/cards`,
         cardData
       );
       return response.data;
@@ -19,7 +19,7 @@ export const useAddCard = () => {
       console.log("✅ Карточка добавлена!", { newCard, setId });
 
       // 🔥 ОПТИМИСТИЧНОЕ ОБНОВЛЕНИЕ ДЕТАЛЬНОГО НАБОРА В REACT QUERY
-      queryClient.setQueryData(cardsetsKeys.detail(setId), (old) => {
+      queryClient.setQueryData(cardSetsKeys.detail(setId), (old) => {
         if (!old) return old;
         return {
           ...old,
@@ -28,7 +28,7 @@ export const useAddCard = () => {
       });
 
       // Обновляем кэш всех наборов
-      queryClient.setQueryData(cardsetsKeys.all, (old) =>
+      queryClient.setQueryData(cardSetsKeys.all, (old) =>
         old
           ? old.map((set) =>
               set.id === setId
@@ -50,7 +50,7 @@ export const useAddCard = () => {
       }
 
       // Инвалидируем для гарантии свежих данных
-      queryClient.invalidateQueries({ queryKey: cardsetsKeys.detail(setId) });
+      queryClient.invalidateQueries({ queryKey: cardSetsKeys.detail(setId) });
     },
     onError: (error) => {
       console.error("❌ Ошибка добавления карточки:", error);
@@ -65,7 +65,7 @@ export const useUpdateCard = () => {
   return useMutation({
     mutationFn: async ({ setId, cardId, cardData }) => {
       const response = await apiClient.put(
-        `/api/cardsets/${setId}/cards/${cardId}`,
+        `/api/cards/${setId}/cards/${cardId}`,
         cardData
       );
       return response.data;
@@ -74,7 +74,7 @@ export const useUpdateCard = () => {
       console.log("✏️ Карточка обновлена!", { updatedCard, setId });
 
       // 🔥 ОБНОВЛЯЕМ ДЕТАЛЬНЫЙ НАБОР В REACT QUERY
-      queryClient.setQueryData(cardsetsKeys.detail(setId), (old) => {
+      queryClient.setQueryData(cardSetsKeys.detail(setId), (old) => {
         if (!old) return old;
         return {
           ...old,
@@ -85,7 +85,7 @@ export const useUpdateCard = () => {
       });
 
       // Обновляем кэш всех наборов
-      queryClient.setQueryData(cardsetsKeys.all, (old) =>
+      queryClient.setQueryData(cardSetsKeys.all, (old) =>
         old
           ? old.map((set) =>
               set.id === setId
@@ -114,7 +114,7 @@ export const useUpdateCard = () => {
       }
 
       // Инвалидируем для гарантии
-      queryClient.invalidateQueries({ queryKey: cardsetsKeys.detail(setId) });
+      queryClient.invalidateQueries({ queryKey: cardSetsKeys.detail(setId) });
     },
     onError: (error) => {
       console.error("❌ Ошибка обновления карточки:", error);
@@ -128,14 +128,14 @@ export const useDeleteCard = () => {
 
   return useMutation({
     mutationFn: async ({ setId, cardId }) => {
-      await apiClient.delete(`/api/cardsets/${setId}/cards/${cardId}`);
+      await apiClient.delete(`/api/cards/${setId}/cards/${cardId}`);
       return { setId, cardId };
     },
     onSuccess: ({ setId, cardId }) => {
       console.log("🗑️ Карточка удалена!", { setId, cardId });
 
       // 🔥 ОБНОВЛЯЕМ ДЕТАЛЬНЫЙ НАБОР В REACT QUERY
-      queryClient.setQueryData(cardsetsKeys.detail(setId), (old) => {
+      queryClient.setQueryData(cardSetsKeys.detail(setId), (old) => {
         if (!old) return old;
         return {
           ...old,
@@ -144,7 +144,7 @@ export const useDeleteCard = () => {
       });
 
       // Обновляем кэш всех наборов
-      queryClient.setQueryData(cardsetsKeys.all, (old) =>
+      queryClient.setQueryData(cardSetsKeys.all, (old) =>
         old
           ? old.map((set) =>
               set.id === setId
@@ -172,10 +172,77 @@ export const useDeleteCard = () => {
         });
       }
 
-      queryClient.invalidateQueries({ queryKey: cardsetsKeys.detail(setId) });
+      queryClient.invalidateQueries({ queryKey: cardSetsKeys.detail(setId) });
     },
     onError: (error) => {
       console.error("❌ Ошибка удаления карточки:", error);
+    },
+  });
+};
+
+// Добавить несколько карточек массово
+export const useAddMultipleCards = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ setId, cardsData }) => {
+      const response = await apiClient.post(
+        `/api/cards/${setId}/cards/batch`,
+        cardsData
+      );
+
+      return response.data;
+    },
+    onSuccess: (newCards, { setId }) => {
+      console.log("✅ Карточки добавлены массово!", {
+        count: Array.isArray(newCards) ? newCards.length : 0,
+        setId,
+      });
+
+      // Добавляем только если есть карточки
+      if (Array.isArray(newCards) && newCards.length > 0) {
+        // 🔥 ОПТИМИСТИЧНОЕ ОБНОВЛЕНИЕ
+        queryClient.setQueryData(cardSetsKeys.detail(setId), (old) => {
+          if (!old) return old;
+          return {
+            ...old,
+            cards: [...(old.cards || []), ...newCards],
+          };
+        });
+
+        // Обновляем кэш всех наборов
+        queryClient.setQueryData(cardSetsKeys.all, (old) =>
+          old
+            ? old.map((set) =>
+                set.id === setId
+                  ? { ...set, cards: [...(set.cards || []), ...newCards] }
+                  : set
+              )
+            : []
+        );
+
+        // 🔥 СИНХРОНИЗИРУЕМ ZUSTAND
+        const dataStore = useDataStore.getState();
+        const currentSelectedSet = dataStore.selectedSet;
+
+        if (currentSelectedSet && currentSelectedSet.id === setId) {
+          dataStore.setSelectedSet({
+            ...currentSelectedSet,
+            cards: [...(currentSelectedSet.cards || []), ...newCards],
+          });
+        }
+
+        queryClient.invalidateQueries({ queryKey: cardSetsKeys.detail(setId) });
+      }
+    },
+    onError: (error) => {
+      console.error("❌ Ошибка массового добавления карточек:", error);
+
+      // Если есть частичные данные, не показываем общую ошибку
+      const hasPartialData = error?.response?.data?.createdCards;
+      if (hasPartialData) {
+        console.log("⚠️ Частичные данные получены:", hasPartialData.length);
+      }
     },
   });
 };

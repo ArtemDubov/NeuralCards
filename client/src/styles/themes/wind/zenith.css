@@ -1,0 +1,80 @@
+/* ==========================================================
+   ТЕМА – ZENITH (солнце в зените)
+   ========================================================== */
+
+[data-theme="zenith"] {
+  /* ========== ОСНОВНЫЕ ЦВЕТА (6) ========== */
+  --nt-color-primary: #f59e0b; /* Золотистый */
+  --nt-color-primary-dark: #d97706;
+  --nt-color-primary-light: #fbbf24;
+  --nt-color-secondary: #fb923c; /* Мягкий оранжевый */
+  --nt-color-accent: #fef3c7; /* Светлое золото */
+  --nt-color-neutral: #fef3c7; /* Очень светлый фон */
+
+  /* ========== ФОНЫ (8) ========== */
+  --nt-bg-primary: #fffbeb; /* Светлый золотистый фон */
+  --nt-bg-secondary: #fef3c7;
+  --nt-bg-tertiary: #fde68a;
+  --nt-bg-card: #ffffff;
+  --nt-bg-overlay: rgba(255, 251, 235, 0.96);
+  --nt-bg-modal: #ffffff;
+  --nt-bg-tooltip: #d97706;
+  --nt-bg-input: #fef9e7;
+
+  /* ========== ТЕКСТ (8) ========== */
+  --nt-text-primary: #78350f; /* Тёплый коричневый */
+  --nt-text-secondary: #92400e;
+  --nt-text-tertiary: #b45309;
+  --nt-text-muted: rgba(120, 53, 15, 0.6);
+  --nt-text-disabled: rgba(120, 53, 15, 0.4);
+  --nt-text-inverse: #ffffff;
+  --nt-text-on-primary: #ffffff;
+  --nt-text-on-accent: #78350f;
+
+  /* ========== ИНТЕРАКТИВНЫЕ СОСТОЯНИЯ (6) ========== */
+  --nt-state-hover: rgba(245, 158, 11, 0.08);
+  --nt-state-active: rgba(245, 158, 11, 0.12);
+  --nt-state-focus: rgba(245, 158, 11, 0.1);
+  --nt-state-selected: rgba(245, 158, 11, 0.06);
+  --nt-state-disabled: rgba(251, 146, 60, 0.2);
+  --nt-state-error: rgba(220, 38, 38, 0.08);
+
+  /* ========== ГРАНИЦЫ (6) ========== */
+  --nt-border-primary: rgba(245, 158, 11, 0.25);
+  --nt-border-secondary: rgba(251, 146, 60, 0.2);
+  --nt-border-light: rgba(245, 158, 11, 0.15);
+  --nt-border-dark: rgba(120, 53, 15, 0.08);
+  --nt-border-input: rgba(245, 158, 11, 0.3);
+  --nt-border-card: rgba(254, 243, 199, 0.5);
+
+  /* ========== ТЕНИ (9) ========== */
+  --nt-shadow-xs: 0 1px 2px rgba(245, 158, 11, 0.04);
+  --nt-shadow-sm: 0 2px 6px rgba(245, 158, 11, 0.06);
+  --nt-shadow-md: 0 4px 12px rgba(245, 158, 11, 0.08);
+  --nt-shadow-lg: 0 8px 24px rgba(245, 158, 11, 0.1);
+  --nt-shadow-xl: 0 12px 36px rgba(245, 158, 11, 0.12);
+  --nt-shadow-focus: 0 0 0 3px rgba(251, 146, 60, 0.2);
+  --nt-shadow-inset: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+  --nt-shadow-elevated: 0 8px 30px rgba(245, 158, 11, 0.08);
+  --nt-shadow-special: 0 0 20px rgba(251, 191, 36, 0.3);
+
+  /* ========== СПЕЦИАЛЬНЫЕ ЭЛЕМЕНТЫ (4) ========== */
+  --nt-color-link: #d97706;
+  --nt-color-link-hover: #b45309;
+  --nt-color-card-border: rgba(254, 243, 199, 0.6);
+  --nt-color-icon: #b45309;
+
+  /* ========== ГРАДИЕНТЫ (3) ========== */
+  --nt-gradient-primary: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+  --nt-gradient-background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  --nt-gradient-card: linear-gradient(135deg, #ffffff, #fef9e7);
+
+  /* ========== ПЕРЕМЕННЫЕ ДЛЯ SWITCHER (7) ========== */
+  --nt-switcher-color: #d97706;
+  --nt-switcher-bg: #ffffff;
+  --nt-switcher-indicator: #d97706;
+  --nt-switcher-border: rgba(217, 119, 6, 0.2);
+  --nt-switcher-hover: rgba(217, 119, 6, 0.08);
+  --nt-switcher-active: rgba(217, 119, 6, 0.12);
+  --nt-switcher-checkmark: #d97706;
+}

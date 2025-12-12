@@ -27,7 +27,7 @@ const FavoritesPage = ({ handleViewCard, handleViewSet }) => {
       // openSetModal(setInfo);
 
       // Или перейти на страницу набора:
-      // window.location.href = `/#cardsets/${setInfo.id}`;
+      // window.location.href = `/#cardSets/${setInfo.id}`;
     }
   };
 
@@ -62,12 +62,12 @@ const FavoritesPage = ({ handleViewCard, handleViewSet }) => {
       <div className="nt-content__grid">
         {activeTab === "sets" ? (
           sets.length === 0 ? (
-            <div className="nt-favorites__empty">
-              <div className="nt-favorites__empty-icon">📚</div>
-              <h3 className="nt-favorites__empty-title">
+            <div className="nt-empty-state">
+              <div className="nt-empty-state-icon">📚</div>
+              <h3 className="nt-empty-state-title">
                 {t("favorites.sets.empty.title")}
               </h3>
-              <p className="nt-favorites__empty-text">
+              <p className="nt-empty-state-text">
                 {t("favorites.sets.empty.message")}
               </p>
             </div>
@@ -75,7 +75,7 @@ const FavoritesPage = ({ handleViewCard, handleViewSet }) => {
             <div className="nt-favorites__grid">
               {sets.map((fav) => {
                 const setInfo = {
-                  id: fav.cardsetId || fav.id,
+                  id: fav.cardSet?.id || fav.cardSetId,
                   title: fav.cardSet?.title || fav.title || t("sets.unknown"),
                   description:
                     fav.cardSet?.description || fav.description || "",
@@ -118,7 +118,7 @@ const FavoritesPage = ({ handleViewCard, handleViewSet }) => {
                       >
                         <FavoriteButton
                           itemId={setInfo.id}
-                          itemType="cardset"
+                          itemType="cardSet"
                         />
                       </div>
                     </div>
@@ -154,12 +154,12 @@ const FavoritesPage = ({ handleViewCard, handleViewSet }) => {
             </div>
           )
         ) : cards.length === 0 ? (
-          <div className="nt-favorites__empty">
-            <div className="nt-favorites__empty-icon">🃏</div>
-            <h3 className="nt-favorites__empty-title">
+          <div className="nt-empty-state">
+            <div className="nt-empty-state-icon">🃏</div>
+            <h3 className="nt-empty-state-title">
               {t("favorites.cards.empty.title")}
             </h3>
-            <p className="nt-favorites__empty-text">
+            <p className="nt-empty-state-text">
               {t("favorites.cards.empty.message")}
             </p>
           </div>
@@ -167,12 +167,12 @@ const FavoritesPage = ({ handleViewCard, handleViewSet }) => {
           <div className="nt-cards-grid">
             {cards.map((fav) => {
               const cardInfo = {
-                id: fav.cardId || fav.id,
+                id: fav.card?.id || fav.cardId,
                 front: fav.card?.front || fav.front || "",
                 back: fav.card?.back || fav.back || "",
                 imageUrl: fav.card?.imageUrl || fav.imageUrl,
                 audioUrl: fav.card?.audioUrl || fav.audioUrl,
-                cardset: fav.card?.cardset || fav.cardset,
+                cardSet: fav.card?.cardSet || fav.cardSet,
               };
 
               return (

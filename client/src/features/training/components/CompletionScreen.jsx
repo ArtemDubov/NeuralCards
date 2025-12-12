@@ -18,149 +18,252 @@ export const CompletionScreen = ({
     return Math.round((stats.correct / stats.total) * 100);
   };
 
-  const getScoreClass = (percentage) => {
-    if (percentage >= 80) return "nt-util__text-success";
-    if (percentage >= 60) return "nt-util__text-warning";
-    return "nt-util__text-error";
-  };
-
-  const getBadgeClass = (percentage) => {
-    if (percentage >= 80) return "nt-util__bg-success nt-util__text-primary";
-    if (percentage >= 60) return "nt-util__bg-warning nt-util__text-primary";
-    return "nt-util__bg-error nt-util__text-primary";
-  };
-
   const scorePercentage = getScorePercentage();
 
+  const getProgressLevel = () => {
+    if (scorePercentage >= 90) return "excellent";
+    if (scorePercentage >= 70) return "good";
+    if (scorePercentage >= 50) return "average";
+    return "needs-improvement";
+  };
+
+  const progressLevel = getProgressLevel();
+
+  const getProgressData = () => {
+    switch (progressLevel) {
+      case "excellent":
+        return {
+          color: "var(--nt-color-success)",
+          emoji: "🏆",
+          title: "Отличный результат!",
+          badgeClass: "nt-badge--success",
+        };
+      case "good":
+        return {
+          color: "var(--nt-color-warning)",
+          emoji: "⭐",
+          title: "Хорошая работа!",
+          badgeClass: "nt-badge--warning",
+        };
+      case "average":
+        return {
+          color: "var(--nt-color-info)",
+          emoji: "📊",
+          title: "Нормально, можно лучше",
+          badgeClass: "nt-badge--info",
+        };
+      default:
+        return {
+          color: "var(--nt-color-error)",
+          emoji: "📈",
+          title: "Повторите материал",
+          badgeClass: "nt-badge--error",
+        };
+    }
+  };
+
+  const progressData = getProgressData();
+
   return (
-    <div className="nt-util__flex nt-util__flex-col nt-util__items-center nt-util__justify-center nt-util__p-xl">
-      <div className="nt-card nt-util__w-full nt-util__max-w-lg nt-util__p-xl">
-        {/* ЗАГОЛОВОК С АНИМАЦИЕЙ */}
-        <div className="nt-util__flex nt-util__flex-col nt-util__items-center nt-util__mb-xl">
-          <div
-            className="nt-util__text-accent nt-util__text-center nt-util__mb-lg nt-util__animate-pulse"
-            style={{ fontSize: "4rem" }}
-          >
-            🏆
+    <div className="nt-training-completion-overlay">
+      <div className="nt-modal nt-modal--large nt-modal--animate-in">
+        {/* ЗАГОЛОВОК С ГАЛОЧКОЙ */}
+        <div className="nt-training-completion-header">
+          <div className="nt-training-completion-icon-container">
+            <div className="nt-training-completion-icon">
+              <div className="nt-training-completion-icon-check"></div>
+            </div>
           </div>
-          <h2
-            className="nt-util__text-accent nt-util__text-center nt-util__mb-md"
-            style={{ fontSize: "2rem" }}
-          >
-            {t("training.completed.title")}
-          </h2>
-          <p className="nt-util__text-secondary nt-util__text-center">
-            {t("training.completed.subtitle") ||
-              "Тренировка успешно завершена!"}
-          </p>
+
+          <div className="nt-training-completion-title-section">
+            <h2 className="nt-modal__title nt-util__text-center">
+              {t("training.completed.title")}
+            </h2>
+            <div className="nt-training-completion-subtitle">
+              {t("training.completed.subtitle")}
+            </div>
+          </div>
         </div>
 
-        {/* СТАТИСТИКА В КАРТОЧКАХ */}
-        <div className="nt-util__grid nt-util__gap-lg nt-util__mb-xl">
-          {/* РЕЖИМ И НАБОР */}
-          <div className="nt-util__flex nt-util__gap-md nt-util__flex-wrap">
-            <div className="nt-card--set nt-util__flex-1 nt-util__min-w-200">
+        {/* ОСНОВНОЕ СОДЕРЖИМОЕ */}
+        <div className="nt-modal__content">
+          {/* ИНФОРМАЦИОННЫЕ БЛОКИ */}
+          <div
+            className="nt-content__grid nt-util__mb-xl"
+            style={{
+              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+              gap: "var(--nt-space-lg)",
+            }}
+          >
+            <div className="nt-content__card">
               <div className="nt-card__content">
-                <h3 className="nt-card__subtitle">
-                  {t("training.completed.mode")}
-                </h3>
-                <p className="nt-card__title nt-util__line-clamp-2">
-                  {t(mode?.nameKey || "")}
-                </p>
+                <div className="nt-card__header">
+                  <span className="nt-card__subtitle">
+                    🎮 {t("training.completed.mode")}
+                  </span>
+                </div>
+                <div className="nt-card__body">
+                  <p className="nt-card__title nt-util__line-clamp-2">
+                    {t(mode?.nameKey || "")}
+                  </p>
+                </div>
               </div>
             </div>
-            <div className="nt-card--set nt-util__flex-1 nt-util__min-w-200">
+
+            <div className="nt-content__card">
               <div className="nt-card__content">
-                <h3 className="nt-card__subtitle">
-                  {t("training.completed.set")}
-                </h3>
-                <p className="nt-card__title nt-util__line-clamp-2">
-                  {set?.title || "—"}
-                </p>
+                <div className="nt-card__header">
+                  <span className="nt-card__subtitle">
+                    📚 {t("training.completed.set")}
+                  </span>
+                </div>
+                <div className="nt-card__body">
+                  <p className="nt-card__title nt-util__line-clamp-2">
+                    {set?.title || "—"}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* ЦИФРЫ СТАТИСТИКИ */}
+          {/* РЕЗУЛЬТАТЫ В ТАБЛИЧНОМ ФОРМАТЕ */}
           {stats && (
-            <div className="nt-util__grid nt-util__grid-cols-2 nt-util__gap-md">
-              <div className="nt-content__card nt-util__text-center">
-                <div className="nt-util__text-secondary nt-util__text-sm">
-                  {t("training.completed.correct")}
-                </div>
-                <div className="nt-util__text-success nt-util__text-2xl nt-util__font-bold">
-                  {stats.correct}
-                </div>
+            <div className="nt-content__card nt-util__mb-xl">
+              <div className="nt-card__header nt-util__mb-lg">
+                <h3 className="nt-card__title">📊 Результаты тренировки</h3>
               </div>
-              <div className="nt-content__card nt-util__text-center">
-                <div className="nt-util__text-secondary nt-util__text-sm">
-                  {t("training.completed.total")}
+
+              <div className="nt-training-results-list">
+                {/* ВЫУЧЕНО КАРТОЧЕК */}
+                <div className="nt-training-result-item">
+                  <div className="nt-training-result-label-container">
+                    <div className="nt-training-result-icon">✅</div>
+                    <div>
+                      <div className="nt-training-result-label">
+                        Выучено карточек
+                      </div>
+                      <div className="nt-training-result-subtitle">
+                        Правильные ответы из общего числа
+                      </div>
+                    </div>
+                  </div>
+                  <div className="nt-training-result-value-container">
+                    <div className="nt-training-result-value">
+                      <span className="nt-training-result-main-value nt-util__text-success">
+                        {stats.correct}
+                      </span>
+                      <span className="nt-training-result-secondary-value">
+                        из {stats.total}
+                      </span>
+                    </div>
+                    <div className="nt-training-result-progress-bar">
+                      <div
+                        className="nt-training-result-progress-fill"
+                        style={{
+                          width: `${(stats.correct / stats.total) * 100}%`,
+                          background: progressData.color,
+                        }}
+                      ></div>
+                    </div>
+                  </div>
                 </div>
-                <div className="nt-util__text-primary nt-util__text-2xl nt-util__font-bold">
-                  {stats.total}
+
+                {/* КОЛИЧЕСТВО ПОВТОРЕНИЙ */}
+                <div className="nt-training-result-item">
+                  <div className="nt-training-result-label-container">
+                    <div className="nt-training-result-icon">🔄</div>
+                    <div>
+                      <div className="nt-training-result-label">
+                        Количество повторений
+                      </div>
+                      <div className="nt-training-result-subtitle">
+                        Сколько раз проходили этот набор
+                      </div>
+                    </div>
+                  </div>
+                  <div className="nt-training-result-value-container">
+                    <div className="nt-training-result-value">
+                      <span className="nt-training-result-main-value">
+                        {stats.repetitions || 0}
+                      </span>
+                    </div>
+                    <div className="nt-training-result-hint">
+                      {stats.repetitions === 0
+                        ? "Первый раз проходите"
+                        : `Повторено ${stats.repetitions} раз`}
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div className="nt-content__card nt-util__col-span-2 nt-util__text-center nt-util__p-lg">
-                <div className="nt-util__text-secondary nt-util__mb-sm">
-                  {t("training.completed.score")}
-                </div>
-                <div
-                  className={`nt-util__text-xl nt-util__font-bold nt-util__rounded-full nt-util__p-sm ${getBadgeClass(
-                    scorePercentage
-                  )}`}
-                >
-                  {scorePercentage}%
-                </div>
-                <div
-                  className={`nt-util__text-sm nt-util__mt-xs ${getScoreClass(
-                    scorePercentage
-                  )}`}
-                >
-                  {scorePercentage >= 80
-                    ? "Отлично!"
-                    : scorePercentage >= 60
-                    ? "Хорошо"
-                    : "Повторите материал"}
+
+                {/* ПРОГРЕСС */}
+                <div className="nt-training-result-item">
+                  <div className="nt-training-result-label-container">
+                    <div className="nt-training-result-icon">
+                      {progressData.emoji}
+                    </div>
+                    <div>
+                      <div className="nt-training-result-label">Прогресс</div>
+                      <div className="nt-training-result-subtitle">
+                        Общая эффективность тренировки
+                      </div>
+                    </div>
+                  </div>
+                  <div className="nt-training-result-value-container">
+                    <div className="nt-training-result-value">
+                      <span
+                        className={`nt-badge ${progressData.badgeClass} nt-badge--large`}
+                      >
+                        {scorePercentage}%
+                      </span>
+                    </div>
+                    <div className="nt-training-result-assessment">
+                      {progressData.title}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           )}
+
+          {/* СОВЕТ */}
+          <div className="nt-content__card nt-card--highlight">
+            <div className="nt-card__content">
+              <div className="nt-card__header">
+                <span className="nt-card__subtitle">
+                  💡 Совет для лучшего запоминания
+                </span>
+              </div>
+              <div className="nt-card__body">
+                <p className="nt-card__text">
+                  {scorePercentage >= 80
+                    ? "Отлично! Для закрепления материала повторите через 2-3 дня."
+                    : scorePercentage >= 60
+                    ? "Хороший результат! Повторите сложные карточки через день."
+                    : "Рекомендуем повторить тренировку завтра для лучшего запоминания."}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
-        {/* ВРЕМЯ (если есть) */}
-        {stats?.startTime && (
-          <div className="nt-util__flex nt-util__justify-center nt-util__items-center nt-util__gap-sm nt-util__mb-xl nt-util__text-secondary">
-            <span>⏱️</span>
-            <span>
-              {t("training.completed.time")}:{" "}
-              {new Date(stats.startTime).toLocaleTimeString()}
-            </span>
-          </div>
-        )}
-
         {/* КНОПКИ ДЕЙСТВИЙ */}
-        <div className="nt-util__flex nt-util__gap-lg nt-util__justify-center nt-util__flex-wrap">
-          <button
-            className="nt-btn nt-btn--primary nt-btn--large"
-            onClick={onRestart}
-          >
-            <span className="nt-util__mr-sm">🔄</span>
-            {t("training.restart")}
-          </button>
-          <button
-            className="nt-btn nt-btn--secondary nt-btn--large"
-            onClick={onNewSet}
-          >
-            <span className="nt-util__mr-sm">📚</span>
-            {t("training.choose.another")}
-          </button>
-          <button
-            className="nt-btn nt-btn--ghost nt-btn--large"
-            onClick={() => (window.location.href = "/training")}
-          >
-            <span className="nt-util__mr-sm">🏠</span>
-            {t("training.back.home") || "На главную"}
-          </button>
+        <div className="nt-modal__footer">
+          <div className="nt-modal__actions">
+            <button className="nt-btn nt-btn--primary" onClick={onRestart}>
+              🔄 {t("training.restart")}
+            </button>
+
+            <button className="nt-btn nt-btn--secondary" onClick={onNewSet}>
+              📚 {t("training.choose.another")}
+            </button>
+
+            <button
+              className="nt-btn nt-btn--ghost"
+              onClick={() => (window.location.href = "/training")}
+            >
+              🏠 {t("training.back.home")}
+            </button>
+          </div>
         </div>
       </div>
     </div>

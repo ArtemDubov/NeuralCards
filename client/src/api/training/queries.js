@@ -13,7 +13,7 @@ export const useTrainingCards = (setId) => {
     queryKey: trainingKeys.cards(setId),
     queryFn: async () => {
       if (!setId) return [];
-      const response = await apiClient.get(`/api/cardsets/${setId}`);
+      const response = await apiClient.get(`/api/cardSets/${setId}`);
       return response.data.cards || [];
     },
     enabled: !!setId,

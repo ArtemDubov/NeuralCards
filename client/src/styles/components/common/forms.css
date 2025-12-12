@@ -25,7 +25,7 @@
 .nt-form__select:focus-visible {
   outline: none;
   border-color: var(--nt-color-primary);
-  box-shadow: 0 0 10px rgba(102, 126, 234, 0.3);
+  box-shadow: var(--nt-shadow-focus);
 }
 
 /* Плейсхолдер */
@@ -57,7 +57,7 @@
 /* ОШИБКИ */
 .nt-form__input--error {
   border-color: var(--nt-color-error);
-  box-shadow: 0 0 5px rgba(255, 107, 107, 0.3);
+  box-shadow: var(--nt-shadow-error);
 }
 
 .nt-form__error {
@@ -133,6 +133,7 @@
 .nt-form__file-input:hover {
   border-color: var(--nt-color-primary);
   background: rgba(126, 87, 194, 0.1);
+  box-shadow: var(--nt-shadow-sm);
 }
 
 .nt-form__file-preview {
@@ -163,7 +164,7 @@
 
 .nt-form__tags-container:focus-within {
   border-color: var(--nt-color-primary);
-  box-shadow: var(--nt-shadow-sm);
+  box-shadow: var(--nt-shadow-focus);
 }
 
 .nt-form__tags-input {

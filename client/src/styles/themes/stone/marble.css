@@ -1,0 +1,81 @@
+/* ==========================================================
+   ТЕМА – MARBLE (благородный мрамор)
+   Полная версия с 50+ переменными
+   ========================================================== */
+
+[data-theme="marble"] {
+  /* ========== ОСНОВНЫЕ ЦВЕТА (6) ========== */
+  --nt-color-primary: #90a4ae; /* Мраморный серый */
+  --nt-color-primary-dark: #607d8b;
+  --nt-color-primary-light: #b0bec5;
+  --nt-color-secondary: #bcaaa4; /* Тёплый бежевый */
+  --nt-color-accent: #8d6e63; /* Коричневые прожилки */
+  --nt-color-neutral: #fafafa; /* Чистый белый */
+
+  /* ========== ФОНЫ (8) ========== */
+  --nt-bg-primary: #ffffff; /* Белый мрамор */
+  --nt-bg-secondary: #f5f5f5;
+  --nt-bg-tertiary: #eeeeee;
+  --nt-bg-card: #ffffff;
+  --nt-bg-overlay: rgba(255, 255, 255, 0.95);
+  --nt-bg-modal: #ffffff;
+  --nt-bg-tooltip: #424242;
+  --nt-bg-input: #fafafa;
+
+  /* ========== ТЕКСТ (8) ========== */
+  --nt-text-primary: #212121; /* Тёмно-серый */
+  --nt-text-secondary: #616161;
+  --nt-text-tertiary: #9e9e9e;
+  --nt-text-muted: rgba(33, 33, 33, 0.6);
+  --nt-text-disabled: rgba(33, 33, 33, 0.38);
+  --nt-text-inverse: #ffffff;
+  --nt-text-on-primary: #ffffff;
+  --nt-text-on-accent: #ffffff;
+
+  /* ========== ИНТЕРАКТИВНЫЕ СОСТОЯНИЯ (6) ========== */
+  --nt-state-hover: rgba(144, 164, 174, 0.1);
+  --nt-state-active: rgba(144, 164, 174, 0.2);
+  --nt-state-focus: rgba(144, 164, 174, 0.15);
+  --nt-state-selected: rgba(144, 164, 174, 0.08);
+  --nt-state-disabled: rgba(188, 170, 164, 0.2);
+  --nt-state-error: rgba(211, 47, 47, 0.1);
+
+  /* ========== ГРАНИЦЫ (6) ========== */
+  --nt-border-primary: rgba(144, 164, 174, 0.3);
+  --nt-border-secondary: rgba(141, 110, 99, 0.2);
+  --nt-border-light: rgba(144, 164, 174, 0.15);
+  --nt-border-dark: rgba(33, 33, 33, 0.1);
+  --nt-border-input: rgba(144, 164, 174, 0.4);
+  --nt-border-card: rgba(141, 110, 99, 0.15);
+
+  /* ========== ТЕНИ (9) ========== */
+  --nt-shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --nt-shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.06);
+  --nt-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --nt-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --nt-shadow-xl: 0 12px 36px rgba(0, 0, 0, 0.12);
+  --nt-shadow-focus: 0 0 0 3px rgba(144, 164, 174, 0.2);
+  --nt-shadow-inset: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+  --nt-shadow-elevated: 0 8px 30px rgba(0, 0, 0, 0.06);
+  --nt-shadow-special: 0 0 10px rgba(141, 110, 99, 0.15);
+
+  /* ========== СПЕЦИАЛЬНЫЕ ЭЛЕМЕНТЫ (4) ========== */
+  --nt-color-link: #607d8b;
+  --nt-color-link-hover: #455a64;
+  --nt-color-card-border: rgba(141, 110, 99, 0.2);
+  --nt-color-icon: #757575;
+
+  /* ========== ГРАДИЕНТЫ (3) ========== */
+  --nt-gradient-primary: linear-gradient(135deg, #90a4ae 0%, #b0bec5 100%);
+  --nt-gradient-background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+  --nt-gradient-card: linear-gradient(135deg, #ffffff, #fafafa);
+
+  /* ========== ПЕРЕМЕННЫЕ ДЛЯ SWITCHER (7) ========== */
+  --nt-switcher-color: #8d6e63;
+  --nt-switcher-bg: #ffffff;
+  --nt-switcher-indicator: #8d6e63;
+  --nt-switcher-border: rgba(141, 110, 99, 0.3);
+  --nt-switcher-hover: rgba(141, 110, 99, 0.08);
+  --nt-switcher-active: rgba(141, 110, 99, 0.15);
+  --nt-switcher-checkmark: #8d6e63;
+}

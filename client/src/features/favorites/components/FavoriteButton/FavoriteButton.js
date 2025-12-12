@@ -6,20 +6,24 @@ import {
 import StarIcon from "../../../shared/components/StarIcon";
 import { useAppStore } from "../../../../shared/stores/appStore";
 
-const FavoriteButton = ({ itemId, itemType = "cardset" }) => {
+const FavoriteButton = ({ itemId, itemType = "cardSet" }) => {
   const { t } = useAppStore();
 
   const toggleFavoriteSet = useToggleFavoriteSet();
   const toggleFavoriteCard = useToggleFavoriteCard();
 
+  if (!itemId || itemId <= 0) {
+    return null;
+  }
+
   const toggleMutation =
-    itemType === "cardset" ? toggleFavoriteSet : toggleFavoriteCard;
+    itemType === "cardSet" ? toggleFavoriteSet : toggleFavoriteCard;
 
   const handleToggle = async () => {
     try {
       await toggleMutation.mutateAsync(itemId);
     } catch (error) {
-      console.error("Ошибка обновления избранного:", error);
+      // Ошибка обрабатывается на уровне хука
     }
   };
 

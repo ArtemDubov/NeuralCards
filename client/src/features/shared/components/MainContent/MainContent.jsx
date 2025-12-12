@@ -1,17 +1,18 @@
 import React, { useState, useMemo } from "react";
 import { useAppStore } from "../../../../shared/stores/appStore";
-import CardsetList from "../../../cardsets/components/CardsetList/CardsetList";
-import CreateSetForm from "../../../cardsets/components/CreateSetForm/CreateSetForm";
-import ViewSet from "../../../cardsets/components/ViewSet/ViewSet";
-import { useFavoriteSets } from "../../../../api/favorites";
-import { useCardsets } from "../../../../api/cardsets";
+import CardSetList from "../../../cardSets/components/CardSetList/CardSetList";
+import CreateSetForm from "../../../cardSets/components/CreateSetForm/CreateSetForm";
+import ViewSet from "../../../cardSets/components/ViewSet/ViewSet";
+import { useCardSets } from "../../../../api/cardSets";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUIStore } from "../../../../shared/stores/uiStore";
 import { useAuthStore } from "../../../../shared/stores/authStore";
+import { useAnimationStore } from "../../../../shared/stores/animationStore";
 
 import FavoritesPage from "../../../favorites/components/FavoritesPage";
 import { TrainingPage } from "../../../training/components/TrainingPage";
 import ProfilePage from "../../../profile/components/ProfilePage/ProfilePage";
+import PremiumSettingsPage from "../../../premium/components/PremiumSettingsPage/PremiumSettingsPage";
 
 const MainContent = ({
   activeTab,
@@ -20,61 +21,41 @@ const MainContent = ({
   onDeleteSet,
   onViewSet,
   setActiveTab,
-  setSelectedSetForTraining,
   forms,
   onUpdateForm,
   onResetForm,
 }) => {
   const { t } = useAppStore();
   const [showFavorites, setShowFavorites] = useState(false);
+  const [selectedSetForTraining, setSelectedSetForTraining] = useState(null);
   const queryClient = useQueryClient();
   const { user } = useAuthStore();
-  const ui = useUIStore(); // ← уже есть
+  const ui = useUIStore();
 
-  const { data: cardsets = [], isLoading, isError, error } = useCardsets();
+  const { newlyCreatedSetId, newlyCreatedCardId, recentlyDeletedSetId } =
+    useAnimationStore();
 
-  // Получаем избранные наборы
-  const { data: favoriteSets = [] } = useFavoriteSets();
+  const { data: allSets = [], isLoading, isError, error } = useCardSets();
 
-  // Функция для фильтрации наборов - используем useMemo
-  const filteredCardsets = useMemo(() => {
-    let filtered = cardsets;
-
+  const filteredCardSets = useMemo(() => {
     if (showFavorites) {
-      const favoriteSetIds = new Set(
-        favoriteSets.map((fav) => fav.cardsetId || fav.id || fav.cardset?.id)
-      );
-      filtered = filtered.filter((set) => favoriteSetIds.has(set.id));
+      return allSets.filter((set) => set.isFavorite === true);
     }
-
-    return filtered;
-  }, [cardsets, showFavorites, favoriteSets]);
+    return allSets;
+  }, [allSets, showFavorites]);
 
   const handleStartTraining = (set) => {
     setSelectedSetForTraining(set);
     setActiveTab("training");
   };
 
-  // Функция для просмотра карточки в избранном
-  const handleViewCard = (card) => {
-    ui.openModal("viewCard", {
-      ...card,
-      cardsetId: card.cardset?.id,
-    });
-  };
-
-  // Функция для просмотра набора в избранном
   const handleViewSetFromFavorites = (setInfo) => {
-    // Находим полный набор по ID
-    const fullSet = cardsets.find((set) => set.id === setInfo.id);
+    const fullSet = allSets.find((set) => set.id === setInfo.id);
 
     if (fullSet) {
-      // Открываем набор для просмотра
       onViewSet(fullSet);
-      // Переключаемся на вкладку просмотра набора
       setActiveTab("view-set");
     } else {
-      // Если набор не найден в локальных данных, открываем в модальном окне
       ui.openModal("viewSet", {
         ...setInfo,
         isFromFavorites: true,
@@ -82,7 +63,6 @@ const MainContent = ({
     }
   };
 
-  // Рендер для вкладки "Мои наборы"
   const renderSetsContent = () => {
     return (
       <div className="nt-page__container">
@@ -110,7 +90,7 @@ const MainContent = ({
             {!showFavorites && (
               <button
                 className="nt-btn nt-btn--primary"
-                onClick={() => ui.openModal("createSet")} // ← ИЗМЕНЕНО ТОЛЬКО ЗДЕСЬ!
+                onClick={() => ui.openModal("createSet")}
               >
                 {t("navigation.create")}
               </button>
@@ -133,15 +113,15 @@ const MainContent = ({
               <button
                 className="nt-btn nt-btn--secondary nt-util__mt-sm"
                 onClick={() =>
-                  queryClient.refetchQueries({ queryKey: ["cardsets"] })
+                  queryClient.refetchQueries({ queryKey: ["cardSets"] })
                 }
               >
-                Повторить
+                {t("common.retry")}
               </button>
             </div>
           )}
 
-          {!isLoading && !isError && filteredCardsets.length === 0 && (
+          {!isLoading && !isError && filteredCardSets.length === 0 && (
             <div className="nt-util__empty-state">
               <div className="nt-util__empty-icon">
                 {showFavorites ? "⭐" : "📚"}
@@ -159,20 +139,21 @@ const MainContent = ({
               {!showFavorites && (
                 <button
                   className="nt-btn nt-btn--primary nt-empty-state__button"
-                  onClick={() => ui.openModal("createSet")} // ← ИЛИ ЗДЕСЬ ТОЖЕ МОЖНО ДОБАВИТЬ
+                  onClick={() => ui.openModal("createSet")}
                 >
-                  {t("sets.create.first")}
+                  {t("sets.create_first")}
                 </button>
               )}
             </div>
           )}
 
-          {!isLoading && !isError && filteredCardsets.length > 0 && (
+          {!isLoading && !isError && filteredCardSets.length > 0 && (
             <div className="nt-cards-grid">
-              <CardsetList
-                cardsets={filteredCardsets}
+              <CardSetList
+                cardSets={filteredCardSets}
                 handleViewSet={onViewSet}
-                showDeleteModal={onDeleteSet}
+                newlyCreatedSetId={newlyCreatedSetId}
+                recentlyDeletedSetId={recentlyDeletedSetId}
               />
             </div>
           )}
@@ -181,7 +162,6 @@ const MainContent = ({
     );
   };
 
-  // Рендер для создания набора - ОСТАВЛЯЕМ НА СЛУЧАЙ
   const renderCreateContent = () => {
     return (
       <div className="nt-page__container">
@@ -204,7 +184,6 @@ const MainContent = ({
     );
   };
 
-  // Рендер для просмотра набора
   const renderViewSetContent = () => {
     if (!selectedSet) return null;
 
@@ -213,38 +192,36 @@ const MainContent = ({
         <ViewSet
           selectedSet={selectedSet}
           setActiveTab={setActiveTab}
-          onStartTraining={() => handleStartTraining(selectedSet)}
+          onStartTraining={handleStartTraining}
+          newlyCreatedCardId={newlyCreatedCardId}
         />
       </div>
     );
   };
 
-  // Рендер для избранного
   const renderFavoritesContent = () => {
     return (
       <div className="nt-page__container">
-        <FavoritesPage
-          handleViewCard={handleViewCard}
-          handleViewSet={handleViewSetFromFavorites} // ← ПЕРЕДАЕМ ФУНКЦИЮ
-        />
+        <FavoritesPage handleViewSet={handleViewSetFromFavorites} />
       </div>
     );
   };
 
-  // Рендер для тренировки
   const renderTrainingContent = () => {
     return (
       <div className="nt-page__container">
         <TrainingPage
-          cardsets={cardsets}
-          selectedSetForTraining={selectedSet}
-          onBackToSets={() => setActiveTab("sets")}
+          cardSets={allSets}
+          selectedSetForTraining={selectedSetForTraining}
+          onBackToSets={() => {
+            setActiveTab("sets");
+            setSelectedSetForTraining(null);
+          }}
         />
       </div>
     );
   };
 
-  // Рендер для профиля
   const renderProfileContent = () => {
     return (
       <div className="nt-page__container">
@@ -253,7 +230,14 @@ const MainContent = ({
     );
   };
 
-  // Главный рендер
+  const renderPremiumContent = () => {
+    return (
+      <div className="nt-page__container">
+        <PremiumSettingsPage />
+      </div>
+    );
+  };
+
   return (
     <main className="nt-main__content">
       {activeTab === "sets" && renderSetsContent()}
@@ -262,6 +246,7 @@ const MainContent = ({
       {activeTab === "favorites" && renderFavoritesContent()}
       {activeTab === "training" && renderTrainingContent()}
       {activeTab === "profile" && renderProfileContent()}
+      {activeTab === "premium" && renderPremiumContent()}
     </main>
   );
 };

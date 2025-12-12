@@ -1,130 +1,107 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import apiClient from "../../api-client";
-import { cardsetsKeys } from "./queries";
+import { cardSetsKeys } from "./queries";
 import { useDataStore } from "../../shared/stores/dataStore";
 
-// Обновить набор - ПОЛНОСТЬЮ ПЕРЕПИСАННАЯ ВЕРСИЯ
+// Обновить набор
 export const useUpdateSet = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({ setId, data }) => {
-      console.log("✏️ Обновление набора:", { setId, data });
+      console.log("✏️ [mutation] Обновление набора:", { setId, data });
 
-      // Подготавливаем данные для отправки
+      // ВАЖНО: Формируем полный объект для отправки
       const requestData = {
-        title: data.title,
-        tags: data.tags || [],
+        title: data.title || "",
+        description: data.description || null,
+        isPublic: data.isPublic !== undefined ? data.isPublic : false,
+        tags: Array.isArray(data.tags) ? data.tags : [],
       };
 
-      // Пробуем разные endpoint'ы по очереди
-      const endpoints = [
-        `/api/cardsets/${setId}`, // Основной endpoint
-        `/cardsets/${setId}`, // Альтернативный endpoint
-      ];
+      console.log("📤 [mutation] Отправляем данные:", requestData);
 
-      const methods = ["put", "patch", "post"]; // Пробуем все методы
-
-      for (const endpoint of endpoints) {
-        for (const method of methods) {
-          try {
-            console.log(`🔄 Пробуем ${method.toUpperCase()} ${endpoint}...`);
-            const response = await apiClient[method](endpoint, requestData);
-            console.log(
-              `✅ ${method.toUpperCase()} ${endpoint} успешен:`,
-              response.data
-            );
-            return response.data;
-          } catch (error) {
-            console.log(
-              `⚠️ ${method.toUpperCase()} ${endpoint} не сработал:`,
-              error.message
-            );
-            // Продолжаем пробовать следующий метод
-          }
-        }
+      try {
+        const response = await apiClient.put(
+          `/api/cardSets/${setId}`,
+          requestData
+        );
+        console.log("✅ [mutation] Набор обновлён:", response.data);
+        return response.data;
+      } catch (error) {
+        console.error("❌ [mutation] Ошибка обновления:", {
+          message: error.message,
+          response: error.response?.data,
+          status: error.response?.status,
+        });
+        throw error;
       }
-
-      // Если ни один endpoint не сработал
-      throw new Error("Все endpoint'ы для обновления набора не сработали");
     },
     onSuccess: (updatedSet) => {
-      console.log("🔄 Обновляем кэш для набора:", updatedSet?.id);
+      console.log("🔄 [mutation] Обновляем кэш для набора:", updatedSet?.id);
 
-      if (updatedSet?.id) {
-        // Обновляем в кэше
-        queryClient.setQueryData(cardsetsKeys.all, (old) =>
-          old
-            ? old.map((set) => (set.id === updatedSet.id ? updatedSet : set))
-            : []
-        );
+      // 1. Обновляем общий список наборов
+      queryClient.setQueryData(cardSetsKeys.all, (old) =>
+        old
+          ? old.map((set) => (set.id === updatedSet.id ? updatedSet : set))
+          : []
+      );
 
-        // Обновляем детальный запрос
-        queryClient.setQueryData(
-          cardsetsKeys.detail(updatedSet.id),
-          updatedSet
-        );
+      // 2. Обновляем детальный запрос
+      queryClient.setQueryData(cardSetsKeys.detail(updatedSet.id), updatedSet);
 
-        // Инвалидируем детальный запрос
-        queryClient.invalidateQueries({
-          queryKey: cardsetsKeys.detail(updatedSet.id),
-        });
+      // 3. Инвалидируем кэш для перезапроса
+      queryClient.invalidateQueries({
+        queryKey: cardSetsKeys.detail(updatedSet.id),
+        refetchType: "none", // Не делаем повторный запрос, т.к. уже обновили данные
+      });
 
-        // Синхронизируем с Zustand store
-        const dataStore = useDataStore.getState();
-        const currentSelectedSet = dataStore.selectedSet;
-        if (currentSelectedSet && currentSelectedSet.id === updatedSet.id) {
-          dataStore.setSelectedSet(updatedSet);
-        }
+      // 4. Обновляем в Zustand store
+      const dataStore = useDataStore.getState();
+      const currentSelectedSet = dataStore.selectedSet;
+      if (currentSelectedSet && currentSelectedSet.id === updatedSet.id) {
+        dataStore.setSelectedSet(updatedSet);
       }
+
+      console.log("✅ [mutation] Кэш обновлён");
     },
     onError: (error) => {
-      console.error("🔥 Критическая ошибка обновления набора:", error);
-      console.error("Детали ошибки:", {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status,
-      });
+      console.error(
+        "🔥 [mutation] Критическая ошибка обновления набора:",
+        error
+      );
     },
   });
 };
 
-// Обновить остальные мутации тоже (остаются без изменений)
 export const useCreateSet = () => {
-  const queryClient = useQueryClient();
-
   return useMutation({
-    mutationFn: async (setData) => {
-      console.log("🔄 Создание набора (полные данные):", setData);
-      console.log("🔄 Тип tags:", typeof setData.tags, setData.tags);
+    mutationFn: async (data) => {
+      console.log("🔄 Создание набора (полные данные):", data);
+      console.log("🔄 Тип tags:", typeof data.tags, data.tags);
 
-      // УБРАТЬ преобразование в строку! Отправляем массив как есть
-      const dataToSend = {
-        title: setData.title,
-        tags: setData.tags, // ← Оставляем как МАССИВ, не преобразуем в строку!
+      // ВАЖНО: Отправляем массив строк как есть
+      const formattedData = {
+        title: data.title || "",
+        tags: Array.isArray(data.tags)
+          ? data.tags // Оставляем как массив строк
+          : [], // Если не массив - пустой массив
       };
 
-      console.log("🔄 Данные для отправки:", dataToSend);
+      console.log("🔄 Данные для отправки:", formattedData);
 
-      // Пробуем разные endpoint'ы
-      const endpoints = ["/cardsets", "/api/cardsets"];
-
-      for (const endpoint of endpoints) {
-        try {
-          console.log(`🔄 Пробуем POST ${endpoint}...`);
-          const response = await apiClient.post(endpoint, dataToSend);
-          console.log(`✅ POST ${endpoint} успешен:`, response.data);
+      try {
+        console.log("🔄 Пробуем POST /cardSets...");
+        const response = await apiClient.post("/cardSets", formattedData);
+        return response.data;
+      } catch (error) {
+        if (error.response?.status === 404) {
+          console.log("🔄 Пробуем POST /api/cardSets...");
+          const response = await apiClient.post("/api/cardSets", formattedData);
           return response.data;
-        } catch (error) {
-          console.log(`⚠️ POST ${endpoint} не сработал:`, error.message);
-          console.log("Ответ сервера:", error.response?.data);
         }
+        throw error;
       }
-
-      throw new Error("Не удалось создать набор");
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: cardsetsKeys.all });
     },
     onError: (error) => {
       console.error("Ошибка создания набора:", error);
@@ -140,7 +117,7 @@ export const useDeleteSet = () => {
       console.log("🔄 Удаление набора:", setId);
 
       // Пробуем разные endpoint'ы
-      const endpoints = [`/cardsets/${setId}`, `/api/cardsets/${setId}`];
+      const endpoints = [`/cardSets/${setId}`, `/api/cardSets/${setId}`];
 
       for (const endpoint of endpoints) {
         try {
@@ -156,7 +133,7 @@ export const useDeleteSet = () => {
       throw new Error("Не удалось удалить набор");
     },
     onSuccess: (setId) => {
-      queryClient.setQueryData(cardsetsKeys.all, (old) =>
+      queryClient.setQueryData(cardSetsKeys.all, (old) =>
         old ? old.filter((set) => set.id !== setId) : []
       );
     },

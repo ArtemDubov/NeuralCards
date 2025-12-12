@@ -65,9 +65,9 @@ export const useTrainingStore = create(
       // Получить прогресс (простая обертка)
       getProgress: () => {
         const { session } = get();
-        if (!session || !session.cardset?.cards) return null;
+        if (!session || !session.cardSet?.cards) return null;
 
-        const total = session.cardset.cards.length;
+        const total = session.cardSet.cards.length;
         const current = session.currentCardIndex;
 
         return {

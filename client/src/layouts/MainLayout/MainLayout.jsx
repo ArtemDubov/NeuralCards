@@ -12,7 +12,7 @@ export function MainLayout() {
     activeTab,
     forms,
     selectedSet,
-    cardsets,
+    cardSets,
     t,
     handleLogout,
     handleCreateSet,

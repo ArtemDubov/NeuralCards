@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAppStore } from "../../../../shared/stores/appStore";
+import AnimatedModal from "../../../shared/components/AnimatedModal/AnimatedModal";
 
-// Компонент для ввода тегов (аналогичный из ModalManager)
+// Компонент для ввода тегов
 const SimpleTagsInput = ({
   tags = [],
   setTags,
@@ -10,7 +11,6 @@ const SimpleTagsInput = ({
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef(null);
 
-  // Нормализуем теги при получении
   const normalizedTags = Array.isArray(tags)
     ? tags
         .map((tag) => {
@@ -107,10 +107,9 @@ const EditSetModal = ({
     tags: [],
   });
 
-  // Инициализация формы при открытии модалки
+  // Инициализация формы
   useEffect(() => {
     if (isOpen && setData) {
-      // Преобразуем теги в массив строк
       const tagsArray = [];
       if (Array.isArray(setData.tags)) {
         setData.tags.forEach((tag) => {
@@ -119,7 +118,6 @@ const EditSetModal = ({
             tagsArray.push(tag.name || tag.title || String(tag));
         });
       } else if (typeof setData.tags === "string") {
-        // Если теги пришли как строка, разделяем по запятым
         tagsArray.push(
           ...setData.tags
             .split(",")
@@ -146,109 +144,88 @@ const EditSetModal = ({
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!form.title.trim()) {
-      // Показываем ошибку в форме вместо alert
-      return;
-    }
+    if (!form.title.trim()) return;
 
-    onSubmit(form);
+    const submitData = {
+      title: form.title.trim(),
+      tags: form.tags,
+      // description и isPublic будут undefined - сервер оставит старые значения
+    };
+
+    console.log("📤 Упрощённая отправка данных:", submitData);
+    onSubmit(submitData);
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="nt-modal__overlay">
-      <div className="nt-modal nt-modal--medium">
-        <div className="nt-modal__header">
-          <h2 className="nt-modal__title">
-            {t("sets.edit.title") || "Редактирование набора"}
-          </h2>
-          <button className="nt-modal__close" onClick={onClose}>
-            ✕
-          </button>
+    <AnimatedModal isOpen={isOpen} onClose={onClose} size="medium">
+      <div className="nt-modal__header">
+        <h2 className="nt-modal__title">
+          {t("sets.edit.title") || "Редактирование набора"}
+        </h2>
+        <button className="nt-modal__close" onClick={onClose}>
+          ✕
+        </button>
+      </div>
+
+      <form onSubmit={handleSubmit}>
+        <div className="nt-modal__body">
+          {/* Только название */}
+          <div className="nt-form__group">
+            <label className="nt-form__label">
+              {t("sets.edit.name") || "Название набора"} *
+            </label>
+            <input
+              type="text"
+              value={form.title}
+              onChange={(e) => handleTextChange("title", e.target.value)}
+              className="nt-form__input"
+              placeholder="Введите название набора"
+              required
+              autoFocus
+              disabled={isSubmitting}
+            />
+          </div>
+
+          {/* Теги */}
+          <div className="nt-form__group">
+            <label className="nt-form__label">
+              {t("sets.edit.tags") || "Теги"}
+            </label>
+            <SimpleTagsInput tags={form.tags} setTags={handleTagsChange} />
+            <small className="nt-form__hint">
+              Введите теги через запятую или нажмите Enter
+            </small>
+          </div>
+
+          {/* Ошибка */}
+          {error && (
+            <div className="nt-form__validation-error">
+              ⚠️ {error.message || error}
+            </div>
+          )}
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="nt-modal__body">
-            {/* Поле названия */}
-            <div className="nt-form__group">
-              <label className="nt-form__label">
-                {t("sets.edit.name") || "Название набора"}
-              </label>
-              <input
-                type="text"
-                value={form.title}
-                onChange={(e) => handleTextChange("title", e.target.value)}
-                className="nt-form__input"
-                placeholder={
-                  t("sets.edit.name.placeholder") || "Введите название набора"
-                }
-                required
-                autoFocus
-                disabled={isSubmitting}
-              />
-            </div>
-
-            {/* Поле тегов */}
-            <div className="nt-form__group">
-              <label className="nt-form__label">
-                {t("sets.edit.tags") || "Теги"}
-              </label>
-              <SimpleTagsInput
-                tags={form.tags}
-                setTags={handleTagsChange}
-                placeholder={
-                  t("sets.edit.tags.placeholder") || "тег1, тег2, тег3"
-                }
-              />
-              <small className="nt-form__hint">
-                {t("sets.edit.tags.hint") ||
-                  "Введите теги через запятую или нажмите Enter"}
-              </small>
-            </div>
-
-            {/* Отображение ошибок */}
-            {error && (
-              <div className="nt-form__validation-error">
-                ⚠️ {error.message || error}
-              </div>
-            )}
-
-            {/* Валидация */}
-            <div className="nt-form__validation">
-              {!form.title.trim() && (
-                <div className="nt-form__validation-error">
-                  ⚠️{" "}
-                  {t("sets.edit.validation.title") || "Введите название набора"}
-                </div>
-              )}
-            </div>
+        <div className="nt-modal__footer">
+          <div className="nt-modal__actions">
+            <button
+              type="button"
+              className="nt-btn nt-btn--secondary"
+              onClick={onClose}
+              disabled={isSubmitting}
+            >
+              Отмена
+            </button>
+            <button
+              type="submit"
+              className="nt-btn nt-btn--primary"
+              disabled={isSubmitting || !form.title.trim()}
+            >
+              {isSubmitting ? "Сохранение..." : "Сохранить"}
+            </button>
           </div>
-
-          <div className="nt-modal__footer">
-            <div className="nt-modal__actions">
-              <button
-                type="button"
-                className="nt-btn nt-btn--secondary"
-                onClick={onClose}
-                disabled={isSubmitting}
-              >
-                {t("sets.edit.cancel") || "Отмена"}
-              </button>
-              <button
-                type="submit"
-                className="nt-btn nt-btn--primary"
-                disabled={isSubmitting || !form.title.trim()}
-              >
-                {isSubmitting
-                  ? t("sets.edit.saving") || "Сохранение..."
-                  : t("sets.edit.save") || "Сохранить изменения"}
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
+        </div>
+      </form>
+    </AnimatedModal>
   );
 };
 

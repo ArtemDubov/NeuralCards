@@ -22,7 +22,7 @@ const authMiddleware = (req, res, next) => {
       return res.status(401).json({ error: "Неверный токен" });
     }
 
-    req.userId = decoded.userId;
+    req.userId = Number(decoded.userId);
     next();
   } catch (error) {
     console.error("❌ Token verification error:", error.message);

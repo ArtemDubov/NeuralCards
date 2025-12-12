@@ -57,18 +57,88 @@
 /* -------------------------------------------------
    8️⃣ Темы – переопределяют только цвета
    ------------------------------------------------- */
-@import "./themes/ocean.css";
-@import "./themes/dark.css";
-@import "./themes/forest.css";
-@import "./themes/sunset.css";
-@import "./themes/light.css";
+
+/* ==================== ВРЕМЯ СУТОК ==================== */
+@import "./themes/time_of_day/morning.css";
+@import "./themes/time_of_day/day.css";
+@import "./themes/time_of_day/evening.css";
+@import "./themes/time_of_day/night.css";
+
+/* ==================== СТИХИЯ: ВОДА ==================== */
+@import "./themes/water/ocean.css";
+@import "./themes/water/deep-sea.css";
+@import "./themes/water/arctic-ice.css";
+@import "./themes/water/warm-waters.css";
+
+/* ==================== СТИХИЯ: ЗЕМЛЯ ==================== */
+@import "./themes/earth/forest.css";
+@import "./themes/earth/mossy-grove.css";
+@import "./themes/earth/jungle.css";
+@import "./themes/earth/swamp.css";
+
+/* ==================== СТИХИЯ: КАМЕНЬ ==================== */
+@import "./themes/stone/desert-sand.css";
+@import "./themes/stone/canyon.css";
+@import "./themes/stone/basalt.css";
+@import "./themes/stone/marble.css";
+
+/* ==================== СТИХИЯ: ВЕТЕР ==================== */
+@import "./themes/wind/sky.css";
+@import "./themes/wind/mist.css";
+@import "./themes/wind/storm.css";
+@import "./themes/wind/zenith.css";
+
+/* ==================== СТИХИЯ: ОГОНЬ ==================== */
+@import "./themes/fire/sunset.css";
+@import "./themes/fire/ember.css";
+@import "./themes/fire/volcano.css";
+@import "./themes/fire/lava.css";
+
+/* ==================== ЭСТЕТИКА ==================== */
+@import "./themes/aesthetics/monochrome.css";
+@import "./themes/aesthetics/cyberpunk.css";
+@import "./themes/aesthetics/neon-nights.css";
+@import "./themes/aesthetics/vintage-wine.css";
+
+/* ==================== МАТЕРИАЛЫ ==================== */
+@import "./themes/materials/lavender-field.css";
+@import "./themes/materials/rose-quartz.css";
+@import "./themes/materials/coral.css";
+@import "./themes/materials/velvet.css";
 
 /* -------------------------------------------------
    9️⃣ Фичи (страницы) – используют переменные и токены
    ------------------------------------------------- */
 @import "./components/features/auth/auth.css";
-@import "./components/features/cardsets/cardsets.css";
-@import "./components/features/favorites/favorites.css";
+@import "./components/features/cardSets/cardSets.css";
 @import "./components/features/profile/profile.css";
 @import "./components/features/training/index.css";
 @import "./components/features/premium/premium-button.css";
+
+/* Премиум анимации */
+@import "./premium/premium-animations.css";
+@import "./components/features/premium/navigation.css";
+@import "./components/features/premium/premium-settings.css";
+
+/* Гарантируем, что удаление всегда скроет элемент */
+[data-animation-locked="true"] {
+  will-change: opacity, transform !important;
+}
+
+/* Атомарные переходы - только одно состояние */
+.premium-animation--creating {
+  animation-fill-mode: both !important;
+}
+
+.premium-animation--deleting {
+  animation-fill-mode: forwards !important;
+  pointer-events: none !important;
+  z-index: 1 !important; /* поверх других элементов */
+}
+
+/* Если есть оба класса (гонка) - удаление побеждает */
+.premium-animation--creating.premium-animation--deleting {
+  animation-name: none !important;
+  opacity: 0 !important;
+  transition: none !important;
+}

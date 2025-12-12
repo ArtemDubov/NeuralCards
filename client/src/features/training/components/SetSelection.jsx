@@ -2,7 +2,7 @@ import React from "react";
 import { useAppStore } from "../../../shared/stores/appStore";
 import { useTrainingStore } from "../../../shared/stores/training-legacy-adapter";
 
-export const SetSelection = ({ cardsets, modeId, onSelectSet, onBack }) => {
+export const SetSelection = ({ cardSets, modeId, onSelectSet, onBack }) => {
   const { t } = useAppStore();
   const { modes } = useTrainingStore();
   const mode = modes[modeId];
@@ -17,12 +17,12 @@ export const SetSelection = ({ cardsets, modeId, onSelectSet, onBack }) => {
     );
   }
 
-  const availableSets = cardsets.filter((set) => {
+  const availableSets = cardSets.filter((set) => {
     const cardCount = set.cards?.length || 0;
     return cardCount >= mode.minCards;
   });
 
-  if (cardsets.length === 0) {
+  if (cardSets.length === 0) {
     return (
       <div className="nt-training-selection">
         <div className="nt-page__header">
@@ -78,13 +78,13 @@ export const SetSelection = ({ cardsets, modeId, onSelectSet, onBack }) => {
                 : ""
             }`}
           >
-            {availableSets.length} из {cardsets.length}
+            {availableSets.length} из {cardSets.length}
           </span>
         </div>
       </div>
 
       <div className="nt-training-modes-grid">
-        {cardsets.map((set) => {
+        {cardSets.map((set) => {
           const cardCount = set.cards?.length || 0;
           const canStart = cardCount >= mode.minCards;
 

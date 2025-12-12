@@ -3,7 +3,7 @@ import { useAppStore } from "../../../../shared/stores/appStore";
 import { useMixerMode } from "../../hooks/useMixerMode";
 
 // Компонент выбора наборов
-const SetSelector = ({ cardsets, onSelectSets, onStart }) => {
+const SetSelector = ({ cardSets, onSelectSets, onStart }) => {
   const [selectedIds, setSelectedIds] = useState([]);
 
   const toggleSet = (setId) => {
@@ -20,7 +20,7 @@ const SetSelector = ({ cardsets, onSelectSets, onStart }) => {
     });
   };
 
-  const selectedSets = cardsets.filter((set) => selectedIds.includes(set.id));
+  const selectedSets = cardSets.filter((set) => selectedIds.includes(set.id));
   const totalCards = selectedSets.reduce(
     (sum, set) => sum + (set.cards?.length || 0),
     0
@@ -34,7 +34,7 @@ const SetSelector = ({ cardsets, onSelectSets, onStart }) => {
       </div>
 
       <div className="sets-grid">
-        {cardsets.map((set) => {
+        {cardSets.map((set) => {
           const cardCount = set.cards?.length || 0;
           const isSelected = selectedIds.includes(set.id);
 
@@ -107,10 +107,10 @@ const SetSelector = ({ cardsets, onSelectSets, onStart }) => {
 };
 
 // Основной компонент сессии
-export const MixerSession = ({ cardsets, onAnswer, onEnd }) => {
+export const MixerSession = ({ cardSets, onAnswer, onEnd }) => {
   const { t } = useAppStore();
   const [selectionPhase, setSelectionPhase] = useState(true);
-  const mixer = useMixerMode(cardsets, onAnswer);
+  const mixer = useMixerMode(cardSets, onAnswer);
 
   // Обработчик выбора наборов
   const handleSelectSets = (sets) => {
@@ -123,7 +123,7 @@ export const MixerSession = ({ cardsets, onAnswer, onEnd }) => {
     return (
       <div className="mixer-session">
         <SetSelector
-          cardsets={cardsets}
+          cardSets={cardSets}
           onSelectSets={handleSelectSets}
           onStart={() => setSelectionPhase(false)}
         />

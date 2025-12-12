@@ -1,0 +1,390 @@
+/* ============================================
+   МАСШТАБИРУЕМАЯ СИСТЕМА ПРЕМИУМ-АНИМАЦИЙ
+   Для добавления новых анимаций:
+   1. Добавьте ID анимации в ANIMATIONS_CONFIG в animationStore.js
+   2. Создайте CSS класс .premium-animation--{action}-{id}
+   3. Создайте @keyframes premium-{id}
+   ============================================ */
+
+/* ---------- БАЗОВЫЕ СТИЛИ ДЛЯ ВСЕХ АНИМАЦИЙ ---------- */
+.premium-animation-wrapper {
+  position: relative;
+  overflow: hidden;
+  transform-origin: center center;
+}
+
+/* Состояния анимаций */
+.premium-animation--creating {
+  position: relative;
+  z-index: 2;
+  animation-fill-mode: both;
+}
+
+.premium-animation--deleting {
+  position: relative;
+  z-index: 1;
+  pointer-events: none;
+  animation-fill-mode: forwards;
+}
+
+/* ---------- АНИМАЦИИ СОЗДАНИЯ ---------- */
+
+/* fadeIn - плавное появление */
+.premium-animation--create-fadeIn {
+  animation: premium-fadeIn 0.6s ease-out;
+}
+
+@keyframes premium-fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* slideIn - выезд снизу */
+.premium-animation--create-slideIn {
+  animation: premium-slideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes premium-slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* scaleIn - увеличение */
+.premium-animation--create-scaleIn {
+  animation: premium-scaleIn 0.4s ease-out;
+}
+
+@keyframes premium-scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* bounceIn - отскок */
+.premium-animation--create-bounceIn {
+  animation: premium-bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+@keyframes premium-bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* confetti - конфетти (премиум-эксклюзив) */
+.premium-animation--create-confetti {
+  animation: premium-confetti 0.8s ease-out;
+  position: relative;
+  overflow: visible;
+}
+
+@keyframes premium-confetti {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.premium-animation--create-confetti::after {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  right: -10px;
+  bottom: -10px;
+  background: radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 215, 0, 0.4) 0%,
+      transparent 20%
+    ),
+    radial-gradient(
+      circle at 80% 30%,
+      rgba(255, 20, 147, 0.4) 0%,
+      transparent 20%
+    ),
+    radial-gradient(
+      circle at 40% 70%,
+      rgba(0, 191, 255, 0.4) 0%,
+      transparent 20%
+    );
+  animation: premium-confetti-bg 1s ease-out;
+  z-index: -1;
+  border-radius: inherit;
+}
+
+@keyframes premium-confetti-bg {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.5);
+  }
+}
+
+/* ---------- АНИМАЦИИ УДАЛЕНИЯ ---------- */
+
+/* fadeOut - плавное исчезновение */
+.premium-animation--delete-fadeOut {
+  animation: premium-fadeOut 0.4s ease-out;
+}
+
+@keyframes premium-fadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* slideOut - уезд вверх */
+.premium-animation--delete-slideOut {
+  animation: premium-slideOut 0.4s ease-out;
+}
+
+@keyframes premium-slideOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+}
+
+/* scaleOut - сжатие */
+.premium-animation--delete-scaleOut {
+  animation: premium-scaleOut 0.3s ease-out;
+}
+
+@keyframes premium-scaleOut {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* bounceOut - отскок исчезновение */
+.premium-animation--delete-bounceOut {
+  animation: premium-bounceOut 0.5s ease-in;
+}
+
+@keyframes premium-bounceOut {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  20% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+}
+
+/* disintegrate - рассыпание */
+.premium-animation--delete-disintegrate {
+  animation: premium-disintegrate 0.6s ease-out;
+}
+
+@keyframes premium-disintegrate {
+  0% {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(10px);
+    transform: scale(0.7) rotate(5deg);
+  }
+}
+
+/* ---------- УТИЛИТЫ ДЛЯ РАБОТЫ С АНИМАЦИЯМИ ---------- */
+
+/* Плавное удаление класса анимации */
+.premium-animation-remove {
+  animation: premium-remove-class 0.3s ease;
+  opacity: 0;
+}
+
+@keyframes premium-remove-class {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Индикатор премиум-статуса */
+.premium-indicator {
+  position: relative;
+}
+
+.premium-indicator::after {
+  content: "⚡";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 12px;
+  animation: premium-pulse 2s infinite;
+  z-index: 10;
+}
+
+@keyframes premium-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+/* Базовая анимация для обычных пользователей */
+.basic-animation--fade {
+  animation: basic-fade 0.3s ease;
+}
+
+@keyframes basic-fade {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------- МИКСИНЫ ДЛЯ НОВЫХ АНИМАЦИЙ ---------- */
+/* Используйте эти шаблоны для создания новых анимаций */
+
+/* Шаблон для анимации появления */
+.premium-animation-template--create {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+}
+
+/* Шаблон для анимации удаления */
+.premium-animation-template--delete {
+  animation-duration: 0.4s;
+  animation-fill-mode: forwards;
+}
+
+/* Пример новой анимации (раскомментируйте для использования) */
+/*
+.premium-animation--create-spinIn {
+  animation: premium-spinIn 0.7s ease-out;
+}
+
+@keyframes premium-spinIn {
+  0% {
+    opacity: 0;
+    transform: rotate(-180deg) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+  }
+}
+*/
+/* Гарантируем корректное завершение анимаций удаления */
+.premium-animation--delete-fadeOut,
+.premium-animation--delete-slideOut,
+.premium-animation--delete-scaleOut,
+.premium-animation--delete-bounceOut,
+.premium-animation--delete-disintegrate {
+  animation-fill-mode: forwards !important;
+  pointer-events: none !important;
+}
+
+/* Предотвращаем мерцание */
+.premium-animation--deleting {
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Убираем классы анимаций после их завершения */
+.premium-animation-wrapper {
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+}
+
+/* Предотвращаем повторный запуск анимаций */
+.nt-card--premium-animated {
+  pointer-events: all;
+}
+
+/* Базовая анимация fade для fallback */
+.basic-animation--fade {
+  animation: basicFade 0.4s ease-in-out;
+  animation-fill-mode: both;
+}
+
+@keyframes basicFade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

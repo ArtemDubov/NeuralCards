@@ -17,16 +17,17 @@
   display: flex;
   align-items: center;
   gap: var(--nt-space-xs);
-  padding: var(--nt-space-sm) var(--nt-space-md); /* одинаковые отступы */
+  padding: var(--nt-space-sm) var(--nt-space-md);
   border-radius: var(--nt-radius-full);
   min-width: 60px;
-  height: 44px; /* ⚡ ФИКСИРОВАННАЯ ВЫСОТА */
+  height: 44px;
   justify-content: center;
   transition: var(--nt-transition-base);
   background: var(--nt-bg-card);
   border: 1px solid var(--nt-border-light);
   cursor: pointer;
-  box-sizing: border-box; /* важно для точных размеров */
+  box-sizing: border-box;
+  color: var(--nt-text-primary);
 }
 
 .nt-language__current:focus-visible {
@@ -56,7 +57,7 @@
   border: 1px solid var(--nt-border-primary);
   border-radius: var(--nt-radius-lg);
   padding: var(--nt-space-sm);
-  min-width: 150px;
+  min-width: 180px;
   box-shadow: var(--nt-shadow-lg);
   z-index: 10003331;
   display: none;
@@ -79,29 +80,163 @@
   padding: var(--nt-space-sm);
   border: none;
   background: transparent;
-  color: var(--nt-text-primary);
   border-radius: var(--nt-radius-sm);
   cursor: pointer;
   transition: var(--nt-transition-base);
   text-align: left;
+  margin-bottom: 2px;
+}
+
+.nt-language__option:last-child {
+  margin-bottom: 0;
+}
+
+/* ЦВЕТ ТЕКСТА В ЗАВИСИМОСТИ ОТ ТЕМЫ */
+.nt-language__container[data-theme="ocean"] .nt-language__option {
+  color: #4fc3f7;
+  background-color: rgba(30, 58, 95, 0.05);
+}
+.nt-language__container[data-theme="dark"] .nt-language__option {
+  color: #60a5fa;
+  background-color: rgba(124, 58, 237, 0.05);
+}
+.nt-language__container[data-theme="forest"] .nt-language__option {
+  color: #10b981;
+  background-color: rgba(5, 150, 105, 0.05);
+}
+.nt-language__container[data-theme="sunset"] .nt-language__option {
+  color: #f97316;
+  background-color: rgba(234, 88, 12, 0.05);
+}
+.nt-language__container[data-theme="light"] .nt-language__option {
+  color: #06b6d4;
+  background-color: rgba(59, 130, 246, 0.05);
 }
 
 .nt-language__option:hover {
-  background: var(--nt-bg-hover);
+  transform: translateX(4px);
 }
 
+/* HOVER ЭФФЕКТЫ В ЗАВИСИМОСТИ ОТ ТЕМЫ */
+.nt-language__container[data-theme="ocean"] .nt-language__option:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.1),
+    rgba(79, 195, 247, 0.1)
+  );
+  border-left: 3px solid #4fc3f7;
+}
+.nt-language__container[data-theme="dark"] .nt-language__option:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(124, 58, 237, 0.1),
+    rgba(96, 165, 250, 0.1)
+  );
+  border-left: 3px solid #60a5fa;
+}
+.nt-language__container[data-theme="forest"] .nt-language__option:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(5, 150, 105, 0.1),
+    rgba(16, 185, 129, 0.1)
+  );
+  border-left: 3px solid #10b981;
+}
+.nt-language__container[data-theme="sunset"] .nt-language__option:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(234, 88, 12, 0.1),
+    rgba(249, 115, 22, 0.1)
+  );
+  border-left: 3px solid #f97316;
+}
+.nt-language__container[data-theme="light"] .nt-language__option:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.1),
+    rgba(6, 182, 212, 0.1)
+  );
+  border-left: 3px solid #06b6d4;
+}
+
+/* АКТИВНАЯ ОПЦИЯ */
 .nt-language__option--active {
-  background: var(--nt-bg-hover);
-  border-left: 3px solid var(--nt-color-accent);
   font-weight: 600;
+  position: relative;
+  padding-left: calc(var(--nt-space-sm) + 3px);
+}
+
+.nt-language__container[data-theme="ocean"] .nt-language__option--active {
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.15),
+    rgba(79, 195, 247, 0.15)
+  );
+  border-left: 3px solid #4fc3f7;
+  color: #4fc3f7;
+}
+.nt-language__container[data-theme="dark"] .nt-language__option--active {
+  background: linear-gradient(
+    135deg,
+    rgba(124, 58, 237, 0.15),
+    rgba(96, 165, 250, 0.15)
+  );
+  border-left: 3px solid #60a5fa;
+  color: #60a5fa;
+}
+.nt-language__container[data-theme="forest"] .nt-language__option--active {
+  background: linear-gradient(
+    135deg,
+    rgba(5, 150, 105, 0.15),
+    rgba(16, 185, 129, 0.15)
+  );
+  border-left: 3px solid #10b981;
+  color: #10b981;
+}
+.nt-language__container[data-theme="sunset"] .nt-language__option--active {
+  background: linear-gradient(
+    135deg,
+    rgba(234, 88, 12, 0.15),
+    rgba(249, 115, 22, 0.15)
+  );
+  border-left: 3px solid #f97316;
+  color: #f97316;
+}
+.nt-language__container[data-theme="light"] .nt-language__option--active {
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.15),
+    rgba(6, 182, 212, 0.15)
+  );
+  border-left: 3px solid #06b6d4;
+  color: #06b6d4;
 }
 
 .nt-language__option--active::after {
   content: "✓";
   position: absolute;
   right: var(--nt-space-sm);
-  color: var(--nt-color-accent);
   font-weight: bold;
+}
+
+.nt-language__container[data-theme="ocean"]
+  .nt-language__option--active::after {
+  color: #4fc3f7;
+}
+.nt-language__container[data-theme="dark"] .nt-language__option--active::after {
+  color: #60a5fa;
+}
+.nt-language__container[data-theme="forest"]
+  .nt-language__option--active::after {
+  color: #10b981;
+}
+.nt-language__container[data-theme="sunset"]
+  .nt-language__option--active::after {
+  color: #f97316;
+}
+.nt-language__container[data-theme="light"]
+  .nt-language__option--active::after {
+  color: #06b6d4;
 }
 
 .nt-language__option-flag {
@@ -132,6 +267,224 @@
 }
 
 @keyframes nt-language-dropdown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+/* ============================================
+   ПЕРЕКЛЮЧАТЕЛЬ ТЕМ (с группировкой)
+   ============================================ */
+
+.nt-theme__container {
+  position: relative;
+  display: inline-block;
+}
+
+.nt-theme__dropdown {
+  position: relative;
+}
+
+.nt-theme__current {
+  display: flex;
+  align-items: center;
+  gap: var(--nt-space-xs);
+  padding: var(--nt-space-sm) var(--nt-space-md);
+  border-radius: var(--nt-radius-full);
+  min-width: 60px;
+  height: 44px;
+  justify-content: center;
+  transition: var(--nt-transition-base);
+  background: var(--nt-bg-card);
+  border: 1px solid var(--nt-border-light);
+  cursor: pointer;
+  box-sizing: border-box;
+  color: var(--nt-text-primary);
+}
+
+.nt-theme__current:focus-visible {
+  outline: 2px solid var(--nt-color-accent);
+}
+
+.nt-theme__icon {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.nt-theme__arrow {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  transition: var(--nt-transition-base);
+}
+
+.nt-theme__options {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: var(--nt-space-sm);
+  background: var(--nt-bg-secondary);
+  border: 1px solid var(--nt-border-primary);
+  border-radius: var(--nt-radius-lg);
+  padding: var(--nt-space-md);
+  min-width: 240px;
+  max-width: 260px;
+  max-height: 400px;
+  box-shadow: var(--nt-shadow-lg);
+  z-index: 10003330;
+  display: none;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
+
+.nt-theme__options--open {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Заголовок группы */
+.nt-theme__group-header {
+  display: flex;
+  align-items: center;
+  gap: var(--nt-space-sm);
+  padding: var(--nt-space-sm);
+  margin-bottom: var(--nt-space-sm);
+  color: var(--nt-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-bottom: 2px solid var(--nt-border-light);
+}
+
+.nt-theme__group-icon {
+  font-size: 1.1rem;
+}
+
+.nt-theme__group-name {
+  flex: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+/* Контент группы */
+.nt-theme__group-content {
+  margin-bottom: var(--nt-space-md);
+}
+
+/* Индикаторы групп (пагинация) */
+.nt-theme__group-indicators {
+  display: flex;
+  justify-content: center;
+  gap: var(--nt-space-xs);
+  padding-top: var(--nt-space-sm);
+  border-top: 1px solid var(--nt-border-light);
+}
+
+.nt-theme__group-indicator {
+  background: var(--nt-bg-card);
+  border: 1px solid var(--nt-border-light);
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+  opacity: 0.7;
+}
+
+.nt-theme__group-indicator:hover {
+  opacity: 1;
+  transform: scale(1.1);
+  border-color: var(--nt-color-accent);
+  background: var(--nt-bg-hover);
+}
+
+.nt-theme__group-indicator--active {
+  opacity: 1;
+  background: var(--nt-color-accent);
+  color: var(--nt-bg-primary);
+  border-color: var(--nt-color-accent);
+  transform: scale(1.1);
+}
+
+.nt-theme__group-indicator--active:hover {
+  background: var(--nt-color-accent);
+  opacity: 0.9;
+}
+
+/* Стили для опций тем (оставляем как были) */
+.nt-theme__option {
+  display: flex;
+  align-items: center;
+  gap: var(--nt-space-sm);
+  width: 100%;
+  padding: var(--nt-space-sm);
+  border: none;
+  background: transparent;
+  border-radius: var(--nt-radius-sm);
+  cursor: pointer;
+  transition: var(--nt-transition-base);
+  text-align: left;
+  margin-bottom: 2px;
+}
+
+.nt-theme__option:last-child {
+  margin-bottom: 0;
+}
+
+.nt-language__option:hover {
+  transform: translateX(4px);
+}
+
+.nt-theme__option--active {
+  font-weight: 600;
+  position: relative;
+  padding-left: calc(var(--nt-space-sm) + 3px);
+}
+
+.nt-theme__option--active::after {
+  content: "✓";
+  position: absolute;
+  right: var(--nt-space-sm);
+  font-weight: bold;
+}
+
+.nt-theme__option-icon {
+  font-size: 1.1rem;
+  width: 24px;
+  text-align: center;
+}
+
+.nt-theme__option-name {
+  font-size: 0.95rem;
+  font-weight: 500;
+  flex: 1;
+}
+
+/* Анимации */
+.nt-theme__arrow {
+  transition: transform 0.3s ease;
+}
+
+.nt-theme__dropdown--open .nt-theme__arrow {
+  transform: rotate(180deg);
+}
+
+.nt-theme__options {
+  transform-origin: top right;
+  animation: nt-theme-dropdown 0.3s ease;
+}
+
+@keyframes nt-theme-dropdown {
   from {
     opacity: 0;
     transform: translateY(-10px) scale(0.95);

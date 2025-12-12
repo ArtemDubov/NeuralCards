@@ -1,0 +1,85 @@
+/* ==========================================================
+   ТЕМА – JUNGLE (тропические джунгли)
+   Полная версия с 50+ переменными
+   ========================================================== */
+
+[data-theme="jungle"] {
+  /* ========== ОСНОВНЫЕ ЦВЕТА (6) ========== */
+  --nt-color-primary: #2e7d32; /* Тропический зелёный */
+  --nt-color-primary-dark: #1b5e20;
+  --nt-color-primary-light: #4caf50;
+  --nt-color-secondary: #8bc34a; /* Светло-зелёный лист */
+  --nt-color-accent: #ff9800; /* Оранжевый цветок */
+  --nt-color-neutral: #1b5e20; /* Глубокий зелёный */
+
+  /* ========== ФОНЫ (8) ========== */
+  --nt-bg-primary: #0d2818; /* Тёмно-зелёный, как глубины джунглей */
+  --nt-bg-secondary: #1b5e20; /* Средний зелёный */
+  --nt-bg-tertiary: #2e7d32; /* Яркий тропический зелёный */
+  --nt-bg-card: rgba(27, 94, 32, 0.85); /* Полупрозрачная зелень */
+  --nt-bg-overlay: rgba(13, 40, 24, 0.92);
+  --nt-bg-modal: #1b5e20;
+  --nt-bg-tooltip: #4caf50;
+  --nt-bg-input: rgba(43, 125, 50, 0.8);
+
+  /* ========== ТЕКСТ (8) ========== */
+  --nt-text-primary: #e8f5e9; /* Светло-зелёный текст */
+  --nt-text-secondary: #c8e6c9;
+  --nt-text-tertiary: #a5d6a7;
+  --nt-text-muted: rgba(232, 245, 233, 0.65);
+  --nt-text-disabled: rgba(232, 245, 233, 0.38);
+  --nt-text-inverse: #0d2818;
+  --nt-text-on-primary: #ffffff;
+  --nt-text-on-accent: #0d2818;
+
+  /* ========== ИНТЕРАКТИВНЫЕ СОСТОЯНИЯ (6) ========== */
+  --nt-state-hover: rgba(76, 175, 80, 0.15);
+  --nt-state-active: rgba(76, 175, 80, 0.25);
+  --nt-state-focus: rgba(76, 175, 80, 0.2);
+  --nt-state-selected: rgba(76, 175, 80, 0.12);
+  --nt-state-disabled: rgba(139, 195, 74, 0.2);
+  --nt-state-error: rgba(244, 67, 54, 0.15);
+
+  /* ========== ГРАНИЦЫ (6) ========== */
+  --nt-border-primary: rgba(76, 175, 80, 0.35);
+  --nt-border-secondary: rgba(139, 195, 74, 0.25);
+  --nt-border-light: rgba(255, 152, 0, 0.15);
+  --nt-border-dark: rgba(232, 245, 233, 0.1);
+  --nt-border-input: rgba(76, 175, 80, 0.4);
+  --nt-border-card: rgba(255, 152, 0, 0.2);
+
+  /* ========== ТЕНИ (9) ========== */
+  --nt-shadow-xs: 0 1px 2px rgba(46, 125, 50, 0.1);
+  --nt-shadow-sm: 0 2px 8px rgba(46, 125, 50, 0.12);
+  --nt-shadow-md: 0 4px 16px rgba(46, 125, 50, 0.15);
+  --nt-shadow-lg: 0 8px 32px rgba(46, 125, 50, 0.18);
+  --nt-shadow-xl: 0 12px 48px rgba(46, 125, 50, 0.2);
+  --nt-shadow-focus: 0 0 0 3px rgba(255, 152, 0, 0.3);
+  --nt-shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+  --nt-shadow-elevated: 0 8px 30px rgba(46, 125, 50, 0.15);
+  --nt-shadow-special: 0 0 20px rgba(255, 152, 0, 0.25);
+
+  /* ========== СПЕЦИАЛЬНЫЕ ЭЛЕМЕНТЫ (4) ========== */
+  --nt-color-link: #4caf50;
+  --nt-color-link-hover: #81c784;
+  --nt-color-card-border: rgba(255, 152, 0, 0.3);
+  --nt-color-icon: #a5d6a7;
+
+  /* ========== ГРАДИЕНТЫ (3) ========== */
+  --nt-gradient-primary: linear-gradient(135deg, #2e7d32 0%, #4caf50 100%);
+  --nt-gradient-background: linear-gradient(135deg, #0d2818 0%, #1b5e20 100%);
+  --nt-gradient-card: linear-gradient(
+    135deg,
+    rgba(27, 94, 32, 0.9),
+    rgba(46, 125, 50, 0.95)
+  );
+
+  /* ========== ПЕРЕМЕННЫЕ ДЛЯ SWITCHER (7) ========== */
+  --nt-switcher-color: #ff9800;
+  --nt-switcher-bg: #1b5e20;
+  --nt-switcher-indicator: #ff9800;
+  --nt-switcher-border: rgba(255, 152, 0, 0.4);
+  --nt-switcher-hover: rgba(255, 152, 0, 0.15);
+  --nt-switcher-active: rgba(255, 152, 0, 0.25);
+  --nt-switcher-checkmark: #ff9800;
+}

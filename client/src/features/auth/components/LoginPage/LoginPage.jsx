@@ -156,7 +156,7 @@ const LoginPage = () => {
       <div className="nt-auth__container">
         <div className="nt-loader">
           <div className="nt-loader__spinner"></div>
-          <p>Загрузка страницы входа...</p>
+          <p>{t("loading.login_page")}</p>
         </div>
       </div>
     );

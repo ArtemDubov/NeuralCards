@@ -14,7 +14,7 @@ export const useUIStore = create((set, get) => ({
     viewCard: { open: false, data: null },
     deleteConfirmation: { open: false, data: null },
     editSet: { open: false, data: null },
-    createSet: { open: false, data: null }, // ← ДОБАВЛЕНО
+    createSet: { open: false, data: null },
     premiumConfirmation: { open: false, data: null },
     premiumDeactivate: { open: false, data: null },
   },
@@ -25,11 +25,14 @@ export const useUIStore = create((set, get) => ({
     card: { frontText: "", backText: "" },
   },
 
-  // Язык
+  // Язык (поддерживает все 5 языков)
   language: (() => {
     try {
       const savedLanguage = localStorage.getItem("nt-language");
-      if (savedLanguage && ["ru", "en", "es"].includes(savedLanguage)) {
+      if (
+        savedLanguage &&
+        ["ru", "en", "es", "de", "fr"].includes(savedLanguage)
+      ) {
         return savedLanguage;
       }
     } catch (error) {
@@ -76,7 +79,7 @@ export const useUIStore = create((set, get) => ({
         viewCard: { open: false, data: null },
         deleteConfirmation: { open: false, data: null },
         editSet: { open: false, data: null },
-        createSet: { open: false, data: null }, // ← ДОБАВЛЕНО
+        createSet: { open: false, data: null },
         premiumConfirmation: { open: false, data: null },
         premiumDeactivate: { open: false, data: null },
       },

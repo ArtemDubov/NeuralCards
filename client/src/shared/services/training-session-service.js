@@ -4,14 +4,14 @@
 /**
  * Создает новую сессию тренировки
  * @param {string} modeId - ID режима тренировки
- * @param {object} cardset - Набор карточек
+ * @param {object} cardSet - Набор карточек
  * @returns {object} Новая сессия
  */
-export const createSession = (modeId, cardset) => {
+export const createSession = (modeId, cardSet) => {
   return {
     id: Date.now(),
     mode: modeId,
-    cardset,
+    cardSet,
     currentCardIndex: 0,
     score: 0,
     stats: {
@@ -61,8 +61,8 @@ export const updateSessionAfterAnswer = (
  * @returns {boolean}
  */
 export const isSessionCompleted = (session) => {
-  if (!session || !session.cardset?.cards) return false;
-  return session.currentCardIndex >= session.cardset.cards.length;
+  if (!session || !session.cardSet?.cards) return false;
+  return session.currentCardIndex >= session.cardSet.cards.length;
 };
 
 /**
@@ -71,9 +71,9 @@ export const isSessionCompleted = (session) => {
  * @returns {object|null} Прогресс или null
  */
 export const calculateProgress = (session) => {
-  if (!session || !session.cardset?.cards) return null;
+  if (!session || !session.cardSet?.cards) return null;
 
-  const totalCards = session.cardset.cards.length;
+  const totalCards = session.cardSet.cards.length;
   const current = session.currentCardIndex;
   const percentage = Math.round((current / totalCards) * 100);
 
@@ -116,22 +116,22 @@ export const calculateSessionStats = (session) => {
 /**
  * Валидация сессии перед стартом
  * @param {string} modeId - ID режима
- * @param {object} cardset - Набор карточек
+ * @param {object} cardSet - Набор карточек
  * @param {object} modesConfig - Конфигурация режимов
  * @returns {object} Результат валидации
  */
-export const validateSessionStart = (modeId, cardset, modesConfig) => {
+export const validateSessionStart = (modeId, cardSet, modesConfig) => {
   const mode = modesConfig[modeId];
 
   if (!mode) {
     return { isValid: false, error: `Режим ${modeId} не существует` };
   }
 
-  if (!cardset?.cards) {
+  if (!cardSet?.cards) {
     return { isValid: false, error: "Набор карточек невалиден" };
   }
 
-  const cardsCount = cardset.cards.length;
+  const cardsCount = cardSet.cards.length;
   if (cardsCount < mode.minCards) {
     return {
       isValid: false,
@@ -141,7 +141,7 @@ export const validateSessionStart = (modeId, cardset, modesConfig) => {
 
   // Специфичные проверки для режимов
   if (modeId === "audio" && mode.requireAudio) {
-    const hasAudioCards = cardset.cards.some((card) => card.audio);
+    const hasAudioCards = cardSet.cards.some((card) => card.audio);
     if (!hasAudioCards) {
       return { isValid: false, error: "В этом режиме нужны карточки с аудио" };
     }

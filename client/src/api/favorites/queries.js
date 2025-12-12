@@ -35,7 +35,7 @@ export const useIsSetFavorite = (setId) => {
 
   const isFavorite = favoriteSets.some(
     (fav) =>
-      fav.cardsetId === setId || fav.id === setId || fav.cardset?.id === setId
+      fav.cardSetId === setId || fav.id === setId || fav.cardSet?.id === setId
   );
 
   return isFavorite;

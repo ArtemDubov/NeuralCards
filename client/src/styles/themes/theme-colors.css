@@ -1,0 +1,172 @@
+/* 
+  Цвета превью для всех тем
+  Эти переменные используются в переключателе тем
+*/
+
+/* Время суток */
+[data-theme="morning"] {
+  --nt-color-morning-preview: #ffd6a5;
+  --nt-color-morning-preview-secondary: #ffc7c7;
+}
+
+[data-theme="day"] {
+  --nt-color-day-preview: #bde0fe;
+  --nt-color-day-preview-secondary: #a2d2ff;
+}
+
+[data-theme="evening"] {
+  --nt-color-evening-preview: #ffafcc;
+  --nt-color-evening-preview-secondary: #ff8fab;
+}
+
+[data-theme="night"] {
+  --nt-color-night-preview: #3a0ca3;
+  --nt-color-night-preview-secondary: #7209b7;
+}
+
+/* Вода */
+[data-theme="ocean"] {
+  --nt-color-ocean-preview: #0077b6;
+  --nt-color-ocean-preview-secondary: #00b4d8;
+}
+
+[data-theme="deep-sea"] {
+  --nt-color-deep-sea-preview: #03045e;
+  --nt-color-deep-sea-preview-secondary: #0077b6;
+}
+
+[data-theme="arctic-ice"] {
+  --nt-color-arctic-ice-preview: #caf0f8;
+  --nt-color-arctic-ice-preview-secondary: #90e0ef;
+}
+
+[data-theme="warm-waters"] {
+  --nt-color-warm-waters-preview: #ff9e6d;
+  --nt-color-warm-waters-preview-secondary: #ff7e5f;
+}
+
+/* Земля */
+[data-theme="forest"] {
+  --nt-color-forest-preview: #2d6a4f;
+  --nt-color-forest-preview-secondary: #40916c;
+}
+
+[data-theme="mossy-grove"] {
+  --nt-color-mossy-grove-preview: #4a7c59;
+  --nt-color-mossy-grove-preview-secondary: #8a9a5b;
+}
+
+[data-theme="jungle"] {
+  --nt-color-jungle-preview: #386641;
+  --nt-color-jungle-preview-secondary: #6a994e;
+}
+
+[data-theme="swamp"] {
+  --nt-color-swamp-preview: #5c7457;
+  --nt-color-swamp-preview-secondary: #9b8e6e;
+}
+
+/* Камень */
+[data-theme="desert-sand"] {
+  --nt-color-desert-sand-preview: #e9c46a;
+  --nt-color-desert-sand-preview-secondary: #f4a261;
+}
+
+[data-theme="canyon"] {
+  --nt-color-canyon-preview: #e76f51;
+  --nt-color-canyon-preview-secondary: #f4a261;
+}
+
+[data-theme="basalt"] {
+  --nt-color-basalt-preview: #343a40;
+  --nt-color-basalt-preview-secondary: #6c757d;
+}
+
+[data-theme="marble"] {
+  --nt-color-marble-preview: #f8f9fa;
+  --nt-color-marble-preview-secondary: #e9ecef;
+}
+
+/* Ветер */
+[data-theme="sky"] {
+  --nt-color-sky-preview: #a2d2ff;
+  --nt-color-sky-preview-secondary: #bde0fe;
+}
+
+[data-theme="mist"] {
+  --nt-color-mist-preview: #e2e8f0;
+  --nt-color-mist-preview-secondary: #cbd5e1;
+}
+
+[data-theme="storm"] {
+  --nt-color-storm-preview: #4a5568;
+  --nt-color-storm-preview-secondary: #718096;
+}
+
+[data-theme="zenith"] {
+  --nt-color-zenith-preview: #fbbf24;
+  --nt-color-zenith-preview-secondary: #f59e0b;
+}
+
+/* Огонь */
+[data-theme="sunset"] {
+  --nt-color-sunset-preview: #fb923c;
+  --nt-color-sunset-preview-secondary: #f97316;
+}
+
+[data-theme="ember"] {
+  --nt-color-ember-preview: #dc2626;
+  --nt-color-ember-preview-secondary: #b91c1c;
+}
+
+[data-theme="volcano"] {
+  --nt-color-volcano-preview: #7f1d1d;
+  --nt-color-volcano-preview-secondary: #dc2626;
+}
+
+[data-theme="lava"] {
+  --nt-color-lava-preview: #ea580c;
+  --nt-color-lava-preview-secondary: #c2410c;
+}
+
+/* Эстетика */
+[data-theme="monochrome"] {
+  --nt-color-monochrome-preview: #1f2937;
+  --nt-color-monochrome-preview-secondary: #374151;
+}
+
+[data-theme="cyberpunk"] {
+  --nt-color-cyberpunk-preview: #00ff9d;
+  --nt-color-cyberpunk-preview-secondary: #00b8ff;
+}
+
+[data-theme="neon-nights"] {
+  --nt-color-neon-nights-preview: #ff00ff;
+  --nt-color-neon-nights-preview-secondary: #00ffff;
+}
+
+[data-theme="vintage-wine"] {
+  --nt-color-vintage-wine-preview: #722f37;
+  --nt-color-vintage-wine-preview-secondary: #8b4513;
+}
+
+/* Материалы */
+[data-theme="lavender-field"] {
+  --nt-color-lavender-field-preview: #a78bfa;
+  --nt-color-lavender-field-preview-secondary: #c4b5fd;
+}
+
+[data-theme="rose-quartz"] {
+  --nt-color-rose-quartz-preview: #fecaca;
+  --nt-color-rose-quartz-preview-secondary: #fca5a5;
+}
+
+[data-theme="coral"] {
+  --nt-color-coral-preview: #fdba74;
+  --nt-color-coral-preview-secondary: #fb923c;
+}
+
+[data-theme="velvet"] {
+  --nt-color-velvet-preview: #7c3aed;
+  --nt-color-velvet-preview-secondary: #8b5cf6;
+}

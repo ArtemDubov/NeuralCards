@@ -8,6 +8,7 @@
   perspective: 1000px;
   width: 100%;
   height: 100%;
+  position: relative;
 }
 
 .nt-training-card-flip-inner {
@@ -46,11 +47,11 @@
 
 /* ПЛАВНОЕ ПОЯВЛЕНИЕ */
 .nt-training-fade-in {
-  animation: nt-training-fade-in 0.3s ease-in;
+  animation: nt-training-fade-in 0.3s ease-in forwards;
 }
 
 .nt-training-fade-out {
-  animation: nt-training-fade-out 0.3s ease-out;
+  animation: nt-training-fade-out 0.3s ease-out forwards;
 }
 
 @keyframes nt-training-fade-in {
@@ -94,11 +95,11 @@
 
 /* ПРАВИЛЬНЫЙ/НЕПРАВИЛЬНЫЙ ОТВЕТ */
 .nt-training-answer--correct {
-  animation: nt-training-correct-answer 0.5s ease;
+  animation: nt-training-correct-answer 0.5s ease forwards;
 }
 
 .nt-training-answer--wrong {
-  animation: nt-training-wrong-answer 0.5s ease;
+  animation: nt-training-wrong-answer 0.5s ease forwards;
 }
 
 @keyframes nt-training-correct-answer {
@@ -144,5 +145,139 @@
 }
 
 .nt-training-card-appear {
-  animation: nt-training-card-appear 0.4s ease-out;
+  animation: nt-training-card-appear 0.4s ease-out forwards;
+}
+
+/* ПЕРЕХОДЫ МЕЖДУ КАРТОЧКАМИ */
+.nt-training-card-transition-enter {
+  opacity: 0;
+  transform: translateY(100px) scale(0.9);
+}
+
+.nt-training-card-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: opacity 400ms, transform 400ms;
+}
+
+.nt-training-card-transition-exit {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.nt-training-card-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-100px) scale(0.9);
+  transition: opacity 400ms, transform 400ms;
+}
+
+/* АНИМАЦИЯ КАРТОЧКИ ВО ВРЕМЯ ОТВЕТА */
+.nt-training-card-answer-correct {
+  animation: nt-training-card-answer-correct 0.8s ease forwards;
+}
+
+.nt-training-card-answer-wrong {
+  animation: nt-training-card-answer-wrong 0.8s ease forwards;
+}
+
+@keyframes nt-training-card-answer-correct {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px 10px rgba(46, 204, 113, 0.3);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
+  }
+}
+
+@keyframes nt-training-card-answer-wrong {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7);
+  }
+  50% {
+    transform: scale(0.95);
+    box-shadow: 0 0 20px 10px rgba(231, 76, 60, 0.3);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(231, 76, 60, 0);
+  }
+}
+
+/* АНИМАЦИЯ ВСТРЯХИВАНИЯ */
+.nt-training-card-shake {
+  animation: nt-training-card-shake 0.5s ease-in-out;
+}
+
+@keyframes nt-training-card-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+/* АНИМАЦИЯ ПОДСКАКИВАНИЯ */
+.nt-training-card-bounce {
+  animation: nt-training-card-bounce 0.5s ease;
+}
+
+@keyframes nt-training-card-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ЗАДЕРЖКИ ДЛЯ ПОСЛЕДОВАТЕЛЬНЫХ АНИМАЦИЙ */
+.nt-training-delay-100 {
+  animation-delay: 100ms;
+}
+
+.nt-training-delay-200 {
+  animation-delay: 200ms;
+}
+
+.nt-training-delay-300 {
+  animation-delay: 300ms;
+}
+
+.nt-training-delay-500 {
+  animation-delay: 500ms;
+}
+
+/* ОПТИМИЗАЦИЯ ДЛЯ ПРОИЗВОДИТЕЛЬНОСТИ */
+.nt-training-will-change-transform {
+  will-change: transform;
+}
+
+.nt-training-will-change-opacity {
+  will-change: opacity;
+}
+
+/* СБРОС АНИМАЦИЙ */
+.nt-training-reset-animation {
+  animation: none !important;
+  transition: none !important;
 }

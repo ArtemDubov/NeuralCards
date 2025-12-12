@@ -10,7 +10,7 @@ import {
   calculateProgress,
 } from "./shared";
 
-export const useMixerMode = (cardsets = [], onAnswer) => {
+export const useMixerMode = (cardSets = [], onAnswer) => {
   // Добавляем значение по умолчанию
   // === БАЗОВАЯ ЛОГИКА ===
   const [mixedCards, setMixedCards] = useState([]);
@@ -204,7 +204,7 @@ export const useMixerMode = (cardsets = [], onAnswer) => {
     },
 
     // Геттеры для компонентов
-    getAvailableSets: () => (Array.isArray(cardsets) ? cardsets : []),
+    getAvailableSets: () => (Array.isArray(cardSets) ? cardSets : []),
     getSelectedSets: () => selectedSets,
 
     // Результаты

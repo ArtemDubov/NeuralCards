@@ -1,0 +1,84 @@
+/* ==========================================================
+   ТЕМА – DESERT SAND (пустынный песок)
+   ========================================================== */
+
+[data-theme="desert-sand"] {
+  /* ========== ОСНОВНЫЕ ЦВЕТА (6) ========== */
+  --nt-color-primary: #d97706; /* Тёплый песчаный оранжевый */
+  --nt-color-primary-dark: #b45309;
+  --nt-color-primary-light: #f59e0b;
+  --nt-color-secondary: #92400e; /* Коричневый (камни) */
+  --nt-color-accent: #fbbf24; /* Золотистый песок */
+  --nt-color-neutral: #78350f; /* Темно-коричневый */
+
+  /* ========== ФОНЫ (8) ========== */
+  --nt-bg-primary: #78350f; /* Тёмный пустынный */
+  --nt-bg-secondary: #92400e;
+  --nt-bg-tertiary: #b45309;
+  --nt-bg-card: rgba(146, 64, 14, 0.9);
+  --nt-bg-overlay: rgba(120, 53, 15, 0.95);
+  --nt-bg-modal: #92400e;
+  --nt-bg-tooltip: #d97706;
+  --nt-bg-input: rgba(180, 83, 9, 0.9);
+
+  /* ========== ТЕКСТ (8) ========== */
+  --nt-text-primary: #fffbeb; /* Светлый песочный */
+  --nt-text-secondary: #fef3c7;
+  --nt-text-tertiary: #fde68a;
+  --nt-text-muted: rgba(255, 251, 235, 0.65);
+  --nt-text-disabled: rgba(255, 251, 235, 0.4);
+  --nt-text-inverse: #78350f;
+  --nt-text-on-primary: #ffffff;
+  --nt-text-on-accent: #78350f;
+
+  /* ========== ИНТЕРАКТИВНЫЕ СОСТОЯНИЯ (6) ========== */
+  --nt-state-hover: rgba(217, 119, 6, 0.15);
+  --nt-state-active: rgba(217, 119, 6, 0.25);
+  --nt-state-focus: rgba(217, 119, 6, 0.2);
+  --nt-state-selected: rgba(217, 119, 6, 0.1);
+  --nt-state-disabled: rgba(146, 64, 14, 0.3);
+  --nt-state-error: rgba(180, 83, 9, 0.15);
+
+  /* ========== ГРАНИЦЫ (6) ========== */
+  --nt-border-primary: rgba(217, 119, 6, 0.4);
+  --nt-border-secondary: rgba(251, 191, 36, 0.25);
+  --nt-border-light: rgba(251, 191, 36, 0.2);
+  --nt-border-dark: rgba(0, 0, 0, 0.3);
+  --nt-border-input: rgba(217, 119, 6, 0.5);
+  --nt-border-card: rgba(217, 119, 6, 0.3);
+
+  /* ========== ТЕНИ (9) ========== */
+  --nt-shadow-xs: 0 1px 2px rgba(217, 119, 6, 0.1);
+  --nt-shadow-sm: 0 2px 8px rgba(217, 119, 6, 0.2);
+  --nt-shadow-md: 0 4px 16px rgba(217, 119, 6, 0.3);
+  --nt-shadow-lg: 0 8px 32px rgba(217, 119, 6, 0.4);
+  --nt-shadow-xl: 0 12px 48px rgba(217, 119, 6, 0.5);
+  --nt-shadow-focus: 0 0 0 3px rgba(217, 119, 6, 0.5);
+  --nt-shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  --nt-shadow-elevated: 0 8px 30px rgba(217, 119, 6, 0.3);
+  --nt-shadow-special: 0 0 15px rgba(251, 191, 36, 0.5);
+
+  /* ========== СПЕЦИАЛЬНЫЕ ЭЛЕМЕНТЫ (4) ========== */
+  --nt-color-link: #fbbf24;
+  --nt-color-link-hover: #f59e0b;
+  --nt-color-card-border: var(--nt-color-primary);
+  --nt-color-icon: #fde68a;
+
+  /* ========== ГРАДИЕНТЫ (3) ========== */
+  --nt-gradient-primary: linear-gradient(135deg, #d97706 0%, #fbbf24 100%);
+  --nt-gradient-background: linear-gradient(135deg, #78350f 0%, #92400e 100%);
+  --nt-gradient-card: linear-gradient(
+    135deg,
+    rgba(146, 64, 14, 0.9),
+    rgba(217, 119, 6, 0.8)
+  );
+
+  /* ========== ПЕРЕМЕННЫЕ ДЛЯ SWITCHER (7) ========== */
+  --nt-switcher-color: #fbbf24;
+  --nt-switcher-bg: #92400e;
+  --nt-switcher-indicator: #fbbf24;
+  --nt-switcher-border: rgba(251, 191, 36, 0.4);
+  --nt-switcher-hover: rgba(251, 191, 36, 0.15);
+  --nt-switcher-active: rgba(251, 191, 36, 0.25);
+  --nt-switcher-checkmark: #fbbf24;
+}

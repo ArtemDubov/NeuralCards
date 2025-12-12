@@ -5,21 +5,25 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  url = "file:./dev.db"
+  url      = "file:./dev.db"
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  name      String?
-  isPremium Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  cardsets  CardSet[]
-  progress  CardProgress[]
-  sessions  StudySession[]
-  favoriteCardsets FavoriteCardset[]
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  password     String
+  name         String?
+  avatarEmoji  String?
+  avatarColor  String?   @default("transparent")
+  avatarUrl    String?
+  isPremium    Boolean   @default(false)
+  premiumUntil DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  cardSets     CardSet[]
+  progress     CardProgress[]
+  sessions     StudySession[]
+  favoriteCardSets FavoriteCardSet[]
   favoriteCards     FavoriteCard[]
 }
 
@@ -33,18 +37,18 @@ model CardSet {
   authorId    Int
   author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
   cards       FlashCard[]
-  // УДАЛИТЬ эту строку: favorites   Favorite[]
   tags        Tag[]     @relation("CardSetToTag")
   search_vector Unsupported("tsvector")?
   sessions    StudySession[]
-  // ДОБАВИТЬ эту связь:
-  favoriteCardsets FavoriteCardset[]
+  favoriteCardSets FavoriteCardSet[]
+  
+  @@map("card_set")  // Таблица в БД будет card_set
 }
 
 model Tag {
   id        Int       @id @default(autoincrement())
   name      String    @unique
-  cardsets  CardSet[] @relation("CardSetToTag")
+  cardSets  CardSet[] @relation("CardSetToTag")
 }
 
 model FlashCard {
@@ -57,12 +61,13 @@ model FlashCard {
   backAudioUrl String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  cardsetId   Int
-  cardset     CardSet  @relation(fields: [cardsetId], references: [id], onDelete: Cascade)
+  cardSetId   Int
+  cardSet     CardSet  @relation(fields: [cardSetId], references: [id], onDelete: Cascade)
   search_vector Unsupported("tsvector")?
   progress    CardProgress[]
-  // ДОБАВИТЬ эту связь:
   favoriteCards FavoriteCard[]
+  
+  @@map("flash_card")  // Таблица в БД будет flash_card
 }
 
 model CardProgress {
@@ -77,31 +82,32 @@ model CardProgress {
   createdAt DateTime @default(now())
   
   @@unique([userId, cardId])
+  @@map("card_progress")
 }
 
 model StudySession {
   id        Int      @id @default(autoincrement())
   userId    Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  cardsetId Int
-  cardset   CardSet  @relation(fields: [cardsetId], references: [id], onDelete: Cascade)
+  cardSetId Int
+  cardSet   CardSet  @relation(fields: [cardSetId], references: [id], onDelete: Cascade)
   score     Int?
   completed Boolean @default(false)
   createdAt DateTime @default(now())
+  
+  @@map("study_session")
 }
 
-// ========== МОДЕЛИ ИЗБРАННОГО (ТОЛЬКО ОДИН РАЗ!) ==========
-
-model FavoriteCardset {
+model FavoriteCardSet {
   id        Int      @id @default(autoincrement())
   userId    Int
-  cardsetId Int
+  cardSetId Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  cardSet   CardSet  @relation(fields: [cardsetId], references: [id], onDelete: Cascade)
+  cardSet   CardSet  @relation(fields: [cardSetId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
-  @@unique([userId, cardsetId])
-  @@map("favorite_cardsets")
+  @@unique([userId, cardSetId])
+  @@map("favorite_card_set")  // Таблица в БД будет favorite_card_set
 }
 
 model FavoriteCard {
@@ -109,9 +115,9 @@ model FavoriteCard {
   userId    Int
   cardId    Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  card      FlashCard @relation(fields: [cardId], references: [id], onDelete: Cascade) // ИСПРАВЛЕНО: Card → FlashCard
+  card      FlashCard @relation(fields: [cardId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
   @@unique([userId, cardId])
-  @@map("favorite_cards")
+  @@map("favorite_card")
 }

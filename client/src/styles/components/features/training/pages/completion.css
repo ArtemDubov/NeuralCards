@@ -1,116 +1,378 @@
-/* ============================================
-   ЭКРАН ЗАВЕРШЕНИЯ ТРЕНИРОВКИ
-   (содержимое из completion/completion.css)
-   ============================================ */
-
-.nt-training-completion {
+/* ЭКРАН ЗАВЕРШЕНИЯ ТРЕНИРОВКИ */
+.nt-training-completion-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--nt-bg-overlay);
+  backdrop-filter: blur(12px);
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 60vh;
+  padding: var(--nt-space-xl);
+  z-index: 1000;
 }
 
+/* ЗАГОЛОВОК С ГАЛОЧКОЙ */
 .nt-training-completion-header {
   text-align: center;
   margin-bottom: var(--nt-space-xl);
+  padding-bottom: var(--nt-space-lg);
+  border-bottom: 2px solid var(--nt-color-accent);
+}
+
+.nt-training-completion-icon-container {
+  margin-bottom: var(--nt-space-lg);
 }
 
 .nt-training-completion-icon {
-  font-size: 3.5rem;
-  margin-bottom: var(--nt-space-md);
-  animation: nt-training-pulse 1.5s ease-in-out infinite;
-  color: var(--nt-color-success);
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  background: var(--nt-gradient-primary);
+  border-radius: 50%;
+  position: relative;
+  animation: nt-icon-pulse 2s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@keyframes nt-training-pulse {
+.nt-training-completion-icon-check {
+  width: 40px;
+  height: 40px;
+  border-left: 5px solid var(--nt-color-white);
+  border-bottom: 5px solid var(--nt-color-white);
+  transform: rotate(-45deg);
+  animation: nt-check-bounce 0.8s ease-out;
+}
+
+@keyframes nt-icon-pulse {
   0%,
   100% {
-    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(79, 195, 247, 0.4), 0 0 0 0 rgba(79, 195, 247, 0.2);
   }
   50% {
-    transform: scale(1.1);
+    box-shadow: 0 0 0 20px rgba(79, 195, 247, 0),
+      0 0 0 40px rgba(79, 195, 247, 0);
   }
 }
 
-.nt-training-completion-title {
-  color: var(--nt-color-accent);
-  margin: 0;
-  font-size: 1.8rem;
+@keyframes nt-check-bounce {
+  0% {
+    opacity: 0;
+    transform: rotate(-45deg) scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: rotate(-45deg) scale(1.2);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-45deg) scale(1);
+  }
 }
 
-.nt-training-completion-stats {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: var(--nt-radius-lg);
+.nt-training-completion-title-section {
+  margin-top: var(--nt-space-lg);
+}
+
+.nt-training-completion-subtitle {
+  color: var(--nt-text-secondary);
+  font-size: 1rem;
+  margin-top: var(--nt-space-sm);
+}
+
+/* СПИСОК РЕЗУЛЬТАТОВ */
+.nt-training-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nt-space-lg);
+}
+
+.nt-training-result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: var(--nt-space-lg);
-  margin-bottom: var(--nt-space-xl);
-  border: 1px solid var(--nt-border-primary);
+  background: rgba(30, 58, 95, 0.2);
+  border-radius: var(--nt-radius-lg);
+  border: 1px solid var(--nt-border-light);
+  transition: all 0.3s ease;
 }
 
-.nt-training-stat-row {
+.nt-training-result-item:hover {
+  border-color: var(--nt-color-accent);
+  background: rgba(30, 58, 95, 0.4);
+}
+
+.nt-training-result-label-container {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--nt-space-md);
+  flex: 1;
+  min-width: 0;
+}
+
+.nt-training-result-icon {
+  font-size: 1.5rem;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(79, 195, 247, 0.1);
+  border-radius: var(--nt-radius-lg);
+  flex-shrink: 0;
+}
+
+.nt-training-result-label {
+  color: var(--nt-text-primary);
+  font-weight: 600;
+  font-size: 1rem;
+  margin-bottom: var(--nt-space-xs);
+}
+
+.nt-training-result-subtitle {
+  color: var(--nt-text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  max-width: 300px;
+}
+
+.nt-training-result-value-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--nt-space-sm);
+  flex-shrink: 0;
+  margin-left: var(--nt-space-md);
+}
+
+.nt-training-result-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--nt-space-xs);
+}
+
+.nt-training-result-main-value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.nt-training-result-secondary-value {
+  color: var(--nt-text-secondary);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* ПРОГРЕСС-БАР */
+.nt-training-result-progress-bar {
+  width: 200px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--nt-radius-full);
+  overflow: hidden;
+}
+
+.nt-training-result-progress-fill {
+  height: 100%;
+  border-radius: var(--nt-radius-full);
+  position: relative;
+  transition: width 1.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nt-training-result-progress-fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  animation: nt-shimmer 2s ease-in-out infinite;
+}
+
+@keyframes nt-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ДОПОЛНИТЕЛЬНЫЙ ТЕКСТ */
+.nt-training-result-hint {
+  color: var(--nt-text-secondary);
+  font-size: 0.85rem;
+  text-align: right;
+  font-style: italic;
+}
+
+.nt-training-result-assessment {
+  color: var(--nt-text-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: right;
+  margin-top: var(--nt-space-xs);
+}
+
+/* КАРТОЧКА С ПОДСВЕТКОЙ */
+.nt-card--highlight {
+  border: 2px solid var(--nt-color-warning);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 215, 0, 0.05) 0%,
+    rgba(255, 193, 7, 0.02) 100%
+  );
+  animation: nt-card-glow 2s ease-in-out infinite;
+}
+
+@keyframes nt-card-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+  }
+}
+
+/* БЭЙДЖИ */
+.nt-badge--large {
+  padding: var(--nt-space-sm) var(--nt-space-lg);
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+/* АДАПТИВНОСТЬ */
+@media (max-width: 768px) {
+  .nt-training-completion-overlay {
+    padding: var(--nt-space-md);
+    align-items: flex-start;
+    padding-top: var(--nt-space-xl);
+  }
+
+  .nt-training-result-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--nt-space-md);
+  }
+
+  .nt-training-result-label-container,
+  .nt-training-result-value-container {
+    width: 100%;
+  }
+
+  .nt-training-result-value-container {
+    align-items: flex-start;
+    margin-left: 64px; /* Отступ под иконку */
+  }
+
+  .nt-training-result-progress-bar {
+    width: 100%;
+  }
+
+  .nt-modal__actions {
+    flex-direction: column;
+  }
+
+  .nt-modal__actions .nt-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .nt-training-result-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.2rem;
+  }
+
+  .nt-training-result-value-container {
+    margin-left: 56px;
+  }
+}
+/* СТИЛИ ДЛЯ ТАБЛИЦЫ РЕЗУЛЬТАТОВ */
+.nt-training-result-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: var(--nt-space-md) 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--nt-border-light);
+  gap: var(--nt-space-lg);
 }
 
-.nt-training-stat-row:last-child {
+.nt-training-result-item:last-child {
   border-bottom: none;
+  padding-bottom: 0;
 }
 
-.nt-training-stat-label {
-  color: var(--nt-text-secondary);
-  font-weight: 500;
+.nt-training-result-label-container {
+  display: flex;
+  align-items: center;
+  gap: var(--nt-space-md);
+  flex: 1;
+  min-width: 0;
 }
 
-.nt-training-stat-value {
+.nt-training-result-icon {
+  font-size: 1.2rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(79, 195, 247, 0.1);
+  border-radius: var(--nt-radius-md);
+  flex-shrink: 0;
+}
+
+.nt-training-result-label {
   color: var(--nt-text-primary);
   font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: var(--nt-space-xs);
+}
+
+.nt-training-result-subtitle {
+  color: var(--nt-text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  display: block;
+}
+
+.nt-training-result-value-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--nt-space-xs);
+  flex-shrink: 0;
   text-align: right;
 }
 
-/* Цветовая индикация процентов */
-.nt-training-stat-value--excellent {
-  color: var(--nt-color-success);
-  background: rgba(76, 175, 80, 0.2);
-  padding: var(--nt-space-xs) var(--nt-space-md);
-  border-radius: var(--nt-radius-full);
-}
-
-.nt-training-stat-value--good {
-  color: #ffc107;
-  background: rgba(255, 193, 7, 0.2);
-  padding: var(--nt-space-xs) var(--nt-space-md);
-  border-radius: var(--nt-radius-full);
-}
-
-.nt-training-stat-value--poor {
-  color: var(--nt-color-error);
-  background: rgba(244, 67, 54, 0.2);
-  padding: var(--nt-space-xs) var(--nt-space-md);
-  border-radius: var(--nt-radius-full);
-}
-
-.nt-training-completion-actions {
+.nt-training-result-value {
   display: flex;
-  gap: var(--nt-space-md);
-  justify-content: center;
-  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--nt-space-xs);
 }
 
-@media (max-width: 768px) {
-  .nt-training-completion {
-    min-height: 50vh;
-    padding: var(--nt-space-md);
-  }
+.nt-training-result-main-value {
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1;
+}
 
-  .nt-training-stat-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--nt-space-xs);
-  }
-
-  .nt-training-completion-actions {
-    flex-direction: column;
-  }
+.nt-training-result-secondary-value {
+  color: var(--nt-text-secondary);
+  font-size: 0.9rem;
+  font-weight: 500;
 }

@@ -3,7 +3,7 @@ import { useAppStore } from "../../shared/stores/appStore";
 import { useAuthStore } from "../../shared/stores/authStore";
 import { useUIStore } from "../../shared/stores/uiStore";
 import { useDataStore } from "../../shared/stores/dataStore";
-import { useCardsets, useCreateSet } from "../../api/cardsets";
+import { useCardSets, useCreateSet } from "../../api/cardSets";
 
 export function useMainAppLogic() {
   const { t } = useAppStore();
@@ -19,7 +19,7 @@ export function useMainAppLogic() {
   } = useUIStore();
   const { selectedSet, setSelectedSet } = useDataStore();
 
-  const { data: cardsets = [] } = useCardsets();
+  const { data: cardSets = [] } = useCardSets();
   const createSetMutation = useCreateSet();
 
   // === ОБРАБОТЧИКИ СОБЫТИЙ ===
@@ -67,7 +67,7 @@ export function useMainAppLogic() {
     activeTab,
     forms,
     selectedSet,
-    cardsets,
+    cardSets,
 
     // Данные из сторов
     t,

@@ -1,29 +1,28 @@
-# Определяем путь к рабочему столу и названия файлов
+# Определяем путь к рабочему столу
 $desktopPath = [Environment]::GetFolderPath("Desktop")
-$jsFilesOutput = Join-Path $desktopPath "js_files.txt"
-$cssFilesOutput = Join-Path $desktopPath "css_files.txt"
-$jsContentOutput = Join-Path $desktopPath "js_content.txt"
-$cssContentOutput = Join-Path $desktopPath "css_content.txt"
 
-Write-Host "🔄 Начинаем анализ проекта..."
+# Пути для выходных файлов
+$jsPathsOutput = Join-Path $desktopPath "ВСЕ ПУТИ JS.txt"
+$cssPathsOutput = Join-Path $desktopPath "ВСЕ ПУТИ CSS.txt"
+$jsContentOutput = Join-Path $desktopPath "JS ВЕСЬ КОД.txt"
+$cssContentOutput = Join-Path $desktopPath "CSS ВЕСЬ КОД.txt"
+
+Write-Host "🔄 Начинаем полный анализ проекта..."
 
 # Удаляем предыдущие файлы если существуют
-if (Test-Path $jsFilesOutput) { Remove-Item $jsFilesOutput }
-if (Test-Path $cssFilesOutput) { Remove-Item $cssFilesOutput }
-if (Test-Path $jsContentOutput) { Remove-Item $jsContentOutput }
-if (Test-Path $cssContentOutput) { Remove-Item $cssContentOutput }
+@($jsPathsOutput, $cssPathsOutput, $jsContentOutput, $cssContentOutput) | ForEach-Object {
+    if (Test-Path $_) { Remove-Item $_ }
+}
 
 # Функция для безопасного чтения файлов
 function Read-FileContent {
     param($FilePath)
     try {
-        $content = Get-Content $FilePath -Raw -Encoding UTF8
-        return $content
+        return Get-Content $FilePath -Raw -Encoding UTF8 -ErrorAction Stop
     }
     catch {
         try {
-            $content = Get-Content $FilePath -Raw -Encoding Default
-            return $content
+            return Get-Content $FilePath -Raw -Encoding Default -ErrorAction Stop
         }
         catch {
             return "[ОШИБКА ЧТЕНИЯ ФАЙЛА: $($_.Exception.Message)]"
@@ -31,33 +30,59 @@ function Read-FileContent {
     }
 }
 
-# 1) ФАЙЛ С ПЕРЕЧНЕМ JS/JSX ФАЙЛОВ
-"ПЕРЕЧЕНЬ ВСЕХ JS/JSX ФАЙЛОВ ПРОЕКТА" | Out-File $jsFilesOutput -Encoding UTF8
-"Дата: $(Get-Date)" | Out-File $jsFilesOutput -Encoding UTF8 -Append
-"Всего файлов: $(@(Get-ChildItem "client\src" -Recurse -File -Include '*.js','*.jsx').Count)" | Out-File $jsFilesOutput -Encoding UTF8 -Append
-"=" * 80 | Out-File $jsFilesOutput -Encoding UTF8 -Append
-
-Get-ChildItem "client\src" -Recurse -File -Include '*.js','*.jsx' | Sort-Object FullName | ForEach-Object {
-    "$($_.FullName) ($($_.Length) байт)" | Out-File $jsFilesOutput -Encoding UTF8 -Append
+# Функция для поиска файлов по шаблону
+function Get-FilesRecursive {
+    param($Path, $Pattern)
+    if (Test-Path $Path) {
+        return Get-ChildItem $Path -Recurse -File -Include $Pattern -ErrorAction SilentlyContinue
+    }
+    return @()
 }
 
-# 2) ФАЙЛ С ПЕРЕЧНЕМ CSS ФАЙЛОВ
-"`nПЕРЕЧЕНЬ ВСЕХ CSS ФАЙЛОВ ПРОЕКТА" | Out-File $cssFilesOutput -Encoding UTF8
-"Дата: $(Get-Date)" | Out-File $cssFilesOutput -Encoding UTF8 -Append
-"Всего файлов: $(@(Get-ChildItem "client\src" -Recurse -File -Include '*.css','*.scss','*.sass','*.less').Count)" | Out-File $cssFilesOutput -Encoding UTF8 -Append
-"=" * 80 | Out-File $cssFilesOutput -Encoding UTF8 -Append
+# ==================== АНАЛИЗ JS/JSX ФАЙЛОВ ====================
 
-Get-ChildItem "client\src" -Recurse -File -Include '*.css','*.scss','*.sass','*.less' | Sort-Object FullName | ForEach-Object {
-    "$($_.FullName) ($($_.Length) байт)" | Out-File $cssFilesOutput -Encoding UTF8 -Append
+Write-Host "📁 Поиск JS/JSX файлов..."
+
+# Ищем JS/JSX файлы
+$jsFiles = @()
+
+# 1. В папке client/src
+$clientFiles = Get-FilesRecursive -Path "client\src" -Pattern @('*.js', '*.jsx')
+Write-Host "   client\src: $($clientFiles.Count) файлов"
+
+# 2. В папке server
+$serverFiles = Get-FilesRecursive -Path "server" -Pattern '*.js'
+Write-Host "   server: $($serverFiles.Count) файлов"
+
+# 3. В корне проекта (server.js)
+$rootServerFile = Get-Item "server.js" -ErrorAction SilentlyContinue
+if ($rootServerFile) {
+    Write-Host "   Корневой файл: server.js"
 }
 
-# 3) ФАЙЛ С СОДЕРЖИМЫМ JS/JSX ФАЙЛОВ
-"ПОЛНОЕ СОДЕРЖИМОЕ JS/JSX ФАЙЛОВ" | Out-File $jsContentOutput -Encoding UTF8
-"Дата: $(Get-Date)" | Out-File $jsContentOutput -Encoding UTF8 -Append
-"Всего файлов: $(@(Get-ChildItem "client\src" -Recurse -File -Include '*.js','*.jsx').Count)" | Out-File $jsContentOutput -Encoding UTF8 -Append
+# Объединяем все JS файлы
+$jsFiles = @($clientFiles) + @($serverFiles)
+if ($rootServerFile) { $jsFiles += $rootServerFile }
+
+Write-Host "   Всего JS/JSX файлов: $($jsFiles.Count)"
+
+# 1) ФАЙЛ С ПУТЯМИ JS
+"ПЕРЕЧЕНЬ ВСЕХ JS/JSX ФАЙЛОВ ПРОЕКТА" | Out-File $jsPathsOutput -Encoding UTF8
+"Дата: $(Get-Date -Format 'dd/MM/yyyy HH:mm:ss')" | Out-File $jsPathsOutput -Encoding UTF8 -Append
+"Всего файлов: $($jsFiles.Count)" | Out-File $jsPathsOutput -Encoding UTF8 -Append
+"=" * 80 | Out-File $jsPathsOutput -Encoding UTF8 -Append
+
+$jsFiles | Sort-Object FullName | ForEach-Object {
+    "$($_.FullName) ($($_.Length) байт)" | Out-File $jsPathsOutput -Encoding UTF8 -Append
+}
+
+# 2) ФАЙЛ С СОДЕРЖИМЫМ JS
+"ПОЛНОЕ СОДЕРЖИМОЕ ВСЕХ JS/JSX ФАЙЛОВ" | Out-File $jsContentOutput -Encoding UTF8
+"Дата: $(Get-Date -Format 'dd/MM/yyyy HH:mm:ss')" | Out-File $jsContentOutput -Encoding UTF8 -Append
+"Всего файлов: $($jsFiles.Count)" | Out-File $jsContentOutput -Encoding UTF8 -Append
 "=" * 80 | Out-File $jsContentOutput -Encoding UTF8 -Append
 
-Get-ChildItem "client\src" -Recurse -File -Include '*.js','*.jsx' | Sort-Object FullName | ForEach-Object {
+$jsFiles | Sort-Object FullName | ForEach-Object {
     "`n" + "=" * 60 | Out-File $jsContentOutput -Encoding UTF8 -Append
     "ФАЙЛ: $($_.FullName)" | Out-File $jsContentOutput -Encoding UTF8 -Append
     "РАЗМЕР: $($_.Length) байт" | Out-File $jsContentOutput -Encoding UTF8 -Append
@@ -66,13 +91,57 @@ Get-ChildItem "client\src" -Recurse -File -Include '*.js','*.jsx' | Sort-Object 
     $content | Out-File $jsContentOutput -Encoding UTF8 -Append
 }
 
-# 4) ФАЙЛ С СОДЕРЖИМЫМ CSS ФАЙЛОВ
-"ПОЛНОЕ СОДЕРЖИМОЕ CSS ФАЙЛОВ" | Out-File $cssContentOutput -Encoding UTF8
-"Дата: $(Get-Date)" | Out-File $cssContentOutput -Encoding UTF8 -Append
-"Всего файлов: $(@(Get-ChildItem "client\src" -Recurse -File -Include '*.css','*.scss','*.sass','*.less').Count)" | Out-File $cssContentOutput -Encoding UTF8 -Append
+# ==================== АНАЛИЗ CSS/SCSS/SASS/LESS ФАЙЛОВ ====================
+
+Write-Host "📁 Поиск CSS файлов во всей папке src..."
+
+# Ищем все CSS/SCSS/SASS/LESS файлы в разных местах
+$cssFiles = @()
+
+# 1. В папке src (если есть)
+$srcPath = "src"
+if (Test-Path $srcPath) {
+    $srcFiles = Get-FilesRecursive -Path $srcPath -Pattern @('*.css', '*.scss', '*.sass', '*.less', '*.styl')
+    $cssFiles += $srcFiles
+    Write-Host "   Папка src: $($srcFiles.Count) файлов"
+}
+
+# 2. В папке client/src (если нет файлов в src)
+if ($cssFiles.Count -eq 0) {
+    $clientSrcPath = "client\src"
+    if (Test-Path $clientSrcPath) {
+        $clientSrcFiles = Get-FilesRecursive -Path $clientSrcPath -Pattern @('*.css', '*.scss', '*.sass', '*.less', '*.styl')
+        $cssFiles += $clientSrcFiles
+        Write-Host "   Папка client\src: $($clientSrcFiles.Count) файлов"
+    }
+}
+
+# 3. В корне проекта (если всё ещё нет файлов)
+if ($cssFiles.Count -eq 0) {
+    $rootFiles = Get-ChildItem "." -File -Include '*.css', '*.scss', '*.sass', '*.less', '*.styl' -ErrorAction SilentlyContinue
+    $cssFiles += $rootFiles
+    Write-Host "   Корень проекта: $($rootFiles.Count) файлов"
+}
+
+Write-Host "   Всего CSS/SCSS/SASS/LESS файлов: $($cssFiles.Count)"
+
+# 3) ФАЙЛ С ПУТЯМИ CSS
+"ПЕРЕЧЕНЬ ВСЕХ CSS/SCSS/SASS/LESS ФАЙЛОВ ПРОЕКТА" | Out-File $cssPathsOutput -Encoding UTF8
+"Дата: $(Get-Date -Format 'dd/MM/yyyy HH:mm:ss')" | Out-File $cssPathsOutput -Encoding UTF8 -Append
+"Всего файлов: $($cssFiles.Count)" | Out-File $cssPathsOutput -Encoding UTF8 -Append
+"=" * 80 | Out-File $cssPathsOutput -Encoding UTF8 -Append
+
+$cssFiles | Sort-Object FullName | ForEach-Object {
+    "$($_.FullName) ($($_.Length) байт)" | Out-File $cssPathsOutput -Encoding UTF8 -Append
+}
+
+# 4) ФАЙЛ С СОДЕРЖИМЫМ CSS
+"ПОЛНОЕ СОДЕРЖИМОЕ ВСЕХ CSS/SCSS/SASS/LESS ФАЙЛОВ ПРОЕКТА" | Out-File $cssContentOutput -Encoding UTF8
+"Дата: $(Get-Date -Format 'dd/MM/yyyy HH:mm:ss')" | Out-File $cssContentOutput -Encoding UTF8 -Append
+"Всего файлов: $($cssFiles.Count)" | Out-File $cssContentOutput -Encoding UTF8 -Append
 "=" * 80 | Out-File $cssContentOutput -Encoding UTF8 -Append
 
-Get-ChildItem "client\src" -Recurse -File -Include '*.css','*.scss','*.sass','*.less' | Sort-Object FullName | ForEach-Object {
+$cssFiles | Sort-Object FullName | ForEach-Object {
     "`n" + "=" * 60 | Out-File $cssContentOutput -Encoding UTF8 -Append
     "ФАЙЛ: $($_.FullName)" | Out-File $cssContentOutput -Encoding UTF8 -Append
     "РАЗМЕР: $($_.Length) байт" | Out-File $cssContentOutput -Encoding UTF8 -Append
@@ -81,9 +150,14 @@ Get-ChildItem "client\src" -Recurse -File -Include '*.css','*.scss','*.sass','*.
     $content | Out-File $cssContentOutput -Encoding UTF8 -Append
 }
 
-Write-Host "✅ Анализ завершен! Созданы файлы на рабочем столе:"
-Write-Host "   📄 js_files.txt - перечень JS/JSX файлов"
-Write-Host "   📄 css_files.txt - перечень CSS файлов" 
-Write-Host "   📄 js_content.txt - содержимое JS/JSX файлов"
-Write-Host "   📄 css_content.txt - содержимое CSS файлов"
-Write-Host "`n📁 Путь: $desktopPath"
+# ==================== ИТОГИ ====================
+
+Write-Host "`n✅ Анализ завершен! Созданы файлы на рабочем столе:"
+Write-Host "   ВСЕ ПУТИ JS.txt - $($jsFiles.Count) файлов JS/JSX"
+Write-Host "   ВСЕ ПУТИ CSS.txt - $($cssFiles.Count) файлов CSS/SCSS/SASS/LESS"
+Write-Host "   JS ВЕСЬ КОД.txt - содержимое всех JS файлов"
+Write-Host "   CSS ВЕСЬ КОД.txt - содержимое всех CSS файлов"
+Write-Host "`n📁 Результаты на рабочем столе: $desktopPath"
+Write-Host "`n📊 Сводка:"
+Write-Host "   JS файлов: $($jsFiles.Count)"
+Write-Host "   CSS файлов: $($cssFiles.Count)"

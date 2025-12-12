@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useAppStore } from "../../../../shared/stores/appStore";
 
-const TagsInput = ({ tags = [], setTags, placeholder = "Введите теги..." }) => {
+const TagsInput = ({ tags = [], setTags, placeholder }) => {
+  const { t } = useAppStore();
   const [inputValue, setInputValue] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
@@ -63,6 +65,9 @@ const TagsInput = ({ tags = [], setTags, placeholder = "Введите теги.
     inputRef.current?.focus();
   };
 
+  // Используем переданный placeholder или перевод по умолчанию
+  const actualPlaceholder = placeholder || t("tags.input.placeholder");
+
   return (
     <div
       className={`nt-tags-input ${isFocused ? "nt-tags-input--focused" : ""}`}
@@ -92,7 +97,7 @@ const TagsInput = ({ tags = [], setTags, placeholder = "Введите теги.
           onKeyDown={handleInputKeyDown}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
-          placeholder={normalizedTags.length === 0 ? placeholder : ""}
+          placeholder={normalizedTags.length === 0 ? actualPlaceholder : ""}
           className="nt-tags-input__input"
         />
       </div>
