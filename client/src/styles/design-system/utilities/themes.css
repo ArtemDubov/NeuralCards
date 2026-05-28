@@ -1,0 +1,39 @@
+/* 
+ * Design System - Themes
+ * Управление темами (светлая/тёмная)
+ */
+
+/* 
+ * Тема применяется через data-атрибут на html элементе:
+ * <html data-theme="light"> или <html data-theme="dark">
+ */
+
+/* Переключение темы (можно использовать JavaScript) */
+.theme-toggle {
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-lg);
+  transition: all var(--transition-base);
+}
+
+.theme-toggle:hover {
+  background-color: var(--theme-background-secondary);
+}
+
+/* Плавный переход при смене темы */
+*,
+*::before,
+*::after {
+  transition: background-color var(--transition-base),
+              color var(--transition-base),
+              border-color var(--transition-base);
+}
+
+/* Отключение переходов для пользователей с prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

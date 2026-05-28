@@ -1,0 +1,226 @@
+/* 
+ * Глобальные стили темы NeuralTrident
+ * Все цвета, шрифты и отступы управляются через CSS переменные
+ */
+
+:root {
+  /* Цвета по умолчанию (будут переопределены через JS) */
+  --nt-primary: #667eea;
+  --nt-secondary: #764ba2;
+  --nt-accent: #f093fb;
+  
+  /* Фоны */
+  --nt-background: #f5f5f5;
+  --nt-background-secondary: #e8e8e8;
+  --nt-surface: #ffffff;
+  --nt-surface-elevated: #ffffff;
+  
+  /* Текст */
+  --nt-text: #333333;
+  --nt-text-secondary: #666666;
+  --nt-text-muted: #999999;
+  --nt-text-inverse: #ffffff;
+  
+  /* Границы */
+  --nt-border: #e0e0e0;
+  --nt-border-light: #f0f0f0;
+  --nt-border-dark: #cccccc;
+  
+  /* Семантические цвета */
+  --nt-success: #2ecc71;
+  --nt-success-light: #d5f5e3;
+  --nt-error: #e74c3c;
+  --nt-error-light: #fadbd8;
+  --nt-warning: #f39c12;
+  --nt-warning-light: #fdebd0;
+  --nt-info: #3498db;
+  --nt-info-light: #d6eaf8;
+  
+  /* Компоненты */
+  --nt-header-background: #667eea;
+  --nt-header-text: #ffffff;
+  --nt-button-primary-bg: #667eea;
+  --nt-button-primary-text: #ffffff;
+  --nt-button-secondary-bg: #e0e0e0;
+  --nt-button-secondary-text: #333333;
+  --nt-card-background: #ffffff;
+  --nt-card-shadow: rgba(0,0,0,0.1);
+  --nt-link-color: #667eea;
+  --nt-link-hover: #764ba2;
+  
+  /* Градиенты */
+  --nt-gradient-start: #667eea;
+  --nt-gradient-end: #764ba2;
+  
+  /* Скроллбар */
+  --nt-scrollbar-thumb: #cccccc;
+  --nt-scrollbar-track: #f0f0f0;
+  
+  /* Шрифты */
+  --nt-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --nt-font-size-base: 16px;
+  --nt-font-size-sm: 12px;
+  --nt-font-size-md: 16px;
+  --nt-font-size-lg: 20px;
+  --nt-font-size-xl: 24px;
+  --nt-font-size-2xl: 32px;
+  --nt-font-weight-normal: 400;
+  --nt-font-weight-medium: 500;
+  --nt-font-weight-bold: 700;
+  
+  /* Отступы */
+  --nt-spacing-xs: 6px;
+  --nt-spacing-sm: 12px;
+  --nt-spacing-md: 16px;
+  --nt-spacing-lg: 20px;
+  --nt-spacing-xl: 24px;
+  --nt-spacing-2xl: 32px;
+  --nt-spacing-3xl: 40px;
+  
+  /* Плотность */
+  --nt-component-padding: 14px 20px;
+  --nt-card-padding: 20px;
+  --nt-section-padding: 24px;
+  
+  /* Радиусы и тени */
+  --nt-border-radius: 8px;
+  --nt-shadows: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Применяем шрифт ко всему документу */
+* {
+  font-family: var(--nt-font-family);
+  font-size: var(--nt-font-size-base);
+}
+
+body {
+  background-color: var(--nt-background);
+  color: var(--nt-text);
+  margin: 0;
+  padding: 0;
+  font-family: var(--nt-font-family);
+  font-size: var(--nt-font-size-base);
+  line-height: 1.6;
+}
+
+/* Глобальные стили для ссылок */
+a {
+  color: var(--nt-link-color);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--nt-link-hover);
+  text-decoration: underline;
+}
+
+/* Глобальные стили для кнопок */
+button {
+  font-family: var(--nt-font-family);
+  font-size: var(--nt-font-size-md);
+  border-radius: var(--nt-border-radius);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Глобальные стили для input */
+input, textarea, select {
+  font-family: var(--nt-font-family);
+  font-size: var(--nt-font-size-md);
+  border-radius: var(--nt-border-radius);
+  border: 1px solid var(--nt-border);
+  background: var(--nt-surface);
+  color: var(--nt-text);
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: var(--nt-primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Глобальные стили для заголовков */
+h1 {
+  font-size: var(--nt-font-size-2xl);
+  font-weight: var(--nt-font-weight-bold);
+  color: var(--nt-text);
+  margin: 0 0 var(--nt-spacing-md) 0;
+}
+
+h2 {
+  font-size: var(--nt-font-size-xl);
+  font-weight: var(--nt-font-weight-bold);
+  color: var(--nt-text);
+  margin: 0 0 var(--nt-spacing-md) 0;
+}
+
+h3 {
+  font-size: var(--nt-font-size-lg);
+  font-weight: var(--nt-font-weight-medium);
+  color: var(--nt-text);
+  margin: 0 0 var(--nt-spacing-sm) 0;
+}
+
+/* Глобальные стили для карточек */
+.card, .card-component {
+  background: var(--nt-card-background);
+  border-radius: var(--nt-border-radius);
+  box-shadow: var(--nt-shadows);
+  padding: var(--nt-card-padding);
+}
+
+/* Кастомный скроллбар */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--nt-scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--nt-scrollbar-thumb);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--nt-border-dark);
+}
+
+/* Утилитарные классы */
+.nt-text-primary { color: var(--nt-primary); }
+.nt-text-secondary { color: var(--nt-text-secondary); }
+.nt-text-muted { color: var(--nt-text-muted); }
+.nt-text-success { color: var(--nt-success); }
+.nt-text-error { color: var(--nt-error); }
+.nt-text-warning { color: var(--nt-warning); }
+
+.nt-bg-primary { background-color: var(--nt-primary); }
+.nt-bg-surface { background-color: var(--nt-surface); }
+.nt-bg-background { background-color: var(--nt-background); }
+.nt-bg-background-secondary { background-color: var(--nt-background-secondary); }
+
+.nt-border { border: 1px solid var(--nt-border); }
+.nt-border-radius { border-radius: var(--nt-border-radius); }
+
+.nt-spacing-xs { margin: var(--nt-spacing-xs); }
+.nt-spacing-sm { margin: var(--nt-spacing-sm); }
+.nt-spacing-md { margin: var(--nt-spacing-md); }
+.nt-spacing-lg { margin: var(--nt-spacing-lg); }
+.nt-spacing-xl { margin: var(--nt-spacing-xl); }
+
+.nt-padding-xs { padding: var(--nt-spacing-xs); }
+.nt-padding-sm { padding: var(--nt-spacing-sm); }
+.nt-padding-md { padding: var(--nt-spacing-md); }
+.nt-padding-lg { padding: var(--nt-spacing-lg); }
+.nt-padding-xl { padding: var(--nt-spacing-xl); }
+
+.nt-shadow { box-shadow: var(--nt-shadows); }
+
+.nt-font-normal { font-weight: var(--nt-font-weight-normal); }
+.nt-font-medium { font-weight: var(--nt-font-weight-medium); }
+.nt-font-bold { font-weight: var(--nt-font-weight-bold); }

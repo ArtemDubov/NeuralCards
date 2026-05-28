@@ -1,0 +1,12 @@
+/* 
+ * Training Pages - Main Entry Point
+ * Импортирует все модульные CSS файлы для страницы тренировок
+ */
+
+@import './common.css';
+@import './interval.css';
+@import './marathon.css';
+@import './dictation.css';
+@import './matching.css';
+@import './quiz.css';
+@import './practice.css';

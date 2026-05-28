@@ -1,0 +1,9 @@
+/* 
+ * Profile Pages - Main Entry Point
+ * Импортирует все модульные CSS файлы для страницы профиля
+ */
+
+@import './topbar.css';
+@import './avatar-section.css';
+@import './forms.css';
+@import './modals.css';

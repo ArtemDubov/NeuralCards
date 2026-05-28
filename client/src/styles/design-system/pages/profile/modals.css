@@ -1,0 +1,214 @@
+/* 
+ * Profile - Modals Styles
+ * Стили для модальных окон профиля
+ */
+
+/* Modal Overlay & Container */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-container {
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  background: var(--nt-surface, #ffffff);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s;
+  color: var(--nt-text-secondary, #666);
+}
+
+.modal-close-btn:hover {
+  background: var(--nt-background-secondary, #f5f5f5);
+}
+
+.modal-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  color: var(--nt-text, #333);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+/* Emoji & Color Pickers */
+.emoji-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.emoji-button {
+  aspect-ratio: 1;
+  border: 2px solid var(--nt-border, #e0e0e0);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 24px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--nt-background, #ffffff);
+}
+
+.emoji-button:hover {
+  border-color: var(--nt-primary, #667eea);
+  transform: scale(1.05);
+}
+
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.color-button {
+  aspect-ratio: 1;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+}
+
+.color-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.color-picker-input {
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.color-text-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--nt-border, #e0e0e0);
+  border-radius: 8px;
+  font-size: 14px;
+  margin-top: 8px;
+  background: var(--nt-background-secondary, #f8f9fa);
+  color: var(--nt-text, #333);
+}
+
+/* Password Strength */
+.password-strength-container {
+  margin-top: 8px;
+}
+
+.password-strength-label {
+  font-size: 12px;
+  margin-bottom: 4px;
+  color: var(--nt-text-secondary, #666);
+}
+
+.password-strength-bar {
+  height: 4px;
+  border-radius: 2px;
+  background: var(--nt-border, #e0e0e0);
+  overflow: hidden;
+}
+
+.password-strength-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s, background 0.3s;
+}
+
+/* Image Upload */
+.image-preview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.image-preview {
+  width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.image-placeholder {
+  width: 100%;
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--nt-border, #e0e0e0);
+  border-radius: 8px;
+  background: var(--nt-background-secondary, #f8f9fa);
+}
+
+.upload-button,
+.select-button {
+  width: 100%;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 16px;
+  transition: all 0.2s;
+}
+
+.upload-button {
+  background: var(--nt-primary, #667eea);
+  color: white;
+}
+
+.upload-button:hover {
+  background: var(--nt-primary-dark, #5568d3);
+}
+
+.select-button {
+  background: var(--nt-background-secondary, #f5f5f5);
+  color: var(--nt-text, #333);
+}
+
+.select-button:hover {
+  background: var(--nt-border, #e0e0e0);
+}

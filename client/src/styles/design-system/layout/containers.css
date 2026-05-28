@@ -1,0 +1,29 @@
+/* 
+ * Design System - Containers
+ * Стили для контейнеров и обёрток
+ */
+
+.wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.content-wrapper {
+  flex: 1;
+  padding: var(--spacing-xl);
+}
+
+.section {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.page-header {
+  margin-bottom: var(--spacing-2xl);
+}
+
+.page-footer {
+  padding: var(--spacing-lg) 0;
+  border-top: 1px solid var(--theme-border);
+  margin-top: auto;
+}

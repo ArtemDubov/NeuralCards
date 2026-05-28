@@ -1,0 +1,278 @@
+/* ========================================
+   Favorites Page Styles
+   NeuralTrident Design System
+   ======================================== */
+
+/* Favorites Page Container */
+.favorites-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.favorites-header {
+  margin-bottom: 32px;
+}
+
+.favorites-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--nt-text, #333);
+  margin: 0 0 8px;
+}
+
+.favorites-subtitle {
+  font-size: 14px;
+  color: var(--nt-text-secondary, #666);
+}
+
+/* Favorites Tabs */
+.favorites-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.favorites-tab {
+  padding: 10px 20px;
+  border: 1px solid var(--nt-border, #e0e0e0);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--nt-text-secondary, #666);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.favorites-tab:hover {
+  border-color: var(--nt-primary, #667eea);
+  color: var(--nt-primary, #667eea);
+}
+
+.favorites-tab.active {
+  background: var(--nt-primary, #667eea);
+  color: white;
+  border-color: var(--nt-primary, #667eea);
+}
+
+/* Favorites Grid */
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+/* Favorite Card - используем nt-set-card стили */
+.favorite-card {
+  padding: 24px;
+  border-radius: 12px;
+  background: var(--nt-surface, #ffffff);
+  border: 1px solid var(--nt-border-light, #f0f0f0);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  min-height: 180px;
+}
+
+.favorite-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.favorite-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.favorite-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--nt-text, #333);
+  margin: 0;
+  flex: 1;
+  line-height: 1.4;
+}
+
+.favorite-remove-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--nt-text-muted, #999);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.favorite-remove-btn:hover {
+  background: rgba(231, 76, 60, 0.1);
+  color: var(--nt-error, #e74c3c);
+}
+
+.favorite-card-meta {
+  display: flex;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.favorite-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--nt-text-secondary, #666);
+}
+
+/* Favorites Card List View */
+.favorites-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.favorites-card-list .nt-set-card {
+  min-height: auto;
+  padding: 16px;
+}
+
+.favorites-card-list-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+/* Favorites Card List View - используем те же стили, что и в CardSetDetail */
+.favorites-card-list .sortable-card-container {
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  transition: all var(--transition-base);
+}
+
+.favorites-card-list .sortable-card-container:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateX(4px);
+}
+
+.favorites-card-list .card-set-card-two-columns {
+  align-items: stretch;
+  display: flex;
+  flex: 1;
+  gap: 0;
+  min-width: 0;
+}
+
+.favorites-card-list .card-set-card-column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  min-width: 0;
+  padding: 0 var(--spacing-md);
+}
+
+.favorites-card-list .card-set-card-column:first-child {
+  padding-left: 0;
+}
+
+.favorites-card-list .card-set-card-column:last-child {
+  padding-right: 0;
+}
+
+.favorites-card-list .card-set-column-header {
+  align-items: center;
+  display: flex;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+.favorites-card-list .card-set-column-title {
+  color: var(--theme-text-secondary);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.favorites-card-list .card-set-card-text-with-badges {
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.favorites-card-list .card-set-card-column-divider {
+  align-self: stretch;
+  background: var(--theme-border);
+  flex-shrink: 0;
+  width: 1px;
+}
+
+.favorites-card-list .card-set-card-actions {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  gap: var(--spacing-xs);
+  margin-left: auto;
+}
+
+/* Empty State */
+.favorites-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+  color: var(--nt-text-secondary, #666);
+}
+
+.favorites-empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.favorites-empty-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--nt-text, #333);
+  margin: 0 0 8px;
+}
+
+.favorites-empty-text {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Loading State */
+.favorites-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+}
+
+.favorites-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--nt-border-light, #f0f0f0);
+  border-top-color: var(--nt-primary, #667eea);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

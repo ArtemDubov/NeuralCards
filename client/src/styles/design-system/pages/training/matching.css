@@ -1,0 +1,333 @@
+/* 
+ * Training - Matching Page
+ * Стили для режима сопоставления
+ */
+
+.matching-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 16px 0;
+}
+
+.matching-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 0 4px;
+}
+
+.matching-back-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.06);
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.matching-back-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.matching-progress-info {
+  flex: 1;
+  margin: 0 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.matching-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.matching-progress-icon {
+  font-size: 12px;
+  color: #999;
+}
+
+.matching-progress-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+}
+
+.matching-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: #eee;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.matching-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.matching-header-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.matching-header-icon-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.matching-header-icon-btn:hover {
+  transform: scale(1.05);
+}
+
+.matching-score-correct,
+.matching-score-incorrect {
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.matching-score-correct {
+  background: rgba(39, 174, 96, 0.15);
+  color: #27ae60;
+}
+
+.matching-score-incorrect {
+  background: rgba(231, 76, 60, 0.15);
+  color: #e74c3c;
+}
+
+.matching-instructions {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  font-size: 14px;
+  color: var(--nt-text-secondary, #666);
+}
+
+.matching-area {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.matching-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.matching-arrows-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.matching-arrow-cell {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.matching-item {
+  padding: 14px 20px;
+  border: 2px solid #e0e0e0;
+  border-radius: 10px;
+  background: #f5f5f5;
+  color: #333;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.matching-item-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.matching-item-text {
+  flex: 1;
+}
+
+.matching-item-image {
+  max-width: 100%;
+  max-height: 100px;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+.matching-item-video {
+  max-width: 100%;
+  max-height: 150px;
+  border-radius: 6px;
+}
+
+.matching-item:hover:not(:disabled) {
+  border-color: var(--nt-primary, #667eea);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.matching-item-selected {
+  border-color: var(--nt-primary, #667eea);
+  background: rgba(102, 126, 234, 0.2);
+  color: var(--nt-primary, #667eea);
+}
+
+.matching-item-connected {
+  opacity: 0.3;
+  cursor: default;
+  pointer-events: none;
+}
+
+.matching-reset-row {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.matching-reset-btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.matching-reset-btn:hover {
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  transform: translateY(-2px);
+}
+
+.matching-complete-screen {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.matching-complete-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--nt-text, #333);
+}
+
+.matching-main-stat {
+  margin-bottom: 32px;
+}
+
+.matching-big-score {
+  display: block;
+  font-size: 64px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--nt-primary, #667eea), var(--nt-secondary, #764ba2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.matching-big-label {
+  display: block;
+  font-size: 16px;
+  color: var(--nt-text-secondary, #666);
+  margin-top: 8px;
+}
+
+.matching-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.matching-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.matching-stat-value {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.matching-stat-label {
+  font-size: 14px;
+  color: var(--nt-text-secondary, #666);
+}
+
+.matching-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.matching-action-btn {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.matching-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.matching-action-primary {
+  background: linear-gradient(135deg, var(--nt-primary, #667eea), var(--nt-secondary, #764ba2));
+  color: white;
+}
+
+.matching-action-secondary {
+  background: #f0f0f0;
+  color: #333;
+}

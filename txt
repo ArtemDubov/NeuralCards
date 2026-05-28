@@ -1,0 +1,6 @@
+cd "c:\Users\Артём Дубов\Desktop\NeuralCards\python-backend"
+venv\Scripts\activate
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8081
+
+cd "c:\Users\Артём Дубов\Desktop\NeuralCards\client"
+npm start

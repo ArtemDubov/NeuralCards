@@ -1,0 +1,1606 @@
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTheme } from "../../contexts/ThemeContext";
+import { useToast } from "../../contexts/ToastContext";
+import { useAuth } from "../../contexts/AuthContext";
+import { cardSetsApi } from "../../features/cardSets/api/cardSetsApi";
+import { trainingApi } from "../../features/training/api/trainingApi";
+import { favoritesApi } from "../../features/favorites";
+import { mediaApi } from "../../features/media";
+import MiniAudioPlayer from "../../features/media/components/MiniAudioPlayer";
+import PageShell from "../../components/layout/PageShell";
+import EditCardModal from "./EditCardModal";
+import AddCardModal from "./AddCardModal";
+import ModeSelectModal from "../../components/common/ModeSelectModal";
+import ConfirmModal from "../../components/common/ConfirmModal";
+import ViewCardModal from "../../components/common/ViewCardModal";
+import TagsOverflow from "../../components/common/TagsOverflow";
+import SortableCard from "./SortableCard";
+import SortableGridCard from "./SortableGridCard";
+import InsertDivider from "./InsertDivider";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  MeasuringStrategy,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  rectSortingStrategy,
+} from "@dnd-kit/sortable";
+import {
+  faPen,
+  faTrash,
+  faList,
+  faThLarge,
+  faImage,
+  faEye,
+  faEyeSlash,
+  faPlus,
+  faCopy,
+  faBolt,
+  faCheck,
+  faSearch,
+  faSliders,
+  faTimes,
+  faStar,
+  faPlay,
+  faPause,
+  faVolumeHigh,
+  faVideo,
+} from "../../utils/icons";
+
+export default function CardSetDetailPage() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { currentTheme } = useTheme();
+  const toast = useToast();
+  const { user } = useAuth();
+  const [set, setSet] = useState(null);
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showAddCard, setShowAddCard] = useState(false);
+  const [editingCard, setEditingCard] = useState(null);
+  const [viewMode, setViewMode] = useState("list"); // 'list' или 'grid'
+  const [showContent, setShowContent] = useState(() => {
+    const saved = localStorage.getItem(`card-show-content-${id}`);
+    return saved !== null ? JSON.parse(saved) : true;
+  });
+  const [showModeModal, setShowModeModal] = useState(false);
+  const [showDeleteCardModal, setShowDeleteCardModal] = useState(false);
+  const [deleteCardId, setDeleteCardId] = useState(null);
+  const [deleteCardLoading, setDeleteCardLoading] = useState(false);
+  const [trainingLoading, setTrainingLoading] = useState(false);
+  const [viewingCard, setViewingCard] = useState(null);
+  const [viewingIndex, setViewingIndex] = useState(0);
+  const [favoriteCardIds, setFavoriteCardIds] = useState(new Set());
+
+  // Поиск по карточкам
+  const [searchQuery, setSearchQuery] = useState("");
+  // Настройки поиска
+  const [showSearchFilters, setShowSearchFilters] = useState(false);
+  const [searchFilters, setSearchFilters] = useState({
+    wholeWords: false, // Только целые слова
+    caseSensitive: false, // Учитывать регистр
+    searchBack: true, // Искать на обратной стороне
+    searchFront: true, // Искать на лицевой стороне
+  });
+
+  // Позиция для вставки новой карточки через модалку
+  const [insertPosition, setInsertPosition] = useState(null);
+
+  // Сохраняем showContent в localStorage
+  useEffect(() => {
+    localStorage.setItem(
+      `card-show-content-${id}`,
+      JSON.stringify(showContent),
+    );
+  }, [showContent, id]);
+
+  // Закрытие модалки фильтров при клике вне
+  useEffect(() => {
+    if (!showSearchFilters) return;
+    const handleClick = (e) => {
+      const modal = e.target.closest("[data-search-filters-modal]");
+      const filterBtn = e.target.closest("[data-search-filter-btn]");
+      if (!modal && !filterBtn) {
+        setShowSearchFilters(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [showSearchFilters]);
+
+  const getCardWord = (count) => {
+    const lastDigit = count % 10;
+    const lastTwoDigits = count % 100;
+    if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return "карточек";
+    if (lastDigit === 1) return "карточка";
+    if (lastDigit >= 2 && lastDigit <= 4) return "карточки";
+    return "карточек";
+  };
+
+  const handleStartTraining = (mode) => {
+    setTrainingLoading(true);
+
+    // Practice mode — отдельная логика, не требует сессии
+    if (mode === "practice") {
+      navigate(`/training/practice/${id}`);
+      setTrainingLoading(false);
+      setShowModeModal(false);
+      return;
+    }
+
+    // Marathon, Dictation, Matching, Quiz, Sprint — навигация напрямую по setId (без сессии)
+    if (mode === "marathon") {
+      navigate(`/training/marathon/${id}`);
+      setTrainingLoading(false);
+      setShowModeModal(false);
+      return;
+    }
+
+    if (mode === "dictation") {
+      navigate(`/training/dictation/${id}`);
+      setTrainingLoading(false);
+      setShowModeModal(false);
+      return;
+    }
+
+    if (mode === "matching") {
+      navigate(`/training/matching/${id}`);
+      setTrainingLoading(false);
+      setShowModeModal(false);
+      return;
+    }
+
+    if (mode === "quiz") {
+      navigate(`/training/quiz/${id}`);
+      setTrainingLoading(false);
+      setShowModeModal(false);
+      return;
+    }
+
+    if (mode === "sprint") {
+      navigate(`/training/sprint/${id}`);
+      setTrainingLoading(false);
+      setShowModeModal(false);
+      return;
+    }
+
+    trainingApi
+      .createSession({
+        card_set_id: parseInt(id),
+        mode: mode,
+      })
+      .then((session) => {
+        navigate(`/training/${mode}/${session.data.id}`);
+      })
+      .catch((error) => {
+        toast.error(
+          "Ошибка при запуске тренировки: " +
+            (error.response?.data?.detail || error.message),
+        );
+      })
+      .finally(() => {
+        setTrainingLoading(false);
+        setShowModeModal(false);
+      });
+  };
+
+  const loadSet = React.useCallback(async () => {
+    try {
+      const [setResponse, cardsResponse] = await Promise.all([
+        cardSetsApi.getCardSet(id),
+        cardSetsApi.getCards(id),
+      ]);
+      setSet(setResponse.data);
+      setCards(cardsResponse.data);
+    } catch (error) {
+      console.error("Error loading set:", error);
+      toast.error("Ошибка загрузки набора");
+      navigate("/card-sets");
+    } finally {
+      setLoading(false);
+    }
+  }, [id, navigate]);
+
+  // Определяем, принадлежит ли набор текущему пользователю
+  const isOwner = set && user ? set.author_id === user.id : false;
+  const isReadOnly = !isOwner;
+
+  // Копирование набора к себе
+  const handleCopySet = async () => {
+    try {
+      const response = await cardSetsApi.copyCardSet(id);
+      const newSet = response.data;
+      toast.success("Набор скопирован! Переход к копии…");
+      // Переходим к новому набору
+      navigate(`/card-sets/${newSet.id}`);
+    } catch (error) {
+      const detail = error.response?.data?.detail;
+      let errorMsg = "Ошибка при копировании набора";
+      if (typeof detail === "string") errorMsg = detail;
+      toast.error(errorMsg);
+    }
+  };
+
+  useEffect(() => {
+    loadSet();
+  }, [loadSet]);
+
+  const handleDeleteCard = async (cardId) => {
+    setDeleteCardId(cardId);
+    setShowDeleteCardModal(true);
+  };
+
+  const confirmDeleteCard = async () => {
+    if (!deleteCardId) return;
+    setDeleteCardLoading(true);
+    try {
+      await cardSetsApi.deleteCard(deleteCardId);
+      setCards(cards.filter((c) => c.id !== deleteCardId));
+      toast.success("Карточка удалена");
+    } catch (error) {
+      toast.error("Ошибка при удалении карточки");
+    } finally {
+      setDeleteCardLoading(false);
+      setShowDeleteCardModal(false);
+      setDeleteCardId(null);
+    }
+  };
+
+  const handleViewCard = (card, index) => {
+    setViewingCard(card);
+    setViewingIndex(index);
+  };
+
+  const handleEditFromView = (card) => {
+    setEditingCard(card);
+    setViewingCard(null);
+  };
+
+  const toggleCardFavorite = async (cardId) => {
+    const isFav = favoriteCardIds.has(cardId);
+    try {
+      if (isFav) {
+        await favoritesApi.remove("card", cardId);
+        setFavoriteCardIds((prev) => {
+          const n = new Set(prev);
+          n.delete(cardId);
+          return n;
+        });
+      } else {
+        await favoritesApi.add("card", cardId);
+        setFavoriteCardIds((prev) => new Set([...prev, cardId]));
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleAddCard = (newCard) => {
+    console.log(
+      "[CardSetDetail] Card added, reloading set. New card position:",
+      newCard.position,
+    );
+    loadSet().then(() => {
+      console.log("[CardSetDetail] Set reloaded, cards count:", cards.length);
+    });
+    setShowAddCard(false);
+    setInsertPosition(null);
+    setSearchQuery("");
+    toast.success("Карточка создана");
+  };
+
+  const handleUpdateCard = (updatedCard) => {
+    setCards(cards.map((c) => (c.id === updatedCard.id ? updatedCard : c)));
+    setEditingCard(null);
+    toast.success("Карточка обновлена");
+  };
+
+  // === Drag & Drop via @dnd-kit ===
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5, // Минимальное движение для начала drag
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
+  const handleDragEnd = async (event) => {
+    const { active, over } = event;
+
+    if (!over || active.id === over.id) return;
+
+    const oldIndex = cards.findIndex((c) => c.id === active.id);
+    const newIndex = cards.findIndex((c) => c.id === over.id);
+
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    // Оптимистичное обновление
+    const newCards = arrayMove(cards, oldIndex, newIndex);
+    const updatedCards = newCards.map((c, idx) => ({
+      ...c,
+      position: idx + 1,
+    }));
+    setCards(updatedCards);
+
+    // Отправляем на сервер
+    const reorderPayload = updatedCards.map((c) => c.id);
+    try {
+      await cardSetsApi.reorderCards(id, reorderPayload);
+    } catch (err) {
+      console.error("[DragDrop] Reorder failed:", err);
+      toast.error("Не удалось сохранить порядок карточек");
+      loadSet(); // Перезагружаем актуальный порядок
+    }
+  };
+
+  // Запрет drag при поиске или в чужом наборе
+  const isDragDisabled = searchQuery.trim() !== "" || isReadOnly;
+
+  // === Inline вставка карточки — открывает модалку AddCardModal ===
+  const handleStartInsert = (afterIndex) => {
+    setInsertPosition(afterIndex);
+    setShowAddCard(true);
+  };
+
+  // === Фильтрация карточек по поисковому запросу ===
+  const filteredCards = React.useMemo(() => {
+    if (!searchQuery.trim()) return cards;
+
+    let query = searchQuery.trim();
+    if (!searchFilters.caseSensitive) {
+      query = query.toLowerCase();
+    }
+
+    // Проверяем, является ли запрос числом (поиск по номеру карточки)
+    const queryNum = parseInt(query, 10);
+
+    return cards.filter((card, index) => {
+      const cardNumber = index + 1;
+
+      // Совпадение по номеру карточки
+      if (!isNaN(queryNum) && cardNumber === queryNum) return true;
+
+      // Получаем текст сторон
+      let frontText = card.front || "";
+      let backText = card.back || "";
+      if (!searchFilters.caseSensitive) {
+        frontText = frontText.toLowerCase();
+        backText = backText.toLowerCase();
+      }
+
+      if (searchFilters.wholeWords) {
+        // Только целые слова — регулярка с поддержкой кириллицы и латиницы
+        const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        // \b не работает с кириллицей, используем границы: начало/конец строки или не-буква
+        const wordRegex = new RegExp(
+          `(^|[^a-zA-Zа-яА-ЯёЁ0-9_])${escaped}([^a-zA-Zа-яА-ЯёЁ0-9_]|$)`,
+        );
+        if (searchFilters.searchFront && wordRegex.test(frontText)) return true;
+        if (searchFilters.searchBack && wordRegex.test(backText)) return true;
+      } else {
+        // Частичное совпадение
+        if (searchFilters.searchFront && frontText.includes(query)) return true;
+        if (searchFilters.searchBack && backText.includes(query)) return true;
+      }
+
+      return false;
+    });
+  }, [cards, searchQuery, searchFilters]);
+
+  if (loading) {
+    return (
+      <div style={{ ...styles.loading, color: currentTheme.text }}>
+        Загрузка...
+      </div>
+    );
+  }
+
+  if (!set) {
+    return (
+      <div style={{ ...styles.loading, color: currentTheme.text }}>
+        Набор не найден
+      </div>
+    );
+  }
+
+  return (
+    <PageShell currentTheme={currentTheme}>
+      {/* Header набора */}
+      <div style={detailStyles.header}>
+        <div style={detailStyles.titleRow}>
+          <h1 style={{ color: currentTheme.text, margin: 0 }}>{set.title}</h1>
+          <span style={detailStyles.cardCountBadge}>
+            {cards.length} {getCardWord(cards.length)}
+          </span>
+        </div>
+        {set.description && (
+          <p
+            style={{
+              ...detailStyles.description,
+              color: currentTheme.textSecondary,
+            }}
+          >
+            {set.description}
+          </p>
+        )}
+        {/* Теги */}
+        {set.tags && set.tags.length > 0 && (
+          <TagsOverflow
+            tags={set.tags.map((t) => t.name)}
+            maxVisible={5}
+            currentTheme={currentTheme}
+          />
+        )}
+      </div>
+
+      {/* Панель действий: поиск слева + кнопки справа */}
+      <div style={detailStyles.actionBar}>
+        {/* Поиск — слева */}
+        <div style={styles.searchWrapper}>
+          <FontAwesomeIcon icon={faSearch} style={styles.searchIcon} />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Поиск..."
+            style={{
+              ...styles.searchInput,
+              borderColor: searchQuery ? currentTheme.primary : undefined,
+            }}
+          />
+          {/* Кнопка фильтров поиска */}
+          <button
+            data-search-filter-btn="true"
+            onClick={() => setShowSearchFilters(!showSearchFilters)}
+            style={{
+              ...styles.searchFilterBtn,
+              background:
+                searchFilters.wholeWords || searchFilters.caseSensitive
+                  ? `${currentTheme.primary}20`
+                  : "transparent",
+              color:
+                searchFilters.wholeWords || searchFilters.caseSensitive
+                  ? currentTheme.primary
+                  : "var(--nt-text-muted, #999)",
+            }}
+            title="Настройки поиска"
+          >
+            <FontAwesomeIcon icon={faSliders} />
+          </button>
+          {/* Крестик очистки */}
+          <button
+            onClick={() => {
+              setSearchQuery("");
+              setShowSearchFilters(false);
+            }}
+            style={{
+              ...styles.searchClear,
+              opacity: searchQuery ? 1 : 0.3,
+            }}
+          >
+            <FontAwesomeIcon icon={faTimes} />
+          </button>
+          {/* Счётчик найденных */}
+          {searchQuery && (
+            <span style={styles.searchResultCount}>
+              {filteredCards.length}/{cards.length}
+            </span>
+          )}
+        </div>
+
+        {/* Мини-модалка фильтров поиска — СПРАВА от поисковика */}
+        <div
+          style={{
+            position: "relative",
+            flexShrink: 0,
+            width: 0,
+          }}
+        >
+          {showSearchFilters && (
+            <div
+              data-search-filters-modal="true"
+              style={{
+                ...styles.searchFilterModal,
+                background: currentTheme.surface,
+                border: `1px solid ${currentTheme.border || "#e0e0e0"}`,
+              }}
+            >
+              <div style={styles.searchFilterTitle}>Настройки поиска</div>
+              <label style={styles.searchFilterOption}>
+                <input
+                  type="checkbox"
+                  checked={searchFilters.wholeWords}
+                  onChange={(e) =>
+                    setSearchFilters((prev) => ({
+                      ...prev,
+                      wholeWords: e.target.checked,
+                    }))
+                  }
+                />
+                <span>Только целые слова</span>
+              </label>
+              <label style={styles.searchFilterOption}>
+                <input
+                  type="checkbox"
+                  checked={searchFilters.caseSensitive}
+                  onChange={(e) =>
+                    setSearchFilters((prev) => ({
+                      ...prev,
+                      caseSensitive: e.target.checked,
+                    }))
+                  }
+                />
+                <span>Учитывать регистр</span>
+              </label>
+              <div style={styles.searchFilterDivider} />
+              <label style={styles.searchFilterOption}>
+                <input
+                  type="checkbox"
+                  checked={searchFilters.searchFront}
+                  onChange={(e) =>
+                    setSearchFilters((prev) => ({
+                      ...prev,
+                      searchFront: e.target.checked,
+                    }))
+                  }
+                />
+                <span>Лицевая сторона</span>
+              </label>
+              <label style={styles.searchFilterOption}>
+                <input
+                  type="checkbox"
+                  checked={searchFilters.searchBack}
+                  onChange={(e) =>
+                    setSearchFilters((prev) => ({
+                      ...prev,
+                      searchBack: e.target.checked,
+                    }))
+                  }
+                />
+                <span>Обратная сторона</span>
+              </label>
+              {/* Кнопка сброса */}
+              <button
+                onClick={() => {
+                  setSearchFilters({
+                    wholeWords: false,
+                    caseSensitive: false,
+                    searchBack: true,
+                    searchFront: true,
+                  });
+                }}
+                style={styles.searchFilterResetBtn}
+              >
+                Сбросить
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Тренировка — marginLeft: auto прижимает все кнопки вправо */}
+        <button
+          className="nt-set-action-btn nt-set-action-btn-primary"
+          onClick={() => setShowModeModal(true)}
+          disabled={trainingLoading || cards.length === 0}
+          style={{
+            ...styles.actionBtnCompact,
+            marginLeft: "auto",
+            opacity: trainingLoading || cards.length === 0 ? 0.6 : 1,
+          }}
+        >
+          <FontAwesomeIcon icon={faBolt} style={{ marginRight: "4px" }} />
+          Тренировка
+        </button>
+
+        {/* Копировать набор — только для чужих наборов */}
+        {isReadOnly && (
+          <button
+            className="nt-set-action-btn nt-set-action-btn-primary"
+            onClick={handleCopySet}
+            style={{
+              ...styles.actionBtnCompact,
+              background: `linear-gradient(135deg, ${currentTheme.primary}, ${currentTheme.secondary})`,
+            }}
+          >
+            <FontAwesomeIcon icon={faCopy} style={{ marginRight: "4px" }} />
+            Копировать
+          </button>
+        )}
+
+        {/* Добавить — только для владельца */}
+        {isOwner && (
+          <button
+            className="nt-set-action-btn nt-set-action-btn-primary"
+            onClick={() => {
+              setInsertPosition(null);
+              setShowAddCard(true);
+            }}
+            style={{
+              ...styles.actionBtnCompact,
+              background: `linear-gradient(135deg, ${currentTheme.success}, ${currentTheme.success})`,
+            }}
+          >
+            <FontAwesomeIcon icon={faPlus} style={{ marginRight: "4px" }} />
+            Добавить
+          </button>
+        )}
+
+        {/* Разделитель */}
+        <div style={styles.actionBtnDivider} />
+
+        {/* Переключатель Список/Плитка */}
+        <button
+          onClick={() => setViewMode(viewMode === "list" ? "grid" : "list")}
+          style={{
+            ...styles.viewModeButton,
+            background: currentTheme.backgroundSecondary,
+            color: currentTheme.text,
+          }}
+          title={viewMode === "list" ? "Переключить на плитку" : "Переключить на список"}
+        >
+          <FontAwesomeIcon icon={viewMode === "list" ? faThLarge : faList} />
+        </button>
+
+        {/* Глаз */}
+        <button
+          onClick={() => setShowContent((prev) => !prev)}
+          style={{
+            ...styles.viewModeButton,
+            background: showContent
+              ? currentTheme.success
+              : currentTheme.backgroundSecondary,
+            color: showContent ? "#fff" : currentTheme.text,
+          }}
+          title={
+            showContent
+              ? "Скрыть содержимое карточек"
+              : "Показать содержимое карточек"
+          }
+        >
+          <FontAwesomeIcon icon={showContent ? faEye : faEyeSlash} />
+        </button>
+      </div>
+
+      {filteredCards.length === 0 && cards.length > 0 ? (
+        <div>
+          <div style={{ ...styles.empty, color: currentTheme.textSecondary }}>
+            <p>Ничего не найдено по запросу «{searchQuery}»</p>
+          </div>
+          {/* Кнопка добавить — даже при пустом результате поиска */}
+          <div style={styles.bottomAddCardContainer}>
+            <button
+              className="nt-set-action-btn nt-set-action-btn-primary"
+              onClick={() => {
+                setInsertPosition(null);
+                setShowAddCard(true);
+              }}
+              style={{
+                ...styles.bottomAddCardBtn,
+                background: `linear-gradient(135deg, ${currentTheme.success}, ${currentTheme.success})`,
+              }}
+            >
+              <FontAwesomeIcon icon={faPlus} style={{ marginRight: "6px" }} />
+              Добавить карточку
+            </button>
+          </div>
+        </div>
+      ) : filteredCards.length === 0 ? (
+        <div>
+          <div style={{ ...styles.empty, color: currentTheme.textSecondary }}>
+            <p>Нет карточек</p>
+            <p>Добавьте первую карточку!</p>
+          </div>
+          {/* Кнопка добавить — даже если набор пуст */}
+          <div style={styles.bottomAddCardContainer}>
+            <button
+              className="nt-set-action-btn nt-set-action-btn-primary"
+              onClick={() => {
+                setInsertPosition(null);
+                setShowAddCard(true);
+              }}
+              style={{
+                ...styles.bottomAddCardBtn,
+                background: `linear-gradient(135deg, ${currentTheme.success}, ${currentTheme.success})`,
+              }}
+            >
+              <FontAwesomeIcon icon={faPlus} style={{ marginRight: "6px" }} />
+              Добавить карточку
+            </button>
+          </div>
+        </div>
+      ) : viewMode === "grid" ? (
+        // Grid режим — sortable карточки с dnd-kit
+        <DndContext
+          sensors={isDragDisabled ? [] : sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+          measuring={{
+            droppable: {
+              strategy: MeasuringStrategy.Always,
+            },
+            draggable: {
+              strategy: MeasuringStrategy.Always,
+            },
+          }}
+        >
+          <div className="cards-grid">
+            <SortableContext
+              items={filteredCards.map((c) => c.id)}
+              strategy={rectSortingStrategy}
+            >
+              {filteredCards.map((card, filteredIndex) => {
+                const origIndex = cards.findIndex((c) => c.id === card.id);
+                const displayIndex =
+                  origIndex >= 0
+                    ? origIndex + 1
+                    : card.position || filteredIndex + 1;
+
+                return (
+                  <SortableGridCard
+                    key={card.id}
+                    card={card}
+                    displayIndex={displayIndex}
+                    currentTheme={currentTheme}
+                    showContent={showContent}
+                    favoriteCardIds={favoriteCardIds}
+                    onClick={(card) => handleViewCard(card, origIndex)}
+                    onToggleFavorite={toggleCardFavorite}
+                    onEdit={isOwner ? (card) => setEditingCard(card) : null}
+                    onDelete={isOwner ? handleDeleteCard : null}
+                  />
+                );
+              })}
+            </SortableContext>
+            {/* Кнопка «Добавить карточку» в grid — только для владельца */}
+            {isOwner && (
+              <div style={styles.gridAddCard}>
+                <button
+                  className="nt-set-action-btn nt-set-action-btn-primary"
+                  onClick={() => {
+                    setInsertPosition(null);
+                    setShowAddCard(true);
+                  }}
+                  style={{
+                    ...styles.gridAddCardBtn,
+                    background: `linear-gradient(135deg, ${currentTheme.success}, ${currentTheme.success})`,
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    style={{ marginRight: "6px" }}
+                  />
+                  Добавить карточку
+                </button>
+              </div>
+            )}
+          </div>
+        </DndContext>
+      ) : (
+        // Список режим — лицевая слева, обратная справа, drag & drop через dnd-kit, inline insert
+        <DndContext
+          sensors={isDragDisabled ? [] : sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+          measuring={{
+            droppable: {
+              strategy: MeasuringStrategy.Always,
+            },
+            draggable: {
+              strategy: MeasuringStrategy.Always,
+            },
+          }}
+        >
+          <div style={styles.cardsList}>
+            <SortableContext
+              items={filteredCards.map((c) => c.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              {filteredCards.map((card, filteredIndex) => {
+                // Find original index in full cards array for position display
+                const origIndex = cards.findIndex((c) => c.id === card.id);
+                const displayIndex =
+                  origIndex >= 0
+                    ? origIndex + 1
+                    : card.position || filteredIndex + 1;
+
+                return (
+                  <React.Fragment key={card.id}>
+                    {/* Inline "+" кнопка ПЕРЕД карточкой — только для владельца */}
+                    {isOwner && (
+                      <InsertDivider
+                        onClick={() => handleStartInsert(origIndex)}
+                        currentTheme={currentTheme}
+                      />
+                    )}
+
+                    {/* Карточка с dnd-kit sortable */}
+                    <SortableCard
+                      card={card}
+                      displayIndex={displayIndex}
+                      currentTheme={currentTheme}
+                      showContent={showContent}
+                      favoriteCardIds={favoriteCardIds}
+                      onClick={(card) => handleViewCard(card, origIndex)}
+                      onToggleFavorite={toggleCardFavorite}
+                      onEdit={isOwner ? (card) => setEditingCard(card) : null}
+                      onDelete={isOwner ? handleDeleteCard : null}
+                      FrontMediaPreview={FrontMediaPreview}
+                      BackMediaPreview={BackMediaPreview}
+                    />
+                  </React.Fragment>
+                );
+              })}
+            </SortableContext>
+            {/* Кнопка «Добавить карточку» в самом низу — только для владельца */}
+            {isOwner && (
+              <div style={styles.bottomAddCardContainer}>
+                <button
+                  className="nt-set-action-btn nt-set-action-btn-primary"
+                  onClick={() => {
+                    setInsertPosition(null); // null = в конец
+                    setShowAddCard(true);
+                  }}
+                  style={{
+                    ...styles.bottomAddCardBtn,
+                    background: `linear-gradient(135deg, ${currentTheme.success}, ${currentTheme.success})`,
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faPlus}
+                    style={{ marginRight: "6px" }}
+                  />
+                  Добавить карточку
+                </button>
+              </div>
+            )}
+          </div>
+        </DndContext>
+      )}
+
+      {showAddCard && (
+        <AddCardModal
+          setId={parseInt(id)}
+          onClose={() => {
+            setShowAddCard(false);
+            setInsertPosition(null);
+          }}
+          onAdd={handleAddCard}
+          currentTheme={currentTheme}
+          insertPosition={insertPosition}
+        />
+      )}
+
+      {editingCard && (
+        <EditCardModal
+          card={editingCard}
+          onClose={() => setEditingCard(null)}
+          onUpdate={handleUpdateCard}
+          currentTheme={currentTheme}
+          isFavorite={favoriteCardIds.has(editingCard.id)}
+          onToggleFavorite={() => toggleCardFavorite(editingCard.id)}
+        />
+      )}
+
+      {showModeModal && (
+        <ModeSelectModal
+          onClose={() => {
+            setShowModeModal(false);
+          }}
+          onSelectMode={handleStartTraining}
+          currentTheme={currentTheme}
+          loading={trainingLoading}
+        />
+      )}
+
+      <ConfirmModal
+        isOpen={showDeleteCardModal}
+        onClose={() => {
+          setShowDeleteCardModal(false);
+          setDeleteCardId(null);
+        }}
+        onConfirm={confirmDeleteCard}
+        title="Удалить карточку?"
+        message="Это действие удалит карточку навсегда. Отменить будет невозможно."
+        confirmText="Удалить"
+        confirmColor="#e74c3c"
+        loading={deleteCardLoading}
+        currentTheme={currentTheme}
+      />
+
+      {viewingCard && (
+        <ViewCardModal
+          card={viewingCard}
+          index={viewingIndex}
+          onClose={() => setViewingCard(null)}
+          onEdit={handleEditFromView}
+          isFavorite={favoriteCardIds.has(viewingCard.id)}
+          onToggleFavorite={() => toggleCardFavorite(viewingCard.id)}
+          currentTheme={currentTheme}
+        />
+      )}
+    </PageShell>
+  );
+}
+
+/* ============================================================
+   Мини-компоненты медиа для одной стороны (список)
+   ============================================================ */
+
+function FrontMediaPreview({ image, audio, video, currentTheme }) {
+  if (!image && !audio && !video) return null;
+
+  return (
+    <div style={sideMediaStyles.container}>
+      {image && (
+        <img
+          src={mediaApi.getMediaUrl(image)}
+          alt=""
+          style={sideMediaStyles.image}
+          onError={(e) => {
+            e.target.style.display = "none";
+            e.target.nextSibling &&
+              (e.target.nextSibling.style.display = "flex");
+          }}
+        />
+      )}
+      <div
+        style={{
+          ...sideMediaStyles.imagePlaceholder,
+          display: "none",
+        }}
+      >
+        <FontAwesomeIcon
+          icon={faImage}
+          style={{ fontSize: "20px", color: "#999" }}
+        />
+      </div>
+      {audio && (
+        <MiniAudioPlayer audioUrl={audio} currentTheme={currentTheme} />
+      )}
+      {video && (
+        <video
+          controls
+          preload="metadata"
+          src={mediaApi.getMediaUrl(video)}
+          style={sideMediaStyles.video}
+        />
+      )}
+    </div>
+  );
+}
+
+function BackMediaPreview({ image, audio, video, currentTheme }) {
+  if (!image && !audio && !video) return null;
+
+  return (
+    <div style={sideMediaStyles.container}>
+      {image && (
+        <img
+          src={mediaApi.getMediaUrl(image)}
+          alt=""
+          style={sideMediaStyles.image}
+          onError={(e) => {
+            e.target.style.display = "none";
+            e.target.nextSibling &&
+              (e.target.nextSibling.style.display = "flex");
+          }}
+        />
+      )}
+      <div
+        style={{
+          ...sideMediaStyles.imagePlaceholder,
+          display: "none",
+        }}
+      >
+        <FontAwesomeIcon
+          icon={faImage}
+          style={{ fontSize: "20px", color: "#999" }}
+        />
+      </div>
+      {audio && (
+        <MiniAudioPlayer audioUrl={audio} currentTheme={currentTheme} />
+      )}
+      {video && (
+        <video
+          controls
+          preload="metadata"
+          src={mediaApi.getMediaUrl(video)}
+          style={sideMediaStyles.video}
+        />
+      )}
+    </div>
+  );
+}
+
+const sideMediaStyles = {
+  container: {
+    marginTop: "10px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+  },
+  image: {
+    width: "100%",
+    maxHeight: "150px",
+    objectFit: "contain",
+    borderRadius: "6px",
+    display: "block",
+  },
+  imagePlaceholder: {
+    width: "100%",
+    height: "80px",
+    borderRadius: "6px",
+    background: "var(--nt-background-secondary, #f5f5f5)",
+    border: "1px dashed var(--nt-border, #ddd)",
+    display: "none",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  audio: {
+    width: "100%",
+    height: "36px",
+  },
+  video: {
+    width: "100%",
+    maxHeight: "150px",
+    borderRadius: "6px",
+    background: "#000",
+  },
+  // Compact mode styles
+  gridCardCompactMedia: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "6px",
+    padding: "12px",
+  },
+  compactMediaItem: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "28px",
+    height: "28px",
+    background: "var(--nt-background-secondary, #f5f5f5)",
+    border: "1px solid var(--nt-border, #e0e0e0)",
+    borderRadius: "6px",
+  },
+  compactMediaIcon: {
+    fontSize: "13px",
+    color: "var(--nt-text-muted, #999)",
+  },
+  compactMediaLabel: {
+    fontSize: "11px",
+    color: "var(--nt-text-secondary, #666)",
+  },
+  compactMediaEmpty: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    padding: "12px",
+    background: "var(--nt-background-secondary, #f5f5f5)",
+    borderRadius: "6px",
+    border: "1px dashed var(--nt-border, #ddd)",
+  },
+};
+
+/* ============================================================
+   Стили
+   ============================================================ */
+
+const styles = {
+  setHeader: {
+    marginBottom: "20px",
+  },
+  description: {
+    marginTop: "8px",
+  },
+  actions: {
+    display: "flex",
+    gap: "12px",
+  },
+  practiceButton: {
+    padding: "14px 28px",
+    color: "white",
+    border: "none",
+    borderRadius: "8px",
+    fontSize: "16px",
+    cursor: "pointer",
+  },
+  addButton: {
+    padding: "14px 28px",
+    color: "white",
+    border: "none",
+    borderRadius: "8px",
+    fontSize: "16px",
+    cursor: "pointer",
+  },
+  stats: {
+    maxWidth: "1200px",
+    margin: "0 auto 20px",
+    display: "flex",
+    gap: "24px",
+  },
+  viewModeToggle: {
+    display: "flex",
+    gap: "8px",
+    alignItems: "center",
+  },
+  viewModeDivider: {
+    width: "1px",
+    height: "24px",
+    background: "var(--nt-border, #ddd)",
+    margin: "0 4px",
+  },
+  viewModeButton: {
+    width: "40px",
+    height: "40px",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "16px",
+    transition: "all 0.2s",
+  },
+  empty: {
+    textAlign: "center",
+    padding: "60px 20px",
+  },
+  cardsList: {
+    maxWidth: "1200px",
+    margin: "0 auto",
+    display: "flex",
+    flexDirection: "column",
+    gap: "6px",
+  },
+  card: {
+    padding: "20px",
+    borderRadius: "12px",
+    display: "flex",
+    alignItems: "flex-start",
+    gap: "16px",
+    transition:
+      "transform 0.2s, box-shadow 0.2s, border-color 0.2s, opacity 0.2s",
+    position: "relative",
+    border: "2px solid var(--nt-border, #e0e0e0)",
+  },
+  cardNumber: {
+    width: "36px",
+    height: "36px",
+    borderRadius: "50%",
+    color: "white",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "bold",
+    fontSize: "14px",
+    flexShrink: 0,
+    marginTop: "2px",
+  },
+  cardTwoColumns: {
+    flex: 1,
+    display: "flex",
+    gap: "0",
+    minWidth: 0,
+  },
+  cardColumn: {
+    flex: 1,
+    padding: "0 16px",
+    minWidth: 0,
+  },
+  columnHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    marginBottom: "8px",
+  },
+  columnTitle: {
+    fontSize: "12px",
+    fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: "0.5px",
+    color: "var(--nt-text-secondary, #666)",
+  },
+  sideDot: {
+    width: "8px",
+    height: "8px",
+    borderRadius: "50%",
+    flexShrink: 0,
+  },
+  cardSideText: {
+    fontSize: "15px",
+    lineHeight: "1.6",
+    wordBreak: "break-word",
+  },
+  cardTextWithBadges: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    flexWrap: "wrap",
+  },
+  mediaBadges: {
+    display: "flex",
+    gap: "4px",
+    alignItems: "center",
+    flexShrink: 0,
+  },
+  cardColumnDivider: {
+    width: "1px",
+    background: "var(--nt-border, #e0e0e0)",
+    flexShrink: 0,
+  },
+  cardNumberBadge: {
+    fontSize: "13px",
+    fontWeight: "700",
+    color: "white",
+    padding: "4px 10px",
+    borderRadius: "12px",
+  },
+  // Grid режим — кнопка добавления
+  gridAddCard: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "20px",
+  },
+  gridAddCardBtn: {
+    padding: "12px 24px",
+    border: "none",
+    borderRadius: "10px",
+    color: "white",
+    fontWeight: "600",
+    fontSize: "14px",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    transition: "transform 0.15s, box-shadow 0.15s",
+  },
+  cardActions: {
+    display: "flex",
+    gap: "8px",
+    flexShrink: 0,
+    marginTop: "4px",
+  },
+  favButton: {
+    width: "32px",
+    height: "32px",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "14px",
+    transition: "all 0.2s",
+    flexShrink: 0,
+  },
+  editButton: {
+    width: "36px",
+    height: "36px",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "14px",
+    transition: "all 0.2s",
+  },
+  deleteButton: {
+    width: "36px",
+    height: "36px",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "14px",
+    transition: "all 0.2s",
+  },
+  loading: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+    fontSize: "20px",
+  },
+  dropdown: {
+    position: "relative",
+    display: "inline-block",
+  },
+  dropdownContent: {
+    display: "none",
+    position: "absolute",
+    top: "100%",
+    right: 0,
+    minWidth: "220px",
+    boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+    borderRadius: "8px",
+    overflow: "hidden",
+    zIndex: 100,
+  },
+  dropdownItem: {
+    display: "block",
+    width: "100%",
+    padding: "14px 20px",
+    background: "white",
+    border: "none",
+    textAlign: "left",
+    fontSize: "15px",
+    cursor: "pointer",
+  },
+
+  // Поиск
+  searchWrapper: {
+    position: "relative",
+    width: "300px",
+    flexShrink: 0,
+  },
+  searchIcon: {
+    position: "absolute",
+    left: "12px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    fontSize: "14px",
+    color: "var(--nt-text-muted, #999)",
+    pointerEvents: "none",
+  },
+  searchInput: {
+    width: "100%",
+    padding: "8px 60px 8px 36px",
+    border: "2px solid var(--nt-border, #e0e0e0)",
+    borderRadius: "8px",
+    fontSize: "14px",
+    outline: "none",
+    transition: "border-color 0.2s",
+    background: "var(--nt-surface, #fff)",
+    color: "var(--nt-text, #333)",
+  },
+  searchFilterBtn: {
+    position: "absolute",
+    right: "34px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    width: "24px",
+    height: "24px",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "12px",
+    transition: "background 0.2s, color 0.2s",
+  },
+  searchClear: {
+    position: "absolute",
+    right: "6px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    width: "22px",
+    height: "22px",
+    border: "none",
+    borderRadius: "50%",
+    background: "var(--nt-background-secondary, #f0f0f0)",
+    color: "var(--nt-text-muted, #999)",
+    fontSize: "12px",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  // Мини-модалка фильтров поиска
+  searchFilterModal: {
+    position: "absolute",
+    top: "calc(100% + 6px)",
+    left: 0,
+    width: "240px",
+    padding: "12px 14px",
+    borderRadius: "10px",
+    boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+    zIndex: 9999,
+  },
+  searchFilterTitle: {
+    fontSize: "12px",
+    fontWeight: 700,
+    color: "var(--nt-text, #333)",
+    marginBottom: "8px",
+    textTransform: "uppercase",
+    letterSpacing: "0.5px",
+  },
+  searchFilterOption: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    fontSize: "12px",
+    color: "var(--nt-text-secondary, #666)",
+    cursor: "pointer",
+    marginBottom: "4px",
+  },
+  searchFilterDivider: {
+    height: "1px",
+    background: "var(--nt-border, #e0e0e0)",
+    margin: "6px 0",
+  },
+  searchFilterResetBtn: {
+    marginTop: "8px",
+    width: "100%",
+    padding: "6px",
+    border: "1px solid var(--nt-border, #e0e0e0)",
+    borderRadius: "6px",
+    background: "transparent",
+    color: "var(--nt-text-secondary, #666)",
+    fontSize: "11px",
+    cursor: "pointer",
+    transition: "background 0.2s",
+  },
+  searchResultCount: {
+    position: "absolute",
+    right: "32px",
+    bottom: "-18px",
+    fontSize: "10px",
+    color: "var(--nt-text-muted, #999)",
+    fontWeight: 600,
+    pointerEvents: "none",
+  },
+
+  // Кнопка добавления карточки внизу
+  bottomAddCardContainer: {
+    maxWidth: "1200px",
+    margin: "16px auto 0",
+    padding: "0 16px 32px",
+    display: "flex",
+    justifyContent: "center",
+  },
+  bottomAddCardBtn: {
+    padding: "8px 16px",
+    color: "var(--nt-text-inverse, #ffffff)",
+    border: "none",
+    borderRadius: "8px",
+    fontSize: "13px",
+    fontWeight: 600,
+    cursor: "pointer",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    whiteSpace: "nowrap",
+    transition: "opacity 0.2s, transform 0.2s",
+  },
+};
+
+// Стили для header набора
+const detailStyles = {
+  header: {
+    marginBottom: "20px",
+  },
+  titleRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    marginBottom: "8px",
+    flexWrap: "wrap",
+  },
+  cardCountBadge: {
+    fontSize: "14px",
+    color: "var(--nt-text-muted, #999)",
+    background: "var(--nt-background-secondary, #f0f0f0)",
+    padding: "4px 12px",
+    borderRadius: "12px",
+    fontWeight: "500",
+  },
+  description: {
+    marginTop: "4px",
+    fontSize: "14px",
+    lineHeight: "1.5",
+  },
+  actionBar: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: "8px",
+    marginBottom: "16px",
+    flexWrap: "nowrap",
+  },
+  actionBtnCompact: {
+    padding: "8px 14px",
+    color: "var(--nt-text-inverse, #ffffff)",
+    border: "none",
+    borderRadius: "8px",
+    fontSize: "13px",
+    fontWeight: 600,
+    cursor: "pointer",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    whiteSpace: "nowrap",
+    flexShrink: 0,
+    transition: "opacity 0.2s, transform 0.2s",
+  },
+  actionBtnDivider: {
+    width: "1px",
+    height: "24px",
+    background: "var(--nt-border, #e0e0e0)",
+  },
+  viewModeGroup: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+  },
+};
+
+// Добавляем hover эффект для dropdown через CSS-in-JS хак
+const styleElement = document.createElement("style");
+styleElement.textContent = `
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  /* Стили для переключателя видов */
+  .view-mode-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  
+  .view-mode-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s;
+  }
+  
+  /* Стили для grid-режима */
+  .cards-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 14px;
+  }
+
+  .compact-media-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: var(--nt-background-secondary, #f5f5f5);
+    border: 1px solid var(--nt-border, #e0e0e0);
+    border-radius: 6px;
+    font-size: 12px;
+  }
+
+  /* Inline insert zone — без зелёных полосок */
+  .insert-zone {
+    position: relative;
+    min-height: 32px;
+  }
+
+  /* Card hover effect */
+  .nt-detail-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px var(--nt-card-shadow, rgba(0,0,0,0.1));
+  }
+`;
+document.head.appendChild(styleElement);

@@ -1,0 +1,43 @@
+/* 
+ * Design System - Главная точка входа
+ * Импортирует все модули стилей в правильном порядке
+ */
+
+/* 1. Базовые стили */
+@import './base/variables.css';
+@import './base/reset.css';
+@import './base/typography.css';
+
+/* 2. Утилиты */
+@import './utilities/helpers.css';
+@import './utilities/animations.css';
+@import './utilities/themes.css';
+
+/* 3. Макет */
+@import './layout/grid.css';
+@import './layout/spacing.css';
+@import './layout/containers.css';
+
+/* 4. Компоненты */
+@import './components/buttons.css';
+@import './components/inputs.css';
+@import './components/modals.css';
+@import './components/cards.css';
+@import './components/navigation.css';
+
+/* 5. Страницы */
+@import './pages/profile/index.css';
+@import './pages/public-profile.css';
+@import './pages/stats.css';
+@import './pages/favorites.css';
+@import './pages/languages.css';
+@import './pages/guest-landing.css';
+@import './pages/chat.css';
+@import './pages/leaderboard-page.css';
+@import './pages/theme-settings.css';
+@import './pages/dashboard.css';
+@import './pages/training/index.css';
+@import './pages/card-sets/index.css';
+
+/* 6. Компоненты макета */
+@import './pages/header.css';

@@ -1,0 +1,365 @@
+/* 
+ * Training - Practice Page
+ * Стили для режима практики
+ */
+
+.practice-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 16px 0;
+}
+
+.practice-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding: 0 4px;
+}
+
+.practice-back-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.06);
+  color: #666;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.practice-back-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.practice-progress-info {
+  flex: 1;
+  margin: 0 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.practice-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.practice-progress-icon {
+  font-size: 12px;
+  color: #999;
+}
+
+.practice-progress-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+}
+
+.practice-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: #eee;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.practice-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.practice-header-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.practice-header-icon-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.practice-header-icon-btn:hover {
+  transform: scale(1.05);
+}
+
+.practice-score-knew,
+.practice-score-didnt-know {
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.practice-score-knew {
+  background: rgba(39, 174, 96, 0.15);
+  color: #27ae60;
+}
+
+.practice-score-didnt-know {
+  background: rgba(231, 76, 60, 0.15);
+  color: #e74c3c;
+}
+
+.practice-card-area {
+  position: relative;
+  min-height: 220px;
+  margin-bottom: 12px;
+  border-radius: 14px;
+  user-select: none;
+  touch-action: pan-y;
+}
+
+.practice-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  border: 2px solid #e8e8e8;
+  min-height: 220px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  background: #fff;
+}
+
+.practice-card-top {
+  z-index: 2;
+}
+
+.practice-card-text {
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.5;
+  color: #333;
+  word-break: break-word;
+}
+
+.practice-card-image {
+  max-width: 100%;
+  max-height: 100px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.practice-card-audio {
+  width: 100%;
+  max-width: 240px;
+  margin-top: 10px;
+  height: 30px;
+}
+
+.practice-card-video {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.practice-hint {
+  margin-top: 12px;
+  font-size: 11px;
+  color: #bbb;
+}
+
+.practice-buttons-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.practice-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+}
+
+.practice-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.practice-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.practice-btn-didnt-know {
+  background: #e74c3c;
+}
+
+.practice-btn-knew {
+  background: #27ae60;
+}
+
+.practice-keyboard-hint {
+  margin-top: 20px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.practice-keyboard-hint p {
+  margin: 0 0 8px 0;
+}
+
+.practice-keyboard-hint ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.practice-keyboard-hint li {
+  margin-bottom: 4px;
+}
+
+.practice-keyboard-hint kbd {
+  padding: 2px 6px;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 12px;
+}
+
+/* Practice Page - Finish Screen */
+.practice-finish-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 20px;
+}
+
+.practice-finish-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  padding: 40px;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+}
+
+.practice-finish-icon {
+  font-size: 64px;
+  color: var(--nt-primary, #667eea);
+  margin-bottom: 16px;
+}
+
+.practice-finish-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 16px 0 8px;
+  color: var(--nt-text, #333);
+}
+
+.practice-finish-subtitle {
+  font-size: 16px;
+  color: var(--nt-text-secondary, #666);
+  margin: 0 0 24px;
+}
+
+.practice-finish-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.practice-finish-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.practice-finish-stat-value {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.practice-finish-stat-correct {
+  color: #27ae60;
+}
+
+.practice-finish-stat-incorrect {
+  color: #e74c3c;
+}
+
+.practice-finish-stat-accuracy {
+  color: var(--nt-primary, #667eea);
+}
+
+.practice-finish-stat-label {
+  font-size: 14px;
+  color: var(--nt-text-secondary, #666);
+}
+
+.practice-finish-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.practice-finish-btn {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.practice-finish-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.practice-finish-btn-primary {
+  background: linear-gradient(135deg, var(--nt-primary, #667eea), var(--nt-secondary, #764ba2));
+  color: white;
+}
+
+.practice-finish-btn-secondary {
+  background: #f0f0f0;
+  color: #333;
+}

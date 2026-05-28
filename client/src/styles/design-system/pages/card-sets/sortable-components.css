@@ -1,0 +1,280 @@
+/* 
+ * Card Sets - Sortable Components Styles
+ * Стили для сортируемых компонентов карточек
+ */
+
+/* ===== SortableCard & SortableGridCard ===== */
+
+.sortable-card-container {
+  position: relative;
+  transition: all var(--transition-base);
+  cursor: grab;
+}
+
+.sortable-card-container:active {
+  cursor: grabbing;
+}
+
+.sortable-card-drag-handle {
+  position: absolute;
+  top: var(--spacing-sm);
+  left: var(--spacing-sm);
+  cursor: grab;
+  opacity: 0.3;
+  transition: opacity var(--transition-base);
+  font-size: 16px;
+}
+
+.sortable-card-drag-handle:hover {
+  opacity: 0.7;
+}
+
+/* Стили для списка карточек */
+.card-set-cards-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+/* Две колонки для лицевой и обратной стороны */
+.card-set-card-two-columns {
+  flex: 1;
+  display: flex;
+  gap: 0;
+  min-width: 0;
+  align-items: stretch;
+}
+
+.card-set-card-column {
+  flex: 1;
+  padding: 0 var(--spacing-md);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.card-set-card-column:first-child {
+  padding-left: 0;
+}
+
+.card-set-card-column:last-child {
+  padding-right: 0;
+}
+
+.card-set-column-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+.card-set-column-title {
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--theme-text-secondary);
+}
+
+.card-set-card-text-with-badges {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.card-set-card-column-divider {
+  width: 1px;
+  background: var(--theme-border);
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+/* Бейджи медиа */
+.card-set-media-badges {
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.card-set-compact-media-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  border-radius: var(--radius-md);
+  background: var(--theme-background-secondary);
+  transition: transform var(--transition-base);
+}
+
+.card-set-compact-media-item:hover {
+  transform: scale(1.1);
+}
+
+.card-set-compact-media-icon {
+  font-size: 12px;
+  color: var(--theme-text-secondary);
+}
+
+/* Кнопки действий карточки */
+.card-set-card-actions {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-xs);
+  flex-shrink: 0;
+  align-items: center;
+  margin-left: auto;
+}
+
+/* ===== SortableGridCard (плитка) ===== */
+
+.sortable-grid-card {
+  position: relative;
+  transition: all var(--transition-base);
+  cursor: pointer;
+}
+
+.sortable-grid-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Номер карточки в левом верхнем углу */
+.sortable-grid-card .card-number-badge {
+  position: absolute;
+  top: var(--spacing-sm);
+  left: var(--spacing-sm);
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-xs);
+  flex-shrink: 0;
+  z-index: 5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Кнопки действий в правом верхнем углу */
+.card-set-action-buttons {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  display: flex;
+  gap: 4px;
+  z-index: 10;
+}
+
+/* Тело карточки */
+.card-set-card-body {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding-top: calc(28px + var(--spacing-sm));
+}
+
+/* Секции сторон карточки */
+.card-set-side-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.card-set-side-label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.card-set-side-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.card-set-side-label-text {
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.card-set-side-text {
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  word-break: break-word;
+  padding-left: 12px;
+}
+
+/* Разделитель между сторонами */
+.card-set-divider {
+  height: 1px;
+  background: var(--theme-border);
+  margin: var(--spacing-xs) 0;
+}
+
+/* Медиа ряд */
+.card-set-media-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  align-items: center;
+  padding-top: var(--spacing-xs);
+}
+
+.card-set-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  background: var(--theme-background-secondary);
+  flex-shrink: 0;
+  transition: transform var(--transition-base);
+}
+
+.card-set-thumb:hover {
+  transform: scale(1.05);
+}
+
+.card-set-video-thumb {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  background: #000;
+  flex-shrink: 0;
+}
+
+/* Иконки медиа в компактном режиме */
+.card-set-icon-row {
+  display: flex;
+  gap: var(--spacing-xs);
+  padding-top: 2px;
+}
+
+.card-set-icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--radius-sm);
+  background: var(--theme-background-secondary);
+  flex-shrink: 0;
+  transition: transform var(--transition-base);
+}
+
+.card-set-icon-badge:hover {
+  transform: scale(1.1);
+}
+
+.card-set-icon-badge-inner {
+  font-size: 11px;
+}

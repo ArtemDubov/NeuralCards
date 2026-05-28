@@ -1,0 +1,253 @@
+/* 
+ * Training - Common Styles
+ * Общие стили для всех режимов тренировок
+ */
+
+/* Контейнер страницы выбора режима тренировки */
+.training-mode-select-container {
+  margin: 0 auto;
+}
+
+.training-mode-header {
+  margin-bottom: 28px;
+}
+
+.training-mode-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--nt-text, #333);
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+}
+
+.training-mode-subtitle {
+  color: var(--nt-text-secondary, #666);
+  font-size: 15px;
+  margin-top: 4px;
+}
+
+/* Сетка режимов тренировки */
+.training-modes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+/* Кнопка запуска в карточке режима */
+.training-mode-action {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ========================================
+   ОБЩИЕ СТИЛИ ЭКРАНОВ ЗАВЕРШЕНИЯ ТРЕНИРОВОК
+   Используются всеми режимами: Quiz, Practice, Marathon, Dictation, Matching
+   ======================================== */
+
+/* Контейнер экрана завершения */
+.quiz-complete-screen,
+.practice-complete-screen,
+.marathon-complete-screen,
+.dictation-complete-screen,
+.matching-complete-screen {
+  text-align: center;
+  padding: 40px 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Заголовок экрана завершения */
+.quiz-complete-title,
+.practice-complete-title,
+.marathon-complete-title,
+.dictation-complete-title,
+.matching-complete-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--nt-text, #333);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Основная статистика (большие цифры) */
+.quiz-main-stat,
+.practice-main-stat,
+.marathon-main-stat,
+.dictation-main-stat,
+.matching-main-stat {
+  margin-bottom: 32px;
+}
+
+/* Большие цифры счета/очков */
+.quiz-big-score,
+.practice-big-score,
+.marathon-big-score,
+.dictation-big-score,
+.matching-big-score {
+  display: block;
+  font-size: 64px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--nt-primary, #667eea), var(--nt-secondary, #764ba2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+}
+
+/* Подпись к большим цифрам */
+.quiz-big-label,
+.practice-big-label,
+.marathon-big-label,
+.dictation-big-label,
+.matching-big-label {
+  display: block;
+  font-size: 16px;
+  color: var(--nt-text-secondary, #666);
+  margin-top: 8px;
+}
+
+/* Сетка статистики */
+.quiz-stats,
+.practice-stats,
+.marathon-stats,
+.dictation-stats,
+.matching-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+/* Элемент статистики */
+.quiz-stat-item,
+.practice-stat-item,
+.marathon-stat-item,
+.dictation-stat-item,
+.matching-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 12px;
+}
+
+/* Значение статистики */
+.quiz-stat-value,
+.practice-stat-value,
+.marathon-stat-value,
+.dictation-stat-value,
+.matching-stat-value {
+  font-size: 32px;
+  font-weight: 700;
+}
+
+/* Подпись статистики */
+.quiz-stat-label,
+.practice-stat-label,
+.marathon-stat-label,
+.dictation-stat-label,
+.matching-stat-label {
+  font-size: 14px;
+  color: var(--nt-text-secondary, #666);
+}
+
+/* Контейнер кнопок действий */
+.quiz-actions,
+.practice-actions,
+.marathon-actions,
+.dictation-actions,
+.matching-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Кнопки действий */
+.quiz-action-btn,
+.practice-action-btn,
+.marathon-action-btn,
+.dictation-action-btn,
+.matching-action-btn {
+  padding: 14px 28px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.quiz-action-btn:hover,
+.practice-action-btn:hover,
+.marathon-action-btn:hover,
+.dictation-action-btn:hover,
+.matching-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Первичная кнопка действия */
+.quiz-action-primary,
+.practice-action-primary,
+.marathon-action-primary,
+.dictation-action-primary,
+.matching-action-primary {
+  background: linear-gradient(135deg, var(--nt-primary, #667eea), var(--nt-secondary, #764ba2));
+  color: white;
+}
+
+/* Вторичная кнопка действия */
+.quiz-action-secondary,
+.practice-action-secondary,
+.marathon-action-secondary,
+.dictation-action-secondary,
+.matching-action-secondary {
+  background: #f0f0f0;
+  color: #333;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .quiz-stats,
+  .practice-stats,
+  .marathon-stats,
+  .dictation-stats,
+  .matching-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .quiz-actions,
+  .practice-actions,
+  .marathon-actions,
+  .dictation-actions,
+  .matching-actions {
+    flex-direction: column;
+  }
+  
+  .quiz-action-btn,
+  .practice-action-btn,
+  .marathon-action-btn,
+  .dictation-action-btn,
+  .matching-action-btn {
+    width: 100%;
+  }
+  
+  .quiz-big-score,
+  .practice-big-score,
+  .marathon-big-score,
+  .dictation-big-score,
+  .matching-big-score {
+    font-size: 48px;
+  }
+}

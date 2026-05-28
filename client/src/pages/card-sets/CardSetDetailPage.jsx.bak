@@ -1,0 +1,1463 @@
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useTheme } from "../../contexts/ThemeContext";
+import { cardSetsApi } from "../../features/cardSets/api/cardSetsApi";
+import { trainingApi } from "../../features/training/api/trainingApi";
+import { CardMediaPreview, mediaApi } from "../../features/media";
+import PageShell from "../../components/layout/PageShell";
+import EditCardModal from "./EditCardModal";
+import ModeSelectModal from "../../components/common/ModeSelectModal";
+import ConfirmModal from "../../components/common/ConfirmModal";
+import TagsOverflow from "../../components/common/TagsOverflow";
+import {
+  faPen,
+  faTrash,
+  faList,
+  faThLarge,
+  faImage,
+  faXmark,
+  faMicrophone,
+  faVideo,
+  faEye,
+  faEyeSlash,
+  faPlus,
+  faBolt,
+} from "../../utils/icons";
+
+export default function CardSetDetailPage() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { currentTheme } = useTheme();
+  const [set, setSet] = useState(null);
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showAddCard, setShowAddCard] = useState(false);
+  const [editingCard, setEditingCard] = useState(null);
+  const [viewMode, setViewMode] = useState("list"); // 'list' или 'grid'
+  const [mediaDetailMode, setMediaDetailMode] = useState("compact"); // 'compact' или 'full'
+  const [showModeModal, setShowModeModal] = useState(false);
+  const [showDeleteCardModal, setShowDeleteCardModal] = useState(false);
+  const [deleteCardId, setDeleteCardId] = useState(null);
+  const [deleteCardLoading, setDeleteCardLoading] = useState(false);
+  const [trainingLoading, setTrainingLoading] = useState(false);
+
+  const getCardWord = (count) => {
+    const lastDigit = count % 10;
+    const lastTwoDigits = count % 100;
+    if (lastTwoDigits >= 11 && lastTwoDigits <= 19) return "карточек";
+    if (lastDigit === 1) return "карточка";
+    if (lastDigit >= 2 && lastDigit <= 4) return "карточки";
+    return "карточек";
+  };
+
+  const handleStartTraining = (mode) => {
+    setTrainingLoading(true);
+    trainingApi
+      .createSession({
+        card_set_id: parseInt(id),
+        mode: mode,
+      })
+      .then((session) => {
+        if (mode === "interval") {
+          navigate("/training/interval");
+        } else {
+          navigate(`/training/${mode}/${session.data.id}`);
+        }
+      })
+      .catch((error) => {
+        alert(
+          "Ошибка при запуске тренировки: " +
+            (error.response?.data?.detail || error.message),
+        );
+      })
+      .finally(() => {
+        setTrainingLoading(false);
+        setShowModeModal(false);
+      });
+  };
+
+  const loadSet = React.useCallback(async () => {
+    try {
+      const [setResponse, cardsResponse] = await Promise.all([
+        cardSetsApi.getCardSet(id),
+        cardSetsApi.getCards(id),
+      ]);
+      setSet(setResponse.data);
+      setCards(cardsResponse.data);
+    } catch (error) {
+      console.error("Error loading set:", error);
+      alert("Ошибка загрузки набора");
+      navigate("/card-sets");
+    } finally {
+      setLoading(false);
+    }
+  }, [id, navigate]);
+
+  useEffect(() => {
+    loadSet();
+  }, [loadSet]);
+
+  const handleDeleteCard = async (cardId) => {
+    setDeleteCardId(cardId);
+    setShowDeleteCardModal(true);
+  };
+
+  const confirmDeleteCard = async () => {
+    if (!deleteCardId) return;
+    setDeleteCardLoading(true);
+    try {
+      await cardSetsApi.deleteCard(deleteCardId);
+      setCards(cards.filter((c) => c.id !== deleteCardId));
+    } catch (error) {
+      alert("Ошибка при удалении");
+    } finally {
+      setDeleteCardLoading(false);
+      setShowDeleteCardModal(false);
+      setDeleteCardId(null);
+    }
+  };
+
+  const handleAddCard = (newCard) => {
+    setCards([...cards, newCard]);
+    setShowAddCard(false);
+  };
+
+  const handleUpdateCard = (updatedCard) => {
+    setCards(cards.map((c) => (c.id === updatedCard.id ? updatedCard : c)));
+    setEditingCard(null);
+  };
+
+  if (loading) {
+    return (
+      <div style={{ ...styles.loading, color: currentTheme.text }}>
+        Загрузка...
+      </div>
+    );
+  }
+
+  if (!set) {
+    return (
+      <div style={{ ...styles.loading, color: currentTheme.text }}>
+        Набор не найден
+      </div>
+    );
+  }
+
+  return (
+    <PageShell currentTheme={currentTheme}>
+      {/* Header набора */}
+      <div style={detailStyles.header}>
+        <div style={detailStyles.titleRow}>
+          <h1 style={{ color: currentTheme.text, margin: 0 }}>{set.title}</h1>
+          <span style={detailStyles.cardCountBadge}>
+            {cards.length} {getCardWord(cards.length)}
+          </span>
+          <button
+            onClick={() => setShowModeModal(true)}
+            disabled={trainingLoading || cards.length === 0}
+            style={{
+              ...detailStyles.trainButton,
+              background: `linear-gradient(135deg, ${currentTheme.primary}, ${currentTheme.secondary})`,
+              opacity: trainingLoading || cards.length === 0 ? 0.6 : 1,
+            }}
+          >
+            <FontAwesomeIcon icon={faBolt} style={{ marginRight: "6px" }} />
+            {trainingLoading ? "Запуск..." : "Тренироваться"}
+          </button>
+        </div>
+        {set.description && (
+          <p
+            style={{
+              ...detailStyles.description,
+              color: currentTheme.textSecondary,
+            }}
+          >
+            {set.description}
+          </p>
+        )}
+        {/* Теги */}
+        {set.tags && set.tags.length > 0 && (
+          <TagsOverflow
+            tags={set.tags.map((t) => t.name)}
+            maxVisible={5}
+            currentTheme={currentTheme}
+          />
+        )}
+      </div>
+
+      {/* Панель действий: кнопка добавления + переключатель видов */}
+      <div style={detailStyles.actionBar}>
+        <button
+          onClick={() => setShowAddCard(true)}
+          style={{
+            ...detailStyles.addCardButton,
+            background: currentTheme.success,
+          }}
+        >
+          <FontAwesomeIcon icon={faPlus} style={{ marginRight: "6px" }} />
+          Добавить карточку
+        </button>
+
+        <div style={detailStyles.viewModeGroup}>
+          {/* Переключатель видов */}
+          <div style={styles.viewModeToggle}>
+            <button
+              onClick={() => setViewMode("list")}
+              style={{
+                ...styles.viewModeButton,
+                background:
+                  viewMode === "list"
+                    ? currentTheme.primary
+                    : currentTheme.backgroundSecondary,
+                color: viewMode === "list" ? "#fff" : currentTheme.text,
+              }}
+              title="Список"
+            >
+              <FontAwesomeIcon icon={faList} />
+            </button>
+            <button
+              onClick={() => setViewMode("grid")}
+              style={{
+                ...styles.viewModeButton,
+                background:
+                  viewMode === "grid"
+                    ? currentTheme.primary
+                    : currentTheme.backgroundSecondary,
+                color: viewMode === "grid" ? "#fff" : currentTheme.text,
+              }}
+              title="Плитка"
+            >
+              <FontAwesomeIcon icon={faThLarge} />
+            </button>
+
+            {/* Разделитель */}
+            <div style={styles.viewModeDivider} />
+
+            {/* Переключатель детальности медиа */}
+            <button
+              onClick={() =>
+                setMediaDetailMode(
+                  mediaDetailMode === "compact" ? "full" : "compact",
+                )
+              }
+              style={{
+                ...styles.viewModeButton,
+                background:
+                  mediaDetailMode === "full"
+                    ? currentTheme.success
+                    : currentTheme.backgroundSecondary,
+                color: mediaDetailMode === "full" ? "#fff" : currentTheme.text,
+              }}
+              title={
+                mediaDetailMode === "full"
+                  ? "Частичное отображение медиа"
+                  : "Полное отображение медиа"
+              }
+            >
+              <FontAwesomeIcon
+                icon={mediaDetailMode === "full" ? faEye : faEyeSlash}
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {cards.length === 0 ? (
+        <div style={{ ...styles.empty, color: currentTheme.textSecondary }}>
+          <p>Нет карточек</p>
+          <p>Добавьте первую карточку!</p>
+        </div>
+      ) : viewMode === "grid" ? (
+        // Grid режим
+        <div className="cards-grid">
+          {cards.map((card, index) => (
+            <div
+              key={card.id}
+              className="card-grid-item"
+              style={{
+                ...styles.gridCard,
+                background: currentTheme.surface,
+                boxShadow: `0 2px 8px ${currentTheme.cardShadow}`,
+              }}
+            >
+              {/* Шапка карточки: номер + действия */}
+              <div style={styles.gridCardHeader}>
+                <span style={styles.cardNumberBadge}>#{index + 1}</span>
+                <div style={styles.gridCardActions}>
+                  <button
+                    onClick={() => setEditingCard(card)}
+                    style={{
+                      ...styles.iconButtonSmall,
+                      background: `${currentTheme.primary}15`,
+                      color: currentTheme.primary,
+                    }}
+                    title="Редактировать"
+                  >
+                    <FontAwesomeIcon icon={faPen} />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteCard(card.id)}
+                    style={{
+                      ...styles.iconButtonSmall,
+                      background: `${currentTheme.error}15`,
+                      color: currentTheme.error,
+                    }}
+                    title="Удалить"
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Лицевая сторона */}
+              <div style={styles.gridCardSide}>
+                <div style={styles.sideLabel}>
+                  <span
+                    style={{
+                      ...styles.sideDot,
+                      background: currentTheme.primary,
+                    }}
+                  />
+                  Лицевая
+                </div>
+                <div style={styles.gridCardText}>{card.front}</div>
+              </div>
+
+              {/* Обратная сторона */}
+              <div style={styles.gridCardSide}>
+                <div style={styles.sideLabel}>
+                  <span
+                    style={{
+                      ...styles.sideDot,
+                      background: currentTheme.success,
+                    }}
+                  />
+                  Обратная
+                </div>
+                <div
+                  style={{
+                    ...styles.gridCardText,
+                    color: currentTheme.success,
+                  }}
+                >
+                  {card.back}
+                </div>
+              </div>
+
+              {/* Медиа превью */}
+              <CardMediaPreview
+                frontImage={card.front_image}
+                frontAudio={card.front_audio}
+                frontVideo={card.front_video}
+                backImage={card.back_image}
+                backAudio={card.back_audio}
+                backVideo={card.back_video}
+                mode={mediaDetailMode}
+                currentTheme={currentTheme}
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        // Список режим — лицевая слева, обратная справа
+        <div style={styles.cardsList}>
+          {cards.map((card, index) => (
+            <div
+              key={card.id}
+              style={{
+                ...styles.card,
+                background: currentTheme.surface,
+                boxShadow: `0 2px 8px ${currentTheme.cardShadow}`,
+              }}
+            >
+              {/* Номер карточки */}
+              <div
+                style={{
+                  ...styles.cardNumber,
+                  background: `linear-gradient(135deg, ${currentTheme.primary}, ${currentTheme.secondary})`,
+                }}
+              >
+                {index + 1}
+              </div>
+
+              {/* Контент: две колонки */}
+              <div style={styles.cardTwoColumns}>
+                {/* Лицевая сторона — ЛЕВАЯ колонка */}
+                <div style={styles.cardColumn}>
+                  <div style={styles.columnHeader}>
+                    <span
+                      style={{
+                        ...styles.sideDot,
+                        background: currentTheme.primary,
+                      }}
+                    />
+                    <span style={styles.columnTitle}>Лицевая</span>
+                  </div>
+                  <div
+                    style={{
+                      ...styles.cardSideText,
+                      color: currentTheme.text,
+                    }}
+                  >
+                    {card.front}
+                  </div>
+                  {/* Медиа лицевой стороны */}
+                  <FrontMediaPreview
+                    image={card.front_image}
+                    audio={card.front_audio}
+                    video={card.front_video}
+                    currentTheme={currentTheme}
+                  />
+                </div>
+
+                {/* Разделитель */}
+                <div style={styles.cardColumnDivider} />
+
+                {/* Обратная сторона — ПРАВАЯ колонка */}
+                <div style={styles.cardColumn}>
+                  <div style={styles.columnHeader}>
+                    <span
+                      style={{
+                        ...styles.sideDot,
+                        background: currentTheme.success,
+                      }}
+                    />
+                    <span style={styles.columnTitle}>Обратная</span>
+                  </div>
+                  <div
+                    style={{
+                      ...styles.cardSideText,
+                      color: currentTheme.success,
+                    }}
+                  >
+                    {card.back}
+                  </div>
+                  {/* Медиа обратной стороны */}
+                  <BackMediaPreview
+                    image={card.back_image}
+                    audio={card.back_audio}
+                    video={card.back_video}
+                    currentTheme={currentTheme}
+                  />
+                </div>
+              </div>
+
+              {/* Кнопки действий */}
+              <div style={styles.cardActions}>
+                <button
+                  onClick={() => setEditingCard(card)}
+                  style={{
+                    ...styles.editButton,
+                    background: `${currentTheme.primary}15`,
+                    color: currentTheme.primary,
+                  }}
+                  title="Редактировать"
+                >
+                  <FontAwesomeIcon icon={faPen} />
+                </button>
+                <button
+                  onClick={() => handleDeleteCard(card.id)}
+                  style={{
+                    ...styles.deleteButton,
+                    background: `${currentTheme.error}15`,
+                    color: currentTheme.error,
+                  }}
+                  title="Удалить"
+                >
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {showAddCard && (
+        <AddCardModal
+          setId={parseInt(id)}
+          onClose={() => setShowAddCard(false)}
+          onAdd={handleAddCard}
+          currentTheme={currentTheme}
+        />
+      )}
+
+      {editingCard && (
+        <EditCardModal
+          card={editingCard}
+          onClose={() => setEditingCard(null)}
+          onUpdate={handleUpdateCard}
+          currentTheme={currentTheme}
+        />
+      )}
+
+      {showModeModal && (
+        <ModeSelectModal
+          onClose={() => {
+            setShowModeModal(false);
+          }}
+          onSelectMode={handleStartTraining}
+          currentTheme={currentTheme}
+          loading={trainingLoading}
+        />
+      )}
+
+      <ConfirmModal
+        isOpen={showDeleteCardModal}
+        onClose={() => {
+          setShowDeleteCardModal(false);
+          setDeleteCardId(null);
+        }}
+        onConfirm={confirmDeleteCard}
+        title="Удалить карточку?"
+        message="Это действие удалит карточку навсегда. Отменить будет невозможно."
+        confirmText="Удалить"
+        confirmColor="#e74c3c"
+        loading={deleteCardLoading}
+        currentTheme={currentTheme}
+      />
+    </PageShell>
+  );
+}
+
+function AddCardModal({ setId, onClose, onAdd, currentTheme }) {
+  const [front, setFront] = useState("");
+  const [back, setBack] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // Медиа
+  const [frontImage, setFrontImage] = useState(null);
+  const [frontAudio, setFrontAudio] = useState(null);
+  const [frontVideo, setFrontVideo] = useState(null);
+  const [backImage, setBackImage] = useState(null);
+  const [backAudio, setBackAudio] = useState(null);
+  const [backVideo, setBackVideo] = useState(null);
+
+  const [uploading, setUploading] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const response = await cardSetsApi.createCard(setId, {
+        front,
+        back,
+        front_image: frontImage,
+        front_audio: frontAudio,
+        front_video: frontVideo,
+        back_image: backImage,
+        back_audio: backAudio,
+        back_video: backVideo,
+      });
+      onAdd(response.data);
+    } catch (error) {
+      alert("Ошибка: " + (error.response?.data?.detail || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleMediaUpload = async (side, type, file) => {
+    setUploading(`${side}-${type}`);
+    try {
+      let response;
+      if (type === "image") {
+        response = await mediaApi.uploadImage(file, side);
+        if (side === "front") setFrontImage(response.file_url);
+        else setBackImage(response.file_url);
+      } else if (type === "audio") {
+        response = await mediaApi.uploadAudio(file, side);
+        if (side === "front") setFrontAudio(response.file_url);
+        else setBackAudio(response.file_url);
+      } else if (type === "video") {
+        response = await mediaApi.uploadVideo(file, side);
+        if (side === "front") setFrontVideo(response.file_url);
+        else setBackVideo(response.file_url);
+      }
+    } catch (error) {
+      alert(
+        "Ошибка загрузки: " + (error.response?.data?.detail || error.message),
+      );
+    } finally {
+      setUploading(null);
+    }
+  };
+
+  const handleRemoveMedia = (side, type) => {
+    if (side === "front") {
+      if (type === "image") setFrontImage(null);
+      else if (type === "audio") setFrontAudio(null);
+      else if (type === "video") setFrontVideo(null);
+    } else {
+      if (type === "image") setBackImage(null);
+      else if (type === "audio") setBackAudio(null);
+      else if (type === "video") setBackVideo(null);
+    }
+  };
+
+  const MediaButton = ({ side, type, icon, hasMedia, color }) => {
+    const isUploading = uploading === `${side}-${type}`;
+
+    return (
+      <>
+        <input
+          type="file"
+          accept={`${type}/*`}
+          onChange={(e) => {
+            if (e.target.files[0]) {
+              handleMediaUpload(side, type, e.target.files[0]);
+            }
+          }}
+          disabled={isUploading}
+          style={{ display: "none" }}
+          id={`add-upload-${side}-${type}`}
+        />
+        <label
+          htmlFor={`add-upload-${side}-${type}`}
+          style={{
+            width: "32px",
+            height: "32px",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "12px",
+            background: hasMedia ? color : currentTheme.surface,
+            color: hasMedia ? "white" : currentTheme.text,
+            opacity: isUploading ? 0.6 : 1,
+          }}
+          title={`Загрузить ${type}`}
+        >
+          {isUploading ? "⏳" : <FontAwesomeIcon icon={icon} />}
+        </label>
+        {hasMedia && (
+          <button
+            onClick={() => handleRemoveMedia(side, type)}
+            style={{
+              width: "20px",
+              height: "20px",
+              borderRadius: "50%",
+              background: "#e74c3c",
+              color: "white",
+              border: "none",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "10px",
+            }}
+            title="Удалить"
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
+        )}
+      </>
+    );
+  };
+
+  const addModalStyles = {
+    overlay: {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: "rgba(0,0,0,0.5)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000,
+    },
+    modal: {
+      padding: "24px",
+      borderRadius: "16px",
+      width: "100%",
+      maxWidth: "900px",
+      maxHeight: "90vh",
+      overflowY: "auto",
+      background: currentTheme.surface,
+      color: currentTheme.text,
+    },
+    header: {
+      marginBottom: "20px",
+    },
+    twoColumns: {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr",
+      gap: "20px",
+    },
+    column: {
+      display: "flex",
+      flexDirection: "column",
+      gap: "12px",
+    },
+    columnTitle: {
+      fontSize: "14px",
+      fontWeight: "600",
+      marginBottom: "8px",
+    },
+    input: {
+      width: "100%",
+      padding: "10px 12px",
+      border: `2px solid ${currentTheme.border}`,
+      borderRadius: "8px",
+      fontSize: "14px",
+      background: currentTheme.background,
+      color: currentTheme.text,
+      resize: "vertical",
+      minHeight: "60px",
+    },
+    mediaSection: {
+      padding: "12px",
+      background: currentTheme.backgroundSecondary,
+      borderRadius: "8px",
+    },
+    mediaButtons: {
+      display: "flex",
+      gap: "6px",
+      flexWrap: "wrap",
+      marginTop: "8px",
+    },
+    mediaPreview: {
+      display: "flex",
+      alignItems: "center",
+      gap: "8px",
+      marginTop: "8px",
+      padding: "8px",
+      background: currentTheme.surface,
+      borderRadius: "6px",
+      fontSize: "12px",
+    },
+    actions: {
+      display: "flex",
+      gap: "12px",
+      justifyContent: "flex-end",
+      marginTop: "24px",
+      paddingTop: "20px",
+      borderTop: `1px solid ${currentTheme.border}`,
+    },
+    cancelButton: {
+      padding: "10px 20px",
+      border: "none",
+      borderRadius: "8px",
+      cursor: "pointer",
+      background: currentTheme.backgroundSecondary,
+      color: currentTheme.text,
+      fontSize: "14px",
+    },
+    submitButton: {
+      padding: "10px 24px",
+      color: "white",
+      border: "none",
+      borderRadius: "8px",
+      cursor: "pointer",
+      background: `linear-gradient(135deg, ${currentTheme.primary}, ${currentTheme.secondary})`,
+      fontSize: "14px",
+    },
+  };
+
+  return (
+    <div style={addModalStyles.overlay}>
+      <div style={addModalStyles.modal}>
+        <h2
+          style={{
+            ...addModalStyles.header,
+            color: currentTheme.text,
+            margin: 0,
+          }}
+        >
+          Добавить карточку
+        </h2>
+
+        <form onSubmit={handleSubmit}>
+          <div style={addModalStyles.twoColumns}>
+            {/* Лицевая сторона */}
+            <div style={addModalStyles.column}>
+              <div
+                style={{
+                  ...addModalStyles.columnTitle,
+                  color: currentTheme.primary,
+                }}
+              >
+                📍 Лицевая сторона
+              </div>
+
+              <textarea
+                value={front}
+                onChange={(e) => setFront(e.target.value)}
+                style={addModalStyles.input}
+                placeholder="Вопрос *"
+                required
+              />
+
+              <div style={addModalStyles.mediaSection}>
+                <div
+                  style={{
+                    fontSize: "12px",
+                    color: currentTheme.textSecondary,
+                    marginBottom: "8px",
+                  }}
+                >
+                  Медиа:
+                </div>
+                <div style={addModalStyles.mediaButtons}>
+                  <MediaButton
+                    side="front"
+                    type="image"
+                    icon={faImage}
+                    hasMedia={!!frontImage}
+                    color="#3498db"
+                  />
+                  <MediaButton
+                    side="front"
+                    type="audio"
+                    icon={faMicrophone}
+                    hasMedia={!!frontAudio}
+                    color="#2ecc71"
+                  />
+                  <MediaButton
+                    side="front"
+                    type="video"
+                    icon={faVideo}
+                    hasMedia={!!frontVideo}
+                    color="#e74c3c"
+                  />
+                </div>
+                {frontImage && (
+                  <div style={addModalStyles.mediaPreview}>
+                    <img
+                      src={mediaApi.getMediaUrl(frontImage)}
+                      alt="front"
+                      style={{ maxHeight: "80px", borderRadius: "4px" }}
+                    />
+                  </div>
+                )}
+                {frontAudio && (
+                  <div style={addModalStyles.mediaPreview}>
+                    <audio
+                      controls
+                      src={mediaApi.getMediaUrl(frontAudio)}
+                      style={{ height: "30px" }}
+                    />
+                  </div>
+                )}
+                {frontVideo && (
+                  <div style={addModalStyles.mediaPreview}>
+                    <video
+                      controls
+                      src={mediaApi.getMediaUrl(frontVideo)}
+                      style={{ maxHeight: "80px", borderRadius: "4px" }}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Обратная сторона */}
+            <div style={addModalStyles.column}>
+              <div
+                style={{
+                  ...addModalStyles.columnTitle,
+                  color: currentTheme.success,
+                }}
+              >
+                ✅ Обратная сторона
+              </div>
+
+              <textarea
+                value={back}
+                onChange={(e) => setBack(e.target.value)}
+                style={addModalStyles.input}
+                placeholder="Ответ *"
+                required
+              />
+
+              <div style={addModalStyles.mediaSection}>
+                <div
+                  style={{
+                    fontSize: "12px",
+                    color: currentTheme.textSecondary,
+                    marginBottom: "8px",
+                  }}
+                >
+                  Медиа:
+                </div>
+                <div style={addModalStyles.mediaButtons}>
+                  <MediaButton
+                    side="back"
+                    type="image"
+                    icon={faImage}
+                    hasMedia={!!backImage}
+                    color="#3498db"
+                  />
+                  <MediaButton
+                    side="back"
+                    type="audio"
+                    icon={faMicrophone}
+                    hasMedia={!!backAudio}
+                    color="#2ecc71"
+                  />
+                  <MediaButton
+                    side="back"
+                    type="video"
+                    icon={faVideo}
+                    hasMedia={!!backVideo}
+                    color="#e74c3c"
+                  />
+                </div>
+                {backImage && (
+                  <div style={addModalStyles.mediaPreview}>
+                    <img
+                      src={mediaApi.getMediaUrl(backImage)}
+                      alt="back"
+                      style={{ maxHeight: "80px", borderRadius: "4px" }}
+                    />
+                  </div>
+                )}
+                {backAudio && (
+                  <div style={addModalStyles.mediaPreview}>
+                    <audio
+                      controls
+                      src={mediaApi.getMediaUrl(backAudio)}
+                      style={{ height: "30px" }}
+                    />
+                  </div>
+                )}
+                {backVideo && (
+                  <div style={addModalStyles.mediaPreview}>
+                    <video
+                      controls
+                      src={mediaApi.getMediaUrl(backVideo)}
+                      style={{ maxHeight: "80px", borderRadius: "4px" }}
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div style={addModalStyles.actions}>
+            <button
+              type="button"
+              onClick={onClose}
+              style={addModalStyles.cancelButton}
+            >
+              Отмена
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                ...addModalStyles.submitButton,
+                opacity: loading ? 0.7 : 1,
+              }}
+            >
+              {loading ? "Добавление..." : "Добавить"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   Мини-компоненты медиа для одной стороны (список)
+   ============================================================ */
+
+function FrontMediaPreview({ image, audio, video, currentTheme }) {
+  if (!image && !audio && !video) return null;
+
+  return (
+    <div style={sideMediaStyles.container}>
+      {image && (
+        <img
+          src={mediaApi.getMediaUrl(image)}
+          alt=""
+          style={sideMediaStyles.image}
+          onError={(e) => {
+            e.target.style.display = "none";
+            e.target.nextSibling &&
+              (e.target.nextSibling.style.display = "flex");
+          }}
+        />
+      )}
+      <div
+        style={{
+          ...sideMediaStyles.imagePlaceholder,
+          display: "none",
+        }}
+      >
+        <FontAwesomeIcon
+          icon={faImage}
+          style={{ fontSize: "20px", color: "#999" }}
+        />
+      </div>
+      {audio && (
+        <audio
+          controls
+          src={mediaApi.getMediaUrl(audio)}
+          style={sideMediaStyles.audio}
+        />
+      )}
+      {video && (
+        <video
+          controls
+          preload="metadata"
+          src={mediaApi.getMediaUrl(video)}
+          style={sideMediaStyles.video}
+        />
+      )}
+    </div>
+  );
+}
+
+function BackMediaPreview({ image, audio, video, currentTheme }) {
+  if (!image && !audio && !video) return null;
+
+  return (
+    <div style={sideMediaStyles.container}>
+      {image && (
+        <img
+          src={mediaApi.getMediaUrl(image)}
+          alt=""
+          style={sideMediaStyles.image}
+          onError={(e) => {
+            e.target.style.display = "none";
+            e.target.nextSibling &&
+              (e.target.nextSibling.style.display = "flex");
+          }}
+        />
+      )}
+      <div
+        style={{
+          ...sideMediaStyles.imagePlaceholder,
+          display: "none",
+        }}
+      >
+        <FontAwesomeIcon
+          icon={faImage}
+          style={{ fontSize: "20px", color: "#999" }}
+        />
+      </div>
+      {audio && (
+        <audio
+          controls
+          src={mediaApi.getMediaUrl(audio)}
+          style={sideMediaStyles.audio}
+        />
+      )}
+      {video && (
+        <video
+          controls
+          preload="metadata"
+          src={mediaApi.getMediaUrl(video)}
+          style={sideMediaStyles.video}
+        />
+      )}
+    </div>
+  );
+}
+
+const sideMediaStyles = {
+  container: {
+    marginTop: "10px",
+    display: "flex",
+    flexDirection: "column",
+    gap: "8px",
+  },
+  image: {
+    width: "100%",
+    maxHeight: "150px",
+    objectFit: "contain",
+    borderRadius: "6px",
+    display: "block",
+  },
+  imagePlaceholder: {
+    width: "100%",
+    height: "80px",
+    borderRadius: "6px",
+    background: "var(--nt-background-secondary, #f5f5f5)",
+    border: "1px dashed var(--nt-border, #ddd)",
+    display: "none",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  audio: {
+    width: "100%",
+    height: "36px",
+  },
+  video: {
+    width: "100%",
+    maxHeight: "150px",
+    borderRadius: "6px",
+    background: "#000",
+  },
+};
+
+/* ============================================================
+   Стили
+   ============================================================ */
+
+const styles = {
+  setHeader: {
+    marginBottom: "20px",
+  },
+  description: {
+    marginTop: "8px",
+  },
+  actions: {
+    display: "flex",
+    gap: "12px",
+  },
+  practiceButton: {
+    padding: "14px 28px",
+    color: "white",
+    border: "none",
+    borderRadius: "8px",
+    fontSize: "16px",
+    cursor: "pointer",
+  },
+  addButton: {
+    padding: "14px 28px",
+    color: "white",
+    border: "none",
+    borderRadius: "8px",
+    fontSize: "16px",
+    cursor: "pointer",
+  },
+  stats: {
+    maxWidth: "1200px",
+    margin: "0 auto 20px",
+    display: "flex",
+    gap: "24px",
+  },
+  viewModeToggle: {
+    maxWidth: "1200px",
+    margin: "0 auto 20px",
+    display: "flex",
+    gap: "8px",
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  viewModeDivider: {
+    width: "1px",
+    height: "24px",
+    background: "var(--nt-border, #ddd)",
+    margin: "0 4px",
+  },
+  viewModeButton: {
+    width: "40px",
+    height: "40px",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "16px",
+    transition: "all 0.2s",
+  },
+  empty: {
+    textAlign: "center",
+    padding: "60px 20px",
+  },
+  cardsList: {
+    maxWidth: "1200px",
+    margin: "0 auto",
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
+  },
+  card: {
+    padding: "20px",
+    borderRadius: "12px",
+    display: "flex",
+    alignItems: "flex-start",
+    gap: "16px",
+    transition: "transform 0.2s, box-shadow 0.2s",
+  },
+  cardNumber: {
+    width: "36px",
+    height: "36px",
+    borderRadius: "50%",
+    color: "white",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "bold",
+    fontSize: "14px",
+    flexShrink: 0,
+    marginTop: "2px",
+  },
+  cardTwoColumns: {
+    flex: 1,
+    display: "flex",
+    gap: "0",
+    minWidth: 0,
+  },
+  cardColumn: {
+    flex: 1,
+    padding: "0 16px",
+    minWidth: 0,
+  },
+  columnHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    marginBottom: "8px",
+  },
+  columnTitle: {
+    fontSize: "12px",
+    fontWeight: "600",
+    textTransform: "uppercase",
+    letterSpacing: "0.5px",
+    color: "var(--nt-text-secondary, #666)",
+  },
+  sideDot: {
+    width: "8px",
+    height: "8px",
+    borderRadius: "50%",
+    flexShrink: 0,
+  },
+  cardSideText: {
+    fontSize: "15px",
+    lineHeight: "1.6",
+    wordBreak: "break-word",
+  },
+  cardColumnDivider: {
+    width: "1px",
+    background: "var(--nt-border, #e0e0e0)",
+    flexShrink: 0,
+  },
+  cardNumberBadge: {
+    fontSize: "13px",
+    fontWeight: "700",
+    color: "white",
+    padding: "4px 10px",
+    borderRadius: "12px",
+  },
+  gridCard: {
+    padding: "20px",
+    borderRadius: "12px",
+    transition: "transform 0.2s, box-shadow 0.2s",
+  },
+  gridCardHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "16px",
+  },
+  gridCardActions: {
+    display: "flex",
+    gap: "6px",
+  },
+  gridCardSide: {
+    marginBottom: "12px",
+  },
+  gridCardText: {
+    fontSize: "14px",
+    lineHeight: "1.6",
+    wordBreak: "break-word",
+  },
+  iconButtonSmall: {
+    width: "32px",
+    height: "32px",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "14px",
+    transition: "all 0.2s",
+  },
+  cardActions: {
+    display: "flex",
+    gap: "8px",
+    flexShrink: 0,
+    marginTop: "4px",
+  },
+  editButton: {
+    width: "36px",
+    height: "36px",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "14px",
+    transition: "all 0.2s",
+  },
+  deleteButton: {
+    width: "36px",
+    height: "36px",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "14px",
+    transition: "all 0.2s",
+  },
+  loading: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+    fontSize: "20px",
+  },
+  dropdown: {
+    position: "relative",
+    display: "inline-block",
+  },
+  dropdownContent: {
+    display: "none",
+    position: "absolute",
+    top: "100%",
+    right: 0,
+    minWidth: "220px",
+    boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+    borderRadius: "8px",
+    overflow: "hidden",
+    zIndex: 100,
+  },
+  dropdownItem: {
+    display: "block",
+    width: "100%",
+    padding: "14px 20px",
+    background: "white",
+    border: "none",
+    textAlign: "left",
+    fontSize: "15px",
+    cursor: "pointer",
+  },
+};
+
+// Стили для header набора
+const detailStyles = {
+  header: {
+    marginBottom: "20px",
+  },
+  titleRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    marginBottom: "8px",
+    flexWrap: "wrap",
+  },
+  cardCountBadge: {
+    fontSize: "14px",
+    color: "var(--nt-text-muted, #999)",
+    background: "var(--nt-background-secondary, #f0f0f0)",
+    padding: "4px 12px",
+    borderRadius: "12px",
+    fontWeight: "500",
+  },
+  trainButton: {
+    padding: "8px 18px",
+    color: "white",
+    border: "none",
+    borderRadius: "8px",
+    fontSize: "14px",
+    cursor: "pointer",
+    fontWeight: "500",
+    transition: "all 0.2s",
+    whiteSpace: "nowrap",
+  },
+  description: {
+    marginTop: "4px",
+    fontSize: "14px",
+    lineHeight: "1.5",
+  },
+  actionBar: {
+    display: "flex",
+    alignItems: "center",
+    gap: "16px",
+    marginBottom: "20px",
+    flexWrap: "wrap",
+  },
+  addCardButton: {
+    padding: "10px 20px",
+    color: "white",
+    border: "none",
+    borderRadius: "8px",
+    fontSize: "14px",
+    cursor: "pointer",
+    fontWeight: "500",
+    transition: "all 0.2s",
+    whiteSpace: "nowrap",
+  },
+  viewModeGroup: {
+    marginLeft: "auto",
+  },
+};
+
+// Добавляем hover эффект для dropdown через CSS-in-JS хак
+const styleElement = document.createElement("style");
+styleElement.textContent = `
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  /* Стили для переключателя видов */
+  .view-mode-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  
+  .view-mode-button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s;
+  }
+  
+  /* Стили для grid-режима */
+  .cards-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  
+  .card-grid-item {
+    padding: 16px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .card-grid-item:hover {
+    transform: translateY(-2px);
+  }
+  
+  .card-media-preview {
+    max-width: 100%;
+    border-radius: 6px;
+    margin-top: 8px;
+  }
+  
+  .card-grid-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+    margin-top: auto;
+  }
+`;
+document.head.appendChild(styleElement);

@@ -1,0 +1,154 @@
+/* ========================================
+   Leaderboard Page Styles (отдельная страница)
+   NeuralTrident Design System
+   ======================================== */
+
+.leaderboard-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.leaderboard-page-header {
+  margin-bottom: 32px;
+}
+
+.leaderboard-page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--nt-text, #333);
+  margin: 0 0 8px;
+}
+
+.leaderboard-page-subtitle {
+  font-size: 14px;
+  color: var(--nt-text-secondary, #666);
+}
+
+.leaderboard-page-filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.leaderboard-page-filter-btn {
+  padding: 10px 20px;
+  border: 1px solid var(--nt-border, #e0e0e0);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--nt-text-secondary, #666);
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.leaderboard-page-filter-btn.active {
+  background: var(--nt-primary, #667eea);
+  color: white;
+  border-color: var(--nt-primary, #667eea);
+}
+
+.leaderboard-page-table-container {
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--nt-surface, #ffffff);
+  border: 1px solid var(--nt-border-light, #f0f0f0);
+}
+
+.leaderboard-page-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.leaderboard-page-row {
+  border-bottom: 1px solid var(--nt-border-light, #f0f0f0);
+  transition: background 0.2s;
+}
+
+.leaderboard-page-row:hover {
+  background: var(--nt-background-secondary, #f8f9fa);
+}
+
+.leaderboard-page-row.highlighted {
+  background: rgba(102, 126, 234, 0.1);
+  border-left: 3px solid var(--nt-primary, #667eea);
+}
+
+.leaderboard-page-cell {
+  padding: 16px;
+  text-align: left;
+}
+
+.leaderboard-page-rank {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--nt-text, #333);
+}
+
+.leaderboard-page-medal {
+  font-size: 24px;
+}
+
+.leaderboard-page-user-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.leaderboard-page-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: white;
+  font-size: 16px;
+}
+
+.leaderboard-page-username {
+  font-weight: 600;
+  color: var(--nt-text, #333);
+}
+
+.leaderboard-page-score {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--nt-primary, #667eea);
+}
+
+.leaderboard-page-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: 16px;
+}
+
+.leaderboard-page-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--nt-border-light, #f0f0f0);
+  border-top-color: var(--nt-primary, #667eea);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.leaderboard-page-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--nt-text-secondary, #666);
+}
+
+.leaderboard-page-empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}

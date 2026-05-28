@@ -1,0 +1,9 @@
+/* 
+ * Card Sets Pages - Main Entry Point
+ * Импортирует все модульные CSS файлы для страницы наборов карточек
+ */
+
+@import './list-page.css';
+@import './detail-page.css';
+@import './sortable-components.css';
+@import './modals.css';

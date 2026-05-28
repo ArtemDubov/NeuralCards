@@ -1,0 +1,248 @@
+/* 
+ * Card Sets - List Page Styles
+ * Стили для страницы списка наборов карточек
+ */
+
+/* Заголовок и кнопки действий */
+.card-sets-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.card-sets-header-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.card-sets-import-button,
+.card-sets-create-button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s;
+}
+
+/* Поиск */
+.card-sets-search-container {
+  margin-bottom: 24px;
+}
+
+/* Секции */
+.card-sets-section {
+  margin-bottom: 32px;
+}
+
+/* Сетка наборов - единый стиль для всех типов */
+.card-sets-grid,
+.card-set-my-sets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+/* Карточка набора - более компактная форма */
+.card-set-card,
+.nt-set-card {
+  background: var(--nt-surface, #fff);
+  border: 1px solid var(--nt-border-light, #f0f0f0);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 180px;
+  max-height: 240px;
+  max-width: 100%;
+  overflow: hidden;
+  padding: 20px;
+  position: relative;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+}
+
+.card-set-card:hover,
+.nt-set-card:hover {
+  background: var(--nt-surface-elevated, #fff);
+  border-color: var(--nt-primary, #667eea);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-4px) scale(1.01);
+}
+
+/* Заголовок карточки */
+.card-set-title,
+.nt-set-title {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0 0 6px 0;
+}
+
+/* Описание */
+.card-set-description {
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  opacity: 0.8;
+}
+
+/* Мета информация */
+.card-set-meta,
+.nt-set-meta {
+  font-size: 13px;
+  margin: 0 0 6px 0;
+  opacity: 0.7;
+}
+
+/* Теги */
+.card-set-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+  max-height: 40px;
+  overflow: hidden;
+}
+
+/* Действия с карточкой */
+.card-set-actions,
+.nt-set-actions {
+  border-bottom: 1px solid var(--nt-border-light, #f0f0f0);
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 12px 0;
+}
+
+.card-set-action-btn,
+.nt-set-action-btn {
+  align-items: center;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 600;
+  gap: 6px;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+}
+
+.card-set-action-btn:hover,
+.nt-set-action-btn:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.nt-set-action-btn-primary {
+  background: linear-gradient(135deg, var(--nt-gradient-start, #667eea), var(--nt-gradient-end, #764ba2)) !important;
+  color: var(--nt-text-inverse, #fff) !important;
+}
+
+.nt-set-action-btn-primary:hover:not(:disabled) {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+.nt-set-action-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.nt-set-action-btn-secondary {
+  background: var(--nt-background-secondary, #f0f0f0);
+  color: var(--nt-text, #333);
+}
+
+.nt-set-action-btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Избранное */
+.card-set-favorite-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  transition: transform 0.2s;
+}
+
+.card-set-favorite-btn:hover {
+  transform: scale(1.2);
+}
+
+/* Пустое состояние */
+.card-sets-empty,
+.card-set-empty-my-sets {
+  text-align: center;
+  padding: 60px 20px;
+  opacity: 0.6;
+}
+
+.card-sets-empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  opacity: 0.3;
+}
+
+.card-sets-empty-text {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.card-sets-empty-subtext {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.card-set-empty-my-sets p {
+  font-size: 16px;
+  margin-bottom: 16px;
+  color: var(--nt-text-secondary, #666);
+}
+
+.card-sets-empty-create-btn {
+  transition: all 0.2s;
+}
+
+.card-sets-empty-create-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Ссылка на карточку набора */
+.card-set-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Public actions */
+.nt-set-public-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+/* Официальный бейдж */
+.nt-official-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}

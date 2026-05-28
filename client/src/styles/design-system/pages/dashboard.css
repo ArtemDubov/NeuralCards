@@ -1,0 +1,331 @@
+/* ============================================================
+   Dashboard Component Styles
+   ============================================================ */
+
+/* Основной контейнер дашборда */
+.dashboard-container {
+  min-height: calc(100vh - 80px); /* Занимаем всю высоту минус header */
+}
+
+/* Секция статистики */
+.nt-stat-section {
+  margin-top: 20px;
+}
+
+.nt-stat-section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--nt-text, #333);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+/* Белая карточка (универсальный стиль) */
+.white-card {
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--nt-surface, #ffffff);
+  border: 1px solid var(--nt-border-light, #f0f0f0);
+  margin-top: 16px;
+}
+
+/* Подзаголовок секции */
+.sub-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  color: var(--nt-text, #333);
+}
+
+/* Объединённый блок прогресса (2 графика в ряд) */
+.progress-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.progress-chart-card {
+  padding: 16px;
+  border-radius: 12px;
+  background: var(--nt-surface, #ffffff);
+  border: 1px solid var(--nt-border-light, #f0f0f0);
+}
+
+/* Блок точности */
+.accuracy-block {
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--nt-surface, #ffffff);
+  border: 1px solid var(--nt-border-light, #f0f0f0);
+  margin-top: 16px;
+}
+
+.accuracy-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.accuracy-icon {
+  flex-shrink: 0;
+}
+
+.accuracy-info {
+  flex: 1;
+}
+
+.accuracy-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--nt-text, #333);
+}
+
+.accuracy-percentage {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--nt-text, #333);
+}
+
+.accuracy-bar {
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.08);
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.accuracy-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.accuracy-description {
+  font-size: 13px;
+  color: var(--nt-text-secondary, #666);
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* Detail grid (распределение по режимам и наборам) */
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.detail-card {
+  padding: 16px;
+  border-radius: 10px;
+  background: var(--nt-surface, #ffffff);
+  border: 1px solid var(--nt-border-light, #e8e8e8);
+}
+
+.detail-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  color: var(--nt-text, #333);
+}
+
+.best-day-badge {
+  margin-top: 10px;
+  padding: 6px 10px;
+  background: rgba(241, 196, 15, 0.1);
+  border-radius: 6px;
+  font-size: 12px;
+  text-align: center;
+  color: var(--nt-text, #333);
+}
+
+/* Легенда режимов */
+.mode-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.mode-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.mode-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.mode-label {
+  font-size: 12px;
+  color: var(--nt-text-secondary, #666);
+}
+
+.empty-chart {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 140px;
+  text-align: center;
+}
+
+.empty-chart-text {
+  font-size: 13px;
+  color: var(--nt-text-muted, #999);
+}
+
+/* Сетка наборов */
+.sets-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.set-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.set-icon {
+  font-size: 20px;
+}
+
+.set-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--nt-text, #333);
+}
+
+.set-meta {
+  font-size: 11px;
+  margin: 0 0 4px 0;
+  color: var(--nt-text-secondary, #666);
+}
+
+.set-usage-stats {
+  font-size: 10px;
+  margin: 0 0 4px 0;
+  color: var(--nt-primary, #667eea);
+  font-weight: 500;
+}
+
+.set-desc {
+  font-size: 11px;
+  margin: 0 0 6px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--nt-text-muted, #999);
+}
+
+.meta {
+  font-size: 14px;
+  margin: 0 0 6px 0;
+}
+
+/* Прогресс-индикатор */
+.progress-section {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--nt-background-secondary, #f5f5f5);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.progress-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--nt-text, #333);
+}
+
+.progress-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--nt-primary, #667eea);
+}
+
+/* Коэффициенты ряд */
+.coeff-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: var(--nt-surface, #ffffff);
+  border: 1px solid var(--nt-border-light, #f0f0f0);
+}
+
+.coeff-item {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.coeff-value {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.coeff-label {
+  font-size: 12px;
+  color: var(--nt-text-secondary, #666);
+}
+
+.coeff-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--nt-border, #e0e0e0);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .progress-charts {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sets-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .accuracy-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .dashboard-container {
+    padding: 12px;
+  }
+}
+
+/* Контейнер для графиков */
+.chart-container {
+  width: 100%;
+  height: 280px;
+}

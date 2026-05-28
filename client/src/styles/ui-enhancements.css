@@ -1,0 +1,695 @@
+/*
+ * Дополнительные стили для hover-эффектов, анимаций и карточек
+ * Используются совместно с CSS переменными темы (--nt-*)
+ */
+
+/* ============================================
+   ЗАГОЛОВКИ СТРАНИЦ
+   ============================================ */
+
+.page-header-section {
+  margin-bottom: 16px; /* Уменьшен отступ для более компактного вида */
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-subtitle {
+  font-size: 16px;
+  margin: 8px 0 0 0;
+  opacity: 0.8;
+}
+
+/* ============================================
+   HOVER-ЭФФЕКТЫ ДЛЯ КАРТОЧЕК
+   ============================================ */
+
+/* Базовая hover-карточка (наборы, избранное) */
+.nt-card {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+  cursor: pointer;
+}
+
+.nt-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px var(--nt-card-shadow, rgba(0, 0, 0, 0.15));
+}
+
+/* Карточка с подсветкой бордера при hover */
+.nt-card-bordered {
+  border: 2px solid var(--nt-border, transparent);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+  cursor: pointer;
+}
+
+.nt-card-bordered:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px var(--nt-card-shadow, rgba(0, 0, 0, 0.12));
+  border-color: var(--nt-primary, #667eea);
+}
+
+/* Вертикальная карточка набора (мои наборы) */
+.nt-set-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border-radius: var(--nt-border-radius, 12px);
+  background: var(--nt-surface, #ffffff);
+  border: 1px solid var(--nt-border-light, #f0f0f0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.nt-set-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--nt-gradient-start, #667eea),
+    var(--nt-gradient-end, #764ba2)
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.nt-set-card:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 8px 24px var(--nt-card-shadow, rgba(0, 0, 0, 0.12));
+  background: var(--nt-surface-elevated, #ffffff);
+  border-color: var(--nt-primary, #667eea);
+}
+
+.nt-set-card:hover::before {
+  opacity: 1;
+}
+
+/* Готовый набор (чужой набор) — особый стиль */
+.nt-set-card-public {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  border-radius: var(--nt-border-radius, 12px);
+  background: var(--nt-background-secondary, #f5f5f5);
+  border: 2px dashed var(--nt-border, #e0e0e0);
+  box-shadow: none;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.nt-set-card-public::after {
+  content: "🌍";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 18px;
+  opacity: 0.6;
+}
+
+.nt-set-card-public:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border-color: var(--nt-primary, #667eea);
+  background: var(--nt-surface, #ffffff);
+}
+
+/* Карточка режима тренировки (Яндекс Игры стиль) */
+.nt-mode-card {
+  position: relative;
+  padding: 24px;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  color: #ffffff;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.nt-mode-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.15) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  animation: nt-mode-shimmer 3s ease-in-out infinite;
+}
+
+.nt-mode-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+}
+
+.nt-mode-card:hover::before {
+  opacity: 1;
+}
+
+@keyframes nt-mode-shimmer {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(10px, 10px) rotate(5deg);
+  }
+}
+
+.nt-mode-card-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+  animation: nt-icon-bounce 2s ease-in-out infinite;
+}
+
+@keyframes nt-icon-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.nt-mode-card-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.nt-mode-card-desc {
+  font-size: 14px;
+  opacity: 0.85;
+  line-height: 1.4;
+}
+
+.nt-mode-card-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 12px;
+  transition: background 0.2s ease;
+}
+
+.nt-mode-card:hover .nt-mode-card-badge {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* ============================================
+   ПРОГРЕСС-ИНДИКАТОР С АНИМАЦИЕЙ
+   ============================================ */
+
+/* Анимированная стрелка прогресса */
+.nt-progress-arrow {
+  display: inline-block;
+  animation: nt-arrow-slide 1.5s ease-in-out infinite;
+  color: var(--nt-primary, #667eea);
+  font-size: 20px;
+}
+
+@keyframes nt-arrow-slide {
+  0% {
+    transform: translateX(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateX(12px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 0.4;
+  }
+}
+
+/* Полоска прогресса */
+.nt-progress-bar-container {
+  width: 100%;
+  height: 10px;
+  background: var(--nt-background-secondary, #e8e8e8);
+  border-radius: 5px;
+  overflow: hidden;
+  position: relative;
+}
+
+.nt-progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--nt-gradient-start, #667eea),
+    var(--nt-gradient-end, #764ba2)
+  );
+  border-radius: 5px;
+  transition: width 0.6s ease;
+  position: relative;
+}
+
+/* Пульсация на конце полоски */
+.nt-progress-bar-fill::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--nt-primary, #667eea);
+  box-shadow: 0 0 8px var(--nt-primary, #667eea);
+  animation: nt-progress-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes nt-progress-pulse {
+  0%,
+  100% {
+    transform: translateY(-50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-50%) scale(1.4);
+    opacity: 0.6;
+  }
+}
+
+/* Мотивационный блок при нулевом прогрессе */
+.nt-progress-motivation {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: var(--nt-border-radius, 12px);
+  background: linear-gradient(
+    135deg,
+    var(--nt-info-light, #d6eaf8),
+    var(--nt-surface, #ffffff)
+  );
+  border-left: 4px solid var(--nt-info, #3498db);
+}
+
+.nt-progress-motivation-icon {
+  font-size: 24px;
+  color: var(--nt-info, #3498db);
+  animation: nt-motivation-wave 2s ease-in-out infinite;
+}
+
+@keyframes nt-motivation-wave {
+  0%,
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+  25% {
+    transform: scale(1.1) rotate(-5deg);
+  }
+  75% {
+    transform: scale(1.1) rotate(5deg);
+  }
+}
+
+.nt-progress-motivation-text {
+  font-size: 14px;
+  color: var(--nt-text, #333);
+  font-weight: 500;
+}
+
+/* ============================================
+   КНОПКИ ДЕЙСТВИЙ НАД КАРТОЧКОЙ
+   ============================================ */
+
+/* Контейнер кнопок над набором */
+.nt-set-actions {
+  display: flex;
+  gap: 8px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--nt-border-light, #f0f0f0);
+  margin-bottom: 12px;
+}
+
+.nt-set-action-btn {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nt-set-action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nt-set-action-btn-primary {
+  background: linear-gradient(
+    135deg,
+    var(--nt-gradient-start, #667eea),
+    var(--nt-gradient-end, #764ba2)
+  ) !important;
+  color: var(--nt-text-inverse, #ffffff) !important;
+}
+
+.nt-set-action-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.nt-set-action-btn-secondary {
+  background: var(--nt-background-secondary, #f0f0f0);
+  color: var(--nt-text, #333);
+}
+
+/* Компактные кнопки в actionBar */
+.nt-action-bar-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+}
+
+.nt-action-bar-divider {
+  width: 1px;
+  height: 24px;
+  background: var(--nt-border, #e0e0e0);
+}
+
+/* ============================================
+   КАРТОЧКА ИЗБРАННОГО
+   ============================================ */
+
+.nt-fav-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: var(--nt-border-radius, 12px);
+  background: var(--nt-surface, #ffffff);
+  border: 1px solid var(--nt-border-light, #f0f0f0);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.nt-fav-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px var(--nt-card-shadow, rgba(0, 0, 0, 0.1));
+  border-color: var(--nt-warning, #f39c12);
+}
+
+.nt-fav-card-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: var(--nt-warning-light, #fdebd0);
+  color: var(--nt-warning, #f39c12);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: all 0.2s ease;
+  opacity: 0.6;
+}
+
+.nt-fav-card-remove:hover {
+  opacity: 1;
+  background: var(--nt-warning, #f39c12);
+  color: #ffffff;
+  transform: scale(1.15);
+}
+
+/* ============================================
+   СТАТИСТИКА/АНАЛИТИКА — ЕДИНЫЙ БЛОК
+   ============================================ */
+
+/* Секция статистики без "ИИ" стиля — чисто и минималистично */
+.nt-stat-section {
+  padding: 24px;
+  border-radius: var(--nt-border-radius, 12px);
+  background: var(--nt-surface, #ffffff);
+  box-shadow: var(--nt-shadows, 0 2px 8px rgba(0, 0, 0, 0.08));
+  margin-bottom: 20px;
+}
+
+.nt-stat-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--nt-text, #333);
+  margin-bottom: 16px;
+}
+
+.nt-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.nt-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  border-radius: 10px;
+  background: var(--nt-background-secondary, #f5f5f5);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.nt-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.nt-stat-card-icon {
+  font-size: 22px;
+  opacity: 0.8;
+}
+
+.nt-stat-card-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--nt-text, #333);
+}
+
+.nt-stat-card-label {
+  font-size: 13px;
+  color: var(--nt-text-secondary, #666);
+}
+
+/* ============================================
+   СПИСОК ТОП НАБОРОВ
+   ============================================ */
+
+.nt-top-set-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  transition:
+    background 0.2s ease,
+    transform 0.15s ease;
+  cursor: pointer;
+}
+
+.nt-top-set-item:hover {
+  background: var(--nt-background-secondary, #f5f5f5);
+  transform: translateX(4px);
+}
+
+.nt-top-set-rank {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.nt-top-set-rank-gold {
+  background: linear-gradient(135deg, #f1c40f, #f39c12);
+}
+
+.nt-top-set-rank-silver {
+  background: linear-gradient(135deg, #bdc3c7, #95a5a6);
+}
+
+.nt-top-set-rank-bronze {
+  background: linear-gradient(135deg, #cd7f32, #d35400);
+}
+
+/* ============================================
+   ТАБЫ (ВКЛАДКИ)
+   ============================================ */
+
+.nt-tab {
+  padding: 10px 20px;
+  border-radius: 8px 8px 0 0;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: var(--nt-background-secondary, #f0f0f0);
+  color: var(--nt-text-secondary, #666);
+}
+
+.nt-tab:hover {
+  background: var(--nt-surface, #ffffff);
+  color: var(--nt-text, #333);
+}
+
+.nt-tab-active {
+  background: var(--nt-primary, #667eea);
+  color: var(--nt-text-inverse, #ffffff);
+}
+
+.nt-tab-active:hover {
+  background: var(--nt-primary, #667eea);
+  color: var(--nt-text-inverse, #ffffff);
+}
+
+/* ============================================
+   СКЕЛЕТОН ЗАГРУЗКИ
+   ============================================ */
+
+@keyframes nt-skeleton-pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+.nt-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--nt-background-secondary, #e8e8e8) 25%,
+    var(--nt-border-light, #f0f0f0) 50%,
+    var(--nt-background-secondary, #e8e8e8) 75%
+  );
+  background-size: 200% 100%;
+  animation: nt-skeleton-pulse 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+/* ============================================
+   БЕЙДЖИ / МЕТКИ
+   ============================================ */
+
+.nt-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--nt-background-secondary, #f0f0f0);
+  color: var(--nt-text-secondary, #666);
+  transition: all 0.2s ease;
+}
+
+.nt-badge-primary {
+  background: var(--nt-primary, #667eea);
+  color: var(--nt-text-inverse, #ffffff);
+}
+
+.nt-badge-success {
+  background: var(--nt-success, #2ecc71);
+  color: #ffffff;
+}
+
+.nt-badge-warning {
+  background: var(--nt-warning, #f39c12);
+  color: #ffffff;
+}
+
+/* ============================================
+   ПУСТОЕ СОСТОЯНИЕ
+   ============================================ */
+
+.nt-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.nt-empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.4;
+}
+
+.nt-empty-text {
+  font-size: 16px;
+  color: var(--nt-text-secondary, #666);
+}

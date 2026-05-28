@@ -1,0 +1,901 @@
+import React, { useState, useEffect, useMemo } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useAuth } from "../../contexts/AuthContext";
+import { useTheme } from "../../contexts/ThemeContext";
+import { useToast } from "../../contexts/ToastContext";
+import { cardSetsApi } from "../../features/cardSets/api/cardSetsApi";
+import { favoritesApi } from "../../features/favorites";
+import CreateSetModal from "./CreateSetModal";
+import EditSetModal from "./EditSetModal";
+import ImportModal from "./ImportModal";
+import TagsOverflow from "../../components/common/TagsOverflow";
+import DescriptionOverflow from "../../components/common/DescriptionOverflow";
+import PageShell from "../../components/layout/PageShell";
+import {
+  faPlus,
+  faBook,
+  faUpload,
+  faSearch,
+  faStar,
+  faPen,
+  faTrash,
+  faPlay,
+  faCopy,
+  faCheck,
+  faAward,
+} from "../../utils/icons";
+
+export default function CardSetsListPage() {
+  const navigate = useNavigate();
+  const [sets, setSets] = useState([]);
+  const [officialSets, setOfficialSets] = useState([]);
+  const [favoriteIds, setFavoriteIds] = useState(new Set());
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showImportModal, setShowImportModal] = useState(false);
+  const [editingSet, setEditingSet] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [deleteTargetId, setDeleteTargetId] = useState(null);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [trainingLoading, setTrainingLoading] = useState(false);
+  const [selectedSetId, setSelectedSetId] = useState(null);
+  const { user } = useAuth();
+  const { currentTheme } = useTheme();
+  const toast = useToast();
+
+  // Memoize styles to prevent flash of unstyled content
+  const styles = useMemo(
+    () => ({
+      headerActions: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "20px",
+        flexWrap: "wrap",
+        gap: "12px",
+      },
+      headerButtons: {
+        display: "flex",
+        gap: "10px",
+        flexWrap: "wrap",
+      },
+      importButton: {
+        padding: "10px 18px",
+        border: "none",
+        borderRadius: "10px",
+        color: "white",
+        cursor: "pointer",
+        fontSize: "14px",
+        fontWeight: "600",
+        display: "flex",
+        alignItems: "center",
+        transition: "all 0.2s",
+      },
+      createButton: {
+        padding: "10px 18px",
+        border: "none",
+        borderRadius: "10px",
+        color: "white",
+        cursor: "pointer",
+        fontSize: "14px",
+        fontWeight: "600",
+        display: "flex",
+        alignItems: "center",
+        transition: "all 0.2s",
+      },
+      searchContainer: {
+        marginBottom: "24px",
+      },
+      section: {
+        marginBottom: "32px",
+      },
+      mySetsGrid: {
+        display: "grid",
+        gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+        gap: "20px",
+      },
+      modalOverlay: {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: "rgba(0,0,0,0.5)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 1000,
+      },
+      modal: {
+        borderRadius: "16px",
+        padding: "20px",
+        maxWidth: "500px",
+        width: "90%",
+        maxHeight: "90vh",
+        overflowY: "auto",
+        boxShadow: "0 10px 40px rgba(0,0,0,0.3)",
+        position: "relative",
+      },
+      header: {
+        marginBottom: "20px",
+        paddingRight: "40px",
+      },
+      closeBtn: {},
+      infoBox: {
+        padding: "12px",
+        borderRadius: "8px",
+        marginBottom: "16px",
+      },
+      formGroup: {
+        marginBottom: "12px",
+      },
+      input: {
+        width: "100%",
+        padding: "8px 10px",
+        border: "1px solid #ddd",
+        borderRadius: "8px",
+        fontSize: "14px",
+        outline: "none",
+        transition: "border-color 0.2s",
+      },
+      textarea: {
+        width: "100%",
+        padding: "8px 10px",
+        border: "1px solid #ddd",
+        borderRadius: "8px",
+        fontSize: "14px",
+        outline: "none",
+        resize: "vertical",
+        fontFamily: "inherit",
+      },
+      charCounter: {
+        fontSize: "11px",
+        textAlign: "right",
+        marginTop: "2px",
+      },
+      toggleGroup: {
+        marginBottom: "16px",
+      },
+      modalActions: {
+        display: "flex",
+        gap: "10px",
+        justifyContent: "flex-end",
+        marginTop: "16px",
+      },
+      cancelButton: {
+        padding: "8px 16px",
+        border: "none",
+        borderRadius: "8px",
+        cursor: "pointer",
+        fontSize: "14px",
+        fontWeight: "500",
+        transition: "all 0.2s",
+      },
+      submitButton: {
+        padding: "8px 16px",
+        border: "none",
+        borderRadius: "8px",
+        color: "white",
+        cursor: "pointer",
+        fontSize: "14px",
+        fontWeight: "500",
+        transition: "all 0.2s",
+      },
+      emptyMySets: {
+        textAlign: "center",
+        padding: "60px 20px",
+      },
+      emptyCreateButton: {
+        padding: "12px 24px",
+        border: "none",
+        borderRadius: "10px",
+        color: "white",
+        cursor: "pointer",
+        fontSize: "15px",
+        fontWeight: "600",
+        display: "inline-flex",
+        alignItems: "center",
+        marginTop: "16px",
+        transition: "all 0.2s",
+      },
+      cardLink: {
+        textDecoration: "none",
+        color: "inherit",
+      },
+      meta: {
+        fontSize: "13px",
+        margin: "0 0 6px 0",
+      },
+    }),
+    [],
+  );
+
+  useEffect(() => {
+    loadSets();
+    if (localStorage.getItem("openCreateModal") === "true") {
+      localStorage.removeItem("openCreateModal");
+      setShowCreateModal(true);
+    }
+  }, []);
+
+  const loadSets = async () => {
+    try {
+      const [setsResponse, favResponse, officialResponse] = await Promise.all([
+        cardSetsApi.getCardSets(true),
+        favoritesApi.getList("card_set"),
+        cardSetsApi.getOfficialSets().catch(() => ({ data: [] })),
+      ]);
+      setSets(setsResponse.data || []);
+      setOfficialSets(officialResponse.data || []);
+      setFavoriteIds(new Set((favResponse.data || []).map((f) => f.item_id)));
+    } catch (error) {
+      console.error("Error loading sets:", error);
+      setSets([]);
+      setOfficialSets([]);
+      setFavoriteIds(new Set());
+    }
+  };
+
+  const handleCreate = (newSet) => {
+    setSets([...sets, newSet]);
+    setShowCreateModal(false);
+  };
+
+  const handleUpdate = (updatedSet) => {
+    setSets(sets.map((s) => (s.id === updatedSet.id ? updatedSet : s)));
+    setShowEditModal(false);
+    setEditingSet(null);
+  };
+
+  const handleImport = async ({ file, importMode, setId, setName, description, frontLang, backLang }) => {
+    try {
+      let cards = [];
+      const fileName = file.name.toLowerCase();
+      
+      // Excel файлы
+      if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
+        const data = await readFileAsArrayBuffer(file);
+        const XLSX = await import('xlsx');
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+        
+        cards = jsonData
+          .map((row) => {
+            if (row && row.length >= 2) {
+              return {
+                front: String(row[0]).trim(),
+                back: String(row[1]).trim(),
+                front_lang: frontLang,
+                back_lang: backLang,
+              };
+            }
+            return null;
+          })
+          .filter(Boolean);
+      } 
+      // CSV и TXT файлы
+      else {
+        const text = await readFileAsText(file);
+        const lines = text.split("\n").filter((line) => line.trim());
+        
+        cards = lines.map((line) => {
+          const parts = line.split(";").map((p) => p.trim());
+          if (parts.length >= 2) {
+            return {
+              front: parts[0],
+              back: parts[1],
+              front_lang: frontLang,
+              back_lang: backLang,
+            };
+          }
+          return null;
+        }).filter(Boolean);
+      }
+
+      if (cards.length === 0) {
+        throw new Error("Не удалось распознать карточки в файле");
+      }
+
+      let targetSetId;
+
+      // Импорт в существующий набор или создание нового
+      if (importMode === "existing" && setId) {
+        targetSetId = setId;
+      } else {
+        // Создаем новый набор (автоматически непубличный)
+        const setResponse = await cardSetsApi.createCardSet({
+          title: setName,
+          description: description || "",
+          is_public: false,
+          tags: [],
+        });
+        targetSetId = setResponse.data.id;
+      }
+
+      // Добавляем карточки батчем
+      await cardSetsApi.createCardsBatch(targetSetId, cards);
+
+      toast.success(`Успешно импортировано ${cards.length} карточек`);
+      loadSets();
+      setShowImportModal(false);
+    } catch (error) {
+      console.error("Ошибка импорта:", error);
+      throw new Error(error.response?.data?.detail || "Ошибка при импорте");
+    }
+  };
+
+  const readFileAsText = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.onerror = (e) => reject(e);
+      reader.readAsText(file);
+    });
+  };
+
+  const readFileAsArrayBuffer = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => resolve(e.target.result);
+      reader.onerror = (e) => reject(e);
+      reader.readAsArrayBuffer(file);
+    });
+  };
+
+  const handleDelete = (setId) => {
+    setDeleteTargetId(setId);
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteTargetId) return;
+    setDeleteLoading(true);
+    try {
+      await cardSetsApi.deleteCardSet(deleteTargetId);
+      setSets(sets.filter((s) => s.id !== deleteTargetId));
+      toast.success("Набор удален");
+    } catch (error) {
+      console.error("Error deleting set:", error);
+      toast.error("Ошибка при удалении набора");
+    } finally {
+      setDeleteLoading(false);
+      setDeleteTargetId(null);
+    }
+  };
+
+  const startTraining = async (setId) => {
+    setTrainingLoading(true);
+    setSelectedSetId(setId);
+    try {
+      navigate(`/training/mode-select/${setId}`);
+    } catch (error) {
+      console.error("Error starting training:", error);
+      toast.error("Ошибка при запуске тренировки");
+    } finally {
+      setTrainingLoading(false);
+      setSelectedSetId(null);
+    }
+  };
+
+  const handleCopySet = async (setId) => {
+    try {
+      const response = await cardSetsApi.copyCardSet(setId);
+      setSets([...sets, response.data]);
+      toast.success("Набор скопирован");
+    } catch (error) {
+      console.error("Error copying set:", error);
+      toast.error("Ошибка при копировании набора");
+    }
+  };
+
+  const toggleFavorite = async (setId) => {
+    const isFav = favoriteIds.has(setId);
+    try {
+      if (isFav) {
+        await favoritesApi.remove("card_set", setId);
+        setFavoriteIds((prev) => {
+          const next = new Set(prev);
+          next.delete(setId);
+          return next;
+        });
+      } else {
+        await favoritesApi.add("card_set", setId);
+        setFavoriteIds((prev) => new Set([...prev, setId]));
+      }
+    } catch (error) {
+      console.error("Error toggling favorite:", error);
+    }
+  };
+
+  const mySets = sets.filter((s) => s.author_id === user?.id);
+  const publicSets = sets.filter(
+    (s) => s.author_id !== user?.id && !s.is_official,
+  );
+
+  const matchesSearch = (set) => {
+    if (!searchQuery) return true;
+    const query = searchQuery.toLowerCase();
+    return (
+      set.title.toLowerCase().includes(query) ||
+      (set.description && set.description.toLowerCase().includes(query)) ||
+      (set.tags &&
+        set.tags.some((tag) => tag.name.toLowerCase().includes(query)))
+    );
+  };
+
+  const filteredMySets = mySets.filter(matchesSearch);
+  const filteredPublicSets = publicSets.filter(matchesSearch);
+  const filteredOfficialSets = officialSets.filter(matchesSearch);
+
+  return (
+    <PageShell currentTheme={currentTheme}>
+      <div style={styles.headerActions}>
+        <h1 style={{ color: currentTheme.text }}>
+          <FontAwesomeIcon icon={faBook} style={{ marginRight: "8px" }} />
+          Мои наборы
+        </h1>
+        <div style={styles.headerButtons}>
+          <button
+            onClick={() => setShowImportModal(true)}
+            style={{
+              ...styles.importButton,
+              background: currentTheme.success,
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faUpload}
+              style={{ marginRight: "6px" }}
+            />
+            Импорт
+          </button>
+          <button
+            onClick={() => setShowCreateModal(true)}
+            style={{
+              ...styles.createButton,
+              background: `linear-gradient(135deg, ${currentTheme.primary}, ${currentTheme.secondary})`,
+            }}
+          >
+            <FontAwesomeIcon icon={faPlus} style={{ marginRight: "6px" }} />
+            Создать набор
+          </button>
+        </div>
+      </div>
+
+      <div style={{ ...styles.searchContainer, position: "relative" }}>
+        <input
+          type="text"
+          placeholder="Поиск наборов..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          style={{
+            ...styles.input,
+            paddingLeft: "36px",
+            background: currentTheme.surface,
+            color: currentTheme.text,
+            borderColor: currentTheme.border,
+          }}
+        />
+        <FontAwesomeIcon
+          icon={faSearch}
+          style={{
+            position: "absolute",
+            left: "12px",
+            top: "50%",
+            transform: "translateY(-50%)",
+            color: currentTheme.textMuted,
+          }}
+        />
+      </div>
+
+      <section style={styles.section}>
+        <h2 style={{ color: currentTheme.text }}>Мои наборы</h2>
+        {filteredMySets.length > 0 ? (
+          <div style={styles.mySetsGrid}>
+            {filteredMySets.map((set) => (
+              <div
+                key={set.id}
+                className="nt-set-card"
+                style={{ background: currentTheme.surface }}
+              >
+                {/* Actions */}
+                <div className="nt-set-actions">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      startTraining(set.id);
+                    }}
+                    className="nt-set-action-btn nt-set-action-btn-primary"
+                    disabled={trainingLoading && selectedSetId === set.id}
+                  >
+                    <FontAwesomeIcon icon={faPlay} /> Тренировка
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(set.id);
+                    }}
+                    className="nt-set-action-btn nt-set-action-btn-secondary"
+                    title={
+                      favoriteIds.has(set.id)
+                        ? "Убрать из избранного"
+                        : "В избранное"
+                    }
+                    style={{
+                      color: favoriteIds.has(set.id)
+                        ? currentTheme.warning || "#f39c12"
+                        : undefined,
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faStar} />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setEditingSet(set);
+                      setShowEditModal(true);
+                    }}
+                    className="nt-set-action-btn nt-set-action-btn-secondary"
+                    title="Редактировать"
+                  >
+                    <FontAwesomeIcon icon={faPen} />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDelete(set.id);
+                    }}
+                    className="nt-set-action-btn nt-set-action-btn-secondary"
+                    style={{ color: currentTheme.error }}
+                    title="Удалить"
+                  >
+                    <FontAwesomeIcon icon={faTrash} />
+                  </button>
+                </div>
+
+                {/* Кликабельная область */}
+                <Link
+                  to={`/card-sets/${set.id}`}
+                  style={styles.cardLink}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <h3 style={{ color: currentTheme.text, margin: "0 0 6px 0" }}>
+                    {set.title}
+                  </h3>
+                  {set.description ? (
+                    <DescriptionOverflow
+                      text={set.description}
+                      maxLength={80}
+                      currentTheme={currentTheme}
+                    />
+                  ) : (
+                    <p
+                      style={{
+                        color: currentTheme.textSecondary,
+                        fontSize: "14px",
+                        margin: "0 0 6px 0",
+                      }}
+                    >
+                      Нет описания
+                    </p>
+                  )}
+                  <p style={{ ...styles.meta, color: currentTheme.textMuted }}>
+                    {set.cards_count ?? set.cards?.length ?? 0} карточек
+                  </p>
+                </Link>
+
+                {/* Теги */}
+                {set.tags && set.tags.length > 0 && (
+                  <TagsOverflow
+                    tags={set.tags.map((t) => t.name)}
+                    maxVisible={3}
+                    currentTheme={currentTheme}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div style={styles.emptyMySets}>
+            <p>У вас пока нет наборов</p>
+            <button
+              onClick={() => setShowCreateModal(true)}
+              style={{
+                ...styles.emptyCreateButton,
+                background: `linear-gradient(135deg, ${currentTheme.primary}, ${currentTheme.secondary})`,
+              }}
+            >
+              <FontAwesomeIcon icon={faPlus} style={{ marginRight: "6px" }} />
+              Создать мой первый набор
+            </button>
+          </div>
+        )}
+      </section>
+
+      {filteredOfficialSets.length > 0 && (
+        <section style={styles.section}>
+          <h2
+            style={{
+              color: currentTheme.text,
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faAward}
+              style={{ color: currentTheme.warning || "#f39c12" }}
+            />
+            Готовые наборы
+          </h2>
+          <div style={styles.mySetsGrid}>
+            {filteredOfficialSets.map((set) => (
+              <div
+                key={set.id}
+                className="nt-set-card"
+                style={{
+                  background: currentTheme.surface,
+                  border: `1px solid ${currentTheme.border}`,
+                  position: "relative",
+                  overflow: "hidden",
+                }}
+                onClick={() => navigate(`/card-sets/${set.id}`)}
+              >
+                {/* Бейдж */}
+                <div
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "4px",
+                    padding: "3px 10px",
+                    borderRadius: "6px",
+                    background: `${currentTheme.primary || "#3498db"}15`,
+                    color: currentTheme.primary || "#3498db",
+                    fontSize: "12px",
+                    fontWeight: 600,
+                    marginBottom: "8px",
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faCheck}
+                    style={{ fontSize: "11px" }}
+                  />
+                  От разработчиков
+                </div>
+
+                <Link
+                  to={`/card-sets/${set.id}`}
+                  style={styles.cardLink}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <h3 style={{ color: currentTheme.text, margin: "0 0 6px 0" }}>
+                    {set.title}
+                  </h3>
+                  {set.description ? (
+                    <DescriptionOverflow
+                      text={set.description}
+                      maxLength={80}
+                      currentTheme={currentTheme}
+                    />
+                  ) : (
+                    <p
+                      style={{
+                        color: currentTheme.textSecondary,
+                        fontSize: "14px",
+                        margin: "0 0 6px 0",
+                      }}
+                    >
+                      Нет описания
+                    </p>
+                  )}
+                  <p style={{ ...styles.meta, color: currentTheme.textMuted }}>
+                    {set.cards_count ?? set.cards?.length ?? 0} карточек
+                  </p>
+                </Link>
+
+                {set.tags && set.tags.length > 0 && (
+                  <TagsOverflow
+                    tags={set.tags.map((t) => t.name)}
+                    maxVisible={3}
+                    currentTheme={currentTheme}
+                  />
+                )}
+
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(set.id);
+                    }}
+                    className="nt-set-action-btn nt-set-action-btn-secondary"
+                    title={
+                      favoriteIds.has(set.id)
+                        ? "Убрать из избранного"
+                        : "В избранное"
+                    }
+                    style={{
+                      color: favoriteIds.has(set.id)
+                        ? currentTheme.warning || "#f39c12"
+                        : undefined,
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faStar} />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCopySet(set.id);
+                    }}
+                    className="nt-set-action-btn nt-set-action-btn-secondary"
+                    title="Копировать набор к себе"
+                  >
+                    <FontAwesomeIcon icon={faCopy} /> Копировать
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {filteredPublicSets.length > 0 && (
+        <section style={styles.section}>
+          <h2 style={{ color: currentTheme.text }}>Публичные наборы</h2>
+          <div style={styles.mySetsGrid}>
+            {filteredPublicSets.map((set) => (
+              <div
+                key={set.id}
+                className="nt-set-card nt-set-card-public"
+                onClick={() => navigate(`/card-sets/${set.id}`)}
+              >
+                <Link
+                  to={`/card-sets/${set.id}`}
+                  style={styles.cardLink}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <h3 style={{ color: currentTheme.text, margin: "0 0 6px 0" }}>
+                    {set.title}
+                  </h3>
+                  {set.description ? (
+                    <DescriptionOverflow
+                      text={set.description}
+                      maxLength={80}
+                      currentTheme={currentTheme}
+                    />
+                  ) : (
+                    <p
+                      style={{
+                        color: currentTheme.textSecondary,
+                        fontSize: "14px",
+                        margin: "0 0 6px 0",
+                      }}
+                    >
+                      Нет описания
+                    </p>
+                  )}
+                  <p style={{ ...styles.meta, color: currentTheme.textMuted }}>
+                    {set.cards_count ?? set.cards?.length ?? 0} карточек •{" "}
+                    {set.author_name || "Аноним"}
+                  </p>
+                </Link>
+
+                {set.tags && set.tags.length > 0 && (
+                  <TagsOverflow
+                    tags={set.tags.map((t) => t.name)}
+                    maxVisible={3}
+                    currentTheme={currentTheme}
+                  />
+                )}
+
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(set.id);
+                    }}
+                    className="nt-set-action-btn nt-set-action-btn-secondary"
+                    title={
+                      favoriteIds.has(set.id)
+                        ? "Убрать из избранного"
+                        : "В избранное"
+                    }
+                    style={{
+                      color: favoriteIds.has(set.id)
+                        ? currentTheme.warning || "#f39c12"
+                        : undefined,
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faStar} />
+                  </button>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCopySet(set.id);
+                    }}
+                    className="nt-set-action-btn nt-set-action-btn-secondary"
+                    title="Копировать набор к себе"
+                  >
+                    <FontAwesomeIcon icon={faCopy} /> Копировать
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Create Modal */}
+      {showCreateModal && (
+        <CreateSetModal
+          onClose={() => setShowCreateModal(false)}
+          onCreate={handleCreate}
+          currentTheme={currentTheme}
+        />
+      )}
+
+      {/* Edit Modal */}
+      {showEditModal && editingSet && (
+        <EditSetModal
+          set={editingSet}
+          onClose={() => {
+            setShowEditModal(false);
+            setEditingSet(null);
+          }}
+          onUpdate={handleUpdate}
+          currentTheme={currentTheme}
+        />
+      )}
+
+      {/* Delete Confirmation */}
+      {deleteTargetId && (
+        <div style={styles.modalOverlay}>
+          <div
+            style={{
+              ...styles.modal,
+              background: currentTheme.surface,
+              color: currentTheme.text,
+            }}
+          >
+            <h3 style={{ color: currentTheme.text }}>Подтверждение удаления</h3>
+            <p style={{ color: currentTheme.textSecondary }}>
+              Вы уверены, что хотите удалить этот набор? Это действие нельзя
+              отменить.
+            </p>
+            <div style={styles.modalActions}>
+              <button
+                onClick={() => setDeleteTargetId(null)}
+                style={{
+                  ...styles.cancelButton,
+                  background: currentTheme.backgroundSecondary,
+                  color: currentTheme.text,
+                }}
+                disabled={deleteLoading}
+              >
+                Отмена
+              </button>
+              <button
+                onClick={confirmDelete}
+                style={{
+                  ...styles.submitButton,
+                  background: currentTheme.error,
+                }}
+                disabled={deleteLoading}
+              >
+                {deleteLoading ? "Удаление..." : "Удалить"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Модальное окно импорта */}
+      <ImportModal
+        isOpen={showImportModal}
+        onClose={() => setShowImportModal(false)}
+        onImport={handleImport}
+        currentTheme={currentTheme}
+        existingSets={sets}
+      />
+    </PageShell>
+  );
+}

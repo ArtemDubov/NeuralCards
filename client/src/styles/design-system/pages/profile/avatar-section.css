@@ -1,0 +1,167 @@
+/* 
+ * Profile - Avatar Section Styles
+ * Стили для секции аватара
+ */
+
+.profile-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 12px;
+  background: var(--nt-surface, #ffffff);
+  border: 1px solid var(--nt-border-light, #f0f0f0);
+}
+
+.profile-avatar-clickable {
+  cursor: pointer;
+  transition: transform 0.2s;
+  position: relative;
+}
+
+.profile-avatar-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-avatar-emoji {
+  font-size: 64px;
+  line-height: 1;
+}
+
+.profile-avatar-letter {
+  font-size: 64px;
+  line-height: 1;
+}
+
+.profile-avatar-edit-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+.profile-avatar-settings-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.profile-avatar-hint {
+  font-size: 14px;
+  margin: 0 0 16px;
+  text-align: center;
+  color: var(--nt-text-secondary, #666);
+}
+
+.profile-avatar-option-group {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.profile-avatar-option-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--nt-text, #333);
+}
+
+.profile-avatar-quick-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.profile-current-settings {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--nt-background-secondary, #f8f9fa);
+}
+
+.profile-setting-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--nt-text, #333);
+}
+
+.profile-setting-button {
+  border: 2px solid var(--nt-border, #e0e0e0);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 8px;
+  background: transparent;
+}
+
+.profile-setting-button:hover {
+  border-color: var(--nt-primary, #667eea);
+}
+
+.profile-action-btn,
+.profile-action-btn-danger {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.profile-action-btn {
+  background: var(--nt-primary, #667eea);
+  color: white;
+}
+
+.profile-action-btn:hover {
+  background: var(--nt-primary-dark, #5568d3);
+}
+
+.profile-action-btn-danger {
+  background: transparent;
+  border: 2px solid #e74c3c;
+  color: #e74c3c;
+}
+
+.profile-action-btn-danger:hover {
+  background: #e74c3c;
+  color: white;
+}

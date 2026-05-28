@@ -1,0 +1,24 @@
+/* 
+ * Design System - Spacing Utilities
+ * Дополнительные утилиты для отступов (расширение helpers.css)
+ */
+
+/* Auto margins */
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+/* Negative margins */
+.mt-n1 { margin-top: calc(var(--spacing-xs) * -1); }
+.mt-n2 { margin-top: calc(var(--spacing-sm) * -1); }
+.mt-n3 { margin-top: calc(var(--spacing-md) * -1); }
+
+.mb-n1 { margin-bottom: calc(var(--spacing-xs) * -1); }
+.mb-n2 { margin-bottom: calc(var(--spacing-sm) * -1); }
+.mb-n3 { margin-bottom: calc(var(--spacing-md) * -1); }

@@ -1,0 +1,1407 @@
+/* 
+ * Card Sets - Modals Styles
+ * Стили для модальных окон (добавление, редактирование, импорт)
+ */
+
+/* ===== Общие стили модальных окон ===== */
+
+/* Оверлей модального окна */
+.card-set-overlay,
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal-backdrop);
+  animation: fadeIn var(--transition-base);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Контейнер модального окна */
+.modal-container,
+.card-set-modal {
+  background-color: var(--theme-surface);
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  max-width: 480px;
+  width: 90%;
+  max-height: 75vh;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUp var(--transition-base);
+  border: 1px solid var(--nt-border-light);
+}
+
+/* Специальные размеры для модалки добавления/редактирования карточки */
+.add-card-modal,
+.edit-card-modal {
+  max-width: 1100px;
+  max-height: 90vh;
+  padding: 0;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(30px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Шапка модального окна */
+.card-set-header,
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--nt-border-light);
+  background: var(--theme-surface);
+}
+
+/* Шапка для модалки карточки - компактная */
+.add-card-modal .card-set-header,
+.edit-card-modal .card-set-header {
+  padding: var(--spacing-sm) var(--spacing-lg);
+}
+
+.card-set-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.card-set-header-right {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.card-set-header h2,
+.modal-title {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--nt-text);
+  margin: 0;
+}
+
+/* Тело модального окна */
+.modal-container .modal-body {
+  padding: var(--spacing-md);
+}
+
+/* Для модалки карточки увеличиваем отступы для контента */
+.add-card-modal .modal-body,
+.edit-card-modal .modal-body {
+  padding: var(--spacing-lg) var(--spacing-xl);
+}
+
+/* Футер модального окна */
+.modal-container .modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-top: none;
+  background: var(--theme-surface);
+}
+
+/* Футер модалки карточки - более просторный */
+.add-card-modal .modal-footer,
+.edit-card-modal .modal-footer {
+  padding: var(--spacing-md) var(--spacing-lg);
+  gap: var(--spacing-md);
+}
+
+/* Кнопка закрытия */
+.modal-close,
+.modal-close-btn,
+.card-set-close-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  color: var(--theme-text-secondary);
+  transition: all var(--transition-base);
+  cursor: pointer;
+  background: rgba(0, 0, 0, 0.08);
+  border: none;
+  font-size: 18px;
+}
+
+.modal-close:hover,
+.modal-close-btn:hover,
+.card-set-close-btn:hover {
+  background: rgba(0, 0, 0, 0.15);
+  color: var(--theme-text);
+}
+
+.modal-close:disabled,
+.modal-close-btn:disabled,
+.card-set-close-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Кнопки действий модалок */
+.modal-actions,
+.card-set-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: flex-end;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-top: 1px solid var(--theme-border);
+}
+
+.modal-btn-cancel,
+.card-set-cancel-button {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: none;
+  background-color: var(--nt-secondary);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  color: white;
+  font-weight: var(--font-weight-semibold);
+  min-width: 100px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modal-btn-cancel:hover:not(:disabled),
+.card-set-cancel-button:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.modal-btn-cancel:active:not(:disabled),
+.card-set-cancel-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.modal-btn-cancel:disabled,
+.card-set-cancel-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.modal-btn-submit,
+.card-set-submit-button {
+  padding: var(--spacing-sm) var(--spacing-xl);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  color: white;
+  background-color: var(--nt-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 140px;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modal-btn-submit:hover:not(:disabled),
+.card-set-submit-button:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.modal-btn-submit:active:not(:disabled),
+.card-set-submit-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modal-btn-submit:disabled,
+.card-set-submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Формы в модалках */
+.modal-form-group,
+.card-set-form-group {
+  margin-bottom: var(--spacing-sm);
+}
+
+.modal-form-label,
+.card-set-label {
+  display: block;
+  margin-bottom: 2px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-sm);
+  color: var(--theme-text);
+}
+
+.modal-form-input {
+  width: 100%;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 2px solid var(--nt-border-light);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  transition: all var(--transition-base);
+  background: var(--theme-surface);
+  color: var(--nt-text);
+  font-family: inherit;
+  min-height: 36px;
+}
+
+.modal-form-input:focus {
+  outline: none;
+  border-color: var(--nt-primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.modal-form-input.input-error {
+  border-color: var(--nt-error);
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.15);
+}
+
+.modal-form-textarea,
+.card-set-textarea {
+  width: 100%;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 2px solid var(--nt-border-light);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  resize: vertical;
+  min-height: 50px;
+  font-family: inherit;
+  background: var(--theme-surface);
+  color: var(--nt-text);
+  transition: all var(--transition-base);
+}
+
+.modal-form-textarea:focus,
+.card-set-textarea:focus {
+  outline: none;
+  border-color: var(--nt-primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+/* Счетчик символов */
+.card-set-char-counter {
+  font-size: var(--text-xs);
+  text-align: right;
+  margin-top: var(--spacing-xs);
+  color: var(--theme-text-muted);
+}
+
+/* Сообщение об ошибке валидации */
+.card-set-validation-error {
+  color: var(--theme-error);
+  font-size: var(--text-xs);
+  margin-top: var(--spacing-xs);
+}
+
+/* Информационный блок */
+.card-set-info-box {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-sm);
+  background: var(--nt-background-secondary);
+  border-left: 3px solid var(--nt-primary);
+}
+
+.card-set-info-text {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--nt-text);
+  line-height: 1.4;
+}
+
+/* Теги */
+.card-set-tag-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid var(--nt-border-light);
+  border-radius: var(--radius-lg);
+  background: var(--theme-surface);
+  align-items: center;
+  min-height: 48px;
+  transition: border-color var(--transition-base);
+}
+
+.card-set-tag-container:focus-within {
+  border-color: var(--theme-primary);
+}
+
+.card-set-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  background: rgba(var(--theme-primary-rgb), 0.2);
+  color: var(--theme-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.card-set-tag-remove {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  font-size: var(--text-base);
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+.card-set-tag-remove:hover {
+  opacity: 1;
+}
+
+.card-set-tag-remove:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.card-set-tag-input {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--theme-text);
+  font-size: var(--text-sm);
+  flex: 1;
+  min-width: 100px;
+  padding: var(--spacing-xs) 0;
+  font-family: inherit;
+}
+
+.card-set-tag-input:disabled {
+  opacity: 0.5;
+}
+
+/* Теги - список под полем ввода */
+.card-set-tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
+}
+
+.card-set-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-full);
+  background: rgba(var(--theme-primary-rgb), 0.2);
+  color: var(--theme-primary);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.card-set-tag-remove {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  font-size: var(--text-base);
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+}
+
+.card-set-tag-remove:hover {
+  opacity: 1;
+}
+
+.card-set-tag-remove:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Переключатель (toggle) */
+.card-set-toggle-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-lg);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.card-set-toggle {
+  position: relative;
+  width: 48px;
+  height: 26px;
+  border-radius: var(--radius-full);
+  background: var(--theme-border);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.card-set-toggle:hover {
+  background: var(--theme-text-muted);
+}
+
+.card-set-toggle.active {
+  background-color: var(--nt-primary);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+}
+
+.card-set-toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: white;
+  transition: all var(--transition-base);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.card-set-toggle.active .card-set-toggle-knob {
+  left: 24px;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.card-set-toggle-label {
+  color: var(--theme-text);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ===== AddCardModal & EditCardModal ===== */
+
+/* Секции формы */
+.card-form-section {
+  margin-bottom: var(--spacing-xl);
+}
+
+.card-form-section-title {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--theme-text);
+}
+
+/* Двухколоночная форма */
+.card-form-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--spacing-lg);
+  align-items: start;
+}
+
+/* Для модалки карточки уменьшаем gap и делаем колонки шире */
+.add-card-modal .card-form-row,
+.edit-card-modal .card-form-row {
+  gap: var(--spacing-md);
+  align-items: stretch;
+}
+
+.card-form-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  min-height: 400px;
+}
+
+/* Для модалки карточки убираем фон и границы */
+.add-card-modal .card-form-column,
+.edit-card-modal .card-form-column {
+  gap: var(--spacing-md);
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.card-form-divider {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 60px;
+  gap: var(--spacing-sm);
+}
+
+/* Для модалки карточки уменьшаем отступ */
+.add-card-modal .card-form-divider,
+.edit-card-modal .card-form-divider {
+  padding-top: 80px;
+}
+
+.card-form-translate-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--nt-border);
+  background: var(--nt-surface);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  font-size: 18px;
+  color: var(--nt-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-form-translate-btn:hover:not(:disabled) {
+  border-color: var(--nt-primary);
+  background: var(--nt-background-secondary);
+  color: var(--nt-primary);
+  transform: scale(1.05);
+}
+
+.card-form-translate-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.card-form-translate-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Label для перевода */
+.card-set-translate-label {
+  margin-top: var(--spacing-xs);
+  font-size: var(--text-xs);
+  opacity: 0.7;
+  text-align: center;
+  white-space: nowrap;
+  color: var(--theme-text-secondary);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Медиа секции */
+.card-form-media-section {
+  margin-top: var(--spacing-md);
+}
+
+.card-form-media-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-sm);
+  color: var(--theme-text);
+}
+
+.card-form-media-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid var(--nt-border-light);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-sm);
+  background: var(--theme-surface);
+  color: var(--nt-text);
+  transition: border-color var(--transition-base);
+}
+
+.card-form-media-input:focus {
+  outline: none;
+  border-color: var(--nt-primary);
+}
+
+.card-form-media-preview {
+  margin-top: var(--spacing-md);
+  max-width: 200px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.card-form-media-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ===== Wizard модалка создания карточки ===== */
+
+.add-card-modal-wizard {
+  max-width: 700px;
+  max-height: 90vh;
+}
+
+/* Шапка с прогрессом */
+.card-set-header-wizard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-bottom: 1px solid var(--nt-border-light);
+  background: var(--theme-surface);
+}
+
+.wizard-progress {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.wizard-step {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid var(--nt-border);
+  background: var(--nt-background-secondary);
+  color: var(--nt-text-muted);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.wizard-step:hover {
+  border-color: var(--nt-primary);
+  color: var(--nt-primary);
+  transform: scale(1.1);
+}
+
+.wizard-step.active {
+  border-color: var(--nt-primary);
+  background: var(--nt-primary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(var(--nt-primary-rgb), 0.3);
+}
+
+.wizard-step.completed {
+  border-color: var(--nt-success);
+  background: var(--nt-success);
+  color: white;
+}
+
+.wizard-connector {
+  width: 30px;
+  height: 2px;
+  background: var(--nt-border);
+  margin: 0 4px;
+}
+
+/* Тело wizard */
+.wizard-body {
+  padding: var(--spacing-xl);
+  min-height: 500px;
+}
+
+.wizard-step-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.wizard-step-title {
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--nt-text);
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Секция ввода */
+.wizard-input-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.wizard-textarea {
+  width: 100%;
+  padding: var(--spacing-md);
+  border: 2px solid var(--nt-border-light);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  font-family: inherit;
+  resize: vertical;
+  background: var(--nt-surface);
+  color: var(--nt-text);
+  transition: all var(--transition-base);
+  line-height: 1.6;
+}
+
+.wizard-textarea:focus {
+  outline: none;
+  border-color: var(--nt-primary);
+  box-shadow: 0 0 0 3px rgba(var(--nt-primary-rgb), 0.1);
+}
+
+.wizard-textarea::placeholder {
+  color: var(--nt-text-muted);
+}
+
+/* Селектор языка */
+.wizard-lang-selector {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.wizard-lang-label {
+  font-size: var(--text-sm);
+  color: var(--nt-text-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+.wizard-lang-select {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 2px solid var(--nt-border-light);
+  border-radius: var(--radius-md);
+  background: var(--nt-surface);
+  color: var(--nt-text);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.wizard-lang-select:focus {
+  outline: none;
+  border-color: var(--nt-primary);
+}
+
+/* Ряд действий */
+.wizard-actions-row {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.wizard-translate-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 2px solid var(--nt-border);
+  background: var(--nt-surface);
+  border-radius: var(--radius-lg);
+  color: var(--nt-text);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.wizard-translate-btn:hover:not(:disabled) {
+  border-color: var(--nt-primary);
+  background: var(--nt-background-secondary);
+  color: var(--nt-primary);
+}
+
+.wizard-translate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Кнопки навигации */
+.wizard-next-btn,
+.wizard-back-btn,
+.wizard-submit-btn {
+  padding: var(--spacing-md) var(--spacing-lg);
+  border: none;
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.wizard-next-btn {
+  background: linear-gradient(135deg, var(--nt-primary), var(--nt-secondary));
+  color: white;
+  margin-left: auto;
+}
+
+.wizard-next-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(var(--nt-primary-rgb), 0.4);
+}
+
+.wizard-next-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.wizard-back-btn {
+  background: var(--nt-background-secondary);
+  color: var(--nt-text);
+  border: 2px solid var(--nt-border);
+}
+
+.wizard-back-btn:hover {
+  border-color: var(--nt-primary);
+  color: var(--nt-primary);
+}
+
+.wizard-submit-btn {
+  background: linear-gradient(135deg, var(--nt-success), #2ecc71);
+  color: white;
+  margin-left: auto;
+}
+
+.wizard-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(var(--nt-success-rgb), 0.4);
+}
+
+.wizard-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.wizard-nav-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+}
+
+/* Сетка медиа */
+.wizard-media-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+}
+
+.wizard-media-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.wizard-media-column-title {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--nt-text);
+  margin: 0;
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 2px solid var(--nt-border-light);
+}
+
+.wizard-media-upload {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.wizard-media-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--nt-text);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.wizard-file-input {
+  padding: var(--spacing-sm);
+  border: 2px dashed var(--nt-border);
+  border-radius: var(--radius-lg);
+  background: var(--nt-background-secondary);
+  color: var(--nt-text);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.wizard-file-input:hover {
+  border-color: var(--nt-primary);
+  background: var(--nt-surface);
+}
+
+.wizard-media-preview {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 2px solid var(--nt-border-light);
+}
+
+.wizard-media-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.wizard-media-preview.audio audio,
+.wizard-media-preview.video video {
+  width: 100%;
+  display: block;
+}
+
+.wizard-media-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+}
+
+.wizard-media-remove:hover {
+  background: var(--nt-error);
+  transform: scale(1.1);
+}
+
+/* Предпросмотр карточки */
+.wizard-preview-card {
+  display: flex;
+  gap: var(--spacing-lg);
+  align-items: stretch;
+  background: var(--nt-surface);
+  border: 2px solid var(--nt-border-light);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  box-shadow: var(--theme-shadow-md);
+}
+
+.wizard-preview-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.wizard-preview-side.front {
+  border-right: 2px solid var(--nt-border-light);
+  padding-right: var(--spacing-lg);
+}
+
+.wizard-preview-side.back {
+  padding-left: var(--spacing-lg);
+}
+
+.wizard-preview-label {
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--nt-text-muted);
+}
+
+.wizard-preview-side.front .wizard-preview-label {
+  color: var(--nt-primary);
+}
+
+.wizard-preview-side.back .wizard-preview-label {
+  color: var(--nt-success);
+}
+
+.wizard-preview-text {
+  font-size: var(--text-lg);
+  line-height: 1.6;
+  color: var(--nt-text);
+  word-wrap: break-word;
+}
+
+.wizard-preview-media {
+  width: 100%;
+  border-radius: var(--radius-md);
+  margin-top: var(--spacing-sm);
+}
+
+.wizard-preview-audio {
+  width: 100%;
+  margin-top: var(--spacing-sm);
+}
+
+.wizard-preview-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nt-text-muted);
+  font-size: 24px;
+}
+
+/* ===== ImportModal ===== */
+
+/* Заголовок с табами */
+.card-set-header-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  flex: 1;
+}
+
+/* Табы импорта */
+.import-modal-tabs {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.import-modal-tab {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 1px solid var(--nt-border-light);
+  background: transparent;
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  color: var(--nt-text-secondary);
+}
+
+.import-modal-tab:hover {
+  border-color: var(--nt-primary);
+  color: var(--nt-text);
+}
+
+.import-modal-tab.active {
+  background: var(--nt-primary);
+  border-color: var(--nt-primary);
+  color: white;
+}
+
+/* Область загрузки файла */
+.card-set-upload-area {
+  border: 2px dashed var(--nt-border);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  text-align: center;
+  background: var(--theme-surface);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.card-set-upload-area:hover {
+  border-color: var(--nt-primary);
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.card-set-upload-icon {
+  font-size: 32px;
+  color: var(--nt-primary);
+  margin-bottom: var(--spacing-sm);
+  display: block;
+}
+
+.card-set-upload-text {
+  color: var(--nt-text-secondary);
+  font-size: var(--text-sm);
+  margin-bottom: var(--spacing-xs);
+}
+
+.card-set-file-name {
+  color: var(--nt-success);
+  margin-top: var(--spacing-xs);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--text-xs);
+}
+
+/* Выбор набора */
+.card-set-select {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-lg);
+  border: 2px solid var(--nt-border-light);
+  background: var(--theme-surface);
+  color: var(--nt-text);
+  font-size: var(--text-sm);
+  font-family: inherit;
+  transition: border-color var(--transition-base);
+}
+
+.card-set-select:focus {
+  outline: none;
+  border-color: var(--nt-primary);
+}
+
+/* Языки озвучки */
+.card-set-lang-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: var(--spacing-md);
+  align-items: start;
+}
+
+.card-set-lang-side-label {
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: var(--spacing-xs);
+  color: var(--theme-text);
+}
+
+.card-set-lang-divider {
+  width: 1px;
+  background: var(--nt-border);
+  align-self: stretch;
+  margin-top: 24px;
+}
+
+/* Ошибка */
+.card-set-error {
+  color: var(--nt-error);
+  background: rgba(231, 76, 60, 0.1);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  margin-top: var(--spacing-md);
+  font-size: var(--text-sm);
+}
+
+/* Кнопка импорта */
+.card-set-import-button {
+  flex: 2;
+  padding: var(--spacing-sm) var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  border: none;
+  background-color: var(--nt-primary);
+  color: white;
+  font-size: var(--text-base);
+  cursor: pointer;
+  font-weight: var(--font-weight-bold);
+  transition: all var(--transition-base);
+  min-width: 140px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-set-import-button:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.card-set-import-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-set-import-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--theme-border);
+  transform: none;
+  box-shadow: none;
+}
+
+/* Кнопка закрытия в карточках */
+.card-set-close-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--nt-background-secondary);
+  color: var(--nt-text-secondary);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+}
+
+.card-set-close-btn:hover {
+  background: var(--nt-border);
+  color: var(--nt-text);
+}
+
+/* Футер с кнопками */
+.modal-footer.card-set-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  border-top: none;
+  background: transparent;
+}
+
+/* Для модалки карточки */
+.add-card-modal .modal-footer,
+.edit-card-modal .modal-footer {
+  padding: var(--spacing-lg) var(--spacing-xl);
+}
+
+/* Кнопка отмены */
+.modal-btn-cancel.card-set-cancel-button {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border: 2px solid var(--nt-border);
+  background: var(--nt-background-secondary);
+  color: var(--nt-text);
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.modal-btn-cancel.card-set-cancel-button:hover {
+  border-color: var(--nt-error);
+  color: var(--nt-error);
+  background: rgba(var(--nt-error-rgb), 0.05);
+}
+
+/* Кнопка подтверждения */
+.modal-btn-submit.card-set-submit-button {
+  padding: var(--spacing-sm) var(--spacing-xl);
+  border: none;
+  background: linear-gradient(135deg, var(--nt-primary), var(--nt-secondary));
+  color: white;
+  border-radius: var(--radius-lg);
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: 0 4px 12px rgba(var(--nt-primary-rgb), 0.3);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.modal-btn-submit.card-set-submit-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(var(--nt-primary-rgb), 0.4);
+}
+
+.modal-btn-submit.card-set-submit-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.modal-btn-submit.card-set-submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== CardSideEditor улучшения ===== */
+
+/* Увеличиваем textarea в модалке карточки */
+.add-card-modal .voice-input-textarea,
+.edit-card-modal .voice-input-textarea {
+  min-height: 180px !important;
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+  padding: 16px !important;
+}
+
+/* Увеличиваем языковые кнопки */
+.add-card-modal .lang-selector-container,
+.edit-card-modal .lang-selector-container {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 6px !important;
+  padding: 0 !important;
+  flex-wrap: nowrap !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.add-card-modal .lang-button,
+.edit-card-modal .lang-button {
+  width: 40px !important;
+  height: 40px !important;
+  border-width: 2px !important;
+  border-radius: 8px !important;
+  background: rgba(255, 255, 255, 0.3) !important;
+  border-color: transparent !important;
+  transition: all var(--transition-base) !important;
+  cursor: pointer !important;
+}
+
+.add-card-modal .lang-button:hover,
+.edit-card-modal .lang-button:hover {
+  background: rgba(255, 255, 255, 0.5) !important;
+  transform: translateY(-1px) !important;
+}
+
+.add-card-modal .lang-button:active,
+.edit-card-modal .lang-button:active {
+  transform: translateY(0) scale(0.98) !important;
+}
+
+.add-card-modal .lang-button.selected,
+.edit-card-modal .lang-button.selected {
+  border-color: var(--nt-primary) !important;
+  border-width: 3px !important;
+  background: rgba(255, 255, 255, 0.6) !important;
+  box-shadow: 0 2px 8px rgba(var(--nt-primary-rgb), 0.2) !important;
+}
+
+.add-card-modal .flag-image,
+.edit-card-modal .flag-image {
+  width: 26px !important;
+  height: 20px !important;
+  border-radius: 3px !important;
+}
+
+/* Увеличиваем кнопку TTS */
+.add-card-modal .tts-button,
+.edit-card-modal .tts-button {
+  width: 42px !important;
+  height: 42px !important;
+  font-size: 18px !important;
+}
+
+/* Увеличиваем медиа-кнопки */
+.add-card-modal .media-upload-btn,
+.edit-card-modal .media-upload-btn {
+  width: 42px !important;
+  height: 42px !important;
+  font-size: 16px !important;
+}
+
+/* Увеличиваем превью медиа */
+.add-card-modal .thumb-image,
+.edit-card-modal .thumb-image {
+  width: 80px !important;
+  height: 80px !important;
+}
+
+.add-card-modal .thumb-video,
+.edit-card-modal .thumb-video {
+  width: 120px !important;
+  max-height: 80px !important;
+}

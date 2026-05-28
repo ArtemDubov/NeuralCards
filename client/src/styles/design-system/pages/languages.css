@@ -1,0 +1,58 @@
+/* ========================================
+   Languages Page Styles
+   NeuralTrident Design System
+   ======================================== */
+
+.languages-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.languages-header {
+  margin-bottom: 32px;
+}
+
+.languages-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--nt-text, #333);
+  margin: 0 0 8px;
+}
+
+.languages-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.language-card {
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--nt-surface, #ffffff);
+  border: 1px solid var(--nt-border-light, #f0f0f0);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.language-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.language-flag {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.language-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--nt-text, #333);
+  margin: 0 0 4px;
+}
+
+.language-count {
+  font-size: 14px;
+  color: var(--nt-text-secondary, #666);
+}
